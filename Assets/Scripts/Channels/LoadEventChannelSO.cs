@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
+[CreateAssetMenu (menuName = "Events/Load Event Channel")]
 public class LoadEventChannelSO : ScriptableObject {
 
     public UnityAction<GameSceneSO[], bool> OnLoadingRequested;
