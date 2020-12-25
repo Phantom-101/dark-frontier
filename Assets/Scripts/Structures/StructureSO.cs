@@ -10,5 +10,6 @@ public class StructureSO : ScriptableObject {
     [Header ("Stats")]
     public StructureDestroyedEventChannelSO OnDestroyedChannel;
     public double DropPercentage;
+    public int MaxMeta;
 
 }

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
+[CreateAssetMenu (menuName = "Items/Item")]
 public class ItemSO : ScriptableObject {
 
     [Header ("Information")]
@@ -14,23 +11,25 @@ public class ItemSO : ScriptableObject {
     public double Size;
 
     [Header ("Usage")]
-    public ItemUsedEventChannelSO OnUsedChannel;
+    public ItemUsedEventChannelSO OnUseChannel;
 
     private void Awake () {
 
-        if (OnUsedChannel != null) OnUsedChannel.OnItemUsed += OnUsed;
+        if (OnUseChannel != null) OnUseChannel.OnItemUsed += OnUse;
 
     }
 
-    protected virtual void OnUsed (Structure user) {
+    protected virtual void OnUse (ItemSO itemUsed, Structure itemUser) {
 
-        if (OnUsedChannel == null) throw new Exception ("OnUsed called on unusable item " + Name);
+        if (itemUsed != this) return;
+
+        if (OnUseChannel == null) throw new Exception ("OnUse called on unusable item " + Name);
 
     }
 
     public virtual bool CanUse (Structure user) {
 
-        return OnUsedChannel != null;
+        return OnUseChannel != null;
 
     }
 

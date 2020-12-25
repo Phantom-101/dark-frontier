@@ -4,11 +4,11 @@ using UnityEngine.Events;
 [CreateAssetMenu (menuName = "Events/Item Used Event Channel")]
 public class ItemUsedEventChannelSO : ScriptableObject {
 
-    public UnityAction<Structure> OnItemUsed;
+    public UnityAction<ItemSO, Structure> OnItemUsed;
 
-    public void RaiseEvent (Structure user) {
+    public void RaiseEvent (ItemSO itemUsed, Structure itemUser) {
 
-        if (OnItemUsed != null) OnItemUsed.Invoke (user);
+        if (OnItemUsed != null) OnItemUsed.Invoke (itemUsed, itemUser);
 
     }
 

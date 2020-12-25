@@ -17,6 +17,12 @@ public class StructureManager : MonoBehaviour {
 
     }
 
+    private void Update () {
+
+        foreach (Structure structure in _structures) structure.Tick ();
+
+    }
+
     public virtual List<Structure> GetStructures () { return _structures; }
 
     protected virtual void OnShipDestroyed (Structure destroyedStructure, StructureSO destroyedType) {
