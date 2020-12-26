@@ -3,9 +3,40 @@
 public class EquipmentSlot : MonoBehaviour {
 
     [SerializeField] protected EquipmentSO _equipment;
-    [SerializeField] protected double _storedEnergy;
-    [SerializeField] protected double _currentDurability;
+    [SerializeField] protected float _storedEnergy;
+    [SerializeField] protected float _currentDurability;
     [SerializeField] protected Structure _equipper;
+    [SerializeField] protected bool _active;
+
+    public EquipmentSO GetEquipment () { return _equipment; }
+
+    public float GetStoredEnergy () { return _storedEnergy; }
+
+    public void ChangeStoredEnergy (float amount) { _storedEnergy = Mathf.Clamp (_storedEnergy + amount, 0, _equipment.EnergyStorage); }
+
+    public void SetStoredEnergy (float amount) { _storedEnergy = Mathf.Clamp (amount, 0, _equipment.EnergyStorage); }
+
+    public float GetDurability () { return _currentDurability; }
+
+    public void ChangeDurability (float amount) { _currentDurability = Mathf.Clamp (_currentDurability + amount, 0, _equipment.Durability); }
+
+    public void SetDurability (float amount) { _currentDurability = Mathf.Clamp (amount, 0, _equipment.Durability); }
+
+    public Structure GetEquipper () { return _equipper; }
+
+    public bool IsActive () { return _active; }
+
+    public bool CanActivate () { return _equipment.CanActivate (this); }
+
+    public void SetIsActive (bool target) { _active = target; }
+
+    public void Activate () { _equipment.Activate (this); }
+
+    public void Deactivate () { _equipment.Deactivate (this); }
+
+    public void Tick () { _equipment.Tick (this); }
+
+    public void FixedTick () { _equipment.FixedTick (this); }
 
     public virtual bool CanEquip (EquipmentSO equipment) {
 
@@ -19,42 +50,21 @@ public class EquipmentSlot : MonoBehaviour {
 
         if (CanEquip (equipment)) {
 
-            // Call OnUnequipChannel.RaiseEvent and unsubscribe to old channels
-
             if (_equipment != null) {
 
-                if (_equipment.OnEquipChannel != null) _equipment.OnEquipChannel.OnChanged -= OnEquip;
-
-                if (_equipment.OnUnequipChannel != null) {
-
-                    _equipment.OnUnequipChannel.RaiseEvent (_equipper, this, _equipment, equipment);
-                    _equipment.OnUnequipChannel.OnChanged -= OnUnequip;
-
-                }
-
-                if (_equipment.OnDestroyChannel != null) _equipment.OnDestroyChannel.OnChanged -= OnDestroyed;
+                _equipment.OnUnequip (this);
 
             }
 
-            // Call OnEquipChannel.RaiseEvent and subscribe to new channels
+            Reset ();
 
-            if (_equipment != null) {
-
-                if (_equipment.OnEquipChannel != null) {
-
-                    _equipment.OnEquipChannel.OnChanged += OnEquip;
-                    _equipment.OnEquipChannel.RaiseEvent (_equipper, this, _equipment, equipment);
-
-                }
-
-                if (_equipment.OnUnequipChannel != null) _equipment.OnUnequipChannel.OnChanged += OnUnequip;
-
-                if (_equipment.OnDestroyChannel != null) _equipment.OnDestroyChannel.OnChanged += OnDestroyed;
-
-            }
-
-            // Change equipment
             _equipment = equipment;
+
+            if (_equipment != null) {
+
+                _equipment.OnEquip (this);
+
+            }
 
             return true;
 
@@ -64,68 +74,11 @@ public class EquipmentSlot : MonoBehaviour {
 
     }
 
-    protected virtual void OnEquip (Structure structure, EquipmentSlot slot, EquipmentSO prevEquipment, EquipmentSO newEquipment) {
-
-        if (slot != this) return;
-
-        _storedEnergy = 0;
-        _currentDurability = _equipment.Durability;
-
-    }
-
-    protected virtual void OnUnequip (Structure structure, EquipmentSlot slot, EquipmentSO prevEquipment, EquipmentSO newEquipment) {
-
-        if (slot != this) return;
+    protected virtual void Reset () {
 
         _storedEnergy = 0;
         _currentDurability = 0;
 
     }
-
-    protected virtual void OnDestroyed (Structure structure, EquipmentSlot slot, EquipmentSO prevEquipment, EquipmentSO newEquipment) {
-
-        if (slot != this) return;
-
-        _storedEnergy = 0;
-        _currentDurability = 0;
-
-    }
-
-    public virtual void Damage (double amount) {
-
-        _currentDurability -= amount;
-
-        if (_currentDurability <= 0) {
-
-            if (_equipment != null) {
-
-                if (_equipment.OnEquipChannel != null) _equipment.OnEquipChannel.OnChanged -= OnEquip;
-
-                if (_equipment.OnUnequipChannel != null) _equipment.OnUnequipChannel.OnChanged -= OnUnequip;
-
-                if (_equipment.OnDestroyChannel != null) {
-
-                    _equipment.OnDestroyChannel.RaiseEvent (_equipper, this, _equipment, null);
-                    _equipment.OnDestroyChannel.OnChanged -= OnDestroyed;
-
-                }
-
-                _equipment = null;
-
-            }
-
-        }
-
-    }
-
-    public virtual bool CanActivate () { return false; }
-
-    public virtual bool CanSustain () { return false; }
-
-    public virtual bool Activate () { return false; }
-
-    public virtual void Deactivate () { }
-
-    public virtual void Tick () { }
 
 }

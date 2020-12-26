@@ -4,11 +4,11 @@ using UnityEngine.Events;
 [CreateAssetMenu (menuName = "Events/Structure Destroyed Event Channel")]
 public class StructureDestroyedEventChannelSO : ScriptableObject {
 
-    public UnityAction<Structure, StructureSO> OnStructureDestroyed;
+    public UnityAction<Structure> OnStructureDestroyed;
 
-    public void RaiseEvent (Structure destroyedStructure, StructureSO destroyedType) {
+    public void RaiseEvent (Structure destroyedStructure) {
 
-        if (OnStructureDestroyed != null) OnStructureDestroyed.Invoke (destroyedStructure, destroyedType);
+        if (OnStructureDestroyed != null) OnStructureDestroyed.Invoke (destroyedStructure);
 
     }
 
