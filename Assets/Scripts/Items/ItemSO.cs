@@ -6,8 +6,9 @@ public class ItemSO : ScriptableObject {
     [Header ("Information")]
     public string Name;
     public string Description;
-    public Texture2D Icon;
-    public double Size;
+    public string Id;
+    public Sprite Icon;
+    public float Size;
     public bool Usable;
 
     public virtual void OnUse (Structure user) {

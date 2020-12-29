@@ -50,3 +50,4 @@ MonoBehaviour:
   _shipDestroyedChannel: {fileID: 11400000, guid: c42055d3c124f174fa639daf99561b4e, type: 2}
   _stationDestroyedChannel: {fileID: 11400000, guid: 4ec892e024a0ffb47a407d1f3a8b5008, type: 2}
   _cargoDestroyedChannel: {fileID: 11400000, guid: be50e1a829ee826499500d59f0b88d02, type: 2}
+  _saveGameChannel: {fileID: 11400000, guid: 30ae3dd6741af194889b2f12fc99ac7c, type: 2}

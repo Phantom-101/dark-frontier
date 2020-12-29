@@ -43,10 +43,6 @@ public class WeaponSO : EquipmentSO {
                 slot.SetStoredEnergy (0);
                 (slot as WeaponSlot).GetTarget ().ChangeHull (-Damage);
 
-            } else {
-
-                slot.ChangeStoredEnergy (Time.deltaTime);
-
             }
 
         }

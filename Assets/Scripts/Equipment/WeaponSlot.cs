@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class WeaponSlot : EquipmentSlot {
 
@@ -16,9 +17,9 @@ public class WeaponSlot : EquipmentSlot {
 
     }
 
-    protected override void Reset () {
+    protected override void ResetValues () {
 
-        base.Reset ();
+        base.ResetValues ();
 
         _target = null;
         _active = false;

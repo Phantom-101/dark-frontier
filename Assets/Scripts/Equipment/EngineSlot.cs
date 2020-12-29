@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EngineSlot : EquipmentSlot {
 
@@ -23,9 +21,9 @@ public class EngineSlot : EquipmentSlot {
 
     }
 
-    protected override void Reset () {
+    protected override void ResetValues () {
 
-        base.Reset ();
+        base.ResetValues ();
 
         _forwardSetting = 0;
         _turnSetting = 0;

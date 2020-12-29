@@ -13,14 +13,19 @@ MonoBehaviour:
   m_Name: Engine 10
   m_EditorClassIdentifier: 
   Name: Engine 10
-  Description: A small engine.
-  Icon: {fileID: 0}
+  Description: A small chemical engine that uses combustible fuels to propell a spaceship
+    forward.
+  Id: items.equipment.engines.engine-10
+  Icon: {fileID: 21300000, guid: 34502f7e93de60d40ac817b2a0f12f4a, type: 3}
   Size: 0
   Usable: 0
   Meta: 1
-  EnergyStorage: 0
-  EnergyRechargeRate: 0
+  EnergyStorage: 10
+  EnergyRechargeRate: 2
   Durability: 10
   Activatable: 0
+  InventorySize: 0
+  Charges: []
   ForwardPower: 10
   TurnPower: 25
+  FuelConsumption: 0.5

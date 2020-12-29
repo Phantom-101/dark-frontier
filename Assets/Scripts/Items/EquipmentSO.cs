@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu (menuName = "Items/Equipment")]
 public class EquipmentSO : ItemSO {
@@ -9,6 +10,8 @@ public class EquipmentSO : ItemSO {
     public float EnergyRechargeRate;
     public float Durability;
     public bool Activatable;
+    public float InventorySize;
+    public ItemSO[] Charges;
 
     public virtual void OnEquip (EquipmentSlot slot) { }
 
@@ -22,16 +25,8 @@ public class EquipmentSO : ItemSO {
 
     public virtual void Deactivate (EquipmentSlot slot) { }
 
-    public virtual void Tick (EquipmentSlot slot) { }
+    public virtual void Tick (EquipmentSlot slot) {}
 
     public virtual void FixedTick (EquipmentSlot slot) { }
-
-    public virtual void TakeDamage (EquipmentSlot slot, float amount) {
-
-        slot.ChangeDurability (-amount);
-
-        if (slot.GetDurability () <= 0) slot.Equip (null);
-
-    }
 
 }
