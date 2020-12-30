@@ -24,6 +24,8 @@ public class GeneratorSO : EquipmentSO {
 
         }
 
+        slot.TakeDamage (Wear * Time.deltaTime);
+
     }
 
 }

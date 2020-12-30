@@ -21,7 +21,8 @@ MonoBehaviour:
   Meta: 1
   EnergyStorage: 100
   EnergyRechargeRate: 0
-  Durability: 10
+  Durability: 25
+  Wear: 0.01
   Activatable: 0
   InventorySize: 0
   Charges: []

@@ -7,14 +7,14 @@ public class Structure : MonoBehaviour {
     [SerializeField] private StructureSO _profile;
     [SerializeField] private string _id;
 
-    [SerializeField] private double _hull;
+    [SerializeField] private float _hull;
     [SerializeField] private Faction _faction;
     [SerializeField] private FactionSO _initialFaction;
 
     [SerializeField] private List<EquipmentSlot> _equipmentSlots = new List<EquipmentSlot> ();
 
-    [SerializeReference] private Controller _controller;
-    [SerializeField] private ControllerSO _initialController;
+    [SerializeReference] private AI _ai;
+    [SerializeField] private AISO _initialAI;
     [SerializeField] private Structure _target;
 
     [SerializeField] private Sector _sector;
@@ -33,7 +33,7 @@ public class Structure : MonoBehaviour {
         if (string.IsNullOrEmpty (_id)) _id = Guid.NewGuid ().ToString ();
 
         if (_initialFaction != null) _faction = FactionManager.GetInstance ().GetFaction (_initialFaction.Id);
-        if (_initialController != null) _controller = _initialController.GetController ();
+        if (_initialAI != null) _ai = _initialAI.GetAI (this);
 
     }
 
@@ -43,13 +43,13 @@ public class Structure : MonoBehaviour {
 
     public void SetId (string id) { _id = id; }
 
-    public double GetHull () { return _hull; }
+    public float GetHull () { return _hull; }
 
     public Faction GetFaction () { return _faction; }
 
     public void SetFaction (Faction faction) { _faction = faction; }
 
-    public void ChangeHull (double amount) {
+    public void ChangeHull (float amount) {
 
         _hull += amount;
 
@@ -77,9 +77,19 @@ public class Structure : MonoBehaviour {
 
     }
 
+    public AI GetAI () { return _ai; }
+
+    public void SetAI (AI controller) { _ai = controller; }
+
     public Structure GetTarget () { return _target; }
 
-    public void SetTarget (Structure target) { _target = target; }
+    public void SetTarget (Structure target) {
+
+        _target = target;
+
+        if (PlayerController.GetInstance ().GetPlayer () == this) PlayerController.GetInstance ().TargetChangedChannel.OnEventRaised ();
+
+    }
 
     public Sector GetSector () { return _sector; }
 
@@ -87,7 +97,8 @@ public class Structure : MonoBehaviour {
 
     public void Tick () {
 
-        _controller.Control (this);
+        if (_ai == null) _ai = new AI (this);
+        _ai.Tick ();
 
         foreach (EquipmentSlot slot in _equipmentSlots) slot.Tick ();
 
@@ -140,7 +151,7 @@ public class StructureSaveData {
     public Quaternion Rotation;
     public string ProfileId;
     public string Id;
-    public double Hull;
+    public float Hull;
     public string FactionId;
     public List<EquipmentSlotSaveData> Equipment = new List<EquipmentSlotSaveData> ();
     public string SectorId;

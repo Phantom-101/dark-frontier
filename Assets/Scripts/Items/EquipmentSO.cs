@@ -9,6 +9,7 @@ public class EquipmentSO : ItemSO {
     public float EnergyStorage;
     public float EnergyRechargeRate;
     public float Durability;
+    public float Wear;
     public bool Activatable;
     public float InventorySize;
     public ItemSO[] Charges;
@@ -25,7 +26,7 @@ public class EquipmentSO : ItemSO {
 
     public virtual void Deactivate (EquipmentSlot slot) { }
 
-    public virtual void Tick (EquipmentSlot slot) {}
+    public virtual void Tick (EquipmentSlot slot) { }
 
     public virtual void FixedTick (EquipmentSlot slot) { }
 

@@ -13,6 +13,7 @@ public class RadialEquipmentIndicator : EquipmentIndicator {
     [SerializeField] protected float _chargesMax;
     [SerializeField] protected float _chargesOffset;
     [SerializeField] protected Image _icon;
+    [SerializeField] protected Button _button;
 
     private void Update () {
 

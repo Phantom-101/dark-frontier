@@ -3,8 +3,8 @@
 [CreateAssetMenu (menuName = "Items/Equipment/Weapon")]
 public class WeaponSO : EquipmentSO {
 
-    public double Damage;
-    public double Range;
+    public float Damage;
+    public float Range;
 
     public override bool CanActivate (EquipmentSlot slot) {
 
@@ -42,6 +42,8 @@ public class WeaponSO : EquipmentSO {
 
                 slot.SetStoredEnergy (0);
                 (slot as WeaponSlot).GetTarget ().ChangeHull (-Damage);
+
+                slot.TakeDamage (Wear);
 
             }
 

@@ -20,6 +20,8 @@ public class CapacitorSO : EquipmentSO {
 
         }
 
+        slot.TakeDamage (Wear * Time.deltaTime);
+
     }
 
 }

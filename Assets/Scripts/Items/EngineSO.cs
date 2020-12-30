@@ -12,7 +12,7 @@ public class EngineSO : EquipmentSO {
         base.Tick (slot);
 
         slot.ChangeStoredEnergy (-FuelConsumption * Time.deltaTime);
-        slot.TakeDamage (FuelConsumption * Time.deltaTime);
+        slot.TakeDamage (Wear * Time.deltaTime);
 
     }
 
