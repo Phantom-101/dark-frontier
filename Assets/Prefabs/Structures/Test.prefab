@@ -339,7 +339,7 @@ GameObject:
   m_Component:
   - component: {fileID: 570406170929327934}
   - component: {fileID: 570406170929327928}
-  - component: {fileID: 570406170929327929}
+  - component: {fileID: 8627895639827070375}
   m_Layer: 0
   m_Name: Engine Slot
   m_TagString: Untagged
@@ -382,7 +382,7 @@ MonoBehaviour:
   _chargeQuantity: 0
   _forwardSetting: 0
   _turnSetting: 0
---- !u!96 &570406170929327929
+--- !u!96 &8627895639827070375
 TrailRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
@@ -423,7 +423,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 5
+  m_Time: 3
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.2
@@ -483,7 +483,7 @@ TrailRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 1
+    textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
   m_MinVertexDistance: 0.1

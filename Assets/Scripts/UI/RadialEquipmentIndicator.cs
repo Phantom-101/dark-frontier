@@ -105,11 +105,11 @@ public class RadialEquipmentIndicator : EquipmentIndicator {
 
     void TweenToCurAlpha () {
 
-        LeanTween.alpha (_energy.rectTransform, _curAlpha, 0.2f);
-        LeanTween.alpha (_durability.rectTransform, _curAlpha, 0.2f);
-        LeanTween.alpha (_charges.rectTransform, _curAlpha, 0.2f);
-        LeanTween.alpha (_icon.rectTransform, _curAlpha, 0.2f);
-        LeanTween.alpha (_buttonRect, _curAlpha, 0.2f);
+        LeanTween.alpha (_energy.rectTransform, _curAlpha, 0.2f).setIgnoreTimeScale (true);
+        LeanTween.alpha (_durability.rectTransform, _curAlpha, 0.2f).setIgnoreTimeScale (true);
+        LeanTween.alpha (_charges.rectTransform, _curAlpha, 0.2f).setIgnoreTimeScale (true);
+        LeanTween.alpha (_icon.rectTransform, _curAlpha, 0.2f).setIgnoreTimeScale (true);
+        LeanTween.alpha (_buttonRect, _curAlpha, 0.2f).setIgnoreTimeScale (true);
 
     }
 

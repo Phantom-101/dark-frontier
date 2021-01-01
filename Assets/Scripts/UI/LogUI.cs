@@ -1,17 +1,20 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class MenuUI : MonoBehaviour {
+public class LogUI : MonoBehaviour {
 
     [SerializeField] private Image[] _images;
     [SerializeField] private Text[] _texts;
     [SerializeField] private Selectable[] _selectables;
-    [SerializeField] protected float _curAlpha = -1;
+    [SerializeField] private int _tab = 0;
+    [SerializeField] private float _curAlpha = -1;
 
     private void Start () {
 
         UIState current = UIStateManager.GetInstance ().GetState ();
-        bool shouldShow = current == UIState.Menu;
+        bool shouldShow = current == UIState.Log;
 
         if (!shouldShow) {
 
@@ -29,7 +32,7 @@ public class MenuUI : MonoBehaviour {
     private void Update () {
 
         UIState current = UIStateManager.GetInstance ().GetState ();
-        bool shouldShow = current == UIState.Menu;
+        bool shouldShow = current == UIState.Log;
 
         if (!shouldShow) {
 
@@ -52,6 +55,10 @@ public class MenuUI : MonoBehaviour {
         }
 
     }
+
+    public int GetTab () { return _tab; }
+
+    public void SetTab (int tab) { _tab = tab; }
 
     void TweenToCurAlpha () {
 

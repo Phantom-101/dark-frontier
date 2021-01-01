@@ -31,5 +31,5 @@ MonoBehaviour:
   ForwardPower: 10
   TurnPower: 1
   FuelConsumption: 0.5
-  Damp: 0.5
+  Damp: 1
   AngularDamp: 1

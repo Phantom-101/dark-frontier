@@ -38,7 +38,7 @@ public class TurnButtonUI : MonoBehaviour {
 
     void TweenToCurAlpha () {
 
-        LeanTween.alpha (_image.rectTransform, _curAlpha, 0.2f);
+        LeanTween.alpha (_image.rectTransform, _curAlpha, 0.2f).setIgnoreTimeScale (true);
 
     }
 

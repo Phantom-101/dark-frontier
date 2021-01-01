@@ -31,7 +31,7 @@ public class NotificationUI : MonoBehaviour {
 
         } else {
 
-            _timer -= Time.deltaTime;
+            _timer -= Time.unscaledDeltaTime;
             _text.color = new Color (1, 1, 1, _fadeCurve.Evaluate ((_timePerNotification - _timer) / _timePerNotification));
 
         }

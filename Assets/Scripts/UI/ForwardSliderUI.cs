@@ -42,16 +42,17 @@ public class ForwardSliderUI : MonoBehaviour {
 
     void TweenToCurAlpha () {
 
-        LeanTween.alpha (_outline.rectTransform, _curAlpha, 0.2f);
-        LeanTween.alpha (_shade.rectTransform, _curAlpha, 0.2f);
-        LeanTween.alpha (_fill.rectTransform, _curAlpha, 0.2f);
-        LeanTween.alpha (_handle.rectTransform, _curAlpha, 0.2f);
+        LeanTween.alpha (_outline.rectTransform, _curAlpha, 0.2f).setIgnoreTimeScale (true);
+        LeanTween.alpha (_shade.rectTransform, _curAlpha, 0.2f).setIgnoreTimeScale (true);
+        LeanTween.alpha (_fill.rectTransform, _curAlpha, 0.2f).setIgnoreTimeScale (true);
+        LeanTween.alpha (_handle.rectTransform, _curAlpha, 0.2f).setIgnoreTimeScale (true);
 
     }
 
     void DisableAll () {
 
         _slider.interactable = false;
+        _fill.raycastTarget = false;
         _handle.raycastTarget = false;
 
     }
@@ -59,6 +60,7 @@ public class ForwardSliderUI : MonoBehaviour {
     void EnableAll () {
 
         _slider.interactable = true;
+        _fill.raycastTarget = true;
         _handle.raycastTarget = true;
 
     }
