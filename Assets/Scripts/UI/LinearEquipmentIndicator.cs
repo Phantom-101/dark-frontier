@@ -16,6 +16,12 @@ public class LinearEquipmentIndicator : EquipmentIndicator {
     [SerializeField] protected Image _outline;
     [SerializeField] protected Button _button;
 
+    private void Start () {
+
+        _button.onClick.AddListener (_slot.Activate);
+
+    }
+
     private void Update () {
 
         if (_slot == null) return;

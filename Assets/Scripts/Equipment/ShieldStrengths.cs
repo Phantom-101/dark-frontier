@@ -5,17 +5,17 @@ using UnityEngine;
 public class ShieldStrengths {
 
     [SerializeField] private ShieldSlot _slot;
-    [SerializeField] private readonly float[] _strengths;
-    [SerializeField] private readonly int _sectors;
-    [SerializeField] private readonly float[] _maxStrength;
-    [SerializeField] private readonly float[] _rechargeRate;
+    [SerializeField] private float[] _strengths;
+    [SerializeField] private int _sectors;
+    [SerializeField] private float[] _maxStrength;
+    [SerializeField] private float[] _rechargeRate;
 
     public ShieldStrengths (ShieldSlot slot, float[] strengths, float[] maxStrength, float[] rechargeRate) {
 
         if (strengths.Length != maxStrength.Length || maxStrength.Length != rechargeRate.Length) Debug.LogError ("Shield input arrays must be of equal size");
 
         _slot = slot;
-        _strengths = strengths;
+        _strengths = strengths.Clone () as float[];
         _sectors = strengths.Length;
         _maxStrength = maxStrength;
         _rechargeRate = rechargeRate;
@@ -86,7 +86,13 @@ public class ShieldStrengths {
 
     public int GetSectorTo (GameObject to) {
 
-        Vector3 heading = to.transform.localPosition - _slot.GetEquipper ().transform.localPosition;
+        return GetSectorTo (to.transform.localPosition);
+
+    }
+
+    public int GetSectorTo (Vector3 to) {
+
+        Vector3 heading = to - _slot.GetEquipper ().transform.localPosition;
         Vector3 perp = Vector3.Cross (_slot.GetEquipper ().transform.forward, heading);
         float dir = Vector3.Dot (perp, _slot.GetEquipper ().transform.up);
 

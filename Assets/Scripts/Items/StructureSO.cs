@@ -9,6 +9,7 @@ public class StructureSO : ItemSO {
 
     [Header ("Stats")]
     public float Hull;
+    public float InventorySize;
     public StructureDestroyedEventChannelSO OnDestroyedChannel;
     public float DropPercentage;
     public int MaxMeta;

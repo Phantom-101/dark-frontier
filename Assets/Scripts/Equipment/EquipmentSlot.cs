@@ -12,6 +12,12 @@ public class EquipmentSlot : MonoBehaviour {
     [SerializeField] protected ItemSO _charge;
     [SerializeField] protected int _chargeQuantity;
 
+    private void Awake () {
+
+        if (_equipment != null) _equipment.OnAwake (this);
+
+    }
+
     public EquipmentSO GetEquipment () { return _equipment; }
 
     public float GetStoredEnergy () { return _storedEnergy; }
@@ -88,18 +94,21 @@ public class EquipmentSlot : MonoBehaviour {
 
     public void Deactivate () { _equipment.Deactivate (this); }
 
-    public bool CanLoadCharge (ItemSO charge) {
+    public ItemSO[] GetCharges () { return _equipment.Charges; }
+
+    public bool CanLoadCharge (ItemSO charge, int count) {
 
         if (_equipment == null) return false;
         if (!_equipment.Activatable) return false;
         if (!_equipment.Charges.Contains (charge)) return false;
         if (_charge == charge) {
 
-            if (GetFreeInventorySize () < charge.Size) return false;
+            if (Math.Round (GetFreeInventorySize (), (charge.Size % 1).ToString ().Length) < Math.Round (charge.Size * count, (charge.Size % 1).ToString ().Length)) return false;
 
         } else {
 
-            if (_equipment.InventorySize < charge.Size) return false;
+            if (!CanUnloadCharge ()) return false;
+            if (_equipment.InventorySize < charge.Size * count) return false;
 
         }
 
@@ -107,24 +116,56 @@ public class EquipmentSlot : MonoBehaviour {
 
     }
 
-    public bool LoadCharge (ItemSO charge) {
+    public bool LoadCharge (ItemSO charge, int count) {
 
-        if (!CanLoadCharge (charge)) return false;
+        if (!CanLoadCharge (charge, count)) return false;
 
         if (_charge == charge) {
 
-            _chargeQuantity++;
+            _chargeQuantity += count;
 
         } else {
 
+            UnloadCharge ();
+
             _charge = charge;
-            _chargeQuantity = 1;
+            _chargeQuantity = count;
 
         }
 
         return true;
 
     }
+
+    public bool CanUnloadCharge () {
+
+        if (_charge != null && _equipper.GetFreeInventorySize () < _charge.Size * _chargeQuantity) return false;
+
+        return true;
+
+    }
+
+    public bool UnloadCharge () {
+
+        if (!CanUnloadCharge ()) return false;
+
+        if (_charge != null) _equipper.ChangeInventoryCount (_charge, _chargeQuantity);
+        _charge = null;
+        _chargeQuantity = 0;
+
+        return true;
+
+    }
+
+    public void DepleteCharge (int amount) {
+
+        _chargeQuantity = Mathf.Clamp (_chargeQuantity - amount, 0, (int) (_equipment.InventorySize / _charge.Size));
+
+    }
+
+    public ItemSO GetCharge () { return _charge; }
+
+    public int GetChargeQuantity () { return _chargeQuantity; }
 
     public float GetUsedInventorySize () {
 
@@ -195,6 +236,20 @@ public class EquipmentSlot : MonoBehaviour {
         }
 
         return false;
+
+    }
+
+    public Vector3 GetSlotOffset () {
+
+        return transform.position - _equipper.transform.position;
+
+    }
+
+    public Vector3 GetSlotPosition () {
+
+        Vector3 offset = transform.position - _equipper.transform.position;
+
+        return offset + _equipper.transform.localPosition;
 
     }
 

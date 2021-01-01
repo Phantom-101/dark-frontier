@@ -8,11 +8,21 @@ public class PlayerController : MonoBehaviour {
 
     public VoidEventChannelSO TargetChangedChannel;
 
+    [SerializeField] private VoidEventChannelSO _leftDown;
+    [SerializeField] private VoidEventChannelSO _leftUp;
+    [SerializeField] private VoidEventChannelSO _rightDown;
+    [SerializeField] private VoidEventChannelSO _rightUp;
+
     private static PlayerController _instance;
 
     private void Awake () {
 
         _instance = this;
+
+        _leftDown.OnEventRaised += Left;
+        _leftUp.OnEventRaised += Neutral;
+        _rightDown.OnEventRaised += Right;
+        _rightUp.OnEventRaised += Neutral;
 
     }
 
@@ -27,9 +37,13 @@ public class PlayerController : MonoBehaviour {
 
             if (Physics.Raycast (ray, out hit)) {
 
-                GameObject obj = hit.collider.transform.parent.gameObject;
-                Structure str = obj.GetComponent<Structure> ();
-                if (str != _player) _player.SetTarget (str);
+                if (hit.collider.transform.parent != null) {
+
+                    GameObject obj = hit.collider.transform.parent.gameObject;
+                    Structure str = obj.GetComponent<Structure> ();
+                    if (str != _player) _player.SetTarget (str);
+
+                }
 
             }
 
@@ -42,5 +56,41 @@ public class PlayerController : MonoBehaviour {
     public void SetPlayer (Structure player) { _player = player; }
 
     public static PlayerController GetInstance () { return _instance; }
+
+    private void Left () {
+
+        _player.GetEquipment<EngineSlot> ()[0].SetTurnSetting (-1);
+
+    }
+
+    private void Neutral () {
+
+        _player.GetEquipment<EngineSlot> ()[0].SetTurnSetting (0);
+
+    }
+
+    private void Right () {
+
+        _player.GetEquipment<EngineSlot> ()[0].SetTurnSetting (1);
+
+    }
+
+    private void Fwd () {
+
+        _player.GetEquipment<EngineSlot> ()[0].SetForwardSetting (1);
+
+    }
+
+    private void Stop () {
+
+        _player.GetEquipment<EngineSlot> ()[0].SetForwardSetting (0);
+
+    }
+
+    public void SetFwd (float setting) {
+
+        _player.GetEquipment<EngineSlot> ()[0].SetForwardSetting (setting);
+
+    }
 
 }

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c8dd3d1522f0a142b4948cc5abf0d44, type: 3}
+  m_Name: Phased Laser
+  m_EditorClassIdentifier: 
+  Name: Phased Laser
+  Description: A laser weapon that requires laser crystals to use.
+  Id: items.equipment.weapons.phased-laser
+  Icon: {fileID: 21300000, guid: 3c3eca7ca34457044b6973e02240c76b, type: 3}
+  Size: 0
+  Usable: 0
+  Meta: 1
+  EnergyStorage: 1
+  EnergyRechargeRate: 0.5
+  Durability: 10
+  Wear: 0.1
+  Activatable: 1
+  RequireCharge: 1
+  InventorySize: 1
+  Charges:
+  - {fileID: 11400000, guid: a1225ad303c0a06479625c58384ee621, type: 2}
+  Damage: 15
+  Range: 100
+  LaserVFX: {fileID: 930999058288108214, guid: a55d7e9bdfdafaf49bea6eba1e2302d8, type: 3}
+  LaserWidth: 0.1

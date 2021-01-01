@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class RadialEquipmentIndicator : EquipmentIndicator {
@@ -14,26 +15,58 @@ public class RadialEquipmentIndicator : EquipmentIndicator {
     [SerializeField] protected float _chargesOffset;
     [SerializeField] protected Image _icon;
     [SerializeField] protected Button _button;
+    [SerializeField] protected RectTransform _buttonRect;
+    [SerializeField] protected EventTrigger _eventTrigger;
+    [SerializeField] protected Text _tooltip;
+    [SerializeField] protected float _curAlpha = -1;
+
+    private void Start () {
+
+        _tooltip.text = "";
+
+    }
 
     private void Update () {
+
+        UIState current = UIStateManager.GetInstance ().GetState ();
+        bool shouldShow = current == UIState.InSpace;
+
+        if (!shouldShow) {
+
+            if (_curAlpha != 0) {
+
+                _curAlpha = 0;
+                DisableAll ();
+                TweenToCurAlpha ();
+
+            }
+            return;
+
+        }
+
+        if (_curAlpha == 0) EnableAll ();
 
         if (_slot == null) return;
 
         if (_slot.GetEquipment () == null) {
 
-            _energy.color = new Color (_energy.color.r, _energy.color.g, _energy.color.b, 0.25f);
-            _durability.color = new Color (_durability.color.r, _durability.color.g, _durability.color.b, 0.25f);
-            _charges.color = new Color (_charges.color.r, _charges.color.g, _charges.color.b, 0.25f);
-            _icon.color = new Color (_icon.color.r, _icon.color.g, _icon.color.b, 0.25f);
+            if (_curAlpha != 0.25f) {
+
+                _curAlpha = 0.25f;
+                TweenToCurAlpha ();
+
+            }
 
             return;
 
         }
 
-        _energy.color = new Color (_energy.color.r, _energy.color.g, _energy.color.b, 1);
-        _durability.color = new Color (_durability.color.r, _durability.color.g, _durability.color.b, 1);
-        _charges.color = new Color (_charges.color.r, _charges.color.g, _charges.color.b, 1);
-        _icon.color = new Color (_icon.color.r, _icon.color.g, _icon.color.b, 1);
+        if (_curAlpha != 1) {
+
+            _curAlpha = 1;
+            TweenToCurAlpha ();
+
+        }
 
         float energyFill = Mathf.Clamp (_slot.GetStoredEnergy () / _slot.GetEquipment ().EnergyStorage * _energyMax + _energyOffset, _energyOffset, _energyMax + _energyOffset);
         if (float.IsNaN (energyFill)) energyFill = _energyMax + _energyOffset;
@@ -48,6 +81,51 @@ public class RadialEquipmentIndicator : EquipmentIndicator {
         _charges.fillAmount = chargeFill;
 
         _icon.sprite = _slot.GetEquipment ().Icon;
+
+    }
+
+    public void Toggle () {
+
+        if (_slot.IsActive ()) _slot.Deactivate ();
+        else _slot.Activate ();
+
+    }
+
+    public void ShowTooltip () {
+
+        _tooltip.text = _slot.GetEquipment ().Name;
+
+    }
+
+    public void HideTooltip () {
+
+        _tooltip.text = "";
+
+    }
+
+    void TweenToCurAlpha () {
+
+        LeanTween.alpha (_energy.rectTransform, _curAlpha, 0.2f);
+        LeanTween.alpha (_durability.rectTransform, _curAlpha, 0.2f);
+        LeanTween.alpha (_charges.rectTransform, _curAlpha, 0.2f);
+        LeanTween.alpha (_icon.rectTransform, _curAlpha, 0.2f);
+        LeanTween.alpha (_buttonRect, _curAlpha, 0.2f);
+
+    }
+
+    void DisableAll () {
+
+        _button.interactable = false;
+        _button.targetGraphic.raycastTarget = false;
+        _eventTrigger.enabled = false;
+
+    }
+
+    void EnableAll () {
+
+        _button.interactable = true;
+        _button.targetGraphic.raycastTarget = true;
+        _eventTrigger.enabled = true;
 
     }
 

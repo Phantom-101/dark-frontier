@@ -32,13 +32,17 @@ public class StructureManager : MonoBehaviour {
 
     private void Update () {
 
-        foreach (Structure structure in _structures) structure.Tick ();
+        if (PauseButtonUI.GetInstance ().IsPaused ()) return;
+
+        foreach (Structure structure in _structures.ToArray ()) structure.Tick ();
 
     }
 
     private void FixedUpdate () {
 
-        foreach (Structure structure in _structures) structure.FixedTick ();
+        if (PauseButtonUI.GetInstance ().IsPaused ()) return;
+
+        foreach (Structure structure in _structures.ToArray ()) structure.FixedTick ();
 
     }
 

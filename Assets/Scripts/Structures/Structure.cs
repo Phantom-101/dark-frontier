@@ -12,6 +12,7 @@ public class Structure : MonoBehaviour {
     [SerializeField] private FactionSO _initialFaction;
 
     [SerializeField] private List<EquipmentSlot> _equipmentSlots = new List<EquipmentSlot> ();
+    [SerializeField] private ItemSOToIntMap _inventory = new ItemSOToIntMap ();
 
     [SerializeReference] private AI _ai;
     [SerializeField] private AISO _initialAI;
@@ -77,6 +78,32 @@ public class Structure : MonoBehaviour {
 
     }
 
+    public ItemSOToIntMap GetInventory () { return _inventory; }
+
+    public void SetInventory (ItemSOToIntMap inventory) { _inventory = inventory ?? new ItemSOToIntMap (); }
+
+    public int GetInventoryCount (ItemSO item) { return _inventory.ContainsKey (item) ? _inventory[item] : 0; }
+
+    public void SetInventoryCount (ItemSO item, int count) { _inventory[item] = count; }
+
+    public void ChangeInventoryCount (ItemSO item, int delta) { SetInventoryCount (item, GetInventoryCount (item) + delta); }
+
+    public bool HasInventoryCount (ItemSO item, int condition) { return GetInventoryCount (item) >= condition; }
+
+    public float GetTotalInventorySize () { return _profile.InventorySize; }
+
+    public float GetUsedInventorySize () {
+
+        float used = 0;
+        foreach (ItemSO item in _inventory.Keys) used += item.Size * _inventory[item];
+        return used;
+
+    }
+
+    public float GetFreeInventorySize () { return GetTotalInventorySize () - GetUsedInventorySize (); }
+
+    public bool CanAddInventoryItem (ItemSO item, int count) { return GetFreeInventorySize () >= item.Size * count; }
+
     public AI GetAI () { return _ai; }
 
     public void SetAI (AI controller) { _ai = controller; }
@@ -107,6 +134,21 @@ public class Structure : MonoBehaviour {
     public void FixedTick () {
 
         foreach (EquipmentSlot slot in _equipmentSlots) slot.FixedTick ();
+
+    }
+
+    public void TakeDamage (float amount, Vector3 from) {
+
+        ShieldSlot shield = GetEquipment<ShieldSlot> ()[0];
+        float leftOver = amount;
+        if (shield != null) {
+            int sector = shield.GetStrengths ().GetSectorTo (from);
+            float strength = shield.GetStrengths ().GetSectorStrength (sector);
+            float shieldDmg = Mathf.Min (amount, strength);
+            leftOver -= shieldDmg;
+            shield.GetStrengths ().ChangeSectorStrength (sector, -shieldDmg);
+        }
+        ChangeHull (-leftOver);
 
     }
 
