@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerInfoPanel : MonoBehaviour {
+public class PlayerInfoUI : MonoBehaviour {
 
     [SerializeField] private Image _hull;
     [SerializeField] private Gradient _hullGradient;
@@ -53,7 +53,7 @@ public class PlayerInfoPanel : MonoBehaviour {
 
         }
 
-        _hull.sprite = _structure.GetProfile ()?.HullWireframe;
+        _hull.sprite = _structure.GetProfile ().HullWireframe;
         _hull.color = _hullGradient.Evaluate (_structure.GetHull () / _structure.GetProfile ().Hull);
         ShieldStrengths strengths = _structure.GetEquipment<ShieldSlot> ()[0].GetStrengths ();
         for (int i = 0; i < _shields.Count; i++) {

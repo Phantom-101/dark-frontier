@@ -9,7 +9,8 @@ public class Faction {
     [SerializeField] private string _name;
     [SerializeField] private string _id;
     [SerializeField] private long _wealth;
-    private Dictionary<Faction, float> _relations = new Dictionary<Faction, float> ();
+    [SerializeField] private List<Structure> _property = new List<Structure> ();
+    [SerializeField] private StringToFloatMap _relations = new StringToFloatMap ();
 
     public string GetName () { return _name; }
 
@@ -27,11 +28,27 @@ public class Faction {
 
     public bool HasWealth (long condition) { return _wealth >= condition ? true : false; }
 
-    public float GetRelation (Faction other) { return _relations.ContainsKey (other) ? _relations[other] : 0; }
+    public List<Structure> GetProperty () { return _property; }
 
-    public void SetRelation (Faction other, float target) { _relations[other] = target; }
+    public void AddProperty (Structure structure) { _property.Add (structure); }
 
-    public void ChangeRelation (Faction other, float delta) { _relations[other] = GetRelation (other) + delta; }
+    public void RemoveProperty (Structure structure) { _property.Remove (structure); }
+
+    public void SetRelations (StringToFloatMap map) { _relations = map; }
+
+    public float GetRelation (Faction other) { return _relations.ContainsKey (other._id) ? _relations[other._id] : 0; }
+
+    public void SetRelation (Faction other, float target) { _relations[other._id] = Mathf.Clamp (target, -1, 1); other.SetRelationBack (this, target); }
+
+    private void SetRelationBack (Faction back, float target) { _relations[back._id] = Mathf.Clamp (target, -1, 1); }
+
+    public void ChangeRelation (Faction other, float delta) { SetRelation (other, GetRelation (other) + delta); }
+
+    public bool IsAlly (Faction other) { return GetRelation (other) > 0.75f ? true : false; }
+
+    public bool IsEnemy (Faction other) { return GetRelation (other) < -0.75f ? true : false; }
+
+    public bool IsNeutral (Faction other) { return !IsAlly (other) && !IsEnemy (other); }
 
     public FactionSaveData GetSaveData () {
 
@@ -45,7 +62,7 @@ public class Faction {
         };
         _relations.Keys.ToList ().ForEach (faction => {
 
-            data.RelationIds.Add (faction.GetId ());
+            data.RelationIds.Add (faction);
 
         });
         return data;
@@ -57,14 +74,9 @@ public class Faction {
         _name = saveData.Name;
         _id = saveData.Id;
         _wealth = saveData.Wealth;
-
-    }
-
-    public void LoadRelations (FactionSaveData saveData) {
-
         for (int i = 0; i < saveData.RelationIds.Count; i++) {
 
-            _relations[FactionManager.GetInstance ().GetFaction (saveData.RelationIds[i])] = saveData.RelationValues[i];
+            _relations[saveData.RelationIds[i]] = saveData.RelationValues[i];
 
         }
 

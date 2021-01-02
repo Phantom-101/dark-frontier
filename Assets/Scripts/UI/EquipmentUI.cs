@@ -7,7 +7,7 @@ public class EquipmentUI : MonoBehaviour {
     [SerializeField] private Transform _canvas;
     [SerializeField] private GameObject _indicatorPrefab;
 
-    private readonly Dictionary<EquipmentSlot, EquipmentIndicator> _indicators = new Dictionary<EquipmentSlot, EquipmentIndicator> ();
+    private readonly Dictionary<EquipmentSlot, EquipmentIndicatorUI> _indicators = new Dictionary<EquipmentSlot, EquipmentIndicatorUI> ();
 
     private void Update () {
 
@@ -31,7 +31,7 @@ public class EquipmentUI : MonoBehaviour {
                 GameObject indicator = Instantiate (_indicatorPrefab, _canvas);
                 RectTransform rect = indicator.GetComponent<RectTransform> ();
                 rect.anchoredPosition = new Vector2 (0, 100 * (player.GetEquipment ().Count - player.GetEquipment ().IndexOf (key) - 1));
-                EquipmentIndicator comp = indicator.GetComponent<EquipmentIndicator> ();
+                EquipmentIndicatorUI comp = indicator.GetComponent<EquipmentIndicatorUI> ();
                 comp.SetSlot (key);
                 _indicators[key] = comp;
 

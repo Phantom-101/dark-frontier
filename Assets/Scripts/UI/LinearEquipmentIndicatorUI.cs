@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class LinearEquipmentIndicator : EquipmentIndicator {
+public class LinearEquipmentIndicatorUI : EquipmentIndicatorUI {
 
     [SerializeField] protected Image _energy;
     [SerializeField] protected RectTransform _energyTransform;

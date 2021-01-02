@@ -3,9 +3,7 @@ using UnityEngine.UI;
 
 public class MenuUI : MonoBehaviour {
 
-    [SerializeField] private Image[] _images;
-    [SerializeField] private Text[] _texts;
-    [SerializeField] private Selectable[] _selectables;
+    [SerializeField] private CanvasGroup _group;
     [SerializeField] protected float _curAlpha = -1;
 
     private void Start () {
@@ -55,37 +53,27 @@ public class MenuUI : MonoBehaviour {
 
     void TweenToCurAlpha () {
 
-        foreach (Image img in _images) LeanTween.alpha (img.rectTransform, _curAlpha, 0.2f).setIgnoreTimeScale (true);
-        foreach (Text txt in _texts) LeanTween.alphaText (txt.rectTransform, _curAlpha, 0.2f).setIgnoreTimeScale (true);
+        LeanTween.alphaCanvas (_group, _curAlpha, 0.2f).setIgnoreTimeScale (true);
 
     }
 
     void TweenToCurAlphaImmediately () {
 
-        foreach (Image img in _images) LeanTween.alpha (img.rectTransform, _curAlpha, 0).setIgnoreTimeScale (true);
-        foreach (Text txt in _texts) LeanTween.alphaText (txt.rectTransform, _curAlpha, 0).setIgnoreTimeScale (true);
+        LeanTween.alphaCanvas (_group, _curAlpha, 0).setIgnoreTimeScale (true);
 
     }
 
     void DisableAll () {
 
-        foreach (Selectable selectable in _selectables) {
-
-            selectable.targetGraphic.raycastTarget = false;
-            selectable.interactable = false;
-
-        }
+        _group.interactable = false;
+        _group.blocksRaycasts = false;
 
     }
 
     void EnableAll () {
 
-        foreach (Selectable selectable in _selectables) {
-
-            selectable.targetGraphic.raycastTarget = true;
-            selectable.interactable = true;
-
-        }
+        _group.interactable = true;
+        _group.blocksRaycasts = true;
 
     }
 

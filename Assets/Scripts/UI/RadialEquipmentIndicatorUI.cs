@@ -2,7 +2,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RadialEquipmentIndicator : EquipmentIndicator {
+public class RadialEquipmentIndicatorUI : EquipmentIndicatorUI {
 
     [SerializeField] protected Image _energy;
     [SerializeField] protected float _energyMax;

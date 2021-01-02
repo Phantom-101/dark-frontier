@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EquipmentIndicator : MonoBehaviour {
+public class EquipmentIndicatorUI : MonoBehaviour {
 
     [SerializeField] protected EquipmentSlot _slot;
 

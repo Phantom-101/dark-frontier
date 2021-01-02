@@ -23,7 +23,7 @@ public class UIStateManager : MonoBehaviour {
 
     public UIState GetState () { return _state.Peek (); }
 
-    public void AddState (UIState state) { if (GetState () != state) _state.Push (state); }
+    public void AddState (UIState state) { if (!_state.Contains (state)) _state.Push (state); }
 
     public void RemoveState () { _state.Pop (); }
 

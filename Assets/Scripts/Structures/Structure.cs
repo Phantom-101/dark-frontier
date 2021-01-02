@@ -36,6 +36,8 @@ public class Structure : MonoBehaviour {
         if (_initialFaction != null) _faction = FactionManager.GetInstance ().GetFaction (_initialFaction.Id);
         if (_initialAI != null) _ai = _initialAI.GetAI (this);
 
+        if (_faction != null) _faction.AddProperty (this);
+
     }
 
     public StructureSO GetProfile () { return _profile; }
@@ -56,6 +58,7 @@ public class Structure : MonoBehaviour {
 
         if (_hull <= 0) {
 
+            if (_faction != null) _faction.RemoveProperty (this);
             _profile.OnDestroyedChannel.RaiseEvent (this);
 
         }

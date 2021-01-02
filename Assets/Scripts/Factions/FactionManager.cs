@@ -18,15 +18,11 @@ public class FactionManager : MonoBehaviour {
 
         });
 
-        _initialization.ForEach (faction => {
-
-            faction.SetRelations ();
-
-        });
-
         _initialization = new List<FactionSO> ();
 
     }
+
+    public List<Faction> GetFactions () { return _factions; }
 
     public void AddFaction (Faction faction) { if (!_factions.Contains (faction)) _factions.Add (faction); }
 
@@ -66,12 +62,6 @@ public class FactionManager : MonoBehaviour {
             Faction faction = new Faction ();
             faction.LoadSaveData (data);
             _factions.Add (faction);
-
-        });
-
-        factions.ForEach (data => {
-
-            GetFaction (data.Id).LoadRelations (data);
 
         });
 
