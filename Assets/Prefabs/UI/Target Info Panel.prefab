@@ -627,7 +627,7 @@ GameObject:
   - component: {fileID: 4864166113814497009}
   - component: {fileID: 3656479601572838359}
   m_Layer: 5
-  m_Name: Structure Info Panel
+  m_Name: Target Info Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -669,7 +669,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4864166113814497008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ea553960626b464cbd0be1762b0720c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f52c20549a08f34aa8acafe8f4c4349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _hull: {fileID: 4864166113760634268}
