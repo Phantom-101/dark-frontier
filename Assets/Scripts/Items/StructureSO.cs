@@ -5,6 +5,7 @@ public class StructureSO : ItemSO {
 
     [Header ("Graphics")]
     public GameObject Prefab;
+    public float ApparentSize;
     public Sprite HullWireframe;
 
     [Header ("Stats")]
