@@ -7,6 +7,7 @@ public class StructureSO : ItemSO {
     public GameObject Prefab;
     public float ApparentSize;
     public Sprite HullWireframe;
+    public GameObject DestructionEffect;
 
     [Header ("Stats")]
     public float Hull;

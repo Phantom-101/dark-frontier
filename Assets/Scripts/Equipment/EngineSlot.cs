@@ -4,6 +4,7 @@ public class EngineSlot : EquipmentSlot {
 
     [SerializeField] protected float _forwardSetting;
     [SerializeField] protected float _turnSetting;
+    [SerializeField] protected float _pitchSetting;
 
     public EngineSO GetEngine () { return _equipment as EngineSO; }
 
@@ -14,6 +15,10 @@ public class EngineSlot : EquipmentSlot {
     public float GetTurnSetting () { return _turnSetting; }
 
     public void SetTurnSetting (float target) { _turnSetting = Mathf.Clamp (target, -1, 1); }
+
+    public float GetPitchSetting () { return _pitchSetting; }
+
+    public void SetPitchSetting (float target) { _pitchSetting = Mathf.Clamp (target, -1, 1); }
 
     public override bool CanEquip (EquipmentSO equipment) {
 
@@ -27,6 +32,7 @@ public class EngineSlot : EquipmentSlot {
 
         _forwardSetting = 0;
         _turnSetting = 0;
+        _pitchSetting = 0;
 
     }
 

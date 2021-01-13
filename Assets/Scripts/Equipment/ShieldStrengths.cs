@@ -93,11 +93,7 @@ public class ShieldStrengths {
     public int GetSectorTo (Vector3 to) {
 
         Vector3 heading = to - _slot.GetEquipper ().transform.localPosition;
-        Vector3 perp = Vector3.Cross (_slot.GetEquipper ().transform.forward, heading);
-        float dir = Vector3.Dot (perp, _slot.GetEquipper ().transform.up);
-
-        float unsigned = Vector3.Angle (_slot.GetEquipper ().transform.forward, heading);
-        float angle = dir > 0 ? unsigned : -unsigned;
+        float angle = Vector3.SignedAngle (_slot.GetEquipper ().transform.forward, heading, Vector3.up);
 
         return GetAngleSector (angle);
 

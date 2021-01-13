@@ -22,14 +22,18 @@ public class Structure : MonoBehaviour {
 
     private void Awake () {
 
-        _sector = transform.parent.GetComponent<Sector> ();
-        _sector.Entered (this);
+        if (transform.parent != null) {
+
+            _sector = transform.parent.GetComponent<Sector> ();
+            if (_sector != null) _sector.Entered (this);
+
+        }
 
     }
 
     private void Start () {
 
-        StructureManager.GetInstance ().AddStructure (this);
+        if (StructureManager.GetInstance () != null) StructureManager.GetInstance ().AddStructure (this);
 
         if (string.IsNullOrEmpty (_id)) _id = Guid.NewGuid ().ToString ();
 
@@ -55,6 +59,19 @@ public class Structure : MonoBehaviour {
     public void ChangeHull (float amount) {
 
         _hull += amount;
+
+        if (_hull <= 0) {
+
+            if (_faction != null) _faction.RemoveProperty (this);
+            _profile.OnDestroyedChannel.RaiseEvent (this);
+
+        }
+
+    }
+
+    public void SetHull (float target) {
+
+        _hull = target;
 
         if (_hull <= 0) {
 
@@ -152,6 +169,20 @@ public class Structure : MonoBehaviour {
             shield.GetStrengths ().ChangeSectorStrength (sector, -shieldDmg);
         }
         ChangeHull (-leftOver);
+
+    }
+
+    public float GetAngleTo (Vector3 to) {
+
+        Vector3 heading = to - transform.localPosition;
+        return Vector3.SignedAngle (transform.forward, heading, transform.up);
+
+    }
+
+    public float GetElevationTo (Vector3 to) {
+
+        Vector3 heading = to - transform.localPosition;
+        return Vector3.SignedAngle (transform.forward, heading, -transform.right);
 
     }
 

@@ -79,6 +79,15 @@ public class StructureManager : MonoBehaviour {
 
         _structures.Remove (destroyedStructure);
 
+        if (destroyedStructure.GetProfile ().DestructionEffect != null) {
+
+            GameObject effect = Instantiate (destroyedStructure.GetProfile ().DestructionEffect, destroyedStructure.transform.parent);
+            effect.transform.localPosition = destroyedStructure.transform.localPosition;
+            effect.transform.localScale = Vector3.one * destroyedStructure.GetProfile ().ApparentSize;
+            Destroy (effect, 3);
+
+        }
+
         // Drop stuff according to StructureSO.DropPercentage
 
         Destroy (destroyedStructure.gameObject);
@@ -88,6 +97,15 @@ public class StructureManager : MonoBehaviour {
     private void OnStationDestroyed (Structure destroyedStructure) {
 
         _structures.Remove (destroyedStructure);
+
+        if (destroyedStructure.GetProfile ().DestructionEffect != null) {
+
+            GameObject effect = Instantiate (destroyedStructure.GetProfile ().DestructionEffect, destroyedStructure.transform.parent);
+            effect.transform.localPosition = destroyedStructure.transform.localPosition;
+            effect.transform.localScale = Vector3.one * destroyedStructure.GetProfile ().ApparentSize;
+            Destroy (effect, 3);
+
+        }
 
         // Drop stuff according to StructureSO.DropPercentage
 
@@ -100,6 +118,15 @@ public class StructureManager : MonoBehaviour {
     private void OnCargoDestroyed (Structure destroyedStructure) {
 
         _structures.Remove (destroyedStructure);
+
+        if (destroyedStructure.GetProfile ().DestructionEffect != null) {
+
+            GameObject effect = Instantiate (destroyedStructure.GetProfile ().DestructionEffect, destroyedStructure.transform.parent);
+            effect.transform.localPosition = destroyedStructure.transform.localPosition;
+            effect.transform.localScale = Vector3.one * destroyedStructure.GetProfile ().ApparentSize;
+            Destroy (effect, 3);
+
+        }
 
         Destroy (destroyedStructure.gameObject);
 
