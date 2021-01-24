@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Light Missile
   Description: A light warhead.
-  Id: items.charges.light-missile
+  Id: items.charges.missiles.light-missile
   Icon: {fileID: 21300000, guid: 34502f7e93de60d40ac817b2a0f12f4a, type: 3}
   Size: 0.1
   Usable: 0

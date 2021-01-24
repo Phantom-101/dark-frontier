@@ -10,7 +10,7 @@ public class Faction {
     [SerializeField] private string _id;
     [SerializeField] private long _wealth;
     [SerializeField] private List<Structure> _property = new List<Structure> ();
-    [SerializeField] private StringToFloatMap _relations = new StringToFloatMap ();
+    [SerializeField] private StringToFloatDictionary _relations = new StringToFloatDictionary ();
 
     public string GetName () { return _name; }
 
@@ -34,7 +34,7 @@ public class Faction {
 
     public void RemoveProperty (Structure structure) { _property.Remove (structure); }
 
-    public void SetRelations (StringToFloatMap map) { _relations = map; }
+    public void SetRelations (StringToFloatDictionary map) { _relations = map; }
 
     public float GetRelation (Faction other) { return _relations.ContainsKey (other._id) ? _relations[other._id] : 0; }
 

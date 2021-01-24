@@ -51,11 +51,11 @@
 
             if (slot.GetEquipment ().RequireCharge) {
 
-                ItemSO charge = slot.GetCharge ();
+                ChargeSO charge = slot.GetCharge ();
 
                 if (charge == null) {
 
-                    foreach (ItemSO usable in slot.GetCharges ()) {
+                    foreach (ChargeSO usable in slot.GetCharges ()) {
 
                         if (slot.GetEquipper ().HasInventoryCount (usable, 1) && slot.CanLoadCharge (usable, 1)) {
 

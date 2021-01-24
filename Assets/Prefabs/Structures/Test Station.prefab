@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipment: {fileID: 11400000, guid: 5db6247dac9261245a87307a41707f94, type: 2}
+  _equipment: {fileID: 0}
   _storedEnergy: 0
   _currentDurability: 10
   _equipper: {fileID: 570406170697649155}
@@ -266,7 +266,7 @@ MonoBehaviour:
       elementNameProperty: 
       elementNameOverride: 
       elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
+    reqReferences: {fileID: 11400000, guid: 3d6785e46e940b843aa5fbe4ca729d60, type: 2}
     isExpanded: 0
     _keyValues: []
     _keys: []
@@ -351,7 +351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipment: {fileID: 11400000, guid: 5db6247dac9261245a87307a41707f94, type: 2}
+  _equipment: {fileID: 0}
   _storedEnergy: 0
   _currentDurability: 10
   _equipper: {fileID: 570406170697649155}
@@ -413,6 +413,7 @@ MonoBehaviour:
   _chargeQuantity: 0
   _forwardSetting: 0
   _turnSetting: 0
+  _pitchSetting: 0
 --- !u!1 &656550552423297607
 GameObject:
   m_ObjectHideFlags: 0

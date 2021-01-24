@@ -7,18 +7,20 @@ public class Structure : MonoBehaviour {
     [SerializeField] private StructureSO _profile;
     [SerializeField] private string _id;
 
+    [SerializeField] private StringToStructureStatDictionary _stats = new StringToStructureStatDictionary ();
     [SerializeField] private float _hull;
     [SerializeField] private Faction _faction;
     [SerializeField] private FactionSO _initialFaction;
 
     [SerializeField] private List<EquipmentSlot> _equipmentSlots = new List<EquipmentSlot> ();
-    [SerializeField] private ItemSOToIntMap _inventory = new ItemSOToIntMap ();
+    [SerializeField] private ItemSOToIntDictionary _inventory = new ItemSOToIntDictionary ();
 
     [SerializeReference] private AI _ai;
     [SerializeField] private AISO _initialAI;
     [SerializeField] private Structure _target;
 
     [SerializeField] private Sector _sector;
+    [SerializeField] private List<StructureLink> _links;
 
     private void Awake () {
 
@@ -36,6 +38,20 @@ public class Structure : MonoBehaviour {
         if (StructureManager.GetInstance () != null) StructureManager.GetInstance ().AddStructure (this);
 
         if (string.IsNullOrEmpty (_id)) _id = Guid.NewGuid ().ToString ();
+
+        if (_stats.Keys.Count == 0) {
+
+            // Initialize structure stats
+
+            _stats.Add ("sensor_strength", new StructureStat ("sensor_strength", _profile.SensorStrength));
+            _stats.Add ("detectability", new StructureStat ("detectability", _profile.Detectability));
+            _stats.Add ("docking_bay_size", new StructureStat ("docking_bay_size", _profile.DockingBaySize));
+            _stats.Add ("damage_multiplier", new StructureStat ("damage_multiplier", 1));
+            _stats.Add ("recharge_multiplier", new StructureStat ("recharge_multiplier", 1));
+            _stats.Add ("speed_multiplier", new StructureStat ("speed_multiplier", 1));
+            _stats.Add ("agility_multiplier", new StructureStat ("agility_multiplier", 1));
+
+        }
 
         if (_initialFaction != null) _faction = FactionManager.GetInstance ().GetFaction (_initialFaction.Id);
         if (_initialAI != null) _ai = _initialAI.GetAI (this);
@@ -98,9 +114,9 @@ public class Structure : MonoBehaviour {
 
     }
 
-    public ItemSOToIntMap GetInventory () { return _inventory; }
+    public ItemSOToIntDictionary GetInventory () { return _inventory; }
 
-    public void SetInventory (ItemSOToIntMap inventory) { _inventory = inventory ?? new ItemSOToIntMap (); }
+    public void SetInventory (ItemSOToIntDictionary inventory) { _inventory = inventory ?? new ItemSOToIntDictionary (); }
 
     public int GetInventoryCount (ItemSO item) { return _inventory.ContainsKey (item) ? _inventory[item] : 0; }
 
@@ -141,6 +157,63 @@ public class Structure : MonoBehaviour {
     public Sector GetSector () { return _sector; }
 
     public void SetSector (Sector sector) { _sector = sector; }
+
+    public List<StructureLink> GetLinks () { return _links; }
+
+    public void SetLinks (List<StructureLink> links) { _links = links; }
+
+    public void AddLink (StructureLink link) { if (!_links.Contains (link)) _links.Add (link); }
+
+    public void RemoveLink (StructureLink link) { _links.Remove (link); }
+
+    public List<Structure> GetDockedStructures () {
+
+        List<Structure> docked = new List<Structure> ();
+        foreach (StructureLink link in _links)
+            if (link.GetLinkType () == StructureLinkType.Docking)
+                if (link.GetAId () == _id)
+                    docked.Add (link.GetB ());
+
+        return docked;
+
+    }
+
+    public int GetDockedStructuresCount () {
+
+        int count = 0;
+        foreach (StructureLink link in _links)
+            if (link.GetLinkType () == StructureLinkType.Docking)
+                if (link.GetAId () == _id)
+                    count++;
+
+        return count;
+
+    }
+
+    public bool IsDocked () {
+
+        foreach (StructureLink link in _links)
+            if (link.GetLinkType () == StructureLinkType.Docking)
+                if (link.GetBId () == _id)
+                    return true;
+
+        return false;
+
+    }
+
+    public bool CanReceiveDocker (Structure docker) {
+
+        return false;
+
+    }
+
+    public bool ReceiveDocker (Structure docker) {
+
+        if (!CanReceiveDocker (docker)) return false;
+
+        return false;
+
+    }
 
     public void Tick () {
 

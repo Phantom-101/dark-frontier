@@ -13,7 +13,7 @@ public class EquipmentSO : ItemSO {
     public bool Activatable;
     public bool RequireCharge;
     public float InventorySize;
-    public ItemSO[] Charges;
+    public ChargeSO[] Charges;
 
     public virtual void OnAwake (EquipmentSlot slot) { }
 

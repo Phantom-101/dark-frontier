@@ -12,6 +12,9 @@ public class StructureSO : ItemSO {
     [Header ("Stats")]
     public float Hull;
     public float InventorySize;
+    public float SensorStrength;
+    public float Detectability;
+    public float DockingBaySize;
     public StructureDestroyedEventChannelSO OnDestroyedChannel;
     public float DropPercentage;
     public int MaxMeta;

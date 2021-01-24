@@ -9,7 +9,7 @@ public class EquipmentSlot : MonoBehaviour {
     [SerializeField] protected float _currentDurability;
     [SerializeField] protected Structure _equipper;
     [SerializeField] protected bool _active;
-    [SerializeField] protected ItemSO _charge;
+    [SerializeField] protected ChargeSO _charge;
     [SerializeField] protected int _chargeQuantity;
 
     private void Awake () {
@@ -94,9 +94,9 @@ public class EquipmentSlot : MonoBehaviour {
 
     public void Deactivate () { _equipment.Deactivate (this); }
 
-    public ItemSO[] GetCharges () { return _equipment.Charges; }
+    public ChargeSO[] GetCharges () { return _equipment.Charges; }
 
-    public bool CanLoadCharge (ItemSO charge, int count) {
+    public bool CanLoadCharge (ChargeSO charge, int count) {
 
         if (_equipment == null) return false;
         if (!_equipment.Activatable) return false;
@@ -116,7 +116,7 @@ public class EquipmentSlot : MonoBehaviour {
 
     }
 
-    public bool LoadCharge (ItemSO charge, int count) {
+    public bool LoadCharge (ChargeSO charge, int count) {
 
         if (!CanLoadCharge (charge, count)) return false;
 
@@ -163,7 +163,7 @@ public class EquipmentSlot : MonoBehaviour {
 
     }
 
-    public ItemSO GetCharge () { return _charge; }
+    public ChargeSO GetCharge () { return _charge; }
 
     public int GetChargeQuantity () { return _chargeQuantity; }
 

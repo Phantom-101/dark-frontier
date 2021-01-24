@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class StructureManager : MonoBehaviour {
 
     [SerializeField] private List<Structure> _structures = new List<Structure> ();
+    [SerializeField] private List<StructureLink> _links = new List<StructureLink> ();
 
     [SerializeField] private StructureCreatedEventChannelSO _invSpawnChannel;
     [SerializeField] private StructureCreatedEventChannelSO _siteSpawnChannel;
@@ -43,6 +43,50 @@ public class StructureManager : MonoBehaviour {
     }
 
     public virtual List<Structure> GetStructures () { return _structures; }
+
+    public void AddStructure (Structure structure) { if (!_structures.Contains (structure)) _structures.Add (structure); }
+
+    public void RemoveStructure (Structure structure) { _structures.Remove (structure); }
+
+    public Structure GetStructure (string id) {
+
+        Structure found = null;
+        _structures.ForEach (structure => {
+
+            if (structure.GetId () == id) found = structure;
+
+        });
+        return found;
+
+    }
+
+    public virtual List<StructureLink> GetLinks () { return _links; }
+
+    public void AddLink (StructureLink link) { if (!_links.Contains (link)) _links.Add (link); }
+
+    public void RemoveLink (StructureLink link) { _links.Remove (link); }
+
+    public List<StructureLink> GetStructureLinks (Structure structure) {
+
+        List<StructureLink> found = new List<StructureLink> ();
+        foreach (StructureLink link in _links)
+            if (link.GetAId () == structure.GetId () || link.GetBId () == structure.GetId ())
+                found.Add (link);
+
+        return found;
+
+    }
+
+    public List<StructureLink> GetStructureLinks (string id) {
+
+        List<StructureLink> found = new List<StructureLink> ();
+        foreach (StructureLink link in _links)
+            if (link.GetAId () == id || link.GetBId () == id)
+                found.Add (link);
+
+        return found;
+
+    }
 
     private void OnInvSpawn (StructureSO profile, Faction owner, Sector sector, Location location) {
 
@@ -129,22 +173,6 @@ public class StructureManager : MonoBehaviour {
         }
 
         Destroy (destroyedStructure.gameObject);
-
-    }
-
-    public void AddStructure (Structure structure) { if (!_structures.Contains (structure)) _structures.Add (structure); }
-
-    public void RemoveStructure (Structure structure) { _structures.Remove (structure); }
-
-    public Structure GetStructure (string id) {
-
-        Structure found = null;
-        _structures.ForEach (structure => {
-
-            if (structure.GetId () == id) found = structure;
-
-        });
-        return found;
 
     }
 

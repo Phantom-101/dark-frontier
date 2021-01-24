@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef11afdbd8a2f34448943ffdea9943ac, type: 3}
-  m_Name: References
+  m_Script: {fileID: 11500000, guid: a9249071c2df0514f8cd12c77e189c78, type: 3}
+  m_Name: Default Item
   m_EditorClassIdentifier: 
-  _gameObject: {fileID: 0}
-  _material: {fileID: 0}
-  _audioClip: {fileID: 0}
-  _itemSO: {fileID: 11400000, guid: e6686b177d04d6b4397af0df3385eb78, type: 2}
+  Name: Default Item
+  Description: Default item.
+  Id: items.default-item
+  Icon: {fileID: 21300000, guid: 62cae22076774484f98fb89496c4186a, type: 3}
+  Size: 0
+  Usable: 0

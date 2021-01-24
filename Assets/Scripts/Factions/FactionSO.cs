@@ -7,7 +7,7 @@ public class FactionSO : ScriptableObject {
     public string Name;
     public string Id;
     public long Wealth;
-    public StringToFloatMap Relations = new StringToFloatMap ();
+    public StringToFloatDictionary Relations = new StringToFloatDictionary ();
 
     public Faction GetFaction () {
 
@@ -18,7 +18,7 @@ public class FactionSO : ScriptableObject {
         f.SetId (Id);
         f.SetName (Name);
         f.SetWealth (Wealth);
-        StringToFloatMap copy = new StringToFloatMap ();
+        StringToFloatDictionary copy = new StringToFloatDictionary ();
         Relations.CopyTo (copy);
         f.SetRelations (copy);
         return f;
