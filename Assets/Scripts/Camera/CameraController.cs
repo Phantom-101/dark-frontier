@@ -1,0 +1,62 @@
+﻿using UnityEngine;
+
+public class CameraController : MonoBehaviour {
+
+    [SerializeField] private Vector3 _offset;
+    [SerializeField] private Location _target;
+    [SerializeField] private float _followSpeed;
+
+    private PlayerController _pc;
+
+    private static CameraController _instance;
+
+    private void Awake () {
+
+        _instance = this;
+
+    }
+
+    private void Start () {
+
+        _pc = PlayerController.GetInstance ();
+
+    }
+
+    private void FixedUpdate () {
+
+        Structure player = _pc.GetPlayer ();
+        Transform pt = player.transform;
+
+        if (_target.GetTransform () == null) {
+
+            Vector3 scOff = _offset * player.GetProfile ().ApparentSize;
+            Vector3 targetPos = pt.position + pt.rotation * scOff;
+            Vector3 offset = targetPos - transform.position;
+            Debug.DrawLine (transform.position, targetPos, Color.red);
+            transform.Translate (offset * _followSpeed * Time.deltaTime, Space.World);
+            transform.LookAt (pt.position + pt.rotation * Vector3.forward * player.GetProfile ().ApparentSize * 2);
+
+        } else {
+
+            Vector3 difVec = _target.GetPosition () - pt.position;
+            difVec.y = 0;
+            Vector3 norVec = difVec.normalized;
+            Vector3 scOff = _offset * player.GetProfile ().ApparentSize;
+            Vector3 targetOffset = new Vector3 (scOff.x * norVec.x, scOff.y, scOff.z * norVec.z);
+            Vector3 targetPos = pt.position + pt.rotation * targetOffset;
+            Vector3 offset = targetPos - transform.position;
+            Debug.DrawLine (transform.position, targetPos, Color.red);
+            transform.Translate (offset * _followSpeed * Time.deltaTime, Space.World);
+            transform.LookAt (_target.GetPosition ());
+
+        }
+
+    }
+
+    public void SetTarget (Location target) { _target = target; }
+
+    public void RemoveTarget () { _target = null; }
+
+    public static CameraController GetInstance () { return _instance; }
+
+}

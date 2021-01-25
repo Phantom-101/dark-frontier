@@ -4,7 +4,6 @@ using UnityEngine;
 public class StructureManager : MonoBehaviour {
 
     [SerializeField] private List<Structure> _structures = new List<Structure> ();
-    [SerializeField] private List<StructureLink> _links = new List<StructureLink> ();
 
     [SerializeField] private StructureCreatedEventChannelSO _invSpawnChannel;
     [SerializeField] private StructureCreatedEventChannelSO _siteSpawnChannel;
@@ -16,7 +15,7 @@ public class StructureManager : MonoBehaviour {
 
     private static StructureManager _instance;
 
-    protected virtual void Awake () {
+    private void Awake () {
 
         _invSpawnChannel.OnStructureCreated += OnInvSpawn;
         _siteSpawnChannel.OnStructureCreated += OnSiteSpawn;
@@ -42,7 +41,7 @@ public class StructureManager : MonoBehaviour {
 
     }
 
-    public virtual List<Structure> GetStructures () { return _structures; }
+    public List<Structure> GetStructures () { return _structures; }
 
     public void AddStructure (Structure structure) { if (!_structures.Contains (structure)) _structures.Add (structure); }
 
@@ -56,34 +55,6 @@ public class StructureManager : MonoBehaviour {
             if (structure.GetId () == id) found = structure;
 
         });
-        return found;
-
-    }
-
-    public virtual List<StructureLink> GetLinks () { return _links; }
-
-    public void AddLink (StructureLink link) { if (!_links.Contains (link)) _links.Add (link); }
-
-    public void RemoveLink (StructureLink link) { _links.Remove (link); }
-
-    public List<StructureLink> GetStructureLinks (Structure structure) {
-
-        List<StructureLink> found = new List<StructureLink> ();
-        foreach (StructureLink link in _links)
-            if (link.GetAId () == structure.GetId () || link.GetBId () == structure.GetId ())
-                found.Add (link);
-
-        return found;
-
-    }
-
-    public List<StructureLink> GetStructureLinks (string id) {
-
-        List<StructureLink> found = new List<StructureLink> ();
-        foreach (StructureLink link in _links)
-            if (link.GetAId () == id || link.GetBId () == id)
-                found.Add (link);
-
         return found;
 
     }

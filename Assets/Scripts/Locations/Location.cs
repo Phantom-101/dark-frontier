@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
+[Serializable]
 public class Location {
 
-    private readonly Transform _transform;
-    private Vector3 _position;
+    [SerializeField] private Transform _transform;
+    [SerializeField] private Vector3 _position;
 
     public Location (Transform transform) {
 
@@ -28,6 +28,14 @@ public class Location {
     public Vector3 GetPosition () {
 
         if (_transform != null) return _transform.position;
+
+        return _position;
+
+    }
+
+    public Vector3 GetLocalPosition () {
+
+        if (_transform != null) return _transform.localPosition;
 
         return _position;
 

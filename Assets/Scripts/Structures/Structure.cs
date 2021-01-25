@@ -20,7 +20,9 @@ public class Structure : MonoBehaviour {
     [SerializeField] private Structure _target;
 
     [SerializeField] private Sector _sector;
-    [SerializeField] private List<StructureLink> _links;
+
+    [SerializeField] private List<Structure> _docked;
+    [SerializeField] private List<string> _dockedIds;
 
     private void Awake () {
 
@@ -158,60 +160,100 @@ public class Structure : MonoBehaviour {
 
     public void SetSector (Sector sector) { _sector = sector; }
 
-    public List<StructureLink> GetLinks () { return _links; }
+    public List<Structure> GetDocked () { return _docked; }
 
-    public void SetLinks (List<StructureLink> links) { _links = links; }
+    public bool AddDocker (Structure docker) {
 
-    public void AddLink (StructureLink link) { if (!_links.Contains (link)) _links.Add (link); }
+        if (!CanAddDocker (docker)) return false;
 
-    public void RemoveLink (StructureLink link) { _links.Remove (link); }
+        // Add as child
+        _docked.Add (docker);
+        docker.transform.parent = transform;
 
-    public List<Structure> GetDockedStructures () {
+        // Disable renderers
+        Renderer[] renderers = docker.GetComponentsInChildren<Renderer> ();
+        foreach (Renderer r in renderers) r.enabled = false;
 
-        List<Structure> docked = new List<Structure> ();
-        foreach (StructureLink link in _links)
-            if (link.GetLinkType () == StructureLinkType.Docking)
-                if (link.GetAId () == _id)
-                    docked.Add (link.GetB ());
+        // Disable all equipment
+        foreach (EquipmentSlot slot in docker.GetEquipment ()) slot.Deactivate ();
 
-        return docked;
+        if (docker == PlayerController.GetInstance ().GetPlayer ()) {
 
-    }
+            // Send notification
+            NotificationUI.GetInstance ().AddNotification ("Ship successfully docked");
 
-    public int GetDockedStructuresCount () {
+            // Update UI
+            UIStateManager.GetInstance ().AddState (UIState.Docked);
 
-        int count = 0;
-        foreach (StructureLink link in _links)
-            if (link.GetLinkType () == StructureLinkType.Docking)
-                if (link.GetAId () == _id)
-                    count++;
+            // Update camera anchor
+            
 
-        return count;
+        }
 
-    }
-
-    public bool IsDocked () {
-
-        foreach (StructureLink link in _links)
-            if (link.GetLinkType () == StructureLinkType.Docking)
-                if (link.GetBId () == _id)
-                    return true;
-
-        return false;
+        return true;
 
     }
 
-    public bool CanReceiveDocker (Structure docker) {
+    public void RemoveDocker (Structure docker) {
 
-        return false;
+        if (_docked.Remove (docker)) {
+
+            // Remove as child
+            docker.transform.parent = transform.parent;
+
+            // Enable renderers
+            Renderer[] renderers = docker.GetComponentsInChildren<Renderer> (true);
+            foreach (Renderer r in renderers) r.enabled = true;
+
+            if (docker == PlayerController.GetInstance ().GetPlayer ()) {
+
+                // Send notification
+                NotificationUI.GetInstance ().AddNotification ("Ship successfully undocked");
+
+                // Update UI
+                UIStateManager.GetInstance ().RemoveState ();
+
+            }
+
+        }
 
     }
 
-    public bool ReceiveDocker (Structure docker) {
+    public bool CanAddDocker (Structure docker) {
 
-        if (!CanReceiveDocker (docker)) return false;
+        // In the same sector or already docked?
+        if (docker.transform.parent != transform.parent) return false;
+        // Good relations?
+        if (_faction.IsEnemy (docker.GetFaction ())) return false;
+        // Within range?
+        if (NavigationManager.GetInstance ().GetLocalDistance (this, docker) > 50) return false;
+        // Already children?
+        if (_docked.Contains (docker)) return false;
+        // Enough space?
+        float size = 0;
+        foreach (Structure c in _docked) size += c.GetProfile ().ApparentSize;
+        if (docker.GetProfile ().ApparentSize > _stats["docking_bay_size"].GetAppliedValue () - size) return false;
 
-        return false;
+        return true;
+
+    }
+
+    public bool IsDocked () { return GetDockedAt () != null; }
+
+    public Structure GetDockedAt () { return transform.parent.GetComponent<Structure> (); }
+
+    public bool CanDockTarget () { return _target != null && _target.CanAddDocker (this); }
+
+    public bool CanUndock () { return IsDocked (); }
+
+    public void DockTarget () { _target.AddDocker (this); }
+
+    public bool Undock () {
+
+        if (!CanUndock ()) return false;
+
+        GetDockedAt ().RemoveDocker (this);
+        return true;
 
     }
 
