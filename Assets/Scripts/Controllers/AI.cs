@@ -8,6 +8,12 @@ public class AI {
 
     public AI (Structure structure) { _structure = structure; }
 
-    public virtual void Tick () { }
+    public virtual void Tick () {
+
+        EngineSlot engine = _structure.GetEquipment<EngineSlot> ()[0];
+        engine.SetForwardSetting (0);
+        engine.SetTurnSetting (0);
+
+    }
 
 }

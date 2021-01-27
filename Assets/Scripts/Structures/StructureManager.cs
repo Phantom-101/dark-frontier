@@ -105,7 +105,17 @@ public class StructureManager : MonoBehaviour {
 
         // Drop stuff according to StructureSO.DropPercentage
 
-        Destroy (destroyedStructure.gameObject);
+        LeanTween.value (destroyedStructure.gameObject, 0, 1, 2).setOnUpdateParam (destroyedStructure.gameObject).setOnUpdateObject ((float value, object obj) => {
+
+            GameObject go = obj as GameObject;
+            go.GetComponentInChildren<MeshRenderer> ().material.SetFloat ("_DissolveAmount", value);
+
+        });
+
+        Destroy (destroyedStructure.GetComponent<ConstantForce> ());
+
+        Destroy (destroyedStructure);
+        Destroy (destroyedStructure.gameObject, 3);
 
     }
 
@@ -126,7 +136,17 @@ public class StructureManager : MonoBehaviour {
 
         // Destroy docked ships
 
-        Destroy (destroyedStructure.gameObject);
+        LeanTween.value (destroyedStructure.gameObject, 0, 1, 5).setOnUpdateParam (destroyedStructure.gameObject).setOnUpdateObject ((float value, object obj) => {
+
+            GameObject go = obj as GameObject;
+            go.GetComponentInChildren<MeshRenderer> ().material.SetFloat ("_DissolveAmount", value);
+
+        });
+
+        Destroy (destroyedStructure.GetComponent<ConstantForce> ());
+
+        Destroy (destroyedStructure);
+        Destroy (destroyedStructure.gameObject, 6);
 
     }
 
@@ -143,7 +163,18 @@ public class StructureManager : MonoBehaviour {
 
         }
 
-        Destroy (destroyedStructure.gameObject);
+        LeanTween.value (destroyedStructure.gameObject, 0, 1, 1).setOnUpdateParam (destroyedStructure.gameObject).setOnUpdateObject ((float value, object obj) => {
+
+            GameObject go = obj as GameObject;
+            go.GetComponentInChildren<MeshRenderer> ().material.SetFloat ("_DissolveAmount", value);
+
+        });
+
+        Destroy (destroyedStructure.GetComponent<ConstantForce> ());
+        Destroy (destroyedStructure.GetComponent<Rigidbody> ());
+
+        Destroy (destroyedStructure);
+        Destroy (destroyedStructure.gameObject, 2);
 
     }
 
