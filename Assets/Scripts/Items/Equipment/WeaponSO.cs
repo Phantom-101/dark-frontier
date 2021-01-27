@@ -7,6 +7,7 @@
 
         if (slot.GetEquipment ().RequireCharge && slot.GetChargeQuantity () == 0) return false;
         if (slot.GetEquipper ().GetTarget () == null) return false;
+        if (!(slot as WeaponSlot).CanFireAt (slot.GetEquipper ().GetTarget ())) return false;
         if ((slot.GetEquipper ().transform.localPosition - slot.GetEquipper ().GetTarget ().transform.localPosition).sqrMagnitude > Range * Range) return false;
 
         return true;

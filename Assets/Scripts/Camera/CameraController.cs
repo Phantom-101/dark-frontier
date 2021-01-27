@@ -2,6 +2,7 @@
 
 public class CameraController : MonoBehaviour {
 
+    [SerializeField] private Location _anchor;
     [SerializeField] private Vector3 _offset;
     [SerializeField] private Location _target;
     [SerializeField] private float _followSpeed;
@@ -25,7 +26,7 @@ public class CameraController : MonoBehaviour {
     private void FixedUpdate () {
 
         Structure player = _pc.GetPlayer ();
-        Transform pt = player.transform;
+        Transform pt = _anchor?.GetTransform () == null ? player.transform : _anchor.GetTransform ();
 
         if (_target.GetTransform () == null) {
 
@@ -52,6 +53,10 @@ public class CameraController : MonoBehaviour {
         }
 
     }
+
+    public void SetAnchor (Location anchor) { _anchor = anchor; }
+
+    public void RemoveAnchor () { _anchor = null; }
 
     public void SetTarget (Location target) { _target = target; }
 

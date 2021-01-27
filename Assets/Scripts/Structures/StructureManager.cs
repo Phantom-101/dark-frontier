@@ -105,7 +105,7 @@ public class StructureManager : MonoBehaviour {
 
         // Drop stuff according to StructureSO.DropPercentage
 
-        LeanTween.value (destroyedStructure.gameObject, 0, 1, 2).setOnUpdateParam (destroyedStructure.gameObject).setOnUpdateObject ((float value, object obj) => {
+        LeanTween.value (destroyedStructure.gameObject, 0, 1, 5).setOnUpdateParam (destroyedStructure.gameObject).setOnUpdateObject ((float value, object obj) => {
 
             GameObject go = obj as GameObject;
             go.GetComponentInChildren<MeshRenderer> ().material.SetFloat ("_DissolveAmount", value);
@@ -115,7 +115,7 @@ public class StructureManager : MonoBehaviour {
         Destroy (destroyedStructure.GetComponent<ConstantForce> ());
 
         Destroy (destroyedStructure);
-        Destroy (destroyedStructure.gameObject, 3);
+        Destroy (destroyedStructure.gameObject, 6);
 
     }
 
@@ -136,7 +136,7 @@ public class StructureManager : MonoBehaviour {
 
         // Destroy docked ships
 
-        LeanTween.value (destroyedStructure.gameObject, 0, 1, 5).setOnUpdateParam (destroyedStructure.gameObject).setOnUpdateObject ((float value, object obj) => {
+        LeanTween.value (destroyedStructure.gameObject, 0, 1, 10).setOnUpdateParam (destroyedStructure.gameObject).setOnUpdateObject ((float value, object obj) => {
 
             GameObject go = obj as GameObject;
             go.GetComponentInChildren<MeshRenderer> ().material.SetFloat ("_DissolveAmount", value);
@@ -146,7 +146,7 @@ public class StructureManager : MonoBehaviour {
         Destroy (destroyedStructure.GetComponent<ConstantForce> ());
 
         Destroy (destroyedStructure);
-        Destroy (destroyedStructure.gameObject, 6);
+        Destroy (destroyedStructure.gameObject, 11);
 
     }
 

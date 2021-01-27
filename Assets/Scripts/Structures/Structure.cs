@@ -180,13 +180,13 @@ public class Structure : MonoBehaviour {
         if (docker == PlayerController.GetInstance ().GetPlayer ()) {
 
             // Send notification
-            NotificationUI.GetInstance ().AddNotification ("Ship successfully docked");
+            NotificationUI.GetInstance ().AddNotification ("Docked at " + gameObject.name);
 
             // Update UI
             UIStateManager.GetInstance ().AddState (UIState.Docked);
 
             // Update camera anchor
-            
+            CameraController.GetInstance ().SetAnchor (new Location (transform));
 
         }
 
@@ -208,10 +208,13 @@ public class Structure : MonoBehaviour {
             if (docker == PlayerController.GetInstance ().GetPlayer ()) {
 
                 // Send notification
-                NotificationUI.GetInstance ().AddNotification ("Ship successfully undocked");
+                NotificationUI.GetInstance ().AddNotification ("Undocked from " + gameObject.name);
 
                 // Update UI
                 UIStateManager.GetInstance ().RemoveState ();
+
+                // Update camera anchor
+                CameraController.GetInstance ().RemoveAnchor ();
 
             }
 
