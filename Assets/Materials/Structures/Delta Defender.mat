@@ -21,7 +21,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Albedo:
-        m_Texture: {fileID: 2800000, guid: 6ffb7692282e6684aac9cdbe7da92b5f, type: 3}
+        m_Texture: {fileID: 2800000, guid: ea7887752bcd3ad41aae6961ac1a3fd9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DissolveTexture:
@@ -29,15 +29,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Emission:
-        m_Texture: {fileID: 2800000, guid: ccf28bdf2a261ff408c78ba618b90545, type: 3}
+        m_Texture: {fileID: 2800000, guid: ad881474b40017242b08c142ec0702a7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Metallic:
-        m_Texture: {fileID: 2800000, guid: 01845239f6a61864da6638fef41dd8ab, type: 3}
+        m_Texture: {fileID: 2800000, guid: e3590435ef4e8ba41b495e266bdc0c7e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal:
-        m_Texture: {fileID: 2800000, guid: 086e10d390321e748a91577d56d5f889, type: 3}
+        m_Texture: {fileID: 2800000, guid: 94ca87ab1137b114091d93cf2d6b6d57, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Occlusion:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
