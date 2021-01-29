@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b631ed5d83fe9f45ac195241758721a, type: 3}
+  m_Name: Delta Defender
+  m_EditorClassIdentifier: 
+  Name: Delta Defender
+  Description: A large warship built by the Delta Navy to protect its interests.
+  Id: items.structures.delta-defender
+  Icon: {fileID: 0}
+  Size: 0
+  Usable: 0
+  Prefab: {fileID: 2869013932428447122, guid: 01d3b3e41279c74489c131c0b41597bb, type: 3}
+  ApparentSize: 10
+  HullWireframe: {fileID: 0}
+  DestructionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
+    type: 3}
+  Hull: 10000
+  InventorySize: 100
+  SensorStrength: 10
+  Detectability: 10
+  DockingBaySize: 0
+  OnDestroyedChannel: {fileID: 11400000, guid: c42055d3c124f174fa639daf99561b4e, type: 2}
+  DropPercentage: 1
+  MaxEquipmentTier: 5

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ee9b39818dc0f042b0a811ebb832b90, type: 3}
+  m_Name: Capacitor 5000
+  m_EditorClassIdentifier: 
+  Name: Capacitor 5000
+  Description: A large capacitor designed to store all of the energy needed for a
+    battleship to operate.
+  Id: items.equipment.capacitors.capacitor-5000
+  Icon: {fileID: 21300000, guid: 608ebddc3abdb6547a511a17e26df53f, type: 3}
+  Size: 0
+  Usable: 0
+  Tier: 5
+  EnergyStorage: 5000
+  EnergyRechargeRate: 0
+  Durability: 25
+  Wear: 0.01
+  Activatable: 0
+  RequireCharge: 0
+  InventorySize: 0
+  Charges: []

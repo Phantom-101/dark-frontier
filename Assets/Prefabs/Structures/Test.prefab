@@ -297,6 +297,7 @@ MonoBehaviour:
   _ai:
     id: 0
   _initialAI: {fileID: 11400000, guid: 4b4647d3e66473c4f8c32220ecb98522, type: 2}
+  _aiEnabled: 1
   _target: {fileID: 0}
   _sector: {fileID: 0}
   _docked: []

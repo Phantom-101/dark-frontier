@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd388da7fa1fad640a96e1c4ec0efd65, type: 3}
+  m_Name: Generator 250
+  m_EditorClassIdentifier: 
+  Name: Generator 250
+  Description: A large, battleship-sized fusion core generator.
+  Id: items.equipment.generators.generator-250
+  Icon: {fileID: 21300000, guid: 506212960e6485b4f86823f1b888cb0d, type: 3}
+  Size: 0
+  Usable: 0
+  Tier: 5
+  EnergyStorage: 0
+  EnergyRechargeRate: 0
+  Durability: 25
+  Wear: 0.01
+  Activatable: 0
+  RequireCharge: 0
+  InventorySize: 0
+  Charges: []
+  GenerationRate: 250

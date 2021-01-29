@@ -17,7 +17,7 @@ public class CapacitorSlot : EquipmentSlot {
 
     public override bool CanEquip (EquipmentSO equipment) {
 
-        return base.CanEquip (equipment) || (equipment is CapacitorSO && equipment.Meta <= _equipper.GetProfile ().MaxMeta);
+        return base.CanEquip (equipment) || (equipment is CapacitorSO && equipment.Tier <= _equipper.GetProfile ().MaxEquipmentTier);
 
     }
 

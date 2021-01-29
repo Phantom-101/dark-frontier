@@ -17,6 +17,6 @@ public class StructureSO : ItemSO {
     public float DockingBaySize;
     public StructureDestroyedEventChannelSO OnDestroyedChannel;
     public float DropPercentage;
-    public int MaxMeta;
+    public int MaxEquipmentTier;
 
 }

@@ -29,7 +29,7 @@ public class WeaponSlot : EquipmentSlot {
 
     public override bool CanEquip (EquipmentSO equipment) {
 
-        return base.CanEquip (equipment) || (equipment is WeaponSO && equipment.Meta <= _equipper.GetProfile ().MaxMeta);
+        return base.CanEquip (equipment) || (equipment is WeaponSO && equipment.Tier <= _equipper.GetProfile ().MaxEquipmentTier);
 
     }
 

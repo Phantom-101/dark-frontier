@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Force Field
-  m_Shader: {fileID: -6465566751694194690, guid: 655bcc58951a6554e8fb0e2c9823feb1,
+  m_Name: Grid
+  m_Shader: {fileID: -6465566751694194690, guid: ced01cd5eda852c4fa9262efda05002a,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -19,19 +19,10 @@ Material:
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs:
-    - _ShimmerTexture:
-        m_Texture: {fileID: 2800000, guid: 5fa273c5071c5184c9fc125c95ef9c32, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+    m_TexEnvs: []
     m_Floats:
-    - _Oscillate: 0
-    - _Random: 1
-    - _RandomSpeed: 25
-    - _RandomStrength: 0.05
-    - _Shimmer: 0
-    - _ShimmerAnimation: 0
-    - _ShimmerWidth: 0.01
+    - _LineWidth: 0.1
     m_Colors:
-    - _Color: {r: 0, g: 1, b: 1, a: 0}
+    - _GridColor: {r: 1, g: 1, b: 1, a: 0}
+    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

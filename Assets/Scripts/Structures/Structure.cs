@@ -17,6 +17,7 @@ public class Structure : MonoBehaviour {
 
     [SerializeReference] private AI _ai;
     [SerializeField] private AISO _initialAI;
+    [SerializeField] private bool _aiEnabled;
     [SerializeField] private Structure _target;
 
     [SerializeField] private Sector _sector;
@@ -263,7 +264,7 @@ public class Structure : MonoBehaviour {
     public void Tick () {
 
         if (_ai == null) _ai = new AI (this);
-        _ai.Tick ();
+        if (_aiEnabled) _ai.Tick ();
 
         foreach (EquipmentSlot slot in _equipmentSlots) slot.Tick ();
 

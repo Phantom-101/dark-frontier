@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu (menuName = "Items/Equipment")]
 public class EquipmentSO : ItemSO {
 
     [Header ("Stats")]
-    public int Meta;
+    public int Tier;
     public float EnergyStorage;
     public float EnergyRechargeRate;
     public float Durability;

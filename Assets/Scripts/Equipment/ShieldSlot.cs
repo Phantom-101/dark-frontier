@@ -12,7 +12,7 @@ public class ShieldSlot : EquipmentSlot {
 
     public override bool CanEquip (EquipmentSO equipment) {
 
-        return base.CanEquip (equipment) || (equipment is ShieldSO && equipment.Meta <= _equipper.GetProfile ().MaxMeta);
+        return base.CanEquip (equipment) || (equipment is ShieldSO && equipment.Tier <= _equipper.GetProfile ().MaxEquipmentTier);
 
     }
 

@@ -4,7 +4,7 @@
 
     public override bool CanEquip (EquipmentSO equipment) {
 
-        return base.CanEquip (equipment) || (equipment is GeneratorSO && equipment.Meta <= _equipper.GetProfile ().MaxMeta);
+        return base.CanEquip (equipment) || (equipment is GeneratorSO && equipment.Tier <= _equipper.GetProfile ().MaxEquipmentTier);
 
     }
 
