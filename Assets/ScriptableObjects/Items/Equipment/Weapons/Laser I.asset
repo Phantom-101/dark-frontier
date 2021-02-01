@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Laser I
   Description: A small laser.
   Id: items.equipment.weapons.laser-i
-  Icon: {fileID: 21300000, guid: 3c3eca7ca34457044b6973e02240c76b, type: 3}
+  Icon: {fileID: 21300000, guid: dcc1d9e9f76c9844c92132c2e319c5ab, type: 3}
   Size: 1
   Usable: 0
   Tier: 1
