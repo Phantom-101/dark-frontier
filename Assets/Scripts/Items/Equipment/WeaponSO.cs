@@ -42,7 +42,7 @@
 
                 slot.SetStoredEnergy (0);
                 if (slot.GetEquipment ().RequireCharge) slot.DepleteCharge (1);
-                (slot as WeaponSlot).GetTarget ().TakeDamage (Damage, slot.GetSlotPosition ());
+                (slot as WeaponSlot).GetTarget ().TakeDamage (Damage, slot.GetLocalPosition ());
 
                 slot.TakeDamage (Wear);
 

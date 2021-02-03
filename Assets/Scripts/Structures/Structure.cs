@@ -25,6 +25,8 @@ public class Structure : MonoBehaviour {
     [SerializeField] private List<Structure> _docked;
     [SerializeField] private List<string> _dockedIds;
 
+    private Rigidbody _rb;
+
     private void Awake () {
 
         if (transform.parent != null) {
@@ -33,6 +35,8 @@ public class Structure : MonoBehaviour {
             if (_sector != null) _sector.Entered (this);
 
         }
+
+        _rb = GetComponent<Rigidbody> ();
 
     }
 
@@ -273,6 +277,10 @@ public class Structure : MonoBehaviour {
     public void FixedTick () {
 
         foreach (EquipmentSlot slot in _equipmentSlots) slot.FixedTick ();
+
+        // Set position and rotation
+        transform.LeanSetLocalPosY (0);
+        transform.localEulerAngles = new Vector3 (0, transform.eulerAngles.y, _rb.angularVelocity.y * -25);
 
     }
 

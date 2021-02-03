@@ -14,7 +14,7 @@ public class LaserSO : WeaponSO {
 
             GameObject vfx = Instantiate (LaserVFX, slot.transform);
             vfx.transform.localPosition = Vector3.zero;
-            float dis = Vector3.Distance (slot.GetSlotPosition (), weapon.GetTarget ().transform.localPosition);
+            float dis = Vector3.Distance (slot.GetLocalPosition (), weapon.GetTarget ().transform.localPosition);
             vfx.transform.LookAt (weapon.GetTarget ().transform);
             vfx.transform.localScale = new Vector3 (LaserWidth, LaserWidth, dis);
             weapon.SetProjectile (vfx);
@@ -45,8 +45,8 @@ public class LaserSO : WeaponSO {
         GameObject proj = weapon.GetProjectile ();
         if (proj != null && weapon.GetTarget () != null) {
 
-            float dis = Vector3.Distance (slot.GetSlotPosition (), weapon.GetTarget ().transform.localPosition);
-            proj.transform.LookAt (weapon.GetTarget ().transform);
+            float dis = Vector3.Distance (slot.GetLocalPosition (), weapon.GetTarget ().transform.localPosition);
+            proj.transform.LookAt (weapon.GetTarget ().transform.position);
             proj.transform.localScale = new Vector3 (LaserWidth, LaserWidth, dis);
 
         }

@@ -239,17 +239,21 @@ public class EquipmentSlot : MonoBehaviour {
 
     }
 
-    public Vector3 GetSlotOffset () {
+    public Vector3 GetOffset () {
 
         return transform.position - _equipper.transform.position;
 
     }
 
-    public Vector3 GetSlotPosition () {
+    public Vector3 GetPosition () {
 
-        Vector3 offset = transform.position - _equipper.transform.position;
+        return transform.position;
 
-        return offset + _equipper.transform.localPosition;
+    }
+
+    public Vector3 GetLocalPosition () {
+
+        return GetOffset () + _equipper.transform.localPosition;
 
     }
 
