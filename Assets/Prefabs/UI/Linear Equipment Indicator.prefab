@@ -193,7 +193,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 50
+  m_PixelsPerUnitMultiplier: 25
 --- !u!1 &4864166113760634258
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,18 +324,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slot: {fileID: 0}
+  _group: {fileID: 0}
   _energy: {fileID: 4864166114998821404}
-  _energyTransform: {fileID: 4864166114998821395}
   _energyMax: 80
   _durability: {fileID: 4864166114428518562}
-  _durabilityTransform: {fileID: 4864166114428518561}
   _durabilityMax: 39
   _charges: {fileID: 5255684996810608773}
-  _chargesTransform: {fileID: 8433835934084888182}
   _chargesMax: 39
   _icon: {fileID: 4864166113760634268}
-  _outline: {fileID: 6499140982583541256}
   _button: {fileID: 699393649472098231}
+  _tooltip: {fileID: 0}
+  _curAlpha: -1
 --- !u!1 &4864166114428518560
 GameObject:
   m_ObjectHideFlags: 0

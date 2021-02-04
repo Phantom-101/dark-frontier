@@ -31,7 +31,6 @@ public class LaserSO : WeaponSO {
         base.Deactivate (slot);
 
         WeaponSlot weapon = slot as WeaponSlot;
-
         if (weapon.GetProjectile () != null) Destroy (weapon.GetProjectile ());
 
     }
