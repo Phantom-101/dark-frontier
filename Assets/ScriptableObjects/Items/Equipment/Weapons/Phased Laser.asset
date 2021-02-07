@@ -15,10 +15,10 @@ MonoBehaviour:
   Name: Phased Laser
   Description: A laser weapon that requires laser crystals to use.
   Id: items.equipment.weapons.phased-laser
-  Icon: {fileID: 21300000, guid: 3c3eca7ca34457044b6973e02240c76b, type: 3}
+  Icon: {fileID: 21300000, guid: 470213ad1cffcfb4ebc0c5c9a34ec9a4, type: 3}
   Size: 0
   Usable: 0
-  Meta: 1
+  Tier: 0
   EnergyStorage: 1
   EnergyRechargeRate: 0.5
   Durability: 10

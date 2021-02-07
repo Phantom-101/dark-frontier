@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EquipmentUI : MonoBehaviour {
 
-    [SerializeField] private Transform _canvas;
+    [SerializeField] private Transform _parent;
     [SerializeField] private GameObject _indicatorPrefab;
 
     private readonly Dictionary<EquipmentSlot, EquipmentIndicatorUI> _indicators = new Dictionary<EquipmentSlot, EquipmentIndicatorUI> ();
@@ -25,12 +25,13 @@ public class EquipmentUI : MonoBehaviour {
             if (!_indicators.ContainsKey (slot))
                 _indicators[slot] = null;
 
+        float height = _indicatorPrefab.GetComponent<RectTransform> ().sizeDelta.y;
         foreach (EquipmentSlot key in _indicators.Keys.ToArray ())
             if (_indicators[key] == null) {
 
-                GameObject indicator = Instantiate (_indicatorPrefab, _canvas);
+                GameObject indicator = Instantiate (_indicatorPrefab, _parent);
                 RectTransform rect = indicator.GetComponent<RectTransform> ();
-                rect.anchoredPosition = new Vector2 (0, 100 * (player.GetEquipment ().Count - player.GetEquipment ().IndexOf (key) - 1));
+                rect.anchoredPosition = new Vector2 (0, height * (player.GetEquipment ().Count - player.GetEquipment ().IndexOf (key) - 1));
                 EquipmentIndicatorUI comp = indicator.GetComponent<EquipmentIndicatorUI> ();
                 comp.SetSlot (key);
                 _indicators[key] = comp;

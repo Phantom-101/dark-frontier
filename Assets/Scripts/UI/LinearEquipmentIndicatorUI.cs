@@ -3,62 +3,118 @@ using UnityEngine.UI;
 
 public class LinearEquipmentIndicatorUI : EquipmentIndicatorUI {
 
+    [SerializeField] protected CanvasGroup _group;
     [SerializeField] protected Image _energy;
-    [SerializeField] protected RectTransform _energyTransform;
     [SerializeField] protected float _energyMax;
     [SerializeField] protected Image _durability;
-    [SerializeField] protected RectTransform _durabilityTransform;
     [SerializeField] protected float _durabilityMax;
     [SerializeField] protected Image _charges;
-    [SerializeField] protected RectTransform _chargesTransform;
     [SerializeField] protected float _chargesMax;
     [SerializeField] protected Image _icon;
-    [SerializeField] protected Image _outline;
     [SerializeField] protected Button _button;
+    [SerializeField] protected Text _tooltip;
+    [SerializeField] protected float _curAlpha = -1;
 
     private void Start () {
 
-        _button.onClick.AddListener (_slot.Activate);
+        _tooltip.text = "";
 
     }
 
     private void Update () {
 
+        UIState current = UIStateManager.GetInstance ().GetState ();
+        bool shouldShow = current == UIState.InSpace;
+
+        if (!shouldShow) {
+
+            if (_curAlpha != 0) {
+
+                _curAlpha = 0;
+                DisableAll ();
+                TweenToCurAlpha ();
+
+            }
+            return;
+
+        }
+
+        if (_curAlpha == 0) EnableAll ();
+
         if (_slot == null) return;
 
         if (_slot.GetEquipment () == null) {
 
-            _energy.color = new Color (_energy.color.r, _energy.color.g, _energy.color.b, 0.25f);
-            _durability.color = new Color (_durability.color.r, _durability.color.g, _durability.color.b, 0.25f);
-            _charges.color = new Color (_charges.color.r, _charges.color.g, _charges.color.b, 0.25f);
-            _icon.color = new Color (1, 1, 1, 0.25f);
-            _outline.color = new Color (1, 1, 1, 0.25f);
-            _button.interactable = false;
+            if (_curAlpha != 0.25f) {
+
+                _curAlpha = 0.25f;
+                TweenToCurAlpha ();
+
+            }
 
             return;
 
         }
 
-        _energy.color = new Color (_energy.color.r, _energy.color.g, _energy.color.b, 1);
-        _durability.color = new Color (_durability.color.r, _durability.color.g, _durability.color.b, 1);
-        _charges.color = new Color (_charges.color.r, _charges.color.g, _charges.color.b, 1);
-        _icon.color = new Color (1, 1, 1, 1);
-        _outline.color = new Color (1, 1, 1, 1);
-        _button.interactable = true;
+        if (_curAlpha != 1) {
+
+            _curAlpha = 1;
+            TweenToCurAlpha ();
+
+        }
 
         float energyFill = Mathf.Clamp (_slot.GetStoredEnergy () / _slot.GetEquipment ().EnergyStorage * _energyMax, 0, _energyMax);
         if (float.IsNaN (energyFill)) energyFill = _energyMax;
-        _energyTransform.sizeDelta = new Vector2 (energyFill, _energyTransform.sizeDelta.y);
+        _energy.fillAmount = energyFill;
 
         float durabilityFill = Mathf.Clamp (_slot.GetDurability () / _slot.GetEquipment ().Durability * _durabilityMax, 0, _durabilityMax);
         if (float.IsNaN (durabilityFill)) durabilityFill = _durabilityMax;
-        _durabilityTransform.sizeDelta = new Vector2 (durabilityFill, _durabilityTransform.sizeDelta.y);
+        _durability.fillAmount = durabilityFill;
 
         float chargeFill = Mathf.Clamp (_slot.GetUsedInventorySize () / _slot.GetTotalInventorySize () * _chargesMax, 0, _chargesMax);
         if (float.IsNaN (chargeFill)) chargeFill = _chargesMax;
-        _chargesTransform.sizeDelta = new Vector2 (chargeFill, _chargesTransform.sizeDelta.y);
+        _charges.fillAmount = chargeFill;
 
         _icon.sprite = _slot.GetEquipment ().Icon;
+
+    }
+
+    public void Toggle () {
+
+        if (_slot.IsActive ()) _slot.Deactivate ();
+        else _slot.Activate ();
+
+    }
+
+    public void ShowTooltip () {
+
+        _tooltip.text = _slot.GetEquipment ().Name;
+
+    }
+
+    public void HideTooltip () {
+
+        _tooltip.text = "";
+
+    }
+
+    void TweenToCurAlpha () {
+
+        LeanTween.alphaCanvas (_group, _curAlpha, 0.2f).setIgnoreTimeScale (true);
+
+    }
+
+    void DisableAll () {
+
+        _group.blocksRaycasts = false;
+        _group.interactable = false;
+
+    }
+
+    void EnableAll () {
+
+        _group.blocksRaycasts = true;
+        _group.interactable = true;
 
     }
 
