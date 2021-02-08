@@ -1,6 +1,6 @@
 ﻿public class WeaponSO : EquipmentSO {
 
-    public float Damage;
+    public DamageProfile Damage;
     public float Range;
 
     public override bool CanActivate (EquipmentSlot slot) {

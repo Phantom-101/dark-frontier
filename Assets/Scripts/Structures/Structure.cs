@@ -284,18 +284,24 @@ public class Structure : MonoBehaviour {
 
     }
 
-    public void TakeDamage (float amount, Vector3 from) {
+    public void TakeDamage (DamageProfile damage, Vector3 from) {
 
         ShieldSlot shield = GetEquipment<ShieldSlot> ()[0];
-        float leftOver = amount;
+        float leftOver = damage.Strength;
         if (shield != null) {
             int sector = shield.GetStrengths ().GetSectorTo (from);
             float strength = shield.GetStrengths ().GetSectorStrength (sector);
-            float shieldDmg = Mathf.Min (amount, strength);
-            leftOver -= shieldDmg;
-            shield.GetStrengths ().ChangeSectorStrength (sector, -shieldDmg);
+            strength = Mathf.Max (0, strength - shield.GetStrengths ().GetSectorMaxStrength (sector) * damage.ShieldBypass);
+            float totalDmg = damage.Strength * damage.ShieldMultiplier;
+            if (totalDmg > strength) {
+                shield.GetStrengths ().ChangeSectorStrength (sector, -strength);
+                leftOver -= strength / damage.ShieldMultiplier;
+            } else {
+                shield.GetStrengths ().ChangeSectorStrength (sector, -totalDmg);
+                leftOver = 0;
+            }
         }
-        ChangeHull (-leftOver);
+        ChangeHull (-leftOver * damage.HullMultiplier);
 
     }
 
