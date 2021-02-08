@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: decb66a87c57ba2419115c107a79c574, type: 2}
+  - {fileID: 2100000, guid: f51326437689b8247bd094abb0ab1b31, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -140,7 +140,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: decb66a87c57ba2419115c107a79c574, type: 2}
+  - {fileID: 2100000, guid: f51326437689b8247bd094abb0ab1b31, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -172,7 +172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 930999058288108209}
   m_Layer: 0
-  m_Name: Red Laser
+  m_Name: Dark Blue Laser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

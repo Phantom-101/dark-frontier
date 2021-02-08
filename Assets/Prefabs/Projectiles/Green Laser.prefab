@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1314f4a28b069074a9f58a5cccda675f, type: 2}
+  - {fileID: 2100000, guid: e1b68e8a8fefc2c45b3bd2a77c89f61c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -140,7 +140,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1314f4a28b069074a9f58a5cccda675f, type: 2}
+  - {fileID: 2100000, guid: e1b68e8a8fefc2c45b3bd2a77c89f61c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -172,7 +172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 930999058288108209}
   m_Layer: 0
-  m_Name: White Laser
+  m_Name: Green Laser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
