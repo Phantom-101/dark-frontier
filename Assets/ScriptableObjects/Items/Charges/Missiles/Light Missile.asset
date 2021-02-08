@@ -20,4 +20,8 @@ MonoBehaviour:
   Usable: 0
   HeadingAllowance: 5
   DetonationRange: 1
-  Damage: 150
+  Damage:
+    Strength: 25
+    ShieldMultiplier: 1
+    ShieldBypass: 0.5
+    HullMultiplier: 1
