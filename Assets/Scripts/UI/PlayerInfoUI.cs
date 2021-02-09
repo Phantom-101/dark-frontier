@@ -17,26 +17,11 @@ public class PlayerInfoUI : MonoBehaviour {
 
     private void Start () {
 
-        if (PlayerController.GetInstance ().GetPlayer () == null) {
-
-            Destroy (gameObject);
-            return;
-
-        }
-
         _structure = PlayerController.GetInstance ().GetPlayer ();
 
-        ShieldSlot slot = _structure.GetEquipment<ShieldSlot> ()[0];
-        int sectors = slot.GetStrengths ().GetSectorCount ();
-        float degrees = slot.GetStrengths ().GetSectorAngle ();
+        if (_structure == null) return;
 
-        for (int i = 0; i < sectors; i++) {
-
-            GameObject instantiated = Instantiate (_shieldPrefab, _hull.transform);
-            instantiated.GetComponent<RectTransform> ().Rotate (new Vector3 (0, 0, -degrees * i));
-            _shields.Add (instantiated.transform.GetChild (0).GetComponent<Image> ());
-
-        }
+        SetupShields ();
 
     }
 
@@ -48,10 +33,21 @@ public class PlayerInfoUI : MonoBehaviour {
 
         if (_structure != PlayerController.GetInstance ().GetPlayer ()) {
 
-            Destroy (gameObject);
-            return;
+            _structure = PlayerController.GetInstance ().GetPlayer ();
+            if (_structure == null) return;
+
+            while (_shields.Count > 0) {
+
+                Destroy (_shields[0].transform.parent.gameObject);
+                _shields.RemoveAt (0);
+
+            }
+
+            SetupShields ();
 
         }
+
+        if (_structure == null) return;
 
         _hull.sprite = _structure.GetProfile ().HullWireframe;
         _hull.color = _hullGradient.Evaluate (_structure.GetHull () / _structure.GetProfile ().Hull);
@@ -73,6 +69,22 @@ public class PlayerInfoUI : MonoBehaviour {
 
             _direction.gameObject.SetActive (true);
             _direction.rotation = Quaternion.Euler (0, 0, slot.GetStrengths ().GetSectorTo (_structure.GetTarget ().gameObject) * -degrees);
+
+        }
+
+    }
+
+    private void SetupShields () {
+
+        ShieldSlot slot = _structure.GetEquipment<ShieldSlot> ()[0];
+        int sectors = slot.GetStrengths ().GetSectorCount ();
+        float degrees = slot.GetStrengths ().GetSectorAngle ();
+
+        for (int i = 0; i < sectors; i++) {
+
+            GameObject instantiated = Instantiate (_shieldPrefab, _hull.transform);
+            instantiated.GetComponent<RectTransform> ().Rotate (new Vector3 (0, 0, -degrees * i));
+            _shields.Add (instantiated.transform.GetChild (0).GetComponent<Image> ());
 
         }
 

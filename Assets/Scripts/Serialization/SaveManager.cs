@@ -7,7 +7,6 @@ public class SaveManager : MonoBehaviour {
     [SerializeField] private string _universe;
 
     [SerializeField] private VoidEventChannelSO _saveGameChannel;
-    [SerializeField] private VoidEventChannelSO _loadGameChannel;
 
     private static SaveManager _instance;
 
@@ -16,7 +15,6 @@ public class SaveManager : MonoBehaviour {
         _instance = this;
 
         _saveGameChannel.OnEventRaised += Save;
-        _loadGameChannel.OnEventRaised += Load;
 
     }
 
@@ -36,9 +34,9 @@ public class SaveManager : MonoBehaviour {
 
     }
 
-    public void Load () {
+    public void Load (string universeName) {
 
-        string[] saves = Directory.GetDirectories (Application.persistentDataPath + "/saves/" + _universe);
+        string[] saves = Directory.GetDirectories (Application.persistentDataPath + "/saves/" + universeName);
 
         if (saves.Length == 0) return;
 
@@ -50,6 +48,40 @@ public class SaveManager : MonoBehaviour {
         SectorManager.GetInstance ().LoadGame (SerializationManager.Load (latest + "/sectors.save"));
         FactionManager.GetInstance ().LoadGame (SerializationManager.Load (latest + "/factions.save"));
         StructureManager.GetInstance ().LoadGame (SerializationManager.Load (latest + "/structures.save"));
+
+        _universe = universeName;
+
+    }
+
+    public void Load (string universeName, string saveName) {
+
+        if (!Directory.Exists (Application.persistentDataPath + "/saves/" + universeName + "/" + saveName)) return;
+
+        string path = Application.persistentDataPath + "/saves/" + universeName + "/" + saveName;
+
+        SectorManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/sectors.save"));
+        FactionManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/factions.save"));
+        StructureManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/structures.save"));
+
+        _universe = universeName;
+
+    }
+
+    public string[] GetAllUniverses () {
+
+        DirectoryInfo[] infos = new DirectoryInfo (Application.persistentDataPath + "/saves/").GetDirectories ();
+        string[] names = new string[infos.Length];
+        for (int i = 0; i < infos.Length; i++) names[i] = infos[i].Name;
+        return names;
+
+    }
+
+    public string[] GetAllSaves (string universeName) {
+
+        DirectoryInfo[] infos = new DirectoryInfo (Application.persistentDataPath + "/saves/" + universeName).GetDirectories ();
+        string[] names = new string[infos.Length];
+        for (int i = 0; i < infos.Length; i++) names[i] = infos[i].Name;
+        return names;
 
     }
 

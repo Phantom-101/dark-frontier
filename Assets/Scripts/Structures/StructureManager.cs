@@ -204,6 +204,7 @@ public class StructureManager : MonoBehaviour {
             Structure comp = structure.GetComponent<Structure> ();
             comp.SetSaveData (data);
             _structures.Add (comp);
+            if (data.IsPlayer) PlayerController.GetInstance ().SetPlayer (comp);
 
         });
 

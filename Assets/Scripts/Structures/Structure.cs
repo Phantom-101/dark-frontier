@@ -333,6 +333,8 @@ public class Structure : MonoBehaviour {
         if (_faction != null) data.FactionId = _faction.GetId ();
         _equipmentSlots.ForEach (slot => { data.Equipment.Add (slot.GetSaveData ()); });
         if (_sector != null) data.SectorId = _sector.GetId ();
+        data.AIEnabled = _aiEnabled;
+        if (PlayerController.GetInstance ().GetPlayer () == this) data.IsPlayer = true;
         return data;
 
     }
@@ -347,6 +349,7 @@ public class Structure : MonoBehaviour {
         for (int i = 0; i < _equipmentSlots.Count; i++) _equipmentSlots[i].LoadSaveData (saveData.Equipment[i]);
         _sector = SectorManager.GetInstance ().GetSector (saveData.SectorId);
         _sector.Entered (this);
+        _aiEnabled = saveData.AIEnabled;
 
     }
 
@@ -364,5 +367,7 @@ public class StructureSaveData {
     public string FactionId;
     public List<EquipmentSlotSaveData> Equipment = new List<EquipmentSlotSaveData> ();
     public string SectorId;
+    public bool AIEnabled;
+    public bool IsPlayer;
 
 }

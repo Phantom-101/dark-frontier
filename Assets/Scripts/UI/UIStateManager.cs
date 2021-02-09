@@ -38,5 +38,6 @@ public enum UIState {
     Docked,
     Menu,
     Log,
+    SaveSelection,
 
 }
