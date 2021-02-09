@@ -57,14 +57,10 @@ public class Faction {
             Name = _name,
             Id = _id,
             Wealth = _wealth,
+            RelationIds = _relations.Keys.ToList (),
             RelationValues = _relations.Values.ToList ()
 
         };
-        _relations.Keys.ToList ().ForEach (faction => {
-
-            data.RelationIds.Add (faction);
-
-        });
         return data;
 
     }

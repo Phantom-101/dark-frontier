@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Structure : MonoBehaviour {
@@ -326,7 +327,9 @@ public class Structure : MonoBehaviour {
             Name = gameObject.name,
             Position = transform.localPosition,
             Rotation = transform.localRotation,
-            Hull = _hull
+            Hull = _hull,
+            InventoryIds = _inventory.Keys.Select (item => item.Id).ToList (),
+            InventoryCounts = _inventory.Values.ToList ()
 
         };
         if (_profile != null) data.ProfileId = _profile.Id;
@@ -347,6 +350,12 @@ public class Structure : MonoBehaviour {
         _hull = saveData.Hull;
         _faction = FactionManager.GetInstance ().GetFaction (saveData.FactionId);
         for (int i = 0; i < _equipmentSlots.Count; i++) _equipmentSlots[i].LoadSaveData (saveData.Equipment[i]);
+        ItemManager im = ItemManager.GetInstance ();
+        for (int i = 0; i < saveData.InventoryIds.Count; i++) {
+
+            _inventory[im.GetItem (saveData.InventoryIds[i])] = saveData.InventoryCounts[i];
+
+        }
         _sector = SectorManager.GetInstance ().GetSector (saveData.SectorId);
         _sector.Entered (this);
         _aiEnabled = saveData.AIEnabled;
@@ -366,6 +375,8 @@ public class StructureSaveData {
     public float Hull;
     public string FactionId;
     public List<EquipmentSlotSaveData> Equipment = new List<EquipmentSlotSaveData> ();
+    public List<string> InventoryIds = new List<string> ();
+    public List<int> InventoryCounts = new List<int> ();
     public string SectorId;
     public bool AIEnabled;
     public bool IsPlayer;
