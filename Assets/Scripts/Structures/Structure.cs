@@ -288,21 +288,25 @@ public class Structure : MonoBehaviour {
     public void TakeDamage (DamageProfile damage, Vector3 from) {
 
         ShieldSlot shield = GetEquipment<ShieldSlot> ()[0];
-        float leftOver = damage.Strength;
-        if (shield != null) {
-            int sector = shield.GetStrengths ().GetSectorTo (from);
-            float strength = shield.GetStrengths ().GetSectorStrength (sector);
-            strength = Mathf.Max (0, strength - shield.GetStrengths ().GetSectorMaxStrength (sector) * damage.ShieldBypass);
-            float totalDmg = damage.Strength * damage.ShieldMultiplier;
-            if (totalDmg > strength) {
-                shield.GetStrengths ().ChangeSectorStrength (sector, -strength);
-                leftOver -= strength / damage.ShieldMultiplier;
-            } else {
-                shield.GetStrengths ().ChangeSectorStrength (sector, -totalDmg);
-                leftOver = 0;
+        ShieldStrengths ss = shield.GetStrengths ();
+        int sector = ss.GetSectorTo (from);
+        float strength = ss.GetSectorStrength (sector);
+        float maxStrength = ss.GetSectorMaxStrength (sector);
+        if (strength <= damage.ShieldBypass * maxStrength) ChangeHull (-damage.DamageAmount * damage.HullEffectiveness);
+        else {
+
+            ChangeHull (-damage.DamageAmount * damage.ShieldPenetration * damage.HullEffectiveness);
+            float toShield = damage.DamageAmount * (1 - damage.ShieldPenetration);
+            float remain = toShield - (strength / damage.ShieldEffectiveness);
+            if (remain < 0) ss.ChangeSectorStrength (sector, -toShield * damage.ShieldEffectiveness);
+            else {
+
+                ss.SetSectorStrength (sector, 0);
+                ChangeHull (-remain);
+
             }
+
         }
-        ChangeHull (-leftOver * damage.HullMultiplier);
 
     }
 

@@ -28,7 +28,12 @@ MonoBehaviour:
   InventorySize: 1
   Charges:
   - {fileID: 11400000, guid: a5f65fe7fffd713499762227ae73aa52, type: 2}
-  Damage: 15
+  Damage:
+    DamageAmount: 15
+    ShieldEffectiveness: 1
+    ShieldPenetration: 0
+    ShieldBypass: 0.1
+    HullEffectiveness: 1
   Range: 100
   LaserVFX: {fileID: 930999058288108214, guid: a55d7e9bdfdafaf49bea6eba1e2302d8, type: 3}
-  LaserWidth: 0.1
+  LaserWidth: 1

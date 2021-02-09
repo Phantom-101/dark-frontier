@@ -28,10 +28,11 @@ MonoBehaviour:
   InventorySize: 0
   Charges: []
   Damage:
-    Strength: 10
-    ShieldMultiplier: 1
-    ShieldBypass: 0
-    HullMultiplier: 1
+    DamageAmount: 10
+    ShieldEffectiveness: 1
+    ShieldPenetration: 0
+    ShieldBypass: 0.1
+    HullEffectiveness: 1
   Range: 100
   LaserVFX: {fileID: 930999058288108214, guid: e3b26bd84ba365f40a5aff1f98a0cdbf, type: 3}
   LaserWidth: 1
