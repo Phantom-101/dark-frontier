@@ -26,7 +26,7 @@ public class MissileAI : AI {
         _damageMultiplier = launcher.DamageMultiplier;
         _rangeMultiplier = launcher.RangeMultiplier;
 
-        _structure.AddStatModifier (new StructureStatModifier ("Launcher Range Modifier", "speed_multiplier", _rangeMultiplier, StructureStatModifierType.Multiplicative, _missile.FlightTime));
+        _structure.AddStatModifier (new StructureStatModifier ("Launcher Range Modifier", "speed_multiplier", _rangeMultiplier, StructureStatModifierType.Multiplicative, 100));
 
     }
 

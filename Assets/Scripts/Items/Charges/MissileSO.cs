@@ -7,7 +7,6 @@ public class MissileSO : ChargeSO {
     public float HeadingAllowance;
     public float DetonationRange;
     public DamageProfile Damage;
-    public float FlightTime;
-    public float FlightVelocity;
+    public float Range;
 
 }

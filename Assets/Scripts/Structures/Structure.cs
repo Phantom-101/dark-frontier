@@ -67,7 +67,7 @@ public class Structure : MonoBehaviour {
             _stats.Add ("damage_multiplier", new StructureStat ("damage_multiplier", 1));
             _stats.Add ("recharge_multiplier", new StructureStat ("recharge_multiplier", 1));
             _stats.Add ("speed_multiplier", new StructureStat ("speed_multiplier", 1));
-            _stats.Add ("agility_multiplier", new StructureStat ("agility_multiplier", 1));
+            _stats.Add ("angular_speed_multiplier", new StructureStat ("angular_speed_multiplier", 1));
 
         }
 
@@ -89,6 +89,18 @@ public class Structure : MonoBehaviour {
     public Faction GetFaction () { return _faction; }
 
     public void SetFaction (Faction faction) { _faction = faction; }
+
+    public float GetStatBaseValue (string name) {
+
+        return _stats[name].GetBaseValue ();
+
+    }
+
+    public float GetStatAppliedValue (string name) {
+
+        return _stats[name].GetAppliedValue ();
+
+    }
 
     public void AddStatModifier (StructureStatModifier modifier) {
 

@@ -27,5 +27,4 @@ MonoBehaviour:
     ShieldPenetration: 0.3
     ShieldBypass: 0.2
     HullEffectiveness: 1
-  FlightTime: 10
-  FlightVelocity: 50
+  Range: 500

@@ -6,7 +6,7 @@ public class LauncherSO : ChargeMajorWeaponSO {
     public override bool WithinRange (EquipmentSlot slot) {
 
         MissileSO missile = slot.GetCharge () as MissileSO;
-        float range = missile.FlightTime * missile.FlightVelocity * (slot.GetEquipment () as LauncherSO).RangeMultiplier;
+        float range = missile.Range * (slot.GetEquipment () as LauncherSO).RangeMultiplier;
         return (slot.GetEquipper ().transform.localPosition - slot.GetEquipper ().GetTarget ().transform.localPosition).sqrMagnitude <= range * range;
 
     }

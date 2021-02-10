@@ -29,8 +29,8 @@ public class EngineSO : EquipmentSO {
             rb.drag = Damp * (1 - engine.GetForwardSetting () / 2);
             rb.angularDrag = AngularDamp * (1 - Mathf.Abs (engine.GetTurnSetting ()) / 2);
 
-            cf.relativeForce = Vector3.forward * ForwardPower * (slot as EngineSlot).GetForwardSetting ();
-            cf.relativeTorque = Vector3.up * TurnPower * (slot as EngineSlot).GetTurnSetting () + Vector3.left * TurnPower * (slot as EngineSlot).GetPitchSetting ();
+            cf.relativeForce = Vector3.forward * ForwardPower * (slot as EngineSlot).GetForwardSetting () * slot.GetEquipper ().GetStatAppliedValue ("speed_multiplier");
+            cf.relativeTorque = Vector3.up * TurnPower * (slot as EngineSlot).GetTurnSetting () + Vector3.left * TurnPower * (slot as EngineSlot).GetPitchSetting () * slot.GetEquipper ().GetStatAppliedValue ("angular_speed_multiplier");
 
         } else {
 
