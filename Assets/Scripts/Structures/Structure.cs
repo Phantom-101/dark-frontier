@@ -26,6 +26,8 @@ public class Structure : MonoBehaviour {
     [SerializeField] private List<Structure> _docked;
     [SerializeField] private List<string> _dockedIds;
 
+    [SerializeField] private bool _initialized;
+
     private Rigidbody _rb;
 
     private void Awake () {
@@ -42,6 +44,14 @@ public class Structure : MonoBehaviour {
     }
 
     private void Start () {
+
+        if (!_initialized) Initialize ();
+
+    }
+
+    public void Initialize () {
+
+        _initialized = true;
 
         if (StructureManager.GetInstance () != null) StructureManager.GetInstance ().AddStructure (this);
 
@@ -79,6 +89,18 @@ public class Structure : MonoBehaviour {
     public Faction GetFaction () { return _faction; }
 
     public void SetFaction (Faction faction) { _faction = faction; }
+
+    public void AddStatModifier (StructureStatModifier modifier) {
+
+        _stats[modifier.GetTarget ()].AddModifier (modifier);
+
+    }
+
+    public void RemoveStatModifier (StructureStatModifier modifier) {
+
+        _stats[modifier.GetTarget ()].GetModifiers ().RemoveAll (m => m.GetName () == modifier.GetName ());
+
+    }
 
     public void ChangeHull (float amount) {
 

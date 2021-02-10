@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu (menuName = "Items/Equipment/Weapons/Laser")]
-public class LaserSO : WeaponSO {
+public class LaserSO : ChargeMinorWeaponSO {
 
     public GameObject LaserVFX;
     public float LaserWidth;

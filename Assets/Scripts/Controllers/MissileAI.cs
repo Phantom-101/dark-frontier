@@ -6,16 +6,38 @@ public class MissileAI : AI {
 
     [SerializeField] protected Structure _target;
     [SerializeField] protected MissileSO _missile;
+    [SerializeField] protected DamageProfile _damageMultiplier;
+    [SerializeField] protected float _rangeMultiplier;
 
-    public MissileAI (Structure structure) : base (structure) { }
+    protected NavigationManager _nm;
+
+    public MissileAI (Structure structure) : base (structure) {
+
+        _nm = NavigationManager.GetInstance ();
+
+    }
 
     public void SetTarget (Structure target) { _target = target; }
 
     public void SetMissile (MissileSO missile) { _missile = missile; }
 
+    public void SetLauncher (LauncherSO launcher) {
+
+        _damageMultiplier = launcher.DamageMultiplier;
+        _rangeMultiplier = launcher.RangeMultiplier;
+
+        _structure.AddStatModifier (new StructureStatModifier ("Launcher Range Modifier", "speed_multiplier", _rangeMultiplier, StructureStatModifierType.Multiplicative, _missile.FlightTime));
+
+    }
+
     public override void Tick () {
 
-        if (_target == null || _missile == null) return;
+        if (_target == null || _missile == null) {
+
+            _structure.SetHull (0);
+            return;
+
+        }
 
         EngineSlot engine = _structure.GetEquipment<EngineSlot> ()[0];
 
@@ -31,12 +53,9 @@ public class MissileAI : AI {
         else if (elevation < -_missile.HeadingAllowance) engine.SetPitchSetting (-1);
         else engine.SetPitchSetting (0);
 
-        float dis = _missile.DetonationRange + _target.GetProfile ().ApparentSize;
-        float sqrDis = dis * dis;
+        if (_nm.GetLocalDistance (_target, _structure) <= _missile.DetonationRange) {
 
-        if ((_structure.transform.localPosition - _target.transform.localPosition).sqrMagnitude <= sqrDis) {
-
-            _target.TakeDamage (_missile.Damage, _structure.transform.localPosition);
+            _target.TakeDamage (new DamageProfile (_missile.Damage, _damageMultiplier), _structure.transform.localPosition);
             _structure.SetHull (0);
 
         }

@@ -52,7 +52,7 @@ public class WeaponSlotEditor : Editor {
     private static void DrawArc (WeaponSlot ws, GizmoType gizmoType) {
 
         Handles.color = new Color (1, 0, 0, 0.1f);
-        Handles.DrawSolidArc (ws.transform.position, ws.transform.up, Quaternion.Euler (0, -ws.GetArc () / 2, 0) * ws.transform.forward, ws.GetArc (), ws.GetWeapon () == null ? 10 : ws.GetWeapon ().Range);
+        Handles.DrawSolidArc (ws.transform.position, ws.transform.up, Quaternion.Euler (0, -ws.GetArc () / 2, 0) * ws.transform.forward, ws.GetArc (), 10);
 
     }
 
