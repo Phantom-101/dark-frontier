@@ -158,6 +158,7 @@ MonoBehaviour:
   _sector: {fileID: 0}
   _docked: []
   _dockedIds: []
+  _initialized: 0
   references:
     version: 1
     00000000:
@@ -234,12 +235,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _equipment: {fileID: 0}
-  _storedEnergy: 0
-  _currentDurability: 10
+  _energy: 0
+  _durability: 0
   _equipper: {fileID: 2869013932428447120}
-  _active: 1
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
   _arc: 180
   _target: {fileID: 0}
   _projectile: {fileID: 0}
@@ -283,22 +284,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2869013932810373261}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3f09e3afa77e6b4f94279749a3507cd, type: 3}
+  m_Script: {fileID: 11500000, guid: aa6d949ca5ee17d40a39094cf8ff8360, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipment: {fileID: 11400000, guid: 5ba08d86b1dec3443b0833ffacbd9b10, type: 2}
-  _storedEnergy: 0
-  _currentDurability: 25
-  _equipper: {fileID: 2869013932428447120}
-  _active: 1
+  _equipment: {fileID: 0}
+  _energy: 0
+  _durability: 0
+  _equipper: {fileID: 0}
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
-  _strengths:
-    id: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: , ns: , asm: }
+  _strength: 0
 --- !u!1 &2869013932881049479
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,12 +339,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _equipment: {fileID: 0}
-  _storedEnergy: 0
-  _currentDurability: 10
+  _energy: 0
+  _durability: 0
   _equipper: {fileID: 2869013932428447120}
-  _active: 1
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
   _arc: 180
   _target: {fileID: 0}
   _projectile: {fileID: 0}
@@ -395,13 +391,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83f791907cc86ce49bab998822102a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipment: {fileID: 11400000, guid: 93c247f409474094992cc80e869667cd, type: 2}
-  _storedEnergy: 0
-  _currentDurability: 25
+  _equipment: {fileID: 0}
+  _energy: 0
+  _durability: 0
   _equipper: {fileID: 2869013932428447120}
-  _active: 1
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
 --- !u!1 &2869013933443130349
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,12 +538,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _equipment: {fileID: 0}
-  _storedEnergy: 0
-  _currentDurability: 10
+  _energy: 0
+  _durability: 0
   _equipper: {fileID: 2869013932428447120}
-  _active: 1
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
   _arc: 180
   _target: {fileID: 0}
   _projectile: {fileID: 0}
@@ -595,12 +591,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _equipment: {fileID: 0}
-  _storedEnergy: 0
-  _currentDurability: 10
+  _energy: 0
+  _durability: 0
   _equipper: {fileID: 2869013932428447120}
-  _active: 1
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
   _arc: 180
   _target: {fileID: 0}
   _projectile: {fileID: 0}
@@ -644,16 +640,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2869013934095021293}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1efe423481aae3a4c888259f7617e762, type: 3}
+  m_Script: {fileID: 11500000, guid: 146f05006976f0846b58023a17082494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipment: {fileID: 11400000, guid: 6335175484bc5cd4aa53c4ee3e618cf1, type: 2}
-  _storedEnergy: 0
-  _currentDurability: 25
-  _equipper: {fileID: 2869013932428447120}
-  _active: 1
+  _equipment: {fileID: 0}
+  _energy: 0
+  _durability: 0
+  _equipper: {fileID: 0}
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
 --- !u!1 &2869013934242875146
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,13 +693,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01053b7370665b441876274053f77c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipment: {fileID: 11400000, guid: d2088c55c5b7be34385a4054937b3885, type: 2}
-  _storedEnergy: 0
-  _currentDurability: 25
+  _equipment: {fileID: 0}
+  _energy: 0
+  _durability: 0
   _equipper: {fileID: 2869013932428447120}
-  _active: 1
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
   _forwardSetting: 0
   _turnSetting: 0
   _pitchSetting: 0

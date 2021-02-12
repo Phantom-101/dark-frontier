@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WeaponSlot : EquipmentSlot {
 
@@ -7,53 +6,27 @@ public class WeaponSlot : EquipmentSlot {
     [SerializeField] protected Structure _target;
     [SerializeField] protected GameObject _projectile;
 
-    public WeaponSO GetWeapon () { return _equipment as WeaponSO; }
+    public WeaponSO Weapon { get { return _equipment as WeaponSO; } }
+    public float Arc { get => _arc; }
+    public Structure Target { get => _target; set => _target = value; }
+    public GameObject Projectile { get => _projectile; set => _projectile = value; }
 
-    public float GetArc () { return _arc; }
+    public override void ResetValues () {
 
-    public float GetAngleToTarget () { return Vector3.Angle (transform.forward, _target.transform.position - transform.position); }
+        base.ResetValues ();
 
-    public float GetAngleTo (Structure target) { return Vector3.Angle (transform.forward, target.transform.position - transform.position); }
+        Target = null;
+        Projectile = null;
 
-    public bool CanFireAtTarget () { return GetAngleToTarget () <= _arc / 2; }
-
-    public bool CanFireAt (Structure target) { return GetAngleTo (target) <= _arc / 2; }
-
-    public Structure GetTarget () { return _target; }
-
-    public void SetTarget (Structure target) { _target = target; }
-
-    public GameObject GetProjectile () { return _projectile; }
-
-    public void SetProjectile (GameObject projectile) { _projectile = projectile; }
-
+    }
     public override bool CanEquip (EquipmentSO equipment) {
 
         return base.CanEquip (equipment) || (equipment is WeaponSO && equipment.Tier <= _equipper.GetProfile ().MaxEquipmentTier);
 
     }
-
-    protected override void ResetValues () {
-
-        base.ResetValues ();
-
-        _target = null;
-        _active = false;
-
-    }
-
-}
-
-[CustomEditor (typeof (WeaponSlot))]
-[InitializeOnLoad]
-public class WeaponSlotEditor : Editor {
-
-    [DrawGizmo (GizmoType.InSelectionHierarchy)]
-    private static void DrawArc (WeaponSlot ws, GizmoType gizmoType) {
-
-        Handles.color = new Color (1, 0, 0, 0.1f);
-        Handles.DrawSolidArc (ws.transform.position, ws.transform.up, Quaternion.Euler (0, -ws.GetArc () / 2, 0) * ws.transform.forward, ws.GetArc (), 10);
-
-    }
+    public float GetAngleToTarget () { return Vector3.Angle (transform.forward, _target.transform.position - transform.position); }
+    public float GetAngleTo (Structure target) { return Vector3.Angle (transform.forward, target.transform.position - transform.position); }
+    public bool CanFireAtTarget () { return GetAngleToTarget () <= Arc / 2; }
+    public bool CanFireAt (Structure target) { return GetAngleTo (target) <= Arc / 2; }
 
 }

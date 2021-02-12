@@ -33,7 +33,7 @@ public class EquipmentUI : MonoBehaviour {
                 RectTransform rect = indicator.GetComponent<RectTransform> ();
                 rect.anchoredPosition = new Vector2 (0, height * (player.GetEquipment ().Count - player.GetEquipment ().IndexOf (key) - 1));
                 EquipmentIndicatorUI comp = indicator.GetComponent<EquipmentIndicatorUI> ();
-                comp.SetSlot (key);
+                comp.Slot = key;
                 _indicators[key] = comp;
 
             }

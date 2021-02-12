@@ -3,24 +3,24 @@
 [CreateAssetMenu (menuName = "Items/Equipment/Capacitor")]
 public class CapacitorSO : EquipmentSO {
 
-    public override void Tick (EquipmentSlot slot) {
+    public override void SafeTick (EquipmentSlot slot) {
 
-        CapacitorSlot capacitor = slot as CapacitorSlot;
+        CapacitorSlot cap = slot as CapacitorSlot;
 
-        foreach (EquipmentSlot s in slot.GetEquipper ().GetEquipment ()) {
+        foreach (EquipmentSlot s in slot.Equipper.GetEquipment ()) {
 
-            if (s == null || s.GetEquipment () == null) continue;
+            if (s == null || s.Equipment == null) continue;
 
-            float need = s.GetRequiredEnergy ();
-            float rate = s.GetEquipment ().EnergyRechargeRate * Time.deltaTime;
-            float has = capacitor.GetStoredEnergy ();
+            float need = s.Equipment.EnergyStorage - s.Energy;
+            float rate = s.Equipment.EnergyRechargeRate * Time.deltaTime;
+            float has = cap.Energy;
             float transferred = Mathf.Min (need, Mathf.Min (rate, has));
-            capacitor.ChangeStoredEnergy (-transferred);
-            s.ChangeStoredEnergy (transferred);
+            cap.Energy -= transferred;
+            s.Energy += transferred;
 
         }
 
-        slot.TakeDamage (Wear * Time.deltaTime);
+        slot.Durability -= Wear * Time.deltaTime;
 
     }
 

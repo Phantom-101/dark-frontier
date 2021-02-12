@@ -3,7 +3,6 @@
 [CreateAssetMenu (menuName = "Items/Item")]
 public class ItemSO : ScriptableObject {
 
-    [Header ("Information")]
     public string Name;
     public string Description;
     public string Id;

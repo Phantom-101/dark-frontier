@@ -41,9 +41,9 @@ public class LinearEquipmentIndicatorUI : EquipmentIndicatorUI {
 
         if (_curAlpha == 0) EnableAll ();
 
-        if (_slot == null) return;
+        if (Slot == null) return;
 
-        if (_slot.GetEquipment () == null) {
+        if (Slot.Equipment == null) {
 
             if (_curAlpha != 0.25f) {
 
@@ -63,32 +63,32 @@ public class LinearEquipmentIndicatorUI : EquipmentIndicatorUI {
 
         }
 
-        float energyFill = Mathf.Clamp (_slot.GetStoredEnergy () / _slot.GetEquipment ().EnergyStorage * _energyMax, 0, _energyMax);
+        float energyFill = Mathf.Clamp (Slot.Energy / _slot.Equipment.EnergyStorage * _energyMax, 0, _energyMax);
         if (float.IsNaN (energyFill)) energyFill = _energyMax;
         _energy.fillAmount = energyFill;
 
-        float durabilityFill = Mathf.Clamp (_slot.GetDurability () / _slot.GetEquipment ().Durability * _durabilityMax, 0, _durabilityMax);
+        float durabilityFill = Mathf.Clamp (Slot.Durability / _slot.Equipment.Durability * _durabilityMax, 0, _durabilityMax);
         if (float.IsNaN (durabilityFill)) durabilityFill = _durabilityMax;
         _durability.fillAmount = durabilityFill;
 
-        float chargeFill = Mathf.Clamp (_slot.GetUsedInventorySize () / _slot.GetTotalInventorySize () * _chargesMax, 0, _chargesMax);
+        float chargeFill = Slot.Equipper.GetInventoryCount (Slot.Charge) > 0 ? 1 : 0;
         if (float.IsNaN (chargeFill)) chargeFill = _chargesMax;
         _charges.fillAmount = chargeFill;
 
-        _icon.sprite = _slot.GetEquipment ().Icon;
+        _icon.sprite = Slot.Equipment.Icon;
 
     }
 
     public void Toggle () {
 
-        if (_slot.IsActive ()) _slot.Deactivate ();
-        else _slot.Activate ();
+        if (Slot.TargetState) Slot.TargetState = false;
+        else Slot.TargetState = true;
 
     }
 
     public void ShowTooltip () {
 
-        _tooltip.text = _slot.GetEquipment ().Name;
+        _tooltip.text = Slot.Equipment == null ? "None" : Slot.Equipment.Name;
 
     }
 

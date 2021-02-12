@@ -9,27 +9,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d09ebd86cea86545ac0fc6b8db2df8a, type: 3}
-  m_Name: Missile Engine
+  m_Script: {fileID: 11500000, guid: 31d2861d39624454d9ceb6fbb422ffa8, type: 3}
+  m_Name: Engine 500
   m_EditorClassIdentifier: 
-  Name: Missile Engine
-  Description: A small chemical engine that uses combustible fuels to propel a missile
-    forward.
-  Id: items.equipment.engines.missile-engine
+  Name: Engine 500
+  Description: A large engine.
+  Id: items.equipment.engines.engine-500
   Icon: {fileID: 21300000, guid: 34502f7e93de60d40ac817b2a0f12f4a, type: 3}
   Size: 0
   Usable: 0
-  Meta: 1
-  EnergyStorage: 10
-  EnergyRechargeRate: 2
-  Durability: 25
+  Tier: 1
+  EnergyStorage: 50
+  EnergyRechargeRate: 25
+  Durability: 10
   Wear: 0.01
   Activatable: 0
+  AutomaticallyRepeat: 0
   RequireCharge: 0
-  InventorySize: 0
   Charges: []
-  ForwardPower: 10
-  TurnPower: 1
-  FuelConsumption: 0.5
+  ForwardPower: 500
+  TurnPower: 25000
+  ForwardConsumption: 10
+  TurnConsumption: 10
   Damp: 1
-  AngularDamp: 5
+  AngularDamp: 2

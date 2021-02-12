@@ -5,32 +5,31 @@ public class EngineSO : EquipmentSO {
 
     public float ForwardPower;
     public float TurnPower;
-    public float FuelConsumption;
+    public float ForwardConsumption;
+    public float TurnConsumption;
     public float Damp;
     public float AngularDamp;
 
-    public override void Tick (EquipmentSlot slot) {
+    public override void SafeTick (EquipmentSlot slot) {
 
-        base.Tick (slot);
-
-        slot.ChangeStoredEnergy (-FuelConsumption * Time.deltaTime);
-        slot.TakeDamage (Wear * Time.deltaTime);
+        slot.Energy -= (ForwardPower * ForwardConsumption + TurnPower * TurnConsumption) * Time.deltaTime;
+        slot.Durability -= Wear * Time.deltaTime;
 
     }
 
-    public override void FixedTick (EquipmentSlot slot) {
+    public override void SafeFixedTick (EquipmentSlot slot) {
 
-        Rigidbody rb = slot.GetEquipper ().GetComponent<Rigidbody> ();
-        ConstantForce cf = slot.GetEquipper ().GetComponent<ConstantForce> ();
+        Rigidbody rb = slot.Equipper.GetComponent<Rigidbody> ();
+        ConstantForce cf = slot.Equipper.GetComponent<ConstantForce> ();
         EngineSlot engine = slot as EngineSlot;
 
-        if (slot.GetStoredEnergy () > 0) {
+        if (slot.Energy > 0) {
 
-            rb.drag = Damp * (1 - engine.GetForwardSetting () / 2);
-            rb.angularDrag = AngularDamp * (1 - Mathf.Abs (engine.GetTurnSetting ()) / 2);
+            rb.drag = Damp * (1 - engine.ForwardSetting / 2);
+            rb.angularDrag = AngularDamp * (1 - Mathf.Abs (engine.TurnSetting) / 2);
 
-            cf.relativeForce = Vector3.forward * ForwardPower * (slot as EngineSlot).GetForwardSetting () * slot.GetEquipper ().GetStatAppliedValue ("speed_multiplier");
-            cf.relativeTorque = Vector3.up * TurnPower * (slot as EngineSlot).GetTurnSetting () + Vector3.left * TurnPower * (slot as EngineSlot).GetPitchSetting () * slot.GetEquipper ().GetStatAppliedValue ("angular_speed_multiplier");
+            cf.relativeForce = Vector3.forward * ForwardPower * engine.ForwardSetting * slot.Equipper.GetStatAppliedValue ("speed_multiplier");
+            cf.relativeTorque = (Vector3.up * TurnPower * engine.TurnSetting + Vector3.left * TurnPower * engine.PitchSetting) * slot.Equipper.GetStatAppliedValue ("angular_speed_multiplier");
 
         } else {
 

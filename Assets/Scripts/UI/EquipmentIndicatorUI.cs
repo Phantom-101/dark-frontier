@@ -4,8 +4,6 @@ public class EquipmentIndicatorUI : MonoBehaviour {
 
     [SerializeField] protected EquipmentSlot _slot;
 
-    public EquipmentSlot GetSlot () { return _slot; }
-
-    public void SetSlot (EquipmentSlot slot) { _slot = slot; }
+    public EquipmentSlot Slot { get => _slot; set => _slot = value; }
 
 }

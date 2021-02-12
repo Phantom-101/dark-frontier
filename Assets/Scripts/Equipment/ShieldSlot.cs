@@ -2,25 +2,21 @@
 
 public class ShieldSlot : EquipmentSlot {
 
-    [SerializeReference] protected ShieldStrengths _strengths;
+    [SerializeField] protected float _strength;
 
-    public ShieldSO GetShield () { return _equipment as ShieldSO; }
+    public ShieldSO Shield { get { return _equipment as ShieldSO; } }
+    public float Strength { get => _strength; set { _strength = Mathf.Clamp (value, 0, Shield == null ? 0 : Shield.MaxStrength); } }
 
-    public ShieldStrengths GetStrengths () { return _strengths; }
-
-    public void SetStrengths (ShieldStrengths strengths) { _strengths = strengths; }
-
-    public override bool CanEquip (EquipmentSO equipment) {
-
-        return base.CanEquip (equipment) || (equipment is ShieldSO && equipment.Tier <= _equipper.GetProfile ().MaxEquipmentTier);
-
-    }
-
-    protected override void ResetValues () {
+    public override void ResetValues () {
 
         base.ResetValues ();
 
-        _strengths = null;
+        Strength = 0;
+
+    }
+    public override bool CanEquip (EquipmentSO equipment) {
+
+        return base.CanEquip (equipment) || (equipment is ShieldSO && equipment.Tier <= Equipper.GetProfile ().MaxEquipmentTier);
 
     }
 

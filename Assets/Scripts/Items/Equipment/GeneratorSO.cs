@@ -6,17 +6,17 @@ public class GeneratorSO : EquipmentSO {
 
     public float GenerationRate;
 
-    public override void Tick (EquipmentSlot slot) {
+    public override void SafeTick (EquipmentSlot slot) {
 
-        List<CapacitorSlot> capacitors = slot.GetEquipper ().GetEquipment<CapacitorSlot> ();
+        List<CapacitorSlot> caps = slot.Equipper.GetEquipment<CapacitorSlot> ();
         float left = GenerationRate * Time.deltaTime;
-        foreach (CapacitorSlot capacitor in capacitors) {
+        foreach (CapacitorSlot cap in caps) {
 
-            if (capacitor != null) {
+            if (cap != null && cap.Equipment != null) {
 
-                float transferred = Mathf.Min (left, capacitor.GetRequiredEnergy ());
+                float transferred = Mathf.Min (left, cap.Equipment.EnergyStorage - cap.Energy);
                 left -= transferred;
-                capacitor.ChangeStoredEnergy (transferred);
+                cap.Energy += transferred;
 
                 if (left <= 0) break;
 
@@ -24,7 +24,7 @@ public class GeneratorSO : EquipmentSO {
 
         }
 
-        slot.TakeDamage (Wear * Time.deltaTime);
+        slot.Durability -= Wear * Time.deltaTime;
 
     }
 

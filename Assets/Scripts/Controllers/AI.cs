@@ -11,8 +11,8 @@ public class AI {
     public virtual void Tick () {
 
         EngineSlot engine = _structure.GetEquipment<EngineSlot> ()[0];
-        engine.SetForwardSetting (0);
-        engine.SetTurnSetting (0);
+        engine.ForwardSetting = 0;
+        engine.TurnSetting = 0;
 
     }
 

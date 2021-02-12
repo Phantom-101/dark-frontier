@@ -6,33 +6,23 @@ public class EngineSlot : EquipmentSlot {
     [SerializeField] protected float _turnSetting;
     [SerializeField] protected float _pitchSetting;
 
-    public EngineSO GetEngine () { return _equipment as EngineSO; }
+    public EngineSO Engine { get { return _equipment as EngineSO; } }
+    public float ForwardSetting { get => _forwardSetting; set { _forwardSetting = Mathf.Clamp01 (value); } }
+    public float TurnSetting { get => _turnSetting; set { _turnSetting = Mathf.Clamp (value, -1, 1); } }
+    public float PitchSetting { get => _pitchSetting; set { _pitchSetting = Mathf.Clamp (value, -1, 1); } }
 
-    public float GetForwardSetting () { return _forwardSetting; }
-
-    public void SetForwardSetting (float target) { _forwardSetting = Mathf.Clamp (target, 0, 1); }
-
-    public float GetTurnSetting () { return _turnSetting; }
-
-    public void SetTurnSetting (float target) { _turnSetting = Mathf.Clamp (target, -1, 1); }
-
-    public float GetPitchSetting () { return _pitchSetting; }
-
-    public void SetPitchSetting (float target) { _pitchSetting = Mathf.Clamp (target, -1, 1); }
-
-    public override bool CanEquip (EquipmentSO equipment) {
-
-        return base.CanEquip (equipment) || (equipment is EngineSO && equipment.Tier <= _equipper.GetProfile ().MaxEquipmentTier);
-
-    }
-
-    protected override void ResetValues () {
+    public override void ResetValues () {
 
         base.ResetValues ();
 
-        _forwardSetting = 0;
-        _turnSetting = 0;
-        _pitchSetting = 0;
+        ForwardSetting = 0;
+        TurnSetting = 0;
+        PitchSetting = 0;
+
+    }
+    public override bool CanEquip (EquipmentSO equipment) {
+
+        return base.CanEquip (equipment) || (equipment is EngineSO && equipment.Tier <= Equipper.GetProfile ().MaxEquipmentTier);
 
     }
 

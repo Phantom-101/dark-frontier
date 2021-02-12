@@ -30,4 +30,5 @@ MonoBehaviour:
   DockingBaySize: 0
   OnDestroyedChannel: {fileID: 11400000, guid: c42055d3c124f174fa639daf99561b4e, type: 2}
   DropPercentage: 1
-  MaxMeta: 100
+  MaxEquipmentTier: 0
+  SnapToPlane: 1

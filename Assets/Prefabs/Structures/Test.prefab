@@ -144,13 +144,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipment: {fileID: 11400000, guid: 6fa1805b4fb08324fbbdbece208b5f2b, type: 2}
-  _storedEnergy: 0
-  _currentDurability: 10
+  _equipment: {fileID: 0}
+  _energy: 0
+  _durability: 0
   _equipper: {fileID: 570406170697649155}
-  _active: 0
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
   _arc: 180
   _target: {fileID: 0}
   _projectile: {fileID: 0}
@@ -302,6 +302,7 @@ MonoBehaviour:
   _sector: {fileID: 0}
   _docked: []
   _dockedIds: []
+  _initialized: 0
   references:
     version: 1
     00000000:
@@ -377,13 +378,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipment: {fileID: 11400000, guid: 6fa1805b4fb08324fbbdbece208b5f2b, type: 2}
-  _storedEnergy: 0
-  _currentDurability: 10
+  _equipment: {fileID: 0}
+  _energy: 0
+  _durability: 0
   _equipper: {fileID: 570406170697649155}
-  _active: 0
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
   _arc: 180
   _target: {fileID: 0}
   _projectile: {fileID: 0}
@@ -431,13 +432,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01053b7370665b441876274053f77c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipment: {fileID: 11400000, guid: d963a5cde2f8ef648802b54dc66b3875, type: 2}
-  _storedEnergy: 0
-  _currentDurability: 25
+  _equipment: {fileID: 0}
+  _energy: 0
+  _durability: 0
   _equipper: {fileID: 570406170697649155}
-  _active: 0
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
   _forwardSetting: 0
   _turnSetting: 0
   _pitchSetting: 0
@@ -484,13 +485,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83f791907cc86ce49bab998822102a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipment: {fileID: 11400000, guid: 484fded2e5947e44ea02af2fe0d4643f, type: 2}
-  _storedEnergy: 0
-  _currentDurability: 25
+  _equipment: {fileID: 0}
+  _energy: 0
+  _durability: 0
   _equipper: {fileID: 570406170697649155}
-  _active: 0
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
 --- !u!1 &715498814549850700
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,22 +532,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 715498814549850700}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3f09e3afa77e6b4f94279749a3507cd, type: 3}
+  m_Script: {fileID: 11500000, guid: aa6d949ca5ee17d40a39094cf8ff8360, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipment: {fileID: 11400000, guid: 6a1c612899b819c45a4c7aa22db7194b, type: 2}
-  _storedEnergy: 0
-  _currentDurability: 25
-  _equipper: {fileID: 570406170697649155}
-  _active: 0
+  _equipment: {fileID: 0}
+  _energy: 0
+  _durability: 0
+  _equipper: {fileID: 0}
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
-  _strengths:
-    id: 0
-  references:
-    version: 1
-    00000000:
-      type: {class: , ns: , asm: }
+  _strength: 0
 --- !u!1 &2881743952618391353
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,16 +583,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2881743952618391353}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1efe423481aae3a4c888259f7617e762, type: 3}
+  m_Script: {fileID: 11500000, guid: 146f05006976f0846b58023a17082494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _equipment: {fileID: 11400000, guid: 2869ff7864f008c41824f15c9e94b5b8, type: 2}
-  _storedEnergy: 0
-  _currentDurability: 25
-  _equipper: {fileID: 570406170697649155}
-  _active: 0
+  _equipment: {fileID: 0}
+  _energy: 0
+  _durability: 0
+  _equipper: {fileID: 0}
+  _currentState: 0
+  _targetState: 0
   _charge: {fileID: 0}
-  _chargeQuantity: 0
 --- !u!1 &8314451955865055747
 GameObject:
   m_ObjectHideFlags: 0

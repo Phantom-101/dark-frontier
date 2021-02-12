@@ -18,5 +18,6 @@ public class StructureSO : ItemSO {
     public StructureDestroyedEventChannelSO OnDestroyedChannel;
     public float DropPercentage;
     public int MaxEquipmentTier;
+    public bool SnapToPlane;
 
 }

@@ -3,38 +3,31 @@
 [CreateAssetMenu (menuName = "Items/Equipment/Shield")]
 public class ShieldSO : EquipmentSO {
 
-    public float[] MaxStrengths;
-    public float[] RechargeRates;
+    public float Radius;
+    public float MaxStrength;
+    public float RechargeRate;
 
     public override void OnAwake (EquipmentSlot slot) {
 
         ShieldSlot shield = slot as ShieldSlot;
-
-        if (shield.GetShield () != null && shield.GetStrengths () == null) OnEquip (slot);
+        if (shield.Shield != null) OnEquip (slot);
 
     }
 
     public override void OnEquip (EquipmentSlot slot) {
 
         ShieldSlot shield = slot as ShieldSlot;
-
-        if (shield.GetEquipment () != null) {
-
-            ShieldSO so = shield.GetShield ();
-
-            shield.SetStrengths (new ShieldStrengths (slot as ShieldSlot, so.MaxStrengths, so.MaxStrengths, so.RechargeRates));
-
-        }
+        ShieldSO s = shield.Shield;
+        if (s != null) shield.Strength = s.MaxStrength;
 
     }
 
-    public override void Tick (EquipmentSlot slot) {
+    public override void SafeTick (EquipmentSlot slot) {
 
         ShieldSlot shield = slot as ShieldSlot;
-
-        shield.GetStrengths ().Tick ();
-
-        slot.TakeDamage (Wear * Time.deltaTime);
+        ShieldSO s = shield.Shield;
+        shield.Strength += s.RechargeRate * Time.deltaTime;
+        slot.Durability -= Wear * Time.deltaTime;
 
     }
 

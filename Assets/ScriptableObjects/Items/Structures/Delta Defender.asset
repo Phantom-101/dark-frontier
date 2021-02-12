@@ -31,3 +31,4 @@ MonoBehaviour:
   OnDestroyedChannel: {fileID: 11400000, guid: c42055d3c124f174fa639daf99561b4e, type: 2}
   DropPercentage: 1
   MaxEquipmentTier: 5
+  SnapToPlane: 1

@@ -46,9 +46,9 @@ public class RadialEquipmentIndicatorUI : EquipmentIndicatorUI {
 
         if (_curAlpha == 0) EnableAll ();
 
-        if (_slot == null) return;
+        if (Slot == null) return;
 
-        if (_slot.GetEquipment () == null) {
+        if (Slot.Equipment == null) {
 
             if (_curAlpha != 0.25f) {
 
@@ -68,32 +68,32 @@ public class RadialEquipmentIndicatorUI : EquipmentIndicatorUI {
 
         }
 
-        float energyFill = Mathf.Clamp (_slot.GetStoredEnergy () / _slot.GetEquipment ().EnergyStorage * _energyMax + _energyOffset, _energyOffset, _energyMax + _energyOffset);
+        float energyFill = Mathf.Clamp (Slot.Energy / Slot.Equipment.EnergyStorage * _energyMax + _energyOffset, _energyOffset, _energyMax + _energyOffset);
         if (float.IsNaN (energyFill)) energyFill = _energyMax + _energyOffset;
         _energy.fillAmount = energyFill;
 
-        float durabilityFill = Mathf.Clamp (_slot.GetDurability () / _slot.GetEquipment ().Durability * _durabilityMax + _durabilityOffset, _durabilityOffset, _durabilityMax + _durabilityOffset);
+        float durabilityFill = Mathf.Clamp (Slot.Durability / Slot.Equipment.Durability * _durabilityMax + _durabilityOffset, _durabilityOffset, _durabilityMax + _durabilityOffset);
         if (float.IsNaN (durabilityFill)) durabilityFill = _durabilityMax + _durabilityOffset;
         _durability.fillAmount = durabilityFill;
 
-        float chargeFill = Mathf.Clamp (_slot.GetUsedInventorySize () / _slot.GetTotalInventorySize () * _chargesMax + _chargesOffset, _chargesOffset, _chargesMax + _chargesOffset);
+        float chargeFill = Slot.Equipper.GetInventoryCount (Slot.Charge) > 0 ? 1 : 0;
         if (float.IsNaN (chargeFill)) chargeFill = _chargesMax + _chargesOffset;
         _charges.fillAmount = chargeFill;
 
-        _icon.sprite = _slot.GetEquipment ().Icon;
+        _icon.sprite = Slot.Equipment.Icon;
 
     }
 
     public void Toggle () {
 
-        if (_slot.IsActive ()) _slot.Deactivate ();
-        else _slot.Activate ();
+        if (Slot.TargetState) Slot.TargetState = false;
+        else Slot.TargetState = true;
 
     }
 
     public void ShowTooltip () {
 
-        _tooltip.text = _slot.GetEquipment ().Name;
+        _tooltip.text = Slot.Equipment.Name;
 
     }
 

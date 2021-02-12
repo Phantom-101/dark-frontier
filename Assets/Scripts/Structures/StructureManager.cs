@@ -163,18 +163,11 @@ public class StructureManager : MonoBehaviour {
 
         }
 
-        LeanTween.value (destroyedStructure.gameObject, 0, 1, 1).setOnUpdateParam (destroyedStructure.gameObject).setOnUpdateObject ((float value, object obj) => {
-
-            GameObject go = obj as GameObject;
-            go.GetComponentInChildren<MeshRenderer> ().material.SetFloat ("_DissolveAmount", value);
-
-        });
-
         Destroy (destroyedStructure.GetComponent<ConstantForce> ());
         Destroy (destroyedStructure.GetComponent<Rigidbody> ());
 
         Destroy (destroyedStructure);
-        Destroy (destroyedStructure.gameObject, 2);
+        Destroy (destroyedStructure.gameObject);
 
     }
 

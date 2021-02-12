@@ -23,7 +23,7 @@ public class StructureHPIndicatorUI : MonoBehaviour {
 
         foreach (Image img in _shields) Destroy (img.gameObject);
         _shields = new List<Image> ();
-
+        /*
         ShieldSlot slot = _structure.GetEquipment<ShieldSlot> ()[0];
         int sectors = slot.GetStrengths ().GetSectorCount ();
         float degrees = slot.GetStrengths ().GetSectorAngle ();
@@ -35,6 +35,7 @@ public class StructureHPIndicatorUI : MonoBehaviour {
             _shields.Add (instantiated.transform.GetChild (0).GetComponent<Image> ());
 
         }
+        */
 
     }
 
@@ -50,6 +51,7 @@ public class StructureHPIndicatorUI : MonoBehaviour {
 
         _hull.sprite = _structure.GetProfile ().HullWireframe;
         _hull.color = _hullGradient.Evaluate (_structure.GetHull () / _structure.GetProfile ().Hull);
+        /*
         ShieldStrengths strengths = _structure.GetEquipment<ShieldSlot> ()[0].GetStrengths ();
         if (strengths.GetSectorCount () != _shields.Count) Initialize ();
         for (int i = 0; i < _shields.Count; i++) {
@@ -70,6 +72,7 @@ public class StructureHPIndicatorUI : MonoBehaviour {
             }
 
         }
+        */
 
     }
 

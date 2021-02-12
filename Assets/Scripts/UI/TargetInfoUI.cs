@@ -25,7 +25,7 @@ public class TargetInfoUI : MonoBehaviour {
             return;
 
         }
-
+        /*
         ShieldSlot slot = _structure.GetEquipment<ShieldSlot> ()[0];
         int sectors = slot.GetStrengths ().GetSectorCount ();
         float degrees = slot.GetStrengths ().GetSectorAngle ();
@@ -37,6 +37,7 @@ public class TargetInfoUI : MonoBehaviour {
             _shields.Add (instantiated.transform.GetChild (0).GetComponent<Image> ());
 
         }
+        */
 
     }
 
@@ -55,22 +56,25 @@ public class TargetInfoUI : MonoBehaviour {
 
         _hull.sprite = _structure.GetProfile ().HullWireframe;
         _hull.color = _hullGradient.Evaluate (_structure.GetHull () / _structure.GetProfile ().Hull);
+        /*
         ShieldStrengths strengths = _structure.GetEquipment<ShieldSlot> ()[0].GetStrengths ();
         for (int i = 0; i < _shields.Count; i++) {
 
             _shields[i].color = _shieldGradient.Evaluate (strengths.GetSectorStrength (i) / strengths.GetSectorMaxStrength (i));
 
         }
+        */
         _name.text = _structure.gameObject.name;
         _faction.text = _structure.GetFaction ()?.GetName () ?? "None";
         _distance.text = Vector3.Distance (PlayerController.GetInstance ().GetPlayer ().transform.position, _structure.transform.position).ToString ("F2") + " m";
         Rigidbody rb = _structure.GetComponent<Rigidbody> ();
         if (rb == null) _velocity.text = "0 m/s";
         else _velocity.text = rb.velocity.magnitude.ToString ("F2") + " m/s";
+        /*
         ShieldSlot slot = _structure.GetEquipment<ShieldSlot> ()[0];
         float degrees = slot.GetStrengths ().GetSectorAngle ();
         _direction.rotation = Quaternion.Euler (0, 0, slot.GetStrengths ().GetSectorTo (PlayerController.GetInstance ().GetPlayer ().gameObject) * -degrees);
-
+        */
     }
 
 }

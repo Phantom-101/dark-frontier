@@ -1,302 +1,107 @@
 ﻿using System;
-using System.Linq;
+using UnityEditor;
+//using System.Collections.Generic;
 using UnityEngine;
 
 public class EquipmentSlot : MonoBehaviour {
 
     [SerializeField] protected EquipmentSO _equipment;
-    [SerializeField] protected float _storedEnergy;
-    [SerializeField] protected float _currentDurability;
+    [SerializeField] protected float _energy;
+    [SerializeField] protected float _durability;
     [SerializeField] protected Structure _equipper;
-    [SerializeField] protected bool _active;
+    [SerializeField] protected bool _currentState;
+    [SerializeField] protected bool _targetState;
     [SerializeField] protected ChargeSO _charge;
-    [SerializeField] protected int _chargeQuantity;
+    //[SerializeField] protected List<NewEquipmentSO> _allowedEquipment = new List<NewEquipmentSO> ();
 
-    private void Awake () {
+    public EquipmentSO Equipment { get => _equipment; set { _equipment = value; if (_equipment != null) _equipment.OnEquip (this); } }
+    public float Energy { get => _energy; set { _energy = Mathf.Clamp (value, 0, _equipment == null ? 0 : _equipment.EnergyStorage); } }
+    public float Durability { get => _durability; set { _durability = Mathf.Clamp (value, 0, _equipment == null ? 0 : _equipment.Durability); } }
+    public Structure Equipper { get => _equipper; set => _equipper = value; }
+    public bool CurrentState { get => _currentState; set => _currentState = value; }
+    public bool TargetState { get => _targetState; set => _targetState = value; }
+    public ChargeSO Charge { get => _charge; set => _charge = value; }
+    //public List<NewEquipmentSO> AllowedEquipment { get => _allowedEquipment; }
 
-        if (_equipment != null) _equipment.OnAwake (this);
+    public virtual void Tick () { if (Equipment != null) Equipment.Tick (this); }
+    public virtual void FixedTick () { if (Equipment != null) Equipment.FixedTick (this); }
+    public virtual void ResetValues () {
 
-    }
-
-    public EquipmentSO GetEquipment () { return _equipment; }
-
-    public float GetStoredEnergy () { return _storedEnergy; }
-
-    public float GetRequiredEnergy () {
-
-        if (_equipment == null) return 0;
-
-        return _equipment.EnergyStorage - _storedEnergy;
-
-    }
-
-    public void ChangeStoredEnergy (float amount) {
-
-        if (_equipment == null) return;
-
-        _storedEnergy = Mathf.Clamp (_storedEnergy + amount, 0, _equipment.EnergyStorage);
+        Energy = 0;
+        Durability = 0;
+        CurrentState = false;
+        TargetState = false;
+        Charge = null;
 
     }
-
-    public void SetStoredEnergy (float amount) {
-
-        if (_equipment == null) return;
-
-        _storedEnergy = Mathf.Clamp (amount, 0, _equipment.EnergyStorage);
-
-    }
-
-    public float GetDurability () { return _currentDurability; }
-
-    public void ChangeDurability (float amount) {
-
-        if (_equipment == null) return;
-
-        _currentDurability = Mathf.Clamp (_currentDurability + amount, 0, _equipment.Durability);
-
-        if (_currentDurability <= 0) Equip (null);
-
-    }
-
-    public void SetDurability (float amount) {
-
-        if (_equipment == null) return;
-
-        _currentDurability = Mathf.Clamp (amount, 0, _equipment.Durability);
-
-        if (_currentDurability <= 0) Equip (null);
-
-    }
-
-    public virtual void TakeDamage (float amount) {
-
-        ChangeDurability (-amount);
-
-        if (GetDurability () <= 0) Equip (null);
-
-    }
-
-    public Structure GetEquipper () { return _equipper; }
-
-    public bool IsActive () { return _active; }
-
-    public bool CanActivate () {
-
-        if (_equipment == null) return false;
-
-        return _equipment.CanActivate (this);
-
-    }
-
-    public void SetIsActive (bool target) { _active = target; }
-
-    public void Activate () { _equipment.Activate (this); }
-
-    public void Deactivate () { _equipment.Deactivate (this); }
-
-    public ChargeSO[] GetCharges () { return _equipment.Charges; }
-
-    public bool CanLoadCharge (ChargeSO charge, int count) {
-
-        if (_equipment == null) return false;
-        if (!_equipment.Activatable) return false;
-        if (!_equipment.Charges.Contains (charge)) return false;
-        if (_charge == charge) {
-
-            if (Math.Round (GetFreeInventorySize (), (charge.Size % 1).ToString ().Length) < Math.Round (charge.Size * count, (charge.Size % 1).ToString ().Length)) return false;
-
-        } else {
-
-            if (!CanUnloadCharge ()) return false;
-            if (_equipment.InventorySize < charge.Size * count) return false;
-
-        }
-
-        return true;
-
-    }
-
-    public bool LoadCharge (ChargeSO charge, int count) {
-
-        if (!CanLoadCharge (charge, count)) return false;
-
-        if (_charge == charge) {
-
-            _chargeQuantity += count;
-
-        } else {
-
-            UnloadCharge ();
-
-            _charge = charge;
-            _chargeQuantity = count;
-
-        }
-
-        return true;
-
-    }
-
-    public bool CanUnloadCharge () {
-
-        if (_charge != null && _equipper.GetFreeInventorySize () < _charge.Size * _chargeQuantity) return false;
-
-        return true;
-
-    }
-
-    public bool UnloadCharge () {
-
-        if (!CanUnloadCharge ()) return false;
-
-        if (_charge != null) _equipper.ChangeInventoryCount (_charge, _chargeQuantity);
-        _charge = null;
-        _chargeQuantity = 0;
-
-        return true;
-
-    }
-
-    public void DepleteCharge (int amount) {
-
-        _chargeQuantity = Mathf.Clamp (_chargeQuantity - amount, 0, (int) (_equipment.InventorySize / _charge.Size));
-
-    }
-
-    public ChargeSO GetCharge () { return _charge; }
-
-    public int GetChargeQuantity () { return _chargeQuantity; }
-
-    public float GetUsedInventorySize () {
-
-        if (_charge == null) return 0;
-
-        return _charge.Size * _chargeQuantity;
-
-    }
-
-    public float GetFreeInventorySize () {
-
-        return GetTotalInventorySize () - GetUsedInventorySize ();
-
-    }
-
-    public float GetTotalInventorySize () {
-
-        return _equipment.InventorySize;
-
-    }
-
-    public void Tick () {
-
-        if (_equipment == null) return;
-
-        _equipment.Tick (this);
-
-    }
-
-    public void FixedTick () {
-
-        if (_equipment == null) return;
-
-        _equipment.FixedTick (this);
-
-    }
-
-    public virtual bool CanEquip (EquipmentSO equipment) {
-
-        if (equipment == null) return true;
-
-        return false;
-
-    }
-
-    public virtual bool Equip (EquipmentSO equipment) {
-
-        if (CanEquip (equipment)) {
-
-            if (_equipment != null) {
-
-                _equipment.OnUnequip (this);
-
-            }
-
-            ResetValues ();
-
-            _equipment = equipment;
-
-            if (_equipment != null) {
-
-                _equipment.OnEquip (this);
-
-            }
-
-            return true;
-
-        }
-
-        return false;
-
-    }
-
-    public Vector3 GetOffset () {
-
-        return transform.position - _equipper.transform.position;
-
-    }
-
-    public Vector3 GetPosition () {
-
-        return transform.position;
-
-    }
-
-    public Vector3 GetLocalPosition () {
-
-        return GetOffset () + _equipper.transform.localPosition;
-
-    }
-
-    protected virtual void ResetValues () {
-
-        _storedEnergy = 0;
-        _currentDurability = 0;
-
-    }
-
-    public virtual EquipmentSlotSaveData GetSaveData () {
-
-        EquipmentSlotSaveData data = new EquipmentSlotSaveData {
-
-            StoredEnergy = _storedEnergy,
-            CurrentDurability = _currentDurability,
-            Active = _active
+    public virtual bool CanEquip (EquipmentSO equipment) { return equipment == null; }
+    public virtual NewEquipmentSlotSaveData GetSaveData () {
+
+        return new NewEquipmentSlotSaveData {
+
+            EquipmentId = Equipment.Id,
+            Energy = Energy,
+            Durability = Durability,
+            EquipperId = Equipper.GetId (),
+            CurrentState = CurrentState,
+            TargetState = TargetState,
+            ChargeId = Charge.Id
 
         };
-        if (_equipment != null) data.EquipmentId = _equipment.Id;
-        if (_equipper != null) data.EquipperId = _equipper.GetId ();
-        return data;
+
+    }
+    public virtual void LoadSaveData (NewEquipmentSlotSaveData data) {
+
+        Equipment = ItemManager.GetInstance ().GetItem (data.EquipmentId) as EquipmentSO;
+        Energy = data.Energy;
+        Durability = data.Durability;
+        CurrentState = data.CurrentState;
+        TargetState = data.TargetState;
+        Charge = ItemManager.GetInstance ().GetItem (data.ChargeId) as ChargeSO;
 
     }
 
-    public virtual void LoadSaveData (EquipmentSlotSaveData saveData) {
+}
 
-        _equipment = ItemManager.GetInstance ().GetItem (saveData.EquipmentId) as EquipmentSO;
-        _storedEnergy = saveData.StoredEnergy;
-        _currentDurability = saveData.CurrentDurability;
-        _active = saveData.Active;
+[CustomEditor (typeof (EquipmentSlot))]
+[CanEditMultipleObjects]
+public class EquipmentSlotEditor : Editor {
+
+    SerializedProperty equipment;
+    SerializedProperty energy;
+    SerializedProperty durability;
+
+    void OnEnable () {
+
+        equipment = serializedObject.FindProperty ("_equipment");
+        energy = serializedObject.FindProperty ("_energy");
+        durability = serializedObject.FindProperty ("_durability");
+
+    }
+
+    public override void OnInspectorGUI () {
+
+        serializedObject.Update ();
+
+        EditorGUILayout.PropertyField (equipment);
+        EditorGUILayout.Slider (energy, 0, equipment.objectReferenceValue == null ? 0 : (equipment.objectReferenceValue as EquipmentSO).EnergyStorage);
+        EditorGUILayout.Slider (durability, 0, equipment.objectReferenceValue == null ? 0 : (equipment.objectReferenceValue as EquipmentSO).Durability);
+
+        serializedObject.ApplyModifiedProperties ();
 
     }
 
 }
 
 [Serializable]
-public class EquipmentSlotSaveData {
+public class NewEquipmentSlotSaveData {
 
     public string EquipmentId;
-    public float StoredEnergy;
-    public float CurrentDurability;
+    public float Energy;
+    public float Durability;
     public string EquipperId;
-    public bool Active;
+    public bool CurrentState;
+    public bool TargetState;
+    public string ChargeId;
 
 }

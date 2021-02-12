@@ -215,7 +215,7 @@ public class Structure : MonoBehaviour {
         foreach (Renderer r in renderers) r.enabled = false;
 
         // Disable all equipment
-        foreach (EquipmentSlot slot in docker.GetEquipment ()) slot.Deactivate ();
+        foreach (EquipmentSlot slot in docker.GetEquipment ()) slot.TargetState = false;
 
         if (docker == PlayerController.GetInstance ().GetPlayer ()) {
 
@@ -313,29 +313,31 @@ public class Structure : MonoBehaviour {
 
         foreach (EquipmentSlot slot in _equipmentSlots) slot.FixedTick ();
 
-        // Set position and rotation
-        transform.LeanSetLocalPosY (0);
-        transform.localEulerAngles = new Vector3 (0, transform.eulerAngles.y, _rb.angularVelocity.y * -25);
+        if (_profile.SnapToPlane) {
+
+            // Set position and rotation
+            transform.LeanSetLocalPosY (0);
+            transform.localEulerAngles = new Vector3 (0, transform.eulerAngles.y, _rb.angularVelocity.y * -25);
+
+        }
 
     }
 
     public void TakeDamage (DamageProfile damage, Vector3 from) {
 
         ShieldSlot shield = GetEquipment<ShieldSlot> ()[0];
-        ShieldStrengths ss = shield.GetStrengths ();
-        int sector = ss.GetSectorTo (from);
-        float strength = ss.GetSectorStrength (sector);
-        float maxStrength = ss.GetSectorMaxStrength (sector);
+        float strength = shield.Strength;
+        float maxStrength = shield.Shield.MaxStrength;
         if (strength <= damage.ShieldBypass * maxStrength) ChangeHull (-damage.DamageAmount * damage.HullEffectiveness);
         else {
 
             ChangeHull (-damage.DamageAmount * damage.ShieldPenetration * damage.HullEffectiveness);
             float toShield = damage.DamageAmount * (1 - damage.ShieldPenetration);
             float remain = toShield - (strength / damage.ShieldEffectiveness);
-            if (remain < 0) ss.ChangeSectorStrength (sector, -toShield * damage.ShieldEffectiveness);
+            if (remain < 0) shield.Strength -= toShield * damage.ShieldEffectiveness;
             else {
 
-                ss.SetSectorStrength (sector, 0);
+                shield.Strength = 0;
                 ChangeHull (-remain);
 
             }
@@ -412,7 +414,7 @@ public class StructureSaveData {
     public string Id;
     public float Hull;
     public string FactionId;
-    public List<EquipmentSlotSaveData> Equipment = new List<EquipmentSlotSaveData> ();
+    public List<NewEquipmentSlotSaveData> Equipment = new List<NewEquipmentSlotSaveData> ();
     public List<string> InventoryIds = new List<string> ();
     public List<int> InventoryCounts = new List<int> ();
     public string SectorId;

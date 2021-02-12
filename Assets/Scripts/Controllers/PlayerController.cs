@@ -59,37 +59,37 @@ public class PlayerController : MonoBehaviour {
 
     private void Left () {
 
-        _player.GetEquipment<EngineSlot> ()[0].SetTurnSetting (-1);
+        _player.GetEquipment<EngineSlot> ()[0].TurnSetting = -1;
 
     }
 
     private void Neutral () {
 
-        _player.GetEquipment<EngineSlot> ()[0].SetTurnSetting (0);
+        _player.GetEquipment<EngineSlot> ()[0].TurnSetting = 0;
 
     }
 
     private void Right () {
 
-        _player.GetEquipment<EngineSlot> ()[0].SetTurnSetting (1);
+        _player.GetEquipment<EngineSlot> ()[0].TurnSetting = 1;
 
     }
 
     private void Fwd () {
 
-        _player.GetEquipment<EngineSlot> ()[0].SetForwardSetting (1);
+        _player.GetEquipment<EngineSlot> ()[0].ForwardSetting = 1;
 
     }
 
     private void Stop () {
 
-        _player.GetEquipment<EngineSlot> ()[0].SetForwardSetting (0);
+        _player.GetEquipment<EngineSlot> ()[0].ForwardSetting = 0;
 
     }
 
     public void SetFwd (float setting) {
 
-        _player.GetEquipment<EngineSlot> ()[0].SetForwardSetting (setting);
+        _player.GetEquipment<EngineSlot> ()[0].ForwardSetting = setting;
 
     }
 
