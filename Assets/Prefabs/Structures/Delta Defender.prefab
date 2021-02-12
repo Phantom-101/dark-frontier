@@ -116,14 +116,14 @@ MonoBehaviour:
       _values: []
   _initialFaction: {fileID: 0}
   _equipmentSlots:
-  - {fileID: 2869013933564605248}
-  - {fileID: 2869013932731074998}
-  - {fileID: 2869013932881049477}
-  - {fileID: 2869013933843750051}
-  - {fileID: 2869013932810373259}
-  - {fileID: 2869013934095021291}
-  - {fileID: 2869013932910226454}
   - {fileID: 2869013934242875144}
+  - {fileID: 2869013932910226454}
+  - {fileID: 2869013934095021291}
+  - {fileID: 2869013932810373259}
+  - {fileID: 2869013933843750051}
+  - {fileID: 2869013932881049477}
+  - {fileID: 2869013932731074998}
+  - {fileID: 2869013933564605248}
   _inventory:
     reorderableList:
       canAdd: 1

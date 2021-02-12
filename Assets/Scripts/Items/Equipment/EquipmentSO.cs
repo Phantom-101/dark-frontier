@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 public class EquipmentSO : ItemSO {
 
@@ -162,68 +159,6 @@ public class EquipmentSO : ItemSO {
         if (slot.Equipper == null) return false;
 
         return true;
-
-    }
-
-}
-
-[CustomPropertyDrawer (typeof (EquipmentSO))]
-public class EquipmentSOPropertyDrawer : PropertyDrawer {
-
-    public override float GetPropertyHeight (SerializedProperty property, GUIContent label) {
-
-        // Main properties
-        float svs = EditorGUIUtility.standardVerticalSpacing;
-        float h = EditorGUI.GetPropertyHeight (property, label, true) + svs;
-
-        // Other properties
-        if (property.objectReferenceValue != null) {
-
-            SerializedObject so = new SerializedObject (property.objectReferenceValue as EquipmentSO);
-
-            SerializedProperty name = so.FindProperty ("Name");
-            h += EditorGUI.GetPropertyHeight (name, label, true) + svs;
-
-            SerializedProperty tier = so.FindProperty ("Tier");
-            h += EditorGUI.GetPropertyHeight (tier, label, true) + svs;
-
-        }
-
-        return h;
-
-    }
-
-    public override void OnGUI (Rect position, SerializedProperty property, GUIContent label) {
-
-        EditorGUI.BeginProperty (position, label, property);
-
-        // Main property
-        EditorGUI.PrefixLabel (position, GUIUtility.GetControlID (FocusType.Passive), new GUIContent (label.text));
-        EditorGUI.PropertyField (position, property, true);
-
-        // Other properties
-        if (property.objectReferenceValue != null) {
-
-            float svs = EditorGUIUtility.standardVerticalSpacing;
-            float h = EditorGUI.GetPropertyHeight (property) + svs;
-
-            SerializedObject so = new SerializedObject (property.objectReferenceValue);
-
-            SerializedProperty nameProp = so.FindProperty ("Name");
-            Rect nameRect = new Rect (position.x, position.y + h, position.width, EditorGUI.GetPropertyHeight (nameProp, label, true));
-            EditorGUI.LabelField (nameRect, "Name", nameProp.stringValue);
-            h += EditorGUI.GetPropertyHeight (nameProp, label, true) + svs;
-
-            SerializedProperty tierProp = so.FindProperty ("Tier");
-            Rect tierRect = new Rect (position.x, position.y + h, position.width, EditorGUI.GetPropertyHeight (nameProp, label, true));
-            EditorGUI.LabelField (tierRect, "Tier", tierProp.intValue.ToString ());
-            h += EditorGUI.GetPropertyHeight (tierProp, label, true) + svs;
-
-            so.ApplyModifiedProperties ();
-
-        }
-
-        EditorGUI.EndProperty ();
 
     }
 
