@@ -27,4 +27,4 @@ MonoBehaviour:
   AutomaticallyRepeat: 0
   RequireCharge: 0
   Charges: []
-  GenerationRate: 10000
+  GenerationRate: 50

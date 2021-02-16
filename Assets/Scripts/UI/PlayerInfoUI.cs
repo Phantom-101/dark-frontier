@@ -11,6 +11,10 @@ public class PlayerInfoUI : MonoBehaviour {
     [SerializeField] private List<Image> _shields;
     [SerializeField] private Gradient _shieldGradient;
     [SerializeField] private Transform _direction;
+    [SerializeField] private RectTransform _capFill;
+    [SerializeField] private Image _capImg;
+    [SerializeField] private RectTransform _capOutline;
+    [SerializeField] private Gradient _capGradient;
     [SerializeField] private Structure _structure;
 
     private void Start () {
@@ -73,6 +77,16 @@ public class PlayerInfoUI : MonoBehaviour {
         //Rigidbody rb = _structure.GetComponent<Rigidbody> ();
         //if (rb == null) _velocity.text = "0 m/s";
         //else _velocity.text = rb.velocity.magnitude.ToString ("F2") + " m/s";
+
+        float storedCap = 0, totalCap = 0;
+        foreach (CapacitorSlot cap in _structure.GetEquipment<CapacitorSlot> ()) {
+
+            storedCap += cap.Energy;
+            totalCap += cap.Equipment.EnergyStorage;
+
+        }
+        _capFill.sizeDelta = new Vector2 (_capOutline.sizeDelta.x * storedCap / totalCap, _capFill.sizeDelta.y);
+        _capImg.color = _capGradient.Evaluate (storedCap / totalCap);
 
         if (_structure.GetTarget () == null) _direction.gameObject.SetActive (false);
         else {

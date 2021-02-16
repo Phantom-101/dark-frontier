@@ -9,8 +9,12 @@
 
             if (slot.TargetState) {
 
-                if (CanCycleStart (slot)) slot.CurrentState = true;
-                else slot.TargetState = false;
+                if (CanCycleStart (slot)) {
+
+                    slot.CurrentState = true;
+                    (slot as WeaponSlot).Target = slot.Equipper.GetTarget ();
+
+                } else slot.TargetState = false;
 
             } else slot.CurrentState = false;
 
@@ -26,7 +30,6 @@
 
                         if (slot.Equipper.GetInventoryCount (slot.Charge) > 0) {
 
-                            (slot as WeaponSlot).Target = slot.Equipper.GetTarget ();
                             slot.Equipper.ChangeInventoryCount (slot.Charge, -1);
                             slot.Energy = 0;
                             OnCycleStart (slot);
@@ -36,7 +39,6 @@
 
                     } else {
 
-                        (slot as WeaponSlot).Target = slot.Equipper.GetTarget ();
                         slot.Energy = 0;
                         OnCycleStart (slot);
                         slot.Durability -= Wear;
