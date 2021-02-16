@@ -6,7 +6,7 @@ public class CapacitorSlot : EquipmentSlot {
 
     public override bool CanEquip (EquipmentSO equipment) {
 
-        return base.CanEquip (equipment) || (equipment is CapacitorSO && equipment.Tier <= Equipper.GetProfile ().MaxEquipmentTier);
+        return equipment == null || (base.CanEquip (equipment) && equipment is CapacitorSO);
 
     }
     public float AllocateEnergy (float amount) {

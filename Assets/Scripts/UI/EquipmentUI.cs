@@ -14,14 +14,14 @@ public class EquipmentUI : MonoBehaviour {
         Structure player = PlayerController.GetInstance ().GetPlayer ();
 
         foreach (EquipmentSlot key in _indicators.Keys.ToArray ())
-            if (!player.GetEquipment ().Contains (key)) {
+            if (!player.Equipment.Contains (key)) {
 
                 _indicators.Remove (key);
                 Destroy (key.gameObject);
 
             }
 
-        foreach (EquipmentSlot slot in player.GetEquipment ())
+        foreach (EquipmentSlot slot in player.Equipment)
             if (!_indicators.ContainsKey (slot))
                 _indicators[slot] = null;
 
@@ -31,7 +31,7 @@ public class EquipmentUI : MonoBehaviour {
 
                 GameObject indicator = Instantiate (_indicatorPrefab, _parent);
                 RectTransform rect = indicator.GetComponent<RectTransform> ();
-                rect.anchoredPosition = new Vector2 (0, height * (player.GetEquipment ().Count - player.GetEquipment ().IndexOf (key) - 1));
+                rect.anchoredPosition = new Vector2 (0, height * (player.Equipment.Count - player.Equipment.IndexOf (key) - 1));
                 EquipmentIndicatorUI comp = indicator.GetComponent<EquipmentIndicatorUI> ();
                 comp.Slot = key;
                 _indicators[key] = comp;

@@ -24,13 +24,13 @@ public class NavigationManager : MonoBehaviour {
 
     public float GetWorldDistance (Structure a, Structure b) {
 
-        return GetWorldRealDistance (a, b) - a.GetProfile ().ApparentSize - b.GetProfile ().ApparentSize;
+        return GetWorldRealDistance (a, b) - a.Profile.ApparentSize - b.Profile.ApparentSize;
 
     }
 
     public float GetLocalDistance (Structure a, Structure b) {
 
-        return GetLocalRealDistance (a, b) - a.GetProfile ().ApparentSize - b.GetProfile ().ApparentSize;
+        return GetLocalRealDistance (a, b) - a.Profile.ApparentSize - b.Profile.ApparentSize;
 
     }
 

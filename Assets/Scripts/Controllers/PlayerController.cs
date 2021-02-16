@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour {
 
                     GameObject obj = hit.collider.transform.parent.gameObject;
                     Structure str = obj.GetComponent<Structure> ();
-                    if (str != _player) _player.SetTarget (str);
+                    if (str != _player) _player.Target = str;
 
                 }
 

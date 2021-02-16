@@ -51,8 +51,8 @@ public class PlayerInfoUI : MonoBehaviour {
 
         if (_structure == null) return;
 
-        _hull.sprite = _structure.GetProfile ().HullWireframe;
-        _hull.color = _hullGradient.Evaluate (_structure.GetHull () / _structure.GetProfile ().Hull);
+        _hull.sprite = _structure.Profile.HullWireframe;
+        _hull.color = _hullGradient.Evaluate (_structure.Hull / _structure.Profile.Hull);
 
         List<ShieldSlot> shields = _structure.GetEquipment<ShieldSlot> ();
         for (int i = 0; i < _shields.Count; i++) {
@@ -66,9 +66,9 @@ public class PlayerInfoUI : MonoBehaviour {
 
             } else {
 
-                Vector3 scaled = shields[i].Offset * _structure.GetProfile ().WorldToUIScale;
+                Vector3 scaled = shields[i].Offset * _structure.Profile.WorldToUIScale;
                 rt.anchoredPosition = new Vector2 (scaled.x, scaled.z);
-                rt.sizeDelta = Vector2.one * shields[i].Shield.Radius * _structure.GetProfile ().WorldToUIScale;
+                rt.sizeDelta = Vector2.one * shields[i].Shield.Radius * _structure.Profile.WorldToUIScale;
                 _shields[i].color = _shieldGradient.Evaluate (shields[i].Strength / shields[i].Shield.MaxStrength);
 
             }
@@ -88,11 +88,11 @@ public class PlayerInfoUI : MonoBehaviour {
         _capFill.sizeDelta = new Vector2 (_capOutline.sizeDelta.x * storedCap / totalCap, _capFill.sizeDelta.y);
         _capImg.color = _capGradient.Evaluate (storedCap / totalCap);
 
-        if (_structure.GetTarget () == null) _direction.gameObject.SetActive (false);
+        if (_structure.Target == null) _direction.gameObject.SetActive (false);
         else {
 
             _direction.gameObject.SetActive (true);
-            _direction.rotation = Quaternion.Euler (0, 0, -_structure.GetAngleTo (_structure.GetTarget ().transform.position));
+            _direction.rotation = Quaternion.Euler (0, 0, -_structure.GetAngleTo (_structure.Target.transform.position));
 
         }
 
@@ -113,9 +113,9 @@ public class PlayerInfoUI : MonoBehaviour {
 
             } else {
 
-                Vector3 scaled = shield.Offset * _structure.GetProfile ().WorldToUIScale;
+                Vector3 scaled = shield.Offset * _structure.Profile.WorldToUIScale;
                 rt.anchoredPosition = new Vector2 (scaled.x, scaled.z);
-                rt.sizeDelta = Vector2.one * shield.Shield.Radius * _structure.GetProfile ().WorldToUIScale;
+                rt.sizeDelta = Vector2.one * shield.Shield.Radius * _structure.Profile.WorldToUIScale;
 
             }
             _shields.Add (instantiated.GetComponent<Image> ());

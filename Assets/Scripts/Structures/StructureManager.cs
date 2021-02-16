@@ -52,7 +52,7 @@ public class StructureManager : MonoBehaviour {
         Structure found = null;
         _structures.ForEach (structure => {
 
-            if (structure.GetId () == id) found = structure;
+            if (structure.Id == id) found = structure;
 
         });
         return found;
@@ -64,8 +64,8 @@ public class StructureManager : MonoBehaviour {
         GameObject structure = Instantiate (profile.Prefab, sector.transform);
         structure.name = profile.Name;
         structure.transform.localPosition = location.GetPosition ();
-        structure.GetComponent<Structure> ().SetFaction (owner);
-        structure.GetComponent<Structure> ().SetSector (sector);
+        structure.GetComponent<Structure> ().Faction = owner;
+        structure.GetComponent<Structure> ().Sector = sector;
 
     }
 
@@ -74,8 +74,8 @@ public class StructureManager : MonoBehaviour {
         GameObject structure = Instantiate (profile.Prefab, sector.transform);
         structure.name = profile.Name;
         structure.transform.localPosition = location.GetPosition ();
-        structure.GetComponent<Structure> ().SetFaction (owner);
-        structure.GetComponent<Structure> ().SetSector (sector);
+        structure.GetComponent<Structure> ().Faction = owner;
+        structure.GetComponent<Structure> ().Sector = sector;
         // Spawn structure of profile at random location around location.GetPosition
 
     }
@@ -85,8 +85,8 @@ public class StructureManager : MonoBehaviour {
         GameObject structure = Instantiate (profile.Prefab, location.GetTransform ());
         structure.name = profile.Name;
         structure.transform.localPosition = Vector3.zero;
-        structure.GetComponent<Structure> ().SetFaction (owner);
-        structure.GetComponent<Structure> ().SetSector (sector);
+        structure.GetComponent<Structure> ().Faction = owner;
+        structure.GetComponent<Structure> ().Sector = sector;
 
     }
 
@@ -94,11 +94,11 @@ public class StructureManager : MonoBehaviour {
 
         _structures.Remove (destroyedStructure);
 
-        if (destroyedStructure.GetProfile ().DestructionEffect != null) {
+        if (destroyedStructure.Profile.DestructionEffect != null) {
 
-            GameObject effect = Instantiate (destroyedStructure.GetProfile ().DestructionEffect, destroyedStructure.transform.parent);
+            GameObject effect = Instantiate (destroyedStructure.Profile.DestructionEffect, destroyedStructure.transform.parent);
             effect.transform.localPosition = destroyedStructure.transform.localPosition;
-            effect.transform.localScale = Vector3.one * destroyedStructure.GetProfile ().ApparentSize;
+            effect.transform.localScale = Vector3.one * destroyedStructure.Profile.ApparentSize;
             Destroy (effect, 3);
 
         }
@@ -123,11 +123,11 @@ public class StructureManager : MonoBehaviour {
 
         _structures.Remove (destroyedStructure);
 
-        if (destroyedStructure.GetProfile ().DestructionEffect != null) {
+        if (destroyedStructure.Profile.DestructionEffect != null) {
 
-            GameObject effect = Instantiate (destroyedStructure.GetProfile ().DestructionEffect, destroyedStructure.transform.parent);
+            GameObject effect = Instantiate (destroyedStructure.Profile.DestructionEffect, destroyedStructure.transform.parent);
             effect.transform.localPosition = destroyedStructure.transform.localPosition;
-            effect.transform.localScale = Vector3.one * destroyedStructure.GetProfile ().ApparentSize;
+            effect.transform.localScale = Vector3.one * destroyedStructure.Profile.ApparentSize;
             Destroy (effect, 3);
 
         }
@@ -154,11 +154,11 @@ public class StructureManager : MonoBehaviour {
 
         _structures.Remove (destroyedStructure);
 
-        if (destroyedStructure.GetProfile ().DestructionEffect != null) {
+        if (destroyedStructure.Profile.DestructionEffect != null) {
 
-            GameObject effect = Instantiate (destroyedStructure.GetProfile ().DestructionEffect, destroyedStructure.transform.parent);
+            GameObject effect = Instantiate (destroyedStructure.Profile.DestructionEffect, destroyedStructure.transform.parent);
             effect.transform.localPosition = destroyedStructure.transform.localPosition;
-            effect.transform.localScale = Vector3.one * destroyedStructure.GetProfile ().ApparentSize;
+            effect.transform.localScale = Vector3.one * destroyedStructure.Profile.ApparentSize;
             Destroy (effect, 3);
 
         }

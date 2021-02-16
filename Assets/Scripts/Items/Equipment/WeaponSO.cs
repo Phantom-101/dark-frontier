@@ -12,7 +12,7 @@
                 if (CanCycleStart (slot)) {
 
                     slot.CurrentState = true;
-                    (slot as WeaponSlot).Target = slot.Equipper.GetTarget ();
+                    (slot as WeaponSlot).Target = slot.Equipper.Target;
 
                 } else slot.TargetState = false;
 

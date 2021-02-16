@@ -21,7 +21,7 @@ public class WeaponSlot : EquipmentSlot {
     }
     public override bool CanEquip (EquipmentSO equipment) {
 
-        return base.CanEquip (equipment) || (equipment is WeaponSO && equipment.Tier <= _equipper.GetProfile ().MaxEquipmentTier);
+        return equipment == null || (base.CanEquip (equipment) && equipment is WeaponSO);
 
     }
     public float GetAngleToTarget () { return Vector3.Angle (transform.forward, _target.transform.position - transform.position); }

@@ -7,7 +7,7 @@ public class CapacitorSO : EquipmentSO {
 
         CapacitorSlot cap = slot as CapacitorSlot;
 
-        foreach (EquipmentSlot s in slot.Equipper.GetEquipment ()) {
+        foreach (EquipmentSlot s in slot.Equipper.Equipment) {
 
             if (s == null || s.Equipment == null) continue;
 

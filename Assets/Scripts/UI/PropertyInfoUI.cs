@@ -15,7 +15,7 @@ public class PropertyInfoUI : MonoBehaviour {
     public void Initialize () {
 
         _name.text = _structure.gameObject.name;
-        _location.text = _structure.GetSector ().gameObject.name;
+        _location.text = _structure.Sector.gameObject.name;
         _hp.SetStructure (_structure);
         _hp.Initialize ();
 

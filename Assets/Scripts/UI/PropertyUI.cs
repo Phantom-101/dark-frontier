@@ -13,7 +13,7 @@ public class PropertyUI : LogTabUI {
         foreach (PropertyInfoUI info in _instantiated) Destroy (info.gameObject);
         _instantiated = new List<PropertyInfoUI> ();
 
-        _faction = PlayerController.GetInstance ().GetPlayer ().GetFaction ();
+        _faction = PlayerController.GetInstance ().GetPlayer ().Faction;
 
         if (_faction == null) {
 

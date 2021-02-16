@@ -9,7 +9,7 @@ public class LocationUI : MonoBehaviour {
 
         Structure player = PlayerController.GetInstance ().GetPlayer ();
 
-        _text.text = player.GetProfile().Name + " \"" + player.gameObject.name + "\" (" + player.GetSector ().gameObject.name + ")";
+        _text.text = player.Profile.Name + " \"" + player.gameObject.name + "\" (" + player.Sector.gameObject.name + ")";
 
     }
 

@@ -11,9 +11,9 @@ public class LaserSO : WeaponSO {
     public override bool CanCycleStart (EquipmentSlot slot) {
 
         if (!base.CanCycleStart (slot)) return false;
-        if (slot.Equipper.GetTarget () == null) return false;
-        if (!(slot as WeaponSlot).CanFireAt (slot.Equipper.GetTarget ())) return false;
-        if ((slot.Equipper.transform.localPosition - slot.Equipper.GetTarget ().transform.localPosition).sqrMagnitude > Range * Range) return false;
+        if (slot.Equipper.Target == null) return false;
+        if (!(slot as WeaponSlot).CanFireAt (slot.Equipper.Target)) return false;
+        if ((slot.Equipper.transform.localPosition - slot.Equipper.Target.transform.localPosition).sqrMagnitude > Range * Range) return false;
         return true;
 
     }

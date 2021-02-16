@@ -34,7 +34,7 @@ public class Sector : MonoBehaviour {
 
     public void Exited (Structure structure) {
 
-        if (structure.GetSector () != this) return;
+        if (structure.Sector != this) return;
 
         _inSector.Remove (structure);
 

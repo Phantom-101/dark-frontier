@@ -3,6 +3,7 @@
 public class EquipmentSO : ItemSO {
 
     public int Tier;
+    public EquipmentSize Size;
     public float EnergyStorage;
     public float EnergyRechargeRate;
     public float Durability;
@@ -161,5 +162,15 @@ public class EquipmentSO : ItemSO {
         return true;
 
     }
+
+}
+
+public enum EquipmentSize {
+
+    Micro,
+    Small,
+    Medium,
+    Large,
+    ExtraLarge
 
 }

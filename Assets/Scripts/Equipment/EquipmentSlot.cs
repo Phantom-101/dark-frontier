@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class EquipmentSlot : MonoBehaviour {
 
+    [SerializeField] protected EquipmentSize _slotSize;
     [SerializeField] protected EquipmentSO _equipment;
     [SerializeField] protected float _energy;
     [SerializeField] protected float _durability;
@@ -14,6 +15,7 @@ public class EquipmentSlot : MonoBehaviour {
     [SerializeField] protected ChargeSO _charge;
     //[SerializeField] protected List<NewEquipmentSO> _allowedEquipment = new List<NewEquipmentSO> ();
 
+    public EquipmentSize SlotSize { get => _slotSize; }
     public EquipmentSO Equipment { get => _equipment; set { _equipment = value; if (_equipment != null) _equipment.OnEquip (this); } }
     public float Energy { get => _energy; set { _energy = Mathf.Clamp (value, 0, _equipment == null ? 0 : _equipment.EnergyStorage); } }
     public float Durability { get => _durability; set { _durability = Mathf.Clamp (value, 0, _equipment == null ? 0 : _equipment.Durability); } }
@@ -35,7 +37,7 @@ public class EquipmentSlot : MonoBehaviour {
         Charge = null;
 
     }
-    public virtual bool CanEquip (EquipmentSO equipment) { return equipment == null; }
+    public virtual bool CanEquip (EquipmentSO equipment) { return equipment == null || equipment.Size == SlotSize; }
     public virtual NewEquipmentSlotSaveData GetSaveData () {
 
         return new NewEquipmentSlotSaveData {
@@ -43,7 +45,7 @@ public class EquipmentSlot : MonoBehaviour {
             EquipmentId = Equipment.Id,
             Energy = Energy,
             Durability = Durability,
-            EquipperId = Equipper.GetId (),
+            EquipperId = Equipper.Id,
             CurrentState = CurrentState,
             TargetState = TargetState,
             ChargeId = Charge.Id

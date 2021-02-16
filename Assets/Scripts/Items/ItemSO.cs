@@ -7,7 +7,7 @@ public class ItemSO : ScriptableObject {
     public string Description;
     public string Id;
     public Sprite Icon;
-    public float Size;
+    public float Volume;
     public bool Usable;
 
     public virtual void OnUse (Structure user) {

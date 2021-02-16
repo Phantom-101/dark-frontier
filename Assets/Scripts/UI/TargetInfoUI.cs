@@ -44,8 +44,8 @@ public class TargetInfoUI : MonoBehaviour {
 
         }
 
-        _hull.sprite = _structure.GetProfile ().HullWireframe;
-        _hull.color = _hullGradient.Evaluate (_structure.GetHull () / _structure.GetProfile ().Hull);
+        _hull.sprite = _structure.Profile.HullWireframe;
+        _hull.color = _hullGradient.Evaluate (_structure.Hull / _structure.Profile.Hull);
 
         List<ShieldSlot> shields = _structure.GetEquipment<ShieldSlot> ();
         for (int i = 0; i < _shields.Count; i++) {
@@ -59,16 +59,16 @@ public class TargetInfoUI : MonoBehaviour {
 
             } else {
 
-                Vector3 scaled = shields[i].Offset * _structure.GetProfile ().WorldToUIScale;
+                Vector3 scaled = shields[i].Offset * _structure.Profile.WorldToUIScale;
                 rt.anchoredPosition = new Vector2 (scaled.x, scaled.z);
-                rt.sizeDelta = Vector2.one * shields[i].Shield.Radius * _structure.GetProfile ().WorldToUIScale;
+                rt.sizeDelta = Vector2.one * shields[i].Shield.Radius * _structure.Profile.WorldToUIScale;
                 _shields[i].color = _shieldGradient.Evaluate (shields[i].Strength / shields[i].Shield.MaxStrength);
 
             }
         }
 
         _name.text = _structure.gameObject.name;
-        _faction.text = _structure.GetFaction ()?.GetName () ?? "None";
+        _faction.text = _structure.Faction?.GetName () ?? "None";
         _distance.text = Vector3.Distance (PlayerController.GetInstance ().GetPlayer ().transform.position, _structure.transform.position).ToString ("F2") + " m";
         Rigidbody rb = _structure.GetComponent<Rigidbody> ();
         if (rb == null) _velocity.text = "0 m/s";
@@ -93,9 +93,9 @@ public class TargetInfoUI : MonoBehaviour {
 
             } else {
 
-                Vector3 scaled = shield.Offset * _structure.GetProfile ().WorldToUIScale;
+                Vector3 scaled = shield.Offset * _structure.Profile.WorldToUIScale;
                 rt.anchoredPosition = new Vector2 (scaled.x, scaled.z);
-                rt.sizeDelta = Vector2.one * shield.Shield.Radius * _structure.GetProfile ().WorldToUIScale;
+                rt.sizeDelta = Vector2.one * shield.Shield.Radius * _structure.Profile.WorldToUIScale;
 
             }
             _shields.Add (instantiated.GetComponent<Image> ());

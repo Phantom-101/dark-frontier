@@ -49,8 +49,8 @@ public class StructureHPIndicatorUI : MonoBehaviour {
 
     private void Update () {
 
-        _hull.sprite = _structure.GetProfile ().HullWireframe;
-        _hull.color = _hullGradient.Evaluate (_structure.GetHull () / _structure.GetProfile ().Hull);
+        _hull.sprite = _structure.Profile.HullWireframe;
+        _hull.color = _hullGradient.Evaluate (_structure.Hull / _structure.Profile.Hull);
         /*
         ShieldStrengths strengths = _structure.GetEquipment<ShieldSlot> ()[0].GetStrengths ();
         if (strengths.GetSectorCount () != _shields.Count) Initialize ();

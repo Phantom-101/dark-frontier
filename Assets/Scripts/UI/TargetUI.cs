@@ -19,7 +19,7 @@ public class TargetUI : MonoBehaviour {
         if (_instantiated != null) Destroy (_instantiated);
 
         _instantiated = Instantiate (_infoPanelPrefab, _canvas);
-        _instantiated.GetComponent<TargetInfoUI> ().SetStructure (PlayerController.GetInstance ().GetPlayer ().GetTarget ());
+        _instantiated.GetComponent<TargetInfoUI> ().SetStructure (PlayerController.GetInstance ().GetPlayer ().Target);
 
     }
 

@@ -33,19 +33,19 @@ public class CameraController : MonoBehaviour {
 
         if (_target.GetTransform () == null) {
 
-            Vector3 scOff = _offset * player.GetProfile ().ApparentSize;
+            Vector3 scOff = _offset * player.Profile.ApparentSize;
             Vector3 targetPos = pt.position + pt.rotation * scOff;
             Vector3 offset = targetPos - transform.position;
             Debug.DrawLine (transform.position, targetPos, Color.red);
             transform.Translate (offset * _followSpeed * Time.deltaTime, Space.World);
-            transform.LookAt (pt.position + pt.rotation * Vector3.forward * player.GetProfile ().ApparentSize * 2);
+            transform.LookAt (pt.position + pt.rotation * Vector3.forward * player.Profile.ApparentSize * 2);
 
         } else {
 
             Vector3 difVec = _target.GetPosition () - pt.position;
             difVec.y = 0;
             Vector3 norVec = difVec.normalized;
-            Vector3 scOff = _offset * player.GetProfile ().ApparentSize;
+            Vector3 scOff = _offset * player.Profile.ApparentSize;
             Vector3 targetOffset = new Vector3 (scOff.x * norVec.x, scOff.y, scOff.z * norVec.z);
             Vector3 targetPos = pt.position + pt.rotation * targetOffset;
             Vector3 offset = targetPos - transform.position;

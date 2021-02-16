@@ -31,6 +31,40 @@ public class Structure : MonoBehaviour {
 
     private Rigidbody _rb;
 
+    public StructureSO Profile { get => _profile; }
+    public string Id { get => _id; }
+    public float Hull {
+
+        get => _hull;
+        set {
+
+            _hull = value;
+            if (_hull <= 0) {
+
+                if (Faction != null) Faction.RemoveProperty (this);
+                Profile.OnDestroyedChannel.RaiseEvent (this);
+
+            }
+
+        }
+
+    }
+    public Faction Faction { get => _faction; set => _faction = value; }
+    public List<EquipmentSlot> Equipment { get => _equipmentSlots; }
+    public ItemSOToIntDictionary Inventory { get => _inventory; }
+    public AI AI { get => _ai; set => _ai = value; }
+    public Structure Target {
+
+        get => _target;
+        set {
+            _target = value;
+            if (PlayerController.GetInstance ().GetPlayer () == this) PlayerController.GetInstance ().TargetChangedChannel.OnEventRaised ();
+
+        }
+
+    }
+    public Sector Sector { get => _sector; set => _sector = value; }
+
     private void Awake () {
 
         if (transform.parent != null) {
@@ -79,18 +113,6 @@ public class Structure : MonoBehaviour {
 
     }
 
-    public StructureSO GetProfile () { return _profile; }
-
-    public string GetId () { return _id; }
-
-    public void SetId (string id) { _id = id; }
-
-    public float GetHull () { return _hull; }
-
-    public Faction GetFaction () { return _faction; }
-
-    public void SetFaction (Faction faction) { _faction = faction; }
-
     public float GetStatBaseValue (string name) {
 
         return _stats[name].GetBaseValue ();
@@ -115,34 +137,6 @@ public class Structure : MonoBehaviour {
 
     }
 
-    public void ChangeHull (float amount) {
-
-        _hull += amount;
-
-        if (_hull <= 0) {
-
-            if (_faction != null) _faction.RemoveProperty (this);
-            _profile.OnDestroyedChannel.RaiseEvent (this);
-
-        }
-
-    }
-
-    public void SetHull (float target) {
-
-        _hull = target;
-
-        if (_hull <= 0) {
-
-            if (_faction != null) _faction.RemoveProperty (this);
-            _profile.OnDestroyedChannel.RaiseEvent (this);
-
-        }
-
-    }
-
-    public List<EquipmentSlot> GetEquipment () { return _equipmentSlots; }
-
     public List<T> GetEquipment<T> () where T : EquipmentSlot {
 
         List<T> equipment = new List<T> ();
@@ -156,10 +150,6 @@ public class Structure : MonoBehaviour {
         return equipment;
 
     }
-
-    public ItemSOToIntDictionary GetInventory () { return _inventory; }
-
-    public void SetInventory (ItemSOToIntDictionary inventory) { _inventory = inventory ?? new ItemSOToIntDictionary (); }
 
     public int GetInventoryCount (ItemSO item) {
 
@@ -194,32 +184,14 @@ public class Structure : MonoBehaviour {
     public float GetUsedInventorySize () {
 
         float used = 0;
-        foreach (ItemSO item in _inventory.Keys) used += item.Size * _inventory[item];
+        foreach (ItemSO item in _inventory.Keys) used += item.Volume * _inventory[item];
         return used;
 
     }
 
     public float GetFreeInventorySize () { return GetTotalInventorySize () - GetUsedInventorySize (); }
 
-    public bool CanAddInventoryItem (ItemSO item, int count) { return GetFreeInventorySize () >= item.Size * count; }
-
-    public AI GetAI () { return _ai; }
-
-    public void SetAI (AI controller) { _ai = controller; }
-
-    public Structure GetTarget () { return _target; }
-
-    public void SetTarget (Structure target) {
-
-        _target = target;
-
-        if (PlayerController.GetInstance ().GetPlayer () == this) PlayerController.GetInstance ().TargetChangedChannel.OnEventRaised ();
-
-    }
-
-    public Sector GetSector () { return _sector; }
-
-    public void SetSector (Sector sector) { _sector = sector; }
+    public bool CanAddInventoryItem (ItemSO item, int count) { return GetFreeInventorySize () >= item.Volume * count; }
 
     public List<Structure> GetDocked () { return _docked; }
 
@@ -236,7 +208,7 @@ public class Structure : MonoBehaviour {
         foreach (Renderer r in renderers) r.enabled = false;
 
         // Disable all equipment
-        foreach (EquipmentSlot slot in docker.GetEquipment ()) slot.TargetState = false;
+        foreach (EquipmentSlot slot in docker.Equipment) slot.TargetState = false;
 
         if (docker == PlayerController.GetInstance ().GetPlayer ()) {
 
@@ -288,15 +260,15 @@ public class Structure : MonoBehaviour {
         // In the same sector or already docked?
         if (docker.transform.parent != transform.parent) return false;
         // Good relations?
-        if (_faction.IsEnemy (docker.GetFaction ())) return false;
+        if (_faction.IsEnemy (docker.Faction)) return false;
         // Within range?
         if (NavigationManager.GetInstance ().GetLocalDistance (this, docker) > 50) return false;
         // Already children?
         if (_docked.Contains (docker)) return false;
         // Enough space?
         float size = 0;
-        foreach (Structure c in _docked) size += c.GetProfile ().ApparentSize;
-        if (docker.GetProfile ().ApparentSize > _stats["docking_bay_size"].GetAppliedValue () - size) return false;
+        foreach (Structure c in _docked) size += c.Profile.ApparentSize;
+        if (docker.Profile.ApparentSize > _stats["docking_bay_size"].GetAppliedValue () - size) return false;
 
         return true;
 
@@ -376,22 +348,22 @@ public class Structure : MonoBehaviour {
             }
 
         }
-        if (damaged == null) ChangeHull (-damage.DamageAmount * damage.HullEffectiveness);
+        if (damaged == null) Hull -= damage.DamageAmount * damage.HullEffectiveness;
         else {
 
             float strength = damaged.Strength;
             float maxStrength = damaged.Shield.MaxStrength;
-            if (strength <= damage.ShieldBypass * maxStrength) ChangeHull (-damage.DamageAmount * damage.HullEffectiveness);
+            if (strength <= damage.ShieldBypass * maxStrength) Hull -= damage.DamageAmount * damage.HullEffectiveness;
             else {
 
-                ChangeHull (-damage.DamageAmount * damage.ShieldPenetration * damage.HullEffectiveness);
+                Hull -= damage.DamageAmount * damage.ShieldPenetration * damage.HullEffectiveness;
                 float toShield = damage.DamageAmount * (1 - damage.ShieldPenetration);
                 float remain = toShield - (strength / damage.ShieldEffectiveness);
                 if (remain < 0) damaged.Strength -= toShield * damage.ShieldEffectiveness;
                 else {
 
                     damaged.Strength = 0;
-                    ChangeHull (-remain);
+                    Hull -= remain;
 
                 }
 

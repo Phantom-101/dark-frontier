@@ -16,7 +16,7 @@ public class ShieldSlot : EquipmentSlot {
     }
     public override bool CanEquip (EquipmentSO equipment) {
 
-        return base.CanEquip (equipment) || (equipment is ShieldSO && equipment.Tier <= Equipper.GetProfile ().MaxEquipmentTier);
+        return equipment == null || (base.CanEquip (equipment) && equipment is ShieldSO);
 
     }
 

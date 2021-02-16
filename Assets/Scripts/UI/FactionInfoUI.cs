@@ -17,7 +17,7 @@ public class FactionInfoUI : MonoBehaviour {
     public void Initialize () {
 
         _name.text = _faction.GetName ();
-        Faction playerFaction = PlayerController.GetInstance ().GetPlayer ().GetFaction ();
+        Faction playerFaction = PlayerController.GetInstance ().GetPlayer ().Faction;
         if (playerFaction == _faction) {
 
             _relationsBg.SetActive (false);

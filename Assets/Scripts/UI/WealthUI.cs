@@ -7,7 +7,7 @@ public class WealthUI : MonoBehaviour {
 
     private void Update () {
 
-        _text.text = (PlayerController.GetInstance ().GetPlayer ().GetFaction ()?.GetWealth ().ToString () ?? "0") + " Cr";
+        _text.text = (PlayerController.GetInstance ().GetPlayer ().Faction?.GetWealth ().ToString () ?? "0") + " Cr";
 
     }
 
