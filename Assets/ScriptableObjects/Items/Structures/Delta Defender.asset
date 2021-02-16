@@ -19,8 +19,9 @@ MonoBehaviour:
   Size: 0
   Usable: 0
   Prefab: {fileID: 2869013932428447122, guid: 01d3b3e41279c74489c131c0b41597bb, type: 3}
-  ApparentSize: 50
+  ApparentSize: 65
   HullWireframe: {fileID: 21300000, guid: 5f730e73aeefc3341ac08b3b74b7d511, type: 3}
+  WorldToUIScale: 0.90476
   DestructionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
     type: 3}
   Hull: 10000
@@ -31,4 +32,4 @@ MonoBehaviour:
   OnDestroyedChannel: {fileID: 11400000, guid: c42055d3c124f174fa639daf99561b4e, type: 2}
   DropPercentage: 1
   MaxEquipmentTier: 5
-  SnapToPlane: 1
+  SnapToPlane: 0

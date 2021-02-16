@@ -55,7 +55,7 @@ public class MissileAI : AI {
 
         if (_nm.GetLocalDistance (_target, _structure) <= _missile.DetonationRange) {
 
-            _target.TakeDamage (new DamageProfile (_missile.Damage, _damageMultiplier), _structure.transform.localPosition);
+            _target.TakeDamage (new DamageProfile (_missile.Damage, _damageMultiplier), _structure.transform.position);
             _structure.SetHull (0);
 
         }

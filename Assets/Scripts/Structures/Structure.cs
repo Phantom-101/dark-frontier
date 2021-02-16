@@ -161,13 +161,33 @@ public class Structure : MonoBehaviour {
 
     public void SetInventory (ItemSOToIntDictionary inventory) { _inventory = inventory ?? new ItemSOToIntDictionary (); }
 
-    public int GetInventoryCount (ItemSO item) { return _inventory.ContainsKey (item) ? _inventory[item] : 0; }
+    public int GetInventoryCount (ItemSO item) {
 
-    public void SetInventoryCount (ItemSO item, int count) { _inventory[item] = count; }
+        if (item == null) return 0;
+        return _inventory.ContainsKey (item) ? _inventory[item] : 0;
 
-    public void ChangeInventoryCount (ItemSO item, int delta) { SetInventoryCount (item, GetInventoryCount (item) + delta); }
+    }
 
-    public bool HasInventoryCount (ItemSO item, int condition) { return GetInventoryCount (item) >= condition; }
+    public void SetInventoryCount (ItemSO item, int count) {
+
+        if (item == null) return;
+        _inventory[item] = count;
+
+    }
+
+    public void ChangeInventoryCount (ItemSO item, int delta) {
+
+        if (item == null) return;
+        SetInventoryCount (item, GetInventoryCount (item) + delta);
+
+    }
+
+    public bool HasInventoryCount (ItemSO item, int condition) {
+
+        if (item == null) return false;
+        return GetInventoryCount (item) >= condition;
+
+    }
 
     public float GetTotalInventorySize () { return _profile.InventorySize; }
 
@@ -326,20 +346,54 @@ public class Structure : MonoBehaviour {
 
     public void TakeDamage (DamageProfile damage, Vector3 from) {
 
-        ShieldSlot shield = GetEquipment<ShieldSlot> ()[0];
-        float strength = shield.Strength;
-        float maxStrength = shield.Shield.MaxStrength;
-        if (strength <= damage.ShieldBypass * maxStrength) ChangeHull (-damage.DamageAmount * damage.HullEffectiveness);
+        bool good = false;
+        Vector3 point = from;
+        RaycastHit hit;
+
+        do {
+
+            Physics.Raycast (point, transform.position - point, out hit);
+            if (hit.transform == transform) good = true;
+            point = hit.point;
+
+        } while (!good);
+
+        List<ShieldSlot> shields = GetEquipment<ShieldSlot> ();
+        ShieldSlot damaged = null;
+        float maxInf = 0;
+        foreach (ShieldSlot shield in shields) {
+
+            if (shield.Shield != null) {
+
+                float inf = 1 - (Vector3.Distance (shield.transform.position, point) / shield.Shield.Radius);
+                if (inf >= maxInf) {
+
+                    maxInf = inf;
+                    damaged = shield;
+
+                }
+
+            }
+
+        }
+        if (damaged == null) ChangeHull (-damage.DamageAmount * damage.HullEffectiveness);
         else {
 
-            ChangeHull (-damage.DamageAmount * damage.ShieldPenetration * damage.HullEffectiveness);
-            float toShield = damage.DamageAmount * (1 - damage.ShieldPenetration);
-            float remain = toShield - (strength / damage.ShieldEffectiveness);
-            if (remain < 0) shield.Strength -= toShield * damage.ShieldEffectiveness;
+            float strength = damaged.Strength;
+            float maxStrength = damaged.Shield.MaxStrength;
+            if (strength <= damage.ShieldBypass * maxStrength) ChangeHull (-damage.DamageAmount * damage.HullEffectiveness);
             else {
 
-                shield.Strength = 0;
-                ChangeHull (-remain);
+                ChangeHull (-damage.DamageAmount * damage.ShieldPenetration * damage.HullEffectiveness);
+                float toShield = damage.DamageAmount * (1 - damage.ShieldPenetration);
+                float remain = toShield - (strength / damage.ShieldEffectiveness);
+                if (remain < 0) damaged.Strength -= toShield * damage.ShieldEffectiveness;
+                else {
+
+                    damaged.Strength = 0;
+                    ChangeHull (-remain);
+
+                }
 
             }
 

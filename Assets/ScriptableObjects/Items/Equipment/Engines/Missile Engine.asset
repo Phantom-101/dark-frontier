@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31d2861d39624454d9ceb6fbb422ffa8, type: 3}
+  m_Name: Missile Engine
+  m_EditorClassIdentifier: 
+  Name: Missile Engine
+  Description: A small engine mounted on warheads.
+  Id: items.equipment.engines.missile-engine
+  Icon: {fileID: 21300000, guid: 34502f7e93de60d40ac817b2a0f12f4a, type: 3}
+  Size: 0
+  Usable: 0
+  Tier: 1
+  EnergyStorage: 50
+  EnergyRechargeRate: 25
+  Durability: 10
+  Wear: 0.01
+  Activatable: 0
+  AutomaticallyRepeat: 0
+  RequireCharge: 0
+  Charges: []
+  ForwardPower: 10
+  TurnPower: 50
+  ForwardConsumption: 10
+  TurnConsumption: 10
+  Damp: 1
+  AngularDamp: 5

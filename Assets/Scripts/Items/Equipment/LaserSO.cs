@@ -18,6 +18,13 @@ public class LaserSO : WeaponSO {
 
     }
 
+    public override void OnCycleStart (EquipmentSlot slot) {
+
+        WeaponSlot weapon = slot as WeaponSlot;
+        weapon.Target.TakeDamage (Damage, slot.transform.position);
+
+    }
+
     public override void SafeTick (EquipmentSlot slot) {
 
         WeaponSlot weapon = slot as WeaponSlot;
@@ -37,8 +44,6 @@ public class LaserSO : WeaponSO {
                 float dis = Vector3.Distance (slot.transform.position, weapon.Target.transform.position);
                 weapon.Projectile.transform.LookAt (weapon.Target.transform);
                 weapon.Projectile.transform.localScale = new Vector3 (LaserWidth, LaserWidth, dis);
-
-                weapon.Target.TakeDamage (Damage, slot.transform.position - slot.Equipper.transform.position + slot.Equipper.transform.localPosition);
 
             }
 

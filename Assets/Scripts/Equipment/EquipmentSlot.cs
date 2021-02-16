@@ -22,6 +22,7 @@ public class EquipmentSlot : MonoBehaviour {
     public bool TargetState { get => _targetState; set => _targetState = value; }
     public ChargeSO Charge { get => _charge; set => _charge = value; }
     //public List<NewEquipmentSO> AllowedEquipment { get => _allowedEquipment; }
+    public Vector3 Offset { get => Equipper == null ? Vector3.zero : Quaternion.Inverse (Equipper.transform.rotation) * (transform.position - Equipper.transform.position); }
 
     public virtual void Tick () { if (Equipment != null) Equipment.Tick (this); }
     public virtual void FixedTick () { if (Equipment != null) Equipment.FixedTick (this); }

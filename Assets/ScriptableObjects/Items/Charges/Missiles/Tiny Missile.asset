@@ -22,7 +22,7 @@ MonoBehaviour:
   HeadingAllowance: 5
   DetonationRange: 1.5
   Damage:
-    DamageAmount: 1
+    DamageAmount: 10
     ShieldEffectiveness: 1
     ShieldPenetration: 0.3
     ShieldBypass: 0.2

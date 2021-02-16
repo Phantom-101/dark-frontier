@@ -93,4 +93,16 @@ public class PlayerController : MonoBehaviour {
 
     }
 
+    public void SetYaw (float setting) {
+
+        _player.GetEquipment<EngineSlot> ()[0].TurnSetting = setting;
+
+    }
+
+    public void SetPitch (float setting) {
+
+        _player.GetEquipment<EngineSlot> ()[0].PitchSetting = setting;
+
+    }
+
 }

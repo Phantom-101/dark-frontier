@@ -2,6 +2,7 @@
 
 public class CameraController : MonoBehaviour {
 
+    [SerializeField] private Camera _camera;
     [SerializeField] private Location _anchor;
     [SerializeField] private Vector3 _offset;
     [SerializeField] private Location _target;
@@ -10,6 +11,8 @@ public class CameraController : MonoBehaviour {
     private PlayerController _pc;
 
     private static CameraController _instance;
+
+    public Camera Camera { get => _camera; }
 
     private void Awake () {
 

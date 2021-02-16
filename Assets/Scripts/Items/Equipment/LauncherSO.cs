@@ -19,8 +19,6 @@ public class LauncherSO : WeaponSO {
 
     public override void OnCycleStart (EquipmentSlot slot) {
 
-        base.OnCycleStart (slot);
-
         MissileSO missile = slot.Charge as MissileSO;
         GameObject vfx = Instantiate (missile.MissileStructure.Prefab, slot.transform);
         vfx.transform.parent = slot.Equipper.transform.parent;

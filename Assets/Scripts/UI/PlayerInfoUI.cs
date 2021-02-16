@@ -4,14 +4,12 @@ using UnityEngine.UI;
 
 public class PlayerInfoUI : MonoBehaviour {
 
+    [SerializeField] private Transform _hpIndicators;
     [SerializeField] private Image _hull;
     [SerializeField] private Gradient _hullGradient;
     [SerializeField] private GameObject _shieldPrefab;
     [SerializeField] private List<Image> _shields;
     [SerializeField] private Gradient _shieldGradient;
-    [SerializeField] private Text _name;
-    [SerializeField] private Text _faction;
-    [SerializeField] private Text _velocity;
     [SerializeField] private Transform _direction;
     [SerializeField] private Structure _structure;
 
@@ -51,48 +49,64 @@ public class PlayerInfoUI : MonoBehaviour {
 
         _hull.sprite = _structure.GetProfile ().HullWireframe;
         _hull.color = _hullGradient.Evaluate (_structure.GetHull () / _structure.GetProfile ().Hull);
-        /*
-        ShieldStrengths strengths = _structure.GetEquipment<ShieldSlot> ()[0].GetStrengths ();
+
+        List<ShieldSlot> shields = _structure.GetEquipment<ShieldSlot> ();
         for (int i = 0; i < _shields.Count; i++) {
 
-            _shields[i].color = _shieldGradient.Evaluate (strengths.GetSectorStrength (i) / strengths.GetSectorMaxStrength (i));
+            RectTransform rt = _shields[i].GetComponent<RectTransform> ();
+            if (shields[i].Shield == null) {
 
+                rt.anchoredPosition = Vector3.zero;
+                rt.sizeDelta = Vector2.zero;
+                _shields[i].color = Color.clear;
+
+            } else {
+
+                Vector3 scaled = shields[i].Offset * _structure.GetProfile ().WorldToUIScale;
+                rt.anchoredPosition = new Vector2 (scaled.x, scaled.z);
+                rt.sizeDelta = Vector2.one * shields[i].Shield.Radius * _structure.GetProfile ().WorldToUIScale;
+                _shields[i].color = _shieldGradient.Evaluate (shields[i].Strength / shields[i].Shield.MaxStrength);
+
+            }
         }
-        */
-        _name.text = _structure.gameObject.name;
-        _faction.text = _structure.GetFaction ()?.GetName () ?? "None";
-        Rigidbody rb = _structure.GetComponent<Rigidbody> ();
-        if (rb == null) _velocity.text = "0 m/s";
-        else _velocity.text = rb.velocity.magnitude.ToString ("F2") + " m/s";
-        /*
-        ShieldSlot slot = _structure.GetEquipment<ShieldSlot> ()[0];
-        float degrees = slot.GetStrengths ().GetSectorAngle ();
+
+        //Rigidbody rb = _structure.GetComponent<Rigidbody> ();
+        //if (rb == null) _velocity.text = "0 m/s";
+        //else _velocity.text = rb.velocity.magnitude.ToString ("F2") + " m/s";
+
         if (_structure.GetTarget () == null) _direction.gameObject.SetActive (false);
         else {
 
             _direction.gameObject.SetActive (true);
-            _direction.rotation = Quaternion.Euler (0, 0, slot.GetStrengths ().GetSectorTo (_structure.GetTarget ().gameObject) * -degrees);
+            _direction.rotation = Quaternion.Euler (0, 0, -_structure.GetAngleTo (_structure.GetTarget ().transform.position));
 
         }
-        */
 
     }
 
     private void SetupShields () {
 
-        ShieldSlot slot = _structure.GetEquipment<ShieldSlot> ()[0];
-        /*
-        int sectors = slot.GetStrengths ().GetSectorCount ();
-        float degrees = slot.GetStrengths ().GetSectorAngle ();
+        List<ShieldSlot> shields = _structure.GetEquipment<ShieldSlot> ();
+        foreach (ShieldSlot shield in shields) {
 
-        for (int i = 0; i < sectors; i++) {
+            GameObject instantiated = Instantiate (_shieldPrefab, _hpIndicators);
+            instantiated.transform.SetAsFirstSibling ();
+            RectTransform rt = instantiated.GetComponent<RectTransform> ();
+            if (shield.Shield == null) {
 
-            GameObject instantiated = Instantiate (_shieldPrefab, _hull.transform);
-            instantiated.GetComponent<RectTransform> ().Rotate (new Vector3 (0, 0, -degrees * i));
-            _shields.Add (instantiated.transform.GetChild (0).GetComponent<Image> ());
+                rt.anchoredPosition = Vector3.zero;
+                rt.sizeDelta = Vector2.zero;
+
+            } else {
+
+                Vector3 scaled = shield.Offset * _structure.GetProfile ().WorldToUIScale;
+                rt.anchoredPosition = new Vector2 (scaled.x, scaled.z);
+                rt.sizeDelta = Vector2.one * shield.Shield.Radius * _structure.GetProfile ().WorldToUIScale;
+
+            }
+            _shields.Add (instantiated.GetComponent<Image> ());
 
         }
-        */
 
     }
 
