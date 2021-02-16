@@ -38,7 +38,7 @@ public class CameraController : MonoBehaviour {
             Vector3 offset = targetPos - transform.position;
             Debug.DrawLine (transform.position, targetPos, Color.red);
             transform.Translate (offset * _followSpeed * Time.deltaTime, Space.World);
-            transform.LookAt (pt.position + pt.rotation * Vector3.forward * player.Profile.ApparentSize * 2);
+            transform.LookAt (pt.position + pt.rotation * Vector3.forward * player.Profile.ApparentSize * 2, player.transform.up);
 
         } else {
 
@@ -51,7 +51,7 @@ public class CameraController : MonoBehaviour {
             Vector3 offset = targetPos - transform.position;
             Debug.DrawLine (transform.position, targetPos, Color.red);
             transform.Translate (offset * _followSpeed * Time.deltaTime, Space.World);
-            transform.LookAt (_target.GetPosition ());
+            transform.LookAt (_target.GetPosition (), player.transform.up);
 
         }
 
