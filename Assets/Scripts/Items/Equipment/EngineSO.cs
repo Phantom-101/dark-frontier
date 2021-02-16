@@ -26,10 +26,10 @@ public class EngineSO : EquipmentSO {
         if (slot.Energy > 0) {
 
             rb.drag = Damp * (1 - engine.ForwardSetting / 2);
-            rb.angularDrag = AngularDamp * (1 - Mathf.Abs (engine.TurnSetting) / 2);
+            rb.angularDrag = AngularDamp * (1 - Mathf.Abs (engine.YawSetting) / 2);
 
             cf.relativeForce = Vector3.forward * ForwardPower * engine.ForwardSetting * slot.Equipper.GetStatAppliedValue ("speed_multiplier");
-            cf.relativeTorque = (Vector3.up * TurnPower * engine.TurnSetting + Vector3.left * TurnPower * engine.PitchSetting) * slot.Equipper.GetStatAppliedValue ("angular_speed_multiplier");
+            cf.relativeTorque = (Vector3.up * TurnPower * engine.YawSetting + Vector3.left * TurnPower * engine.PitchSetting) * slot.Equipper.GetStatAppliedValue ("angular_speed_multiplier");
 
         } else {
 

@@ -8,10 +8,10 @@ public class PlayerController : MonoBehaviour {
 
     public VoidEventChannelSO TargetChangedChannel;
 
-    [SerializeField] private VoidEventChannelSO _leftDown;
-    [SerializeField] private VoidEventChannelSO _leftUp;
-    [SerializeField] private VoidEventChannelSO _rightDown;
-    [SerializeField] private VoidEventChannelSO _rightUp;
+    [SerializeField] private VoidEventChannelSO _revDown;
+    [SerializeField] private VoidEventChannelSO _revUp;
+
+    private bool _rev;
 
     private static PlayerController _instance;
 
@@ -19,10 +19,8 @@ public class PlayerController : MonoBehaviour {
 
         _instance = this;
 
-        _leftDown.OnEventRaised += Left;
-        _leftUp.OnEventRaised += Neutral;
-        _rightDown.OnEventRaised += Right;
-        _rightUp.OnEventRaised += Neutral;
+        _revDown.OnEventRaised += () => { _rev = true; };
+        _revUp.OnEventRaised += () => { _rev = false; };
 
     }
 
@@ -49,6 +47,8 @@ public class PlayerController : MonoBehaviour {
 
         }
 
+        if (_rev) _player.GetEquipment<EngineSlot> ()[0].ForwardSetting = -0.5f;
+
     }
 
     public Structure GetPlayer () { return _player; }
@@ -57,45 +57,15 @@ public class PlayerController : MonoBehaviour {
 
     public static PlayerController GetInstance () { return _instance; }
 
-    private void Left () {
-
-        _player.GetEquipment<EngineSlot> ()[0].TurnSetting = -1;
-
-    }
-
-    private void Neutral () {
-
-        _player.GetEquipment<EngineSlot> ()[0].TurnSetting = 0;
-
-    }
-
-    private void Right () {
-
-        _player.GetEquipment<EngineSlot> ()[0].TurnSetting = 1;
-
-    }
-
-    private void Fwd () {
-
-        _player.GetEquipment<EngineSlot> ()[0].ForwardSetting = 1;
-
-    }
-
-    private void Stop () {
-
-        _player.GetEquipment<EngineSlot> ()[0].ForwardSetting = 0;
-
-    }
-
     public void SetFwd (float setting) {
 
-        _player.GetEquipment<EngineSlot> ()[0].ForwardSetting = setting;
+        if (!_rev) _player.GetEquipment<EngineSlot> ()[0].ForwardSetting = setting;
 
     }
 
     public void SetYaw (float setting) {
 
-        _player.GetEquipment<EngineSlot> ()[0].TurnSetting = setting;
+        _player.GetEquipment<EngineSlot> ()[0].YawSetting = setting;
 
     }
 

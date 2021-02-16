@@ -46,7 +46,5 @@ MonoBehaviour:
   _player: {fileID: 0}
   TargetChangedChannel: {fileID: 11400000, guid: c74811d228d8d05429304feaa7007bab,
     type: 2}
-  _leftDown: {fileID: 11400000, guid: a7a4370a94780f9409fb3897d8f78cfa, type: 2}
-  _leftUp: {fileID: 11400000, guid: 16086aae647a8864f90c2c902052befd, type: 2}
-  _rightDown: {fileID: 11400000, guid: bf57924512b65374d89326cf853bee8c, type: 2}
-  _rightUp: {fileID: 11400000, guid: bc84604a6441c4e49b9e1d4989caa373, type: 2}
+  _revDown: {fileID: 11400000, guid: e1f7e84308edd6744a9e4d34dcaf1ce0, type: 2}
+  _revUp: {fileID: 11400000, guid: cd48e8ece176252478100fcd0898b75b, type: 2}

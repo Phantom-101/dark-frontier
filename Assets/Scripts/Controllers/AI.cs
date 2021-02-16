@@ -12,7 +12,7 @@ public class AI {
 
         EngineSlot engine = _structure.GetEquipment<EngineSlot> ()[0];
         engine.ForwardSetting = 0;
-        engine.TurnSetting = 0;
+        engine.YawSetting = 0;
 
     }
 

@@ -44,9 +44,9 @@ public class MissileAI : AI {
         engine.ForwardSetting = 1;
 
         float angle = _structure.GetAngleTo (_target.transform.localPosition);
-        if (angle > _missile.HeadingAllowance) engine.TurnSetting = 1;
-        else if (angle < -_missile.HeadingAllowance) engine.TurnSetting = -1;
-        else engine.TurnSetting = 0;
+        if (angle > _missile.HeadingAllowance) engine.YawSetting = 1;
+        else if (angle < -_missile.HeadingAllowance) engine.YawSetting = -1;
+        else engine.YawSetting = 0;
 
         float elevation = _structure.GetElevationTo (_target.transform.localPosition);
         if (elevation > _missile.HeadingAllowance) engine.PitchSetting = 1;
