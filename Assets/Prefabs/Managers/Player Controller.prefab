@@ -48,3 +48,4 @@ MonoBehaviour:
     type: 2}
   _revDown: {fileID: 11400000, guid: e1f7e84308edd6744a9e4d34dcaf1ce0, type: 2}
   _revUp: {fileID: 11400000, guid: cd48e8ece176252478100fcd0898b75b, type: 2}
+  _fireAll: {fileID: 11400000, guid: 8c0b468df7d3e9349bf4287798485ea4, type: 2}

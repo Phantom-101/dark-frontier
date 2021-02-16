@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour {
 
     [SerializeField] private VoidEventChannelSO _revDown;
     [SerializeField] private VoidEventChannelSO _revUp;
+    [SerializeField] private VoidEventChannelSO _fireAll;
 
     private bool _rev;
 
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour {
 
         _revDown.OnEventRaised += () => { _rev = true; };
         _revUp.OnEventRaised += () => { _rev = false; };
+        _fireAll.OnEventRaised += () => { _player.GetEquipment<WeaponSlot> ().ForEach ((slot) => { slot.TargetState = true; }); };
 
     }
 
