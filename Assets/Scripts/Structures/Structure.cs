@@ -69,7 +69,7 @@ public class Structure : MonoBehaviour {
 
         if (transform.parent != null) {
 
-            _sector = transform.parent.GetComponent<Sector> ();
+            _sector = GetComponentInParent<Sector> ();
             if (_sector != null) _sector.Entered (this);
 
         }

@@ -8,6 +8,7 @@ public class StructureSO : ItemSO {
     public float ApparentSize;
     public Sprite HullWireframe;
     public float WorldToUIScale;
+    public bool ShowBlip;
     public GameObject DestructionEffect;
 
     [Header ("Stats")]

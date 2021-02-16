@@ -5,8 +5,9 @@ using UnityEngine;
 public class Sector : MonoBehaviour {
 
     [SerializeField] private string _id;
-
     [SerializeField] private List<Structure> _inSector = new List<Structure> ();
+
+    public List<Structure> InSector { get => _inSector; }
 
     private void Start () {
 
