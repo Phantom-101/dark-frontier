@@ -9,11 +9,11 @@
 
             if (slot.TargetState) {
 
+                (slot as WeaponSlot).Target = slot.Equipper.Target;
                 if (CanCycleStart (slot)) {
 
                     slot.CurrentState = true;
-                    (slot as WeaponSlot).Target = slot.Equipper.Target;
-
+                    
                 } else slot.TargetState = false;
 
             } else slot.CurrentState = false;

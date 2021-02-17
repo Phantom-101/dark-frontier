@@ -42,6 +42,7 @@ public class Structure : MonoBehaviour {
             if (_hull <= 0) {
 
                 if (Faction != null) Faction.RemoveProperty (this);
+                if (Sector != null) Sector.Exited (this);
                 Profile.OnDestroyedChannel.RaiseEvent (this);
 
             }
