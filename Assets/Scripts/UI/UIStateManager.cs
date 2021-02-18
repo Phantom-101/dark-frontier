@@ -28,6 +28,8 @@ public class UIStateManager : MonoBehaviour {
 
     public void RemoveState () { _state.Pop (); }
 
+    public UIState[] GetStates () { return _state.ToArray (); }
+
     public static UIStateManager GetInstance () { return _instance; }
 
 }

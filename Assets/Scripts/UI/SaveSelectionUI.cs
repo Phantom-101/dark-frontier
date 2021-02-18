@@ -21,6 +21,7 @@ public class SaveSelectionUI : MonoBehaviour {
         if (!shouldShow) {
 
             if (_curAlpha != 0) {
+
                 _curAlpha = 0;
                 SwitchOutImmediately ();
 

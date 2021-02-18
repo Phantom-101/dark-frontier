@@ -26,6 +26,8 @@ public class SaveManager : MonoBehaviour {
 
     public void Save () {
 
+        CreateSavesDirectoryIfNotExists ();
+
         string timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds ().ToString ();
 
         StructureManager.GetInstance ().SaveGame (timestamp);
@@ -35,6 +37,8 @@ public class SaveManager : MonoBehaviour {
     }
 
     public void Load (string universeName) {
+
+        CreateSavesDirectoryIfNotExists ();
 
         string[] saves = Directory.GetDirectories (Application.persistentDataPath + "/saves/" + universeName);
 
@@ -55,6 +59,8 @@ public class SaveManager : MonoBehaviour {
 
     public void Load (string universeName, string saveName) {
 
+        CreateSavesDirectoryIfNotExists ();
+
         if (!Directory.Exists (Application.persistentDataPath + "/saves/" + universeName + "/" + saveName)) return;
 
         string path = Application.persistentDataPath + "/saves/" + universeName + "/" + saveName;
@@ -69,6 +75,8 @@ public class SaveManager : MonoBehaviour {
 
     public string[] GetAllUniverses () {
 
+        CreateSavesDirectoryIfNotExists ();
+
         DirectoryInfo[] infos = new DirectoryInfo (Application.persistentDataPath + "/saves/").GetDirectories ();
         string[] names = new string[infos.Length];
         for (int i = 0; i < infos.Length; i++) names[i] = infos[i].Name;
@@ -78,10 +86,20 @@ public class SaveManager : MonoBehaviour {
 
     public string[] GetAllSaves (string universeName) {
 
+        CreateSavesDirectoryIfNotExists ();
+
+        if (!Directory.Exists (Application.persistentDataPath + "/saves/" + universeName)) return new string[0];
+
         DirectoryInfo[] infos = new DirectoryInfo (Application.persistentDataPath + "/saves/" + universeName).GetDirectories ();
         string[] names = new string[infos.Length];
         for (int i = 0; i < infos.Length; i++) names[i] = infos[i].Name;
         return names;
+
+    }
+
+    void CreateSavesDirectoryIfNotExists () {
+
+        if (!Directory.Exists (Application.persistentDataPath + "/saves/")) Directory.CreateDirectory (Application.persistentDataPath + "/saves/");
 
     }
 

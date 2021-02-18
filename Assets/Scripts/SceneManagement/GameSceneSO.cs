@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu (menuName = "Game Scene")]
-public class GameSceneSO : MonoBehaviour {
+public class GameSceneSO : ScriptableObject {
 
     [Header ("Information")]
     public string SceneName;
