@@ -23,24 +23,6 @@ public class LinearEquipmentIndicatorUI : EquipmentIndicatorUI {
 
     private void Update () {
 
-        UIState current = UIStateManager.GetInstance ().GetState ();
-        bool shouldShow = current == UIState.InSpace;
-
-        if (!shouldShow) {
-
-            if (_curAlpha != 0) {
-
-                _curAlpha = 0;
-                DisableAll ();
-                TweenToCurAlpha ();
-
-            }
-            return;
-
-        }
-
-        if (_curAlpha == 0) EnableAll ();
-
         if (Slot == null) return;
 
         if (Slot.Equipment == null) {
@@ -101,20 +83,6 @@ public class LinearEquipmentIndicatorUI : EquipmentIndicatorUI {
     void TweenToCurAlpha () {
 
         LeanTween.alphaCanvas (_group, _curAlpha, 0.2f).setIgnoreTimeScale (true);
-
-    }
-
-    void DisableAll () {
-
-        _group.blocksRaycasts = false;
-        _group.interactable = false;
-
-    }
-
-    void EnableAll () {
-
-        _group.blocksRaycasts = true;
-        _group.interactable = true;
 
     }
 

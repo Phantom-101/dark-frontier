@@ -3,11 +3,9 @@ using UnityEngine.UI;
 
 public class DockUndockButtonUI : MonoBehaviour {
 
-    [SerializeField] private CanvasGroup _group;
     [SerializeField] private Image _dock;
     [SerializeField] private Image _undock;
     [SerializeField] private Button _button;
-    [SerializeField] protected float _curAlpha = -1;
 
     private PlayerController _pc;
 
@@ -17,26 +15,12 @@ public class DockUndockButtonUI : MonoBehaviour {
 
         _button.onClick.AddListener (Toggle);
 
-        _group.alpha = 0;
-
     }
 
     private void Update () {
 
-        bool shouldShow = _pc.GetPlayer ().CanDockTarget () || _pc.GetPlayer ().CanUndock ();
-
-        if (!shouldShow) {
-
-            if (_curAlpha != 0) {
-
-                _curAlpha = 0;
-                DisableAll ();
-                TweenToCurAlpha ();
-
-            }
-            return;
-
-        }
+        bool i = _pc.GetPlayer ().CanDockTarget () || _pc.GetPlayer ().CanUndock ();
+        _button.interactable = i;
 
         if (_pc.GetPlayer ().CanDockTarget ()) {
             _dock.enabled = true;
@@ -44,14 +28,6 @@ public class DockUndockButtonUI : MonoBehaviour {
         } else {
             _dock.enabled = false;
             _undock.enabled = true;
-        }
-
-        if (_curAlpha == 0) {
-
-            EnableAll ();
-            _curAlpha = 1;
-            TweenToCurAlpha ();
-
         }
 
     }
@@ -72,26 +48,6 @@ public class DockUndockButtonUI : MonoBehaviour {
     void Undock () {
 
         _pc.GetPlayer ().Undock ();
-
-    }
-
-    void TweenToCurAlpha () {
-
-        LeanTween.alphaCanvas (_group, _curAlpha, 0.2f).setIgnoreTimeScale (true);
-
-    }
-
-    void DisableAll () {
-
-        _group.interactable = false;
-        _group.blocksRaycasts = false;
-
-    }
-
-    void EnableAll () {
-
-        _group.interactable = true;
-        _group.blocksRaycasts = true;
 
     }
 

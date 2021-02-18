@@ -5,7 +5,6 @@ public class PlayerTurnJoystickUI : MonoBehaviour {
 
     [SerializeField] private RectTransform _offsetTransform;
     [SerializeField] private RectTransform _buttonTransform;
-    [SerializeField] private Button _button;
     [SerializeField] private float _radius;
     [SerializeField] private bool _held;
     [SerializeField] private VoidEventChannelSO _down;

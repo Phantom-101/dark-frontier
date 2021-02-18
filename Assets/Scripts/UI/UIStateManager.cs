@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UIStateManager : MonoBehaviour {
 
+    [SerializeField] private UIState _initial;
     private Stack<UIState> _state = new Stack<UIState> ();
     [SerializeField] private UIStateAddedEventChannelSO _added;
     [SerializeField] private VoidEventChannelSO _removed;
@@ -17,7 +18,7 @@ public class UIStateManager : MonoBehaviour {
         _added.OnUIStateAdded += AddState;
         _removed.OnEventRaised += RemoveState;
 
-        _state.Push (UIState.InSpace);
+        _state.Push (_initial);
 
     }
 
@@ -34,6 +35,8 @@ public class UIStateManager : MonoBehaviour {
 [Serializable]
 public enum UIState {
 
+    MainMenu,
+    Setup,
     InSpace,
     Docked,
     Menu,

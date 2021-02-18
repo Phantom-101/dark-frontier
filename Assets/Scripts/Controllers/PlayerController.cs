@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 [Serializable]
 public class PlayerController : MonoBehaviour {
@@ -11,6 +14,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private VoidEventChannelSO _revDown;
     [SerializeField] private VoidEventChannelSO _revUp;
     [SerializeField] private VoidEventChannelSO _fireAll;
+    [SerializeField] private GraphicRaycaster _graphicsRaycaster;
+    [SerializeField] private EventSystem _eventSystem;
 
     private bool _rev;
 
@@ -30,7 +35,7 @@ public class PlayerController : MonoBehaviour {
 
         if (_player == null) return;
 
-        if (Input.GetMouseButtonDown (0)) {
+        if (Input.GetMouseButtonDown (0) && !ClickingUI ()) {
 
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
@@ -74,6 +79,16 @@ public class PlayerController : MonoBehaviour {
     public void SetPitch (float setting) {
 
         _player.GetEquipment<EngineSlot> ()[0].PitchSetting = setting;
+
+    }
+
+    private bool ClickingUI () {
+
+        PointerEventData ped = new PointerEventData (_eventSystem);
+        ped.position = Input.mousePosition;
+        List<RaycastResult> res = new List<RaycastResult> ();
+        _graphicsRaycaster.Raycast (ped, res);
+        return res.Count > 0;
 
     }
 
