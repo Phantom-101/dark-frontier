@@ -16,9 +16,10 @@ MonoBehaviour:
   Description: A large engine.
   Id: items.equipment.engines.engine-500
   Icon: {fileID: 21300000, guid: 34502f7e93de60d40ac817b2a0f12f4a, type: 3}
-  Size: 0
+  Volume: 0
   Usable: 0
   Tier: 1
+  Size: 0
   EnergyStorage: 50
   EnergyRechargeRate: 25
   Durability: 10
@@ -28,7 +29,7 @@ MonoBehaviour:
   RequireCharge: 0
   Charges: []
   ForwardPower: 500
-  TurnPower: 25000
+  TurnPower: 10000
   ForwardConsumption: 10
   TurnConsumption: 10
   Damp: 1

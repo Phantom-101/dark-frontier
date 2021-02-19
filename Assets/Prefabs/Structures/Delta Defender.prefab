@@ -10,9 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1280223535976449552}
   - component: {fileID: 5504010630537625597}
+  - component: {fileID: 5080792317767269634}
   - component: {fileID: 8824990598748597096}
+  - component: {fileID: 268400664749681368}
   m_Layer: 0
-  m_Name: Engine Effect
+  m_Name: Central Engine Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -115,7 +117,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.3
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -4747,6 +4749,67 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!108 &5080792317767269634
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2019520047013029414}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 2
+  m_Shape: 0
+  m_Color: {r: 0, g: 1, b: 1, a: 1}
+  m_Intensity: 50
+  m_Range: 15
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 0
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!199 &8824990598748597096
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -4813,6 +4876,18 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!122 &268400664749681368
+Halo:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2019520047013029414}
+  m_Enabled: 1
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967040
+  m_Size: 10
 --- !u!1 &2502060281502705598
 GameObject:
   m_ObjectHideFlags: 0
@@ -4823,9 +4898,11 @@ GameObject:
   m_Component:
   - component: {fileID: 6804172145825089461}
   - component: {fileID: 6090273410473560735}
+  - component: {fileID: 2115150790233968107}
   - component: {fileID: 334871060828500730}
+  - component: {fileID: 1778416270980184330}
   m_Layer: 0
-  m_Name: Engine Effect (1)
+  m_Name: Right Engine Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4928,7 +5005,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.2
+      scalar: 0.1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -9560,6 +9637,67 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!108 &2115150790233968107
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2502060281502705598}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 2
+  m_Shape: 0
+  m_Color: {r: 0, g: 1, b: 1, a: 1}
+  m_Intensity: 50
+  m_Range: 15
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 0
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!199 &334871060828500730
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -9626,6 +9764,18 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!122 &1778416270980184330
+Halo:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2502060281502705598}
+  m_Enabled: 1
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967040
+  m_Size: 10
 --- !u!1 &2869013932428447122
 GameObject:
   m_ObjectHideFlags: 0
@@ -9858,6 +10008,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 0}
   _energy: 0
   _durability: 0
@@ -9911,6 +10062,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa6d949ca5ee17d40a39094cf8ff8360, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 0}
   _energy: 0
   _durability: 0
@@ -9962,6 +10114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 0}
   _energy: 0
   _durability: 0
@@ -10015,6 +10168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83f791907cc86ce49bab998822102a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 0}
   _energy: 0
   _durability: 0
@@ -10165,6 +10319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 0}
   _energy: 0
   _durability: 0
@@ -10218,6 +10373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 0}
   _energy: 0
   _durability: 0
@@ -10271,6 +10427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 146f05006976f0846b58023a17082494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 0}
   _energy: 0
   _durability: 0
@@ -10322,6 +10479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01053b7370665b441876274053f77c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 11400000, guid: 264ffc46fcf52454399b416dd2f3444a, type: 2}
   _energy: 0
   _durability: 0
@@ -10342,9 +10500,11 @@ GameObject:
   m_Component:
   - component: {fileID: 299074635105327696}
   - component: {fileID: 6195886735587686755}
+  - component: {fileID: 3176602208389546295}
   - component: {fileID: 1685159478870159864}
+  - component: {fileID: 2914760440003146869}
   m_Layer: 0
-  m_Name: Engine Effect
+  m_Name: Left Engine Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10447,7 +10607,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.2
+      scalar: 0.1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -15079,6 +15239,67 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!108 &3176602208389546295
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9123209826086789565}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 2
+  m_Shape: 0
+  m_Color: {r: 0, g: 1, b: 1, a: 1}
+  m_Intensity: 50
+  m_Range: 15
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 0
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!199 &1685159478870159864
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -15145,3 +15366,15 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!122 &2914760440003146869
+Halo:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9123209826086789565}
+  m_Enabled: 1
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967040
+  m_Size: 10
