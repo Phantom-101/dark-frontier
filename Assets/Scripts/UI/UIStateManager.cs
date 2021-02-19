@@ -44,5 +44,6 @@ public enum UIState {
     Menu,
     Log,
     SaveSelection,
+    Settings,
 
 }

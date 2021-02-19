@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class SetupUI : MonoBehaviour {
+public class SettingsUI : MonoBehaviour {
 
     [SerializeField] private CanvasGroup _group;
     [SerializeField] private bool _shown;
@@ -10,18 +10,13 @@ public class SetupUI : MonoBehaviour {
     private void Start () {
 
         _uiStateManager = UIStateManager.GetInstance ();
-        if (!PlayerPrefs.HasKey ("InitialSetupDone") || PlayerPrefs.GetInt ("InitialSetupDone") != 1) {
-
-            _uiStateManager.AddState (UIState.Setup);
-
-        }
 
     }
 
     private void Update () {
 
         UIState current = _uiStateManager.GetState ();
-        bool shouldShow = current == UIState.Setup;
+        bool shouldShow = current == UIState.Settings;
 
         if (!shouldShow) {
 
@@ -43,13 +38,6 @@ public class SetupUI : MonoBehaviour {
             TweenAlpha ();
 
         }
-
-    }
-
-    public void SetupDone () {
-
-        _uiStateManager.RemoveState ();
-        PlayerPrefs.SetInt ("InitialSetupDone", 1);
 
     }
 
