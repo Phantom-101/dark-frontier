@@ -49,7 +49,7 @@ Material:
     - _DissolveAmount: 0
     - _OutlineWidth: 0.05
     m_Colors:
-    - _EmissionColor: {r: 1, g: 1, b: 1, a: 0}
+    - _EmissionColor: {r: 4, g: 4, b: 4, a: 0}
     - _EndOutlineColor: {r: 4, g: 0, b: 0, a: 0}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 0}
     - _StartOutlineColor: {r: 4, g: 4, b: 3.137255, a: 0}

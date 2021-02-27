@@ -31,7 +31,7 @@ Material:
     - _RandomStrength: 0.05
     - _Shimmer: 0
     - _ShimmerAnimation: 0
-    - _ShimmerWidth: 0.01
+    - _ShimmerWidth: 0.032
     m_Colors:
     - _Color: {r: 0, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
