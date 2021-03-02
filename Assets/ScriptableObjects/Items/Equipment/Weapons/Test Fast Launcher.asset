@@ -20,7 +20,7 @@ MonoBehaviour:
   Usable: 0
   Tier: 1
   Size: 0
-  EnergyStorage: 0.1
+  EnergyStorage: 1
   EnergyRechargeRate: 5
   Durability: 10
   Wear: 0
