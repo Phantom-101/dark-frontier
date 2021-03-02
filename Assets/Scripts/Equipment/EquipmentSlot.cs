@@ -37,22 +37,23 @@ public class EquipmentSlot : MonoBehaviour {
 
     }
     public virtual bool CanEquip (EquipmentSO equipment) { return equipment == null || equipment.Size == SlotSize; }
-    public virtual NewEquipmentSlotSaveData GetSaveData () {
+    public virtual EquipmentSlotSaveData GetSaveData () {
 
-        return new NewEquipmentSlotSaveData {
+        EquipmentSlotSaveData data = new EquipmentSlotSaveData {
 
-            EquipmentId = Equipment.Id,
             Energy = Energy,
             Durability = Durability,
-            EquipperId = Equipper.Id,
             CurrentState = CurrentState,
-            TargetState = TargetState,
-            ChargeId = Charge.Id
+            TargetState = TargetState
 
         };
+        data.EquipmentId = Equipment == null ? "" : Equipment.Id;
+        data.EquipperId = Equipper == null ? "" : Equipper.Id;
+        data.ChargeId = Charge == null ? "" : Charge.Id;
+        return data;
 
     }
-    public virtual void LoadSaveData (NewEquipmentSlotSaveData data) {
+    public virtual void LoadSaveData (EquipmentSlotSaveData data) {
 
         Equipment = ItemManager.GetInstance ().GetItem (data.EquipmentId) as EquipmentSO;
         Energy = data.Energy;
@@ -66,7 +67,7 @@ public class EquipmentSlot : MonoBehaviour {
 }
 
 [Serializable]
-public class NewEquipmentSlotSaveData {
+public class EquipmentSlotSaveData {
 
     public string EquipmentId;
     public float Energy;

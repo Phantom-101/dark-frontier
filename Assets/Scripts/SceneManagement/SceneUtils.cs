@@ -2,26 +2,33 @@
 using UnityEngine.SceneManagement;
 
 public class SceneUtils : MonoBehaviour {
-
-    private static SceneUtils _instance;
-
-    public SceneUtils Instance { get => _instance; }
+    public static SceneUtils Instance { get; private set; }
 
     private void Awake () {
 
-        if (_instance != null) {
+        if (Instance != null) {
 
             Destroy (gameObject);
             return;
 
         }
-        _instance = this;
+        Instance = this;
 
     }
 
     public void LoadScene (string name) {
 
+        Debug.Log ($"Loading scene {name}");
+
         SceneManager.LoadScene (name);
+
+    }
+
+    public void LoadScene (int id) {
+
+        Debug.Log ($"Loading scene #{id}");
+
+        SceneManager.LoadScene (id);
 
     }
 

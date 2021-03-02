@@ -441,7 +441,7 @@ public class StructureSaveData {
     public string Id;
     public float Hull;
     public string FactionId;
-    public List<NewEquipmentSlotSaveData> Equipment = new List<NewEquipmentSlotSaveData> ();
+    public List<EquipmentSlotSaveData> Equipment = new List<EquipmentSlotSaveData> ();
     public List<string> InventoryIds = new List<string> ();
     public List<int> InventoryCounts = new List<int> ();
     public string SectorId;

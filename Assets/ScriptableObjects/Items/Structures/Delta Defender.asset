@@ -19,7 +19,7 @@ MonoBehaviour:
   Volume: 0
   Usable: 0
   Prefab: {fileID: 2869013932428447122, guid: 01d3b3e41279c74489c131c0b41597bb, type: 3}
-  ApparentSize: 10
+  ApparentSize: 100
   HullWireframe: {fileID: 21300000, guid: 5f730e73aeefc3341ac08b3b74b7d511, type: 3}
   WorldToUIScale: 0.90476
   ShowBlip: 1

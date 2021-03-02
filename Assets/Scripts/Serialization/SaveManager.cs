@@ -5,6 +5,7 @@ using UnityEngine;
 public class SaveManager : MonoBehaviour {
 
     [SerializeField] private string _universe;
+    private SaveLoadJob _job;
 
     [SerializeField] private VoidEventChannelSO _saveGameChannel;
 
@@ -15,6 +16,28 @@ public class SaveManager : MonoBehaviour {
         _instance = this;
 
         _saveGameChannel.OnEventRaised += Save;
+
+    }
+
+    private void Update () {
+
+        if (_job != null) {
+
+            if (SectorManager.GetInstance () == null) return;
+            if (FactionManager.GetInstance () == null) return;
+            if (StructureManager.GetInstance () == null) return;
+
+            string path = Application.persistentDataPath + "/saves/" + _job.Universe + "/" + _job.Save;
+
+            SectorManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/sectors.save"));
+            FactionManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/factions.save"));
+            StructureManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/structures.save"));
+
+            _universe = _job.Universe;
+
+            _job = null;
+
+        }
 
     }
 
@@ -49,6 +72,13 @@ public class SaveManager : MonoBehaviour {
             if (saves[i].CompareTo (latest) > 0)
                 latest = saves[i];
 
+        _job = new SaveLoadJob {
+
+            Universe = universeName,
+            Save = latest.Remove (0, Application.persistentDataPath.Length + universeName.Length + 2)
+
+        };
+
         SectorManager.GetInstance ().LoadGame (SerializationManager.Load (latest + "/sectors.save"));
         FactionManager.GetInstance ().LoadGame (SerializationManager.Load (latest + "/factions.save"));
         StructureManager.GetInstance ().LoadGame (SerializationManager.Load (latest + "/structures.save"));
@@ -63,13 +93,12 @@ public class SaveManager : MonoBehaviour {
 
         if (!Directory.Exists (Application.persistentDataPath + "/saves/" + universeName + "/" + saveName)) return;
 
-        string path = Application.persistentDataPath + "/saves/" + universeName + "/" + saveName;
+        _job = new SaveLoadJob {
 
-        SectorManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/sectors.save"));
-        FactionManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/factions.save"));
-        StructureManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/structures.save"));
+            Universe = universeName,
+            Save = saveName
 
-        _universe = universeName;
+        };
 
     }
 
@@ -102,5 +131,13 @@ public class SaveManager : MonoBehaviour {
         if (!Directory.Exists (Application.persistentDataPath + "/saves/")) Directory.CreateDirectory (Application.persistentDataPath + "/saves/");
 
     }
+
+}
+
+[Serializable]
+public class SaveLoadJob {
+
+    public string Universe;
+    public string Save;
 
 }

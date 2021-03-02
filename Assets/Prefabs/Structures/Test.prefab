@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 0}
   _energy: 0
   _durability: 0
@@ -378,6 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 0}
   _energy: 0
   _durability: 0
@@ -432,6 +434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01053b7370665b441876274053f77c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 0}
   _energy: 0
   _durability: 0
@@ -440,7 +443,7 @@ MonoBehaviour:
   _targetState: 0
   _charge: {fileID: 0}
   _forwardSetting: 0
-  _turnSetting: 0
+  _yawSetting: 0
   _pitchSetting: 0
 --- !u!1 &656550552423297607
 GameObject:
@@ -485,6 +488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83f791907cc86ce49bab998822102a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 0}
   _energy: 0
   _durability: 0
@@ -535,10 +539,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa6d949ca5ee17d40a39094cf8ff8360, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 0}
   _energy: 0
   _durability: 0
-  _equipper: {fileID: 0}
+  _equipper: {fileID: 570406170697649155}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
@@ -586,10 +591,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 146f05006976f0846b58023a17082494, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotSize: 0
   _equipment: {fileID: 0}
   _energy: 0
   _durability: 0
-  _equipper: {fileID: 0}
+  _equipper: {fileID: 570406170697649155}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}

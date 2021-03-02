@@ -11,7 +11,7 @@ public class PauseButtonUI : MonoBehaviour {
 
         _button.onClick.AddListener (Toggle);
 
-        if (Time.timeScale == 0) {
+        if (TimescaleManager.Instance.Paused) {
 
             _pause.enabled = false;
             _play.enabled = true;
@@ -27,12 +27,12 @@ public class PauseButtonUI : MonoBehaviour {
 
     void Toggle () {
 
-        if (Time.timeScale == 0) {
+        if (TimescaleManager.Instance.Paused) {
 
             _pause.enabled = true;
             _play.enabled = false;
 
-            Time.timeScale = 1;
+            TimescaleManager.Instance.Paused = false;
             NotificationUI.GetInstance ().AddNotification ("Unpaused");
 
         } else {
@@ -40,7 +40,7 @@ public class PauseButtonUI : MonoBehaviour {
             _pause.enabled = false;
             _play.enabled = true;
 
-            Time.timeScale = 0;
+            TimescaleManager.Instance.Paused = true;
             NotificationUI.GetInstance ().AddNotification ("Paused");
 
         }

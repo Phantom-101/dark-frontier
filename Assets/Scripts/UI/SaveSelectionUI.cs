@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class SaveSelectionUI : MonoBehaviour {
@@ -58,6 +57,8 @@ public class SaveSelectionUI : MonoBehaviour {
 
     public void SaveSelected (string universe, string name) {
 
+        SceneUtils.Instance.LoadScene ("Game");
+
         SaveManager.GetInstance ().Load (universe, name);
 
     }
@@ -104,8 +105,10 @@ public class SaveSelectionUI : MonoBehaviour {
                     sgo.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, -150 * offset);
                     SaveInfoUI sinfo = sgo.GetComponent<SaveInfoUI> ();
                     sinfo.GetButton ().onClick.AddListener (() => {
+
                         UIStateManager.GetInstance ().RemoveState ();
-                        sm.Load (universe, save);
+                        SaveSelected (universe, save);
+
                     });
                     sinfo.SetName (universe);
                     sinfo.SetTime (save);

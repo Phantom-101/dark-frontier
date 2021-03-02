@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41d52547462b3ff4e9cc0c2c95033de5, type: 3}
-  m_Name: New Laser SO
+  m_Name: Plasma beam weapon
   m_EditorClassIdentifier: 
   Name: 
   Description: 
