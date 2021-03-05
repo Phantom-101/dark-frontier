@@ -12,6 +12,7 @@ public class EquipmentSlot : MonoBehaviour {
     [SerializeField] protected bool _currentState;
     [SerializeField] protected bool _targetState;
     [SerializeField] protected ChargeSO _charge;
+    [SerializeField] protected bool _showUI;
     //[SerializeField] protected List<NewEquipmentSO> _allowedEquipment = new List<NewEquipmentSO> ();
 
     public EquipmentSize SlotSize { get => _slotSize; }
@@ -22,6 +23,7 @@ public class EquipmentSlot : MonoBehaviour {
     public bool CurrentState { get => _currentState; set => _currentState = value; }
     public bool TargetState { get => _targetState; set => _targetState = value; }
     public ChargeSO Charge { get => _charge; set => _charge = value; }
+    public bool ShowUI { get => _showUI; }
     //public List<NewEquipmentSO> AllowedEquipment { get => _allowedEquipment; }
     public Vector3 Offset { get => Equipper == null ? Vector3.zero : Quaternion.Inverse (Equipper.transform.rotation) * (transform.position - Equipper.transform.position); }
 

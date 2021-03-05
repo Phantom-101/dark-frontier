@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerTurnJoystickUI : MonoBehaviour {
 
-    [SerializeField] private RectTransform _offsetTransform;
+    [SerializeField] private RectTransform _areaTransform;
     [SerializeField] private RectTransform _buttonTransform;
-    [SerializeField] private float _radius;
     [SerializeField] private bool _held;
+    [SerializeField] private Touch _touch;
+    [SerializeField] private bool _mouseTouch;
     [SerializeField] private VoidEventChannelSO _down;
     [SerializeField] private VoidEventChannelSO _up;
 
@@ -14,7 +14,7 @@ public class PlayerTurnJoystickUI : MonoBehaviour {
 
     private void Awake () {
 
-        _down.OnEventRaised += () => { _held = true; };
+        _down.OnEventRaised += () => { _held = true; _touch = GetTouch (); };
         _up.OnEventRaised += () => { _held = false; };
 
     }
@@ -27,12 +27,17 @@ public class PlayerTurnJoystickUI : MonoBehaviour {
 
     private void Update () {
 
+        float radius = _areaTransform.sizeDelta.x / 2;
+
         if (_held) {
 
-            Vector2 targetPos = new Vector2 (Input.mousePosition.x - _offsetTransform.anchoredPosition.x, Input.mousePosition.y - _offsetTransform.anchoredPosition.y);
+            if (_mouseTouch) _touch = new Touch {
+                position = Input.mousePosition
+            };
+            Vector2 targetPos = new Vector2 (_touch.position.x - _areaTransform.position.x, _touch.position.y - _areaTransform.position.y);
             float mag = targetPos.magnitude;
-            if (mag <= _radius) _buttonTransform.anchoredPosition = targetPos;
-            else _buttonTransform.anchoredPosition = targetPos.normalized * _radius;
+            if (mag <= radius) _buttonTransform.anchoredPosition = targetPos;
+            else _buttonTransform.anchoredPosition = targetPos.normalized * radius;
 
         } else {
 
@@ -40,8 +45,24 @@ public class PlayerTurnJoystickUI : MonoBehaviour {
 
         }
 
-        pc.SetYaw (_buttonTransform.anchoredPosition.x / _radius);
-        pc.SetPitch (_buttonTransform.anchoredPosition.y / _radius);
+        pc.SetYaw (_buttonTransform.anchoredPosition.x / radius);
+        pc.SetPitch (_buttonTransform.anchoredPosition.y / radius);
+
+    }
+
+    private Touch GetTouch () {
+
+        if (Input.GetMouseButtonDown (0)) {
+
+            Touch touch = new Touch {
+                position = Input.mousePosition
+            };
+            _mouseTouch = true;
+            return touch;
+
+        }
+        _mouseTouch = false;
+        return Input.touches[Input.touches.Length - 1];
 
     }
 

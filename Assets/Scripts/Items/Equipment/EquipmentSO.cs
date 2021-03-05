@@ -12,6 +12,7 @@ public class EquipmentSO : ItemSO {
     public bool AutomaticallyRepeat;
     public bool RequireCharge;
     public List<ChargeSO> Charges = new List<ChargeSO> ();
+    public bool ShowUI;
 
     /// <summary>
     /// Called when the scene starts and the equipment is already equipped.

@@ -10016,6 +10016,7 @@ MonoBehaviour:
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
+  _showUI: 1
   _arc: 180
   _target: {fileID: 0}
   _projectile: {fileID: 0}
@@ -10070,6 +10071,7 @@ MonoBehaviour:
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
+  _showUI: 0
   _strength: 0
 --- !u!1 &2869013932881049479
 GameObject:
@@ -10122,6 +10124,7 @@ MonoBehaviour:
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
+  _showUI: 1
   _arc: 360
   _target: {fileID: 0}
   _projectile: {fileID: 0}
@@ -10176,6 +10179,7 @@ MonoBehaviour:
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
+  _showUI: 0
 --- !u!1 &2869013933443130349
 GameObject:
   m_ObjectHideFlags: 0
@@ -10327,6 +10331,7 @@ MonoBehaviour:
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
+  _showUI: 1
   _arc: 360
   _target: {fileID: 0}
   _projectile: {fileID: 0}
@@ -10381,6 +10386,7 @@ MonoBehaviour:
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
+  _showUI: 1
   _arc: 180
   _target: {fileID: 0}
   _projectile: {fileID: 0}
@@ -10435,6 +10441,7 @@ MonoBehaviour:
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
+  _showUI: 0
 --- !u!1 &2869013934242875146
 GameObject:
   m_ObjectHideFlags: 0
@@ -10487,6 +10494,7 @@ MonoBehaviour:
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
+  _showUI: 0
   _forwardSetting: 0
   _yawSetting: 0
   _pitchSetting: 0
