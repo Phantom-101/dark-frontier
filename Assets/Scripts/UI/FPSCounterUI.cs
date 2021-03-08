@@ -7,7 +7,9 @@ public class FPSCounterUI : MonoBehaviour {
 
     private void Update () {
 
-        _text.text = $"FPS: {(int) (1 / Time.smoothDeltaTime)}";
+        if (Time.timeScale == 0) return;
+
+        _text.text = $"FPS: {(int) (Time.timeScale / Time.smoothDeltaTime)}";
 
     }
 

@@ -4,6 +4,7 @@ public class PlayerTurnJoystickUI : MonoBehaviour {
 
     [SerializeField] private RectTransform _areaTransform;
     [SerializeField] private RectTransform _buttonTransform;
+    [SerializeField] private RectTransform _topTransform;
     [SerializeField] private bool _held;
     [SerializeField] private Touch _touch;
     [SerializeField] private bool _mouseTouch;
@@ -27,7 +28,8 @@ public class PlayerTurnJoystickUI : MonoBehaviour {
 
     private void Update () {
 
-        float radius = _areaTransform.sizeDelta.x / 2;
+        float radius = Vector3.Distance (transform.position, _topTransform.position);
+        float localRadius = _topTransform.anchoredPosition.y;
 
         if (_held) {
 
@@ -35,9 +37,10 @@ public class PlayerTurnJoystickUI : MonoBehaviour {
                 position = Input.mousePosition
             };
             Vector2 targetPos = new Vector2 (_touch.position.x - _areaTransform.position.x, _touch.position.y - _areaTransform.position.y);
+            targetPos /= radius / localRadius;
             float mag = targetPos.magnitude;
-            if (mag <= radius) _buttonTransform.anchoredPosition = targetPos;
-            else _buttonTransform.anchoredPosition = targetPos.normalized * radius;
+            if (mag <= localRadius) _buttonTransform.anchoredPosition = targetPos;
+            else _buttonTransform.anchoredPosition = targetPos.normalized * localRadius;
 
         } else {
 
