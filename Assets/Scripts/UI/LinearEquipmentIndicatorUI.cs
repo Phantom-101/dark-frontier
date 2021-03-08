@@ -13,6 +13,7 @@ public class LinearEquipmentIndicatorUI : EquipmentIndicatorUI {
     [SerializeField] protected Image _icon;
     [SerializeField] protected Button _button;
     [SerializeField] protected Text _tooltip;
+    [SerializeField] protected CanvasGroup _tooltipGroup;
     [SerializeField] protected float _curAlpha = -1;
 
     private void Start () {
@@ -71,12 +72,14 @@ public class LinearEquipmentIndicatorUI : EquipmentIndicatorUI {
     public void ShowTooltip () {
 
         _tooltip.text = Slot.Equipment == null ? "None" : Slot.Equipment.Name;
+        LeanTween.alphaCanvas (_tooltipGroup, 1, 0.2f).setIgnoreTimeScale (true);
 
     }
 
     public void HideTooltip () {
 
         _tooltip.text = "";
+        LeanTween.alphaCanvas (_tooltipGroup, 0, 0.2f).setIgnoreTimeScale (true);
 
     }
 
