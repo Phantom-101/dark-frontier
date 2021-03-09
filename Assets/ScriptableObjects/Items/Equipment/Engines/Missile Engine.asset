@@ -16,9 +16,10 @@ MonoBehaviour:
   Description: A small engine mounted on warheads.
   Id: items.equipment.engines.missile-engine
   Icon: {fileID: 21300000, guid: 34502f7e93de60d40ac817b2a0f12f4a, type: 3}
-  Size: 0
+  Volume: 0
   Usable: 0
   Tier: 1
+  Size: 0
   EnergyStorage: 50
   EnergyRechargeRate: 25
   Durability: 10
@@ -27,8 +28,9 @@ MonoBehaviour:
   AutomaticallyRepeat: 0
   RequireCharge: 0
   Charges: []
-  ForwardPower: 10
-  TurnPower: 50
+  ShowUI: 0
+  ForwardPower: 220
+  TurnPower: 10
   ForwardConsumption: 10
   TurnConsumption: 10
   Damp: 1

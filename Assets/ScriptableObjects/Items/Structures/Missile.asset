@@ -16,15 +16,20 @@ MonoBehaviour:
   Description: A missile.
   Id: items.structures.missile
   Icon: {fileID: 21300000, guid: 34502f7e93de60d40ac817b2a0f12f4a, type: 3}
-  Size: 0.1
+  Volume: 0
   Usable: 0
   Prefab: {fileID: 7653010515942224295, guid: d6eec4139dc9f204ea55211eba122262, type: 3}
   ApparentSize: 1
   HullWireframe: {fileID: 21300000, guid: 21db48d8619e7a946a2bff74625762c1, type: 3}
-  DestructionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
+  WorldToUIScale: 0
+  ShowBlip: 0
+  DestructionEffect: {fileID: 1121192042590650, guid: 133623ce9df31c94f83a6a8948b1fd57,
     type: 3}
   Hull: 1
   InventorySize: 0
+  SensorStrength: 0
+  Detectability: 0
+  DockingBaySize: 0
   OnDestroyedChannel: {fileID: 11400000, guid: be50e1a829ee826499500d59f0b88d02, type: 2}
   DropPercentage: 0
-  MaxMeta: 100
+  SnapToPlane: 0

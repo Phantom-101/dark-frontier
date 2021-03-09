@@ -20,20 +20,25 @@ MonoBehaviour:
   Usable: 0
   Tier: 1
   Size: 0
-  EnergyStorage: 1
+  EnergyStorage: 5
   EnergyRechargeRate: 5
   Durability: 10
   Wear: 0
   Activatable: 1
-  AutomaticallyRepeat: 1
+  AutomaticallyRepeat: 0
   RequireCharge: 1
   Charges:
   - {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c, type: 2}
+  - {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c, type: 2}
+  - {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c, type: 2}
+  - {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c, type: 2}
+  - {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c, type: 2}
+  ShowUI: 0
   DamageMultiplier:
-    DamageAmount: 0.1
+    DamageAmount: 5
     ShieldEffectiveness: 1
     ShieldPenetration: 0
     ShieldBypass: 0
     HullEffectiveness: 1
   RangeMultiplier: 5
-  Spread: 90
+  Spread: 0
