@@ -101,7 +101,7 @@ public class Structure : MonoBehaviour {
             _stats.Add ("docking_bay_size", new StructureStat ("docking_bay_size", _profile.DockingBaySize));
             _stats.Add ("damage_multiplier", new StructureStat ("damage_multiplier", 1));
             _stats.Add ("recharge_multiplier", new StructureStat ("recharge_multiplier", 1));
-            _stats.Add ("speed_multiplier", new StructureStat ("speed_multiplier", 1));
+            _stats.Add ("linear_speed_multiplier", new StructureStat ("linear_speed_multiplier", 1));
             _stats.Add ("angular_speed_multiplier", new StructureStat ("angular_speed_multiplier", 1));
 
         }

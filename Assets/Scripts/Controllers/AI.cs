@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 [Serializable]
@@ -11,8 +12,7 @@ public class AI {
     public virtual void Tick () {
 
         EngineSlot engine = _structure.GetEquipment<EngineSlot> ()[0];
-        engine.ForwardSetting = 0;
-        engine.YawSetting = 0;
+        engine.Settings = new float3x2 ();
 
     }
 

@@ -29,9 +29,42 @@ MonoBehaviour:
   RequireCharge: 0
   Charges: []
   ShowUI: 0
-  ForwardPower: 220
-  TurnPower: 10
-  ForwardConsumption: 10
-  TurnConsumption: 10
-  Damp: 1
-  AngularDamp: 5
+  MaxLinearSpeed: 200
+  MaxAngularSpeed: 200
+  LinearForce:
+    c0:
+      x: 200
+      y: 200
+      z: 200
+    c1:
+      x: -200
+      y: -200
+      z: -200
+  AngularForce:
+    c0:
+      x: 25
+      y: 25
+      z: 25
+    c1:
+      x: -25
+      y: -25
+      z: -25
+  LinearConsumption:
+    c0:
+      x: 10
+      y: 10
+      z: 10
+    c1:
+      x: 10
+      y: 10
+      z: 10
+  AngularConsumption:
+    c0:
+      x: 10
+      y: 10
+      z: 10
+    c1:
+      x: 10
+      y: 10
+      z: 10
+  InertialFactor: 0

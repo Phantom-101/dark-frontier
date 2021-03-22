@@ -49,7 +49,7 @@ public class PlayerTurnJoystickUI : MonoBehaviour {
         }
 
         pc.SetYaw (_buttonTransform.anchoredPosition.x / radius);
-        pc.SetPitch (_buttonTransform.anchoredPosition.y / radius);
+        pc.SetPitch (-_buttonTransform.anchoredPosition.y / radius);
 
     }
 

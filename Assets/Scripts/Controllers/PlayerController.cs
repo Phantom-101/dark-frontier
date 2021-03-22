@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour {
 
         }
 
-        if (_rev) _player.GetEquipment<EngineSlot> ()[0].ForwardSetting = -0.5f;
+        if (_rev) SetFwd (-1);
 
     }
 
@@ -66,19 +66,19 @@ public class PlayerController : MonoBehaviour {
 
     public void SetFwd (float setting) {
 
-        if (!_rev) _player.GetEquipment<EngineSlot> ()[0].ForwardSetting = setting;
+        if (!_rev) _player.GetEquipment<EngineSlot> ()[0].SetSetting (0, 2, setting);
 
     }
 
     public void SetYaw (float setting) {
 
-        _player.GetEquipment<EngineSlot> ()[0].YawSetting = setting;
+        _player.GetEquipment<EngineSlot> ()[0].SetSetting (1, 1, setting);
 
     }
 
     public void SetPitch (float setting) {
 
-        _player.GetEquipment<EngineSlot> ()[0].PitchSetting = setting;
+        _player.GetEquipment<EngineSlot> ()[0].SetSetting (1, 0, setting);
 
     }
 

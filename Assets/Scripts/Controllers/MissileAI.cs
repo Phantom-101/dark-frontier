@@ -26,7 +26,7 @@ public class MissileAI : AI {
         _damageMultiplier = launcher.DamageMultiplier;
         _rangeMultiplier = launcher.RangeMultiplier;
 
-        _structure.AddStatModifier (new StructureStatModifier ("Launcher Range Modifier", "speed_multiplier", _rangeMultiplier, StructureStatModifierType.Multiplicative, 100));
+        _structure.AddStatModifier (new StructureStatModifier ("Launcher Range Modifier", "linear_speed_multiplier", _rangeMultiplier, StructureStatModifierType.Multiplicative, 100));
 
     }
 
@@ -41,17 +41,17 @@ public class MissileAI : AI {
 
         EngineSlot engine = _structure.GetEquipment<EngineSlot> ()[0];
 
-        engine.ForwardSetting = 1;
+        engine.SetSetting (0, 2, 1);
 
         float angle = _structure.GetAngleTo (_target.transform.localPosition);
-        if (angle > _missile.HeadingAllowance) engine.YawSetting = 1;
-        else if (angle < -_missile.HeadingAllowance) engine.YawSetting = -1;
-        else engine.YawSetting = 0;
+        if (angle > _missile.HeadingAllowance) engine.SetSetting (1, 1, 1);
+        else if (angle < -_missile.HeadingAllowance) engine.SetSetting (1, 1, -1);
+        else engine.SetSetting (1, 1, 0);
 
         float elevation = _structure.GetElevationTo (_target.transform.localPosition);
-        if (elevation > _missile.HeadingAllowance) engine.PitchSetting = 1;
-        else if (elevation < -_missile.HeadingAllowance) engine.PitchSetting = -1;
-        else engine.PitchSetting = 0;
+        if (elevation > _missile.HeadingAllowance) engine.SetSetting (1, 0, -1);
+        else if (elevation < -_missile.HeadingAllowance) engine.SetSetting (1, 0, 1);
+        else engine.SetSetting (1, 0, 0);
 
         if (_nm.GetLocalDistance (_target, _structure) <= _missile.DetonationRange) {
 

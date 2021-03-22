@@ -1,28 +1,31 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
+using UnityEngine;
 
 public class EngineSlot : EquipmentSlot {
 
-    [SerializeField] protected float _forwardSetting;
-    [SerializeField] protected float _yawSetting;
-    [SerializeField] protected float _pitchSetting;
+    [SerializeField] protected float3x2 _settings;
 
     public EngineSO Engine { get { return _equipment as EngineSO; } }
-    public float ForwardSetting { get => _forwardSetting; set { _forwardSetting = Mathf.Clamp (value, -0.5f, 1); } }
-    public float YawSetting { get => _yawSetting; set { _yawSetting = Mathf.Clamp (value, -1, 1); } }
-    public float PitchSetting { get => _pitchSetting; set { _pitchSetting = Mathf.Clamp (value, -1, 1); } }
+    public float3x2 Settings { get => _settings; set { _settings = new float3x2 (Mathf.Clamp (value.c0.x, -1, 1), Mathf.Clamp (value.c1.x, -1, 1), Mathf.Clamp (value.c0.y, -1, 1), Mathf.Clamp (value.c1.y, -1, 1), Mathf.Clamp (value.c0.z, -1, 1), Mathf.Clamp (value.c1.z, -1, 1)); } }
 
     public override void ResetValues () {
 
         base.ResetValues ();
 
-        ForwardSetting = 0;
-        YawSetting = 0;
-        PitchSetting = 0;
+        Settings = new float3x2 ();
 
     }
     public override bool CanEquip (EquipmentSO equipment) {
 
         return equipment == null || (base.CanEquip (equipment) && equipment is EngineSO);
+
+    }
+
+    public void SetSetting (int i, int j, float t) {
+
+        float3x2 s = Settings;
+        s[i][j] = t;
+        Settings = s;
 
     }
 

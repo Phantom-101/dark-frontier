@@ -34,6 +34,8 @@ public class LauncherSO : WeaponSO {
 
     public virtual bool WithinRange (EquipmentSlot slot) {
 
+        if (slot.Equipper == null || slot.Equipper.Target == null) return false;
+
         MissileSO missile = slot.Charge as MissileSO;
         float range = missile.Range * (slot.Equipment as LauncherSO).RangeMultiplier;
         return (slot.Equipper.transform.localPosition - slot.Equipper.Target.transform.localPosition).sqrMagnitude <= range * range;
