@@ -3,55 +3,21 @@ using UnityEngine;
 
 public class SaveSelectionUI : MonoBehaviour {
 
-    [SerializeField] private CanvasGroup _group;
     [SerializeField] private Transform _content;
     [SerializeField] private GameObject _universe;
     [SerializeField] private List<UniverseInfoUI> _instUniverses;
     [SerializeField] private GameObject _save;
     [SerializeField] private List<SaveInfoUI> _instSaves;
     [SerializeField] private List<string> _expanded = new List<string> ();
-    [SerializeField] private float _curAlpha = -1;
+    [SerializeField] private VoidEventChannelSO _changed;
+
+    private UIStateManager _uiStateManager;
 
     private void Start () {
 
-        UIState current = UIStateManager.GetInstance ().GetState ();
-        bool shouldShow = current == UIState.SaveSelection;
+        _uiStateManager = UIStateManager.GetInstance ();
 
-        if (!shouldShow) {
-
-            if (_curAlpha != 0) {
-
-                _curAlpha = 0;
-                SwitchOutImmediately ();
-
-            }
-
-        }
-
-    }
-
-    private void Update () {
-
-        UIState current = UIStateManager.GetInstance ().GetState ();
-        bool shouldShow = current == UIState.SaveSelection;
-
-        if (!shouldShow) {
-
-            if (_curAlpha != 0) {
-                _curAlpha = 0;
-                SwitchOut ();
-
-            }
-            return;
-
-        }
-
-        if (_curAlpha == 0) {
-
-            _curAlpha = 1;
-            SwitchIn ();
-
-        }
+        _changed.OnEventRaised += OnUIStateChanged;
 
     }
 
@@ -63,7 +29,18 @@ public class SaveSelectionUI : MonoBehaviour {
 
     }
 
-    private void SwitchIn () {
+    private void OnUIStateChanged () {
+
+        if (_uiStateManager == null) {
+            Debug.Log ("UI state manager not found");
+            return;
+        }
+
+        if (_uiStateManager.GetState () == UIState.SaveSelection) Build ();
+
+    }
+
+    private void Build () {
 
         SaveManager sm = SaveManager.GetInstance ();
 
@@ -90,7 +67,7 @@ public class SaveSelectionUI : MonoBehaviour {
             uinfo.GetButton ().onClick.AddListener (() => {
                 if (_expanded.Contains (universe)) _expanded.Remove (universe);
                 else _expanded.Add (universe);
-                SwitchIn ();
+                Build ();
             });
             uinfo.SetName (universe);
             _instUniverses.Add (uinfo);
@@ -121,26 +98,6 @@ public class SaveSelectionUI : MonoBehaviour {
 
         }
         _content.GetComponent<RectTransform> ().sizeDelta = new Vector2 (0, 150 * offset);
-
-        LeanTween.alphaCanvas (_group, 1, 0.2f).setIgnoreTimeScale (true);
-        _group.interactable = true;
-        _group.blocksRaycasts = true;
-
-    }
-
-    private void SwitchOut () {
-
-        LeanTween.alphaCanvas (_group, 0, 0.2f).setIgnoreTimeScale (true);
-        _group.interactable = false;
-        _group.blocksRaycasts = false;
-
-    }
-
-    private void SwitchOutImmediately () {
-
-        LeanTween.alphaCanvas (_group, 0, 0).setIgnoreTimeScale (true);
-        _group.interactable = false;
-        _group.blocksRaycasts = false;
 
     }
 

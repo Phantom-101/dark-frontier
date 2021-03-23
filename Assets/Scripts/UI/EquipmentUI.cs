@@ -6,36 +6,10 @@ public class EquipmentUI : MonoBehaviour {
 
     [SerializeField] private Transform _parent;
     [SerializeField] private GameObject _indicatorPrefab;
-    [SerializeField] private CanvasGroup _group;
-    [SerializeField] private bool _shown = false;
 
     private readonly Dictionary<EquipmentSlot, EquipmentIndicatorUI> _indicators = new Dictionary<EquipmentSlot, EquipmentIndicatorUI> ();
 
     private void Update () {
-
-        UIState current = UIStateManager.GetInstance ().GetState ();
-        bool shouldShow = current == UIState.InSpace;
-
-        if (!shouldShow) {
-
-            if (_shown) {
-
-                _shown = false;
-                DisableAll ();
-                TweenAlpha ();
-
-            }
-            return;
-
-        }
-
-        if (!_shown) {
-
-            EnableAll ();
-            _shown = true;
-            TweenAlpha ();
-
-        }
 
         Structure player = PlayerController.GetInstance ().GetPlayer ();
 
@@ -67,26 +41,6 @@ public class EquipmentUI : MonoBehaviour {
                 }
 
             }
-
-    }
-
-    void TweenAlpha () {
-
-        LeanTween.alphaCanvas (_group, _shown ? 1 : 0, 0.2f).setIgnoreTimeScale (true);
-
-    }
-
-    void DisableAll () {
-
-        _group.blocksRaycasts = false;
-        _group.interactable = false;
-
-    }
-
-    void EnableAll () {
-
-        _group.blocksRaycasts = true;
-        _group.interactable = true;
 
     }
 

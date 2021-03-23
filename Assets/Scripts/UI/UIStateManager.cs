@@ -8,6 +8,7 @@ public class UIStateManager : MonoBehaviour {
     private Stack<UIState> _state = new Stack<UIState> ();
     [SerializeField] private UIStateAddedEventChannelSO _added;
     [SerializeField] private VoidEventChannelSO _removed;
+    [SerializeField] private VoidEventChannelSO _changed;
 
     private static UIStateManager _instance;
 
@@ -24,9 +25,9 @@ public class UIStateManager : MonoBehaviour {
 
     public UIState GetState () { return _state.Peek (); }
 
-    public void AddState (UIState state) { if (!_state.Contains (state)) _state.Push (state); }
+    public void AddState (UIState state) { if (!_state.Contains (state)) _state.Push (state); _changed.OnEventRaised.Invoke (); }
 
-    public void RemoveState () { _state.Pop (); }
+    public void RemoveState () { _state.Pop (); _changed.OnEventRaised.Invoke (); }
 
     public UIState[] GetStates () { return _state.ToArray (); }
 
