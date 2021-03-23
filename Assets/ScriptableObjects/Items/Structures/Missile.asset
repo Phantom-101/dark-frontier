@@ -28,7 +28,7 @@ MonoBehaviour:
   Hull: 1
   InventorySize: 0
   SensorStrength: 0
-  Detectability: 0
+  Detectability: 5
   DockingBaySize: 0
   OnDestroyedChannel: {fileID: 11400000, guid: be50e1a829ee826499500d59f0b88d02, type: 2}
   DropPercentage: 0

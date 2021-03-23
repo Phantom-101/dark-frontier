@@ -31,6 +31,7 @@ public class StructureManager : MonoBehaviour {
 
     private void Update () {
 
+        foreach (Structure structure in _structures.ToArray ()) structure.Detected = null;
         foreach (Structure structure in _structures.ToArray ()) structure.Tick ();
 
     }
@@ -56,6 +57,28 @@ public class StructureManager : MonoBehaviour {
 
         });
         return found;
+
+    }
+
+    public bool Detects (Structure a, Structure b) {
+
+        if (a.Sector != b.Sector) return false;
+
+        float sqrDis = (a.transform.localPosition - b.transform.localPosition).sqrMagnitude;
+        float range = a.GetStatAppliedValue ("sensor_strength") * b.GetStatAppliedValue ("detectability");
+        float sqrRange = range * range;
+        return sqrDis <= sqrRange;
+
+    }
+
+    public List<Structure> GetDetected (Structure structure) {
+
+        List<Structure> inSector = structure.Sector.InSector;
+        List<Structure> res = new List<Structure> ();
+        foreach (Structure candidate in inSector)
+            if (candidate != structure && Detects (structure, candidate))
+                res.Add (candidate);
+        return res;
 
     }
 

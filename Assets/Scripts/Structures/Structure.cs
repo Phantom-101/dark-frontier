@@ -22,6 +22,7 @@ public class Structure : MonoBehaviour {
     [SerializeField] private Structure _target;
 
     [SerializeField] private Sector _sector;
+    [SerializeField] private List<Structure> _detected;
 
     [SerializeField] private List<Structure> _docked;
     [SerializeField] private List<string> _dockedIds;
@@ -64,6 +65,7 @@ public class Structure : MonoBehaviour {
 
     }
     public Sector Sector { get => _sector; set => _sector = value; }
+    public List<Structure> Detected { get { if (_detected == null) _detected = StructureManager.GetInstance ().GetDetected (this); return _detected; } set => _detected = value; }
 
     private void Awake () {
 
