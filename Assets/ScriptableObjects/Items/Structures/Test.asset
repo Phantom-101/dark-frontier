@@ -29,6 +29,7 @@ MonoBehaviour:
   InventorySize: 100
   SensorStrength: 30
   ScannerStrength: 15
+  MaxLocks: 3
   Detectability: 5
   SignatureSize: 2
   DockingBaySize: 0

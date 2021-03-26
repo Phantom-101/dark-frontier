@@ -21,7 +21,7 @@ public class TargetsUI : MonoBehaviour {
 
         while (_instantiated.Count > 0) {
 
-            Destroy (_instantiated[0].gameObject);
+            if (_instantiated[0] != null) Destroy (_instantiated[0].gameObject);
             _instantiated.RemoveAt (0);
 
         }

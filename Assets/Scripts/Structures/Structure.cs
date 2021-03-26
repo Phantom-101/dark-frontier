@@ -103,6 +103,7 @@ public class Structure : MonoBehaviour {
 
             _stats.Add ("sensor_strength", new StructureStat ("sensor_strength", _profile.SensorStrength));
             _stats.Add ("scanner_strength", new StructureStat ("scanner_strength", _profile.ScannerStrength));
+            _stats.Add ("max_locks", new StructureStat ("max_locks", _profile.MaxLocks));
             _stats.Add ("detectability", new StructureStat ("detectability", _profile.Detectability));
             _stats.Add ("signature_size", new StructureStat ("signature_size", _profile.SignatureSize));
             _stats.Add ("docking_bay_size", new StructureStat ("docking_bay_size", _profile.DockingBaySize));
@@ -362,12 +363,20 @@ public class Structure : MonoBehaviour {
 
     }
 
-    public void RemoveUndetected () {
+    public void ManageSelectedAndLocks () {
 
         if (!Detected.Contains (Selected)) Selected = null;
-        foreach (Structure target in Locks.Keys.ToArray ())
-            if (target == null || !Detected.Contains (target))
+        bool lockChanged = false;
+        foreach (Structure target in Locks.Keys.ToArray ()) {
+            if (target == null || !Detected.Contains (target) || Locks.Keys.Count > GetStatAppliedValue ("max_locks")) {
                 Locks.Remove (target);
+                lockChanged = true;
+            }
+        }
+        if (lockChanged) {
+            PlayerController pc = PlayerController.GetInstance ();
+            if (pc.GetPlayer () == this) pc.LocksChangedChannel.OnEventRaised.Invoke ();
+        }
 
     }
 
@@ -376,6 +385,7 @@ public class Structure : MonoBehaviour {
         if (target == null) return false;
         if (!Detected.Contains (target)) return false;
         if (Locks.ContainsKey (target)) return false;
+        if (Locks.Keys.Count >= GetStatAppliedValue ("max_locks")) return false;
         Locks[target] = 0;
         PlayerController pc = PlayerController.GetInstance ();
         if (pc.GetPlayer () == this) pc.LocksChangedChannel.OnEventRaised.Invoke ();
@@ -407,7 +417,7 @@ public class Structure : MonoBehaviour {
 
     public void Tick () {
 
-        RemoveUndetected ();
+        ManageSelectedAndLocks ();
         TickLocks ();
 
         if (_ai == null) _ai = new AI (this);

@@ -16,6 +16,7 @@ public class StructureSO : ItemSO {
     public float InventorySize;
     public float SensorStrength;
     public float ScannerStrength;
+    public int MaxLocks;
     public float Detectability;
     public float SignatureSize;
     public float DockingBaySize;
