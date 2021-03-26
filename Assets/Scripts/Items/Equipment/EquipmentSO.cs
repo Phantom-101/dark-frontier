@@ -10,6 +10,7 @@ public class EquipmentSO : ItemSO {
     public float Wear;
     public bool Activatable;
     public bool AutomaticallyRepeat;
+    public bool RequireTarget;
     public bool RequireCharge;
     public List<ChargeSO> Charges = new List<ChargeSO> ();
     public bool ShowUI;
@@ -46,6 +47,8 @@ public class EquipmentSO : ItemSO {
     public virtual bool CanCycleStart (EquipmentSlot slot) {
 
         if (!Activatable) return false;
+        if (RequireTarget && slot.Target == null) return false;
+        if (slot.Target != null && !slot.Equipper.Locks.ContainsKey (slot.Target)) return false;
         if (slot.Equipment.RequireCharge && slot.Equipper.GetInventoryCount (slot.Charge) <= 0) return false;
         return true;
 
@@ -98,6 +101,8 @@ public class EquipmentSO : ItemSO {
                             OnCycleStart (slot);
                             slot.Durability -= Wear;
 
+                            if (!slot.Equipment.AutomaticallyRepeat) slot.TargetState = false;
+
                         } else slot.TargetState = false;
 
                     } else {
@@ -105,6 +110,8 @@ public class EquipmentSO : ItemSO {
                         slot.Energy = 0;
                         OnCycleStart (slot);
                         slot.Durability -= Wear;
+
+                        if (!slot.Equipment.AutomaticallyRepeat) slot.TargetState = false;
 
                     }
 

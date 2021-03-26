@@ -9,11 +9,13 @@ public class PlayerController : MonoBehaviour {
 
     [SerializeField] private Structure _player;
 
-    public VoidEventChannelSO TargetChangedChannel;
+    public VoidEventChannelSO SelectedChangedChannel;
+    public VoidEventChannelSO LocksChangedChannel;
 
     [SerializeField] private VoidEventChannelSO _revDown;
     [SerializeField] private VoidEventChannelSO _revUp;
     [SerializeField] private VoidEventChannelSO _fireAll;
+    [SerializeField] private VoidEventChannelSO _lockSelected;
     [SerializeField] private GraphicRaycaster _graphicsRaycaster;
     [SerializeField] private EventSystem _eventSystem;
 
@@ -28,6 +30,7 @@ public class PlayerController : MonoBehaviour {
         _revDown.OnEventRaised += () => { _rev = true; };
         _revUp.OnEventRaised += () => { _rev = false; };
         _fireAll.OnEventRaised += () => { _player.GetEquipment<WeaponSlot> ().ForEach ((slot) => { slot.TargetState = true; }); };
+        _lockSelected.OnEventRaised += () => { _player.Lock (_player.Selected); };
 
     }
 
@@ -46,7 +49,7 @@ public class PlayerController : MonoBehaviour {
 
                     GameObject obj = hit.collider.transform.parent.gameObject;
                     Structure str = obj.GetComponent<Structure> ();
-                    if (str != _player) _player.Target = str;
+                    if (str != _player) _player.Selected = str;
 
                 }
 

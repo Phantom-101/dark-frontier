@@ -9,6 +9,7 @@ public class EquipmentSlot : MonoBehaviour {
     [SerializeField] protected float _energy;
     [SerializeField] protected float _durability;
     [SerializeField] protected Structure _equipper;
+    [SerializeField] protected Structure _target;
     [SerializeField] protected bool _currentState;
     [SerializeField] protected bool _targetState;
     [SerializeField] protected ChargeSO _charge;
@@ -20,6 +21,7 @@ public class EquipmentSlot : MonoBehaviour {
     public float Energy { get => _energy; set { _energy = Mathf.Clamp (value, 0, _equipment == null ? 0 : _equipment.EnergyStorage); } }
     public float Durability { get => _durability; set { _durability = Mathf.Clamp (value, 0, _equipment == null ? 0 : _equipment.Durability); } }
     public Structure Equipper { get => _equipper; set => _equipper = value; }
+    public Structure Target { get => _target; set => _target = value; }
     public bool CurrentState { get => _currentState; set => _currentState = value; }
     public bool TargetState { get => _targetState; set => _targetState = value; }
     public ChargeSO Charge { get => _charge; set => _charge = value; }

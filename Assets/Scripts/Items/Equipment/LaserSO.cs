@@ -13,15 +13,14 @@ public class LaserSO : WeaponSO {
         if (!base.CanCycleStart (slot)) return false;
         if ((slot as WeaponSlot).Target == null) return false;
         if (!(slot as WeaponSlot).CanFireAt ((slot as WeaponSlot).Target)) return false;
-        if ((slot.Equipper.transform.localPosition - (slot as WeaponSlot).Target.transform.localPosition).sqrMagnitude > Range * Range) return false;
+        if ((slot.Equipper.transform.localPosition - slot.Target.transform.localPosition).sqrMagnitude > Range * Range) return false;
         return true;
 
     }
 
     public override void OnCycleStart (EquipmentSlot slot) {
 
-        WeaponSlot weapon = slot as WeaponSlot;
-        weapon.Target.TakeDamage (Damage, slot.transform.position);
+        slot.Target.TakeDamage (new DamageProfile (Damage, slot.Equipper.Locks[slot.Target]), slot.transform.position);
 
     }
 

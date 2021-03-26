@@ -26,8 +26,10 @@ MonoBehaviour:
   Wear: 0
   Activatable: 0
   AutomaticallyRepeat: 0
+  RequireTarget: 1
   RequireCharge: 0
   Charges: []
+  ShowUI: 0
   Damage:
     DamageAmount: 0
     ShieldEffectiveness: 1

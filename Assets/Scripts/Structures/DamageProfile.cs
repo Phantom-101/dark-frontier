@@ -29,6 +29,16 @@ public class DamageProfile {
 
     }
 
+    public DamageProfile (DamageProfile other, float dmgMult) {
+
+        DamageAmount = other.DamageAmount * dmgMult;
+        ShieldEffectiveness = other.ShieldEffectiveness;
+        ShieldPenetration = other.ShieldPenetration;
+        ShieldBypass = other.ShieldBypass;
+        HullEffectiveness = other.HullEffectiveness;
+
+    }
+
     public DamageProfile (DamageProfile other, DamageProfile mult) {
 
         DamageAmount = other.DamageAmount * mult.DamageAmount;

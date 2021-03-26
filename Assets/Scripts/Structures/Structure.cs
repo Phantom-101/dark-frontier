@@ -19,7 +19,9 @@ public class Structure : MonoBehaviour {
     [SerializeReference] private AI _ai;
     [SerializeField] private AISO _initialAI;
     [SerializeField] private bool _aiEnabled;
-    [SerializeField] private Structure _target;
+
+    [SerializeField] private Structure _selected;
+    [SerializeField] private Dictionary<Structure, float> _locks = new Dictionary<Structure, float> ();
 
     [SerializeField] private Sector _sector;
     [SerializeField] private List<Structure> _detected;
@@ -54,16 +56,17 @@ public class Structure : MonoBehaviour {
     public List<EquipmentSlot> Equipment { get => _equipmentSlots; }
     public ItemSOToIntDictionary Inventory { get => _inventory; }
     public AI AI { get => _ai; set => _ai = value; }
-    public Structure Target {
+    public Structure Selected {
 
-        get => _target;
+        get => _selected;
         set {
-            _target = value;
-            if (PlayerController.GetInstance ().GetPlayer () == this) PlayerController.GetInstance ().TargetChangedChannel.OnEventRaised ();
+            _selected = value;
+            if (PlayerController.GetInstance ().GetPlayer () == this) PlayerController.GetInstance ().SelectedChangedChannel.OnEventRaised ();
 
         }
 
     }
+    public Dictionary<Structure, float> Locks { get => _locks; set => _locks = value; }
     public Sector Sector { get => _sector; set => _sector = value; }
     public List<Structure> Detected { get { if (_detected == null) _detected = StructureManager.GetInstance ().GetDetected (this); return _detected; } set => _detected = value; }
 
@@ -99,7 +102,9 @@ public class Structure : MonoBehaviour {
             // Initialize structure stats
 
             _stats.Add ("sensor_strength", new StructureStat ("sensor_strength", _profile.SensorStrength));
+            _stats.Add ("scanner_strength", new StructureStat ("scanner_strength", _profile.ScannerStrength));
             _stats.Add ("detectability", new StructureStat ("detectability", _profile.Detectability));
+            _stats.Add ("signature_size", new StructureStat ("signature_size", _profile.SignatureSize));
             _stats.Add ("docking_bay_size", new StructureStat ("docking_bay_size", _profile.DockingBaySize));
             _stats.Add ("damage_multiplier", new StructureStat ("damage_multiplier", 1));
             _stats.Add ("recharge_multiplier", new StructureStat ("recharge_multiplier", 1));
@@ -280,11 +285,11 @@ public class Structure : MonoBehaviour {
 
     public Structure GetDockedAt () { return transform.parent.GetComponent<Structure> (); }
 
-    public bool CanDockTarget () { return _target != null && _target.CanAddDocker (this); }
+    public bool CanDockTarget () { return _selected != null && _selected.CanAddDocker (this); }
 
     public bool CanUndock () { return IsDocked (); }
 
-    public void DockTarget () { _target.AddDocker (this); }
+    public void DockTarget () { _selected.AddDocker (this); }
 
     public bool Undock () {
 
@@ -295,42 +300,10 @@ public class Structure : MonoBehaviour {
 
     }
 
-    public void Tick () {
-
-        if (_ai == null) _ai = new AI (this);
-        if (_aiEnabled) _ai.Tick ();
-
-        foreach (EquipmentSlot slot in _equipmentSlots) slot.Tick ();
-
-    }
-
-    public void FixedTick () {
-
-        foreach (EquipmentSlot slot in _equipmentSlots) slot.FixedTick ();
-
-        if (_profile.SnapToPlane) {
-
-            // Set position and rotation
-            transform.LeanSetLocalPosY (0);
-            transform.localEulerAngles = new Vector3 (0, transform.eulerAngles.y, _rb.angularVelocity.y * -25);
-
-        }
-
-    }
-
     public void TakeDamage (DamageProfile damage, Vector3 from) {
 
-        bool good = false;
         Vector3 point = from;
-        RaycastHit hit;
-
-        do {
-
-            Physics.Raycast (point, transform.position - point, out hit);
-            if (hit.transform == transform) good = true;
-            point = hit.point;
-
-        } while (!good);
+        if ((transform.position - point).sqrMagnitude > Profile.ApparentSize * Profile.ApparentSize / 4) point = transform.position + (point - transform.position).normalized * Profile.ApparentSize / 2;
 
         List<ShieldSlot> shields = GetEquipment<ShieldSlot> ();
         ShieldSlot damaged = null;
@@ -386,6 +359,75 @@ public class Structure : MonoBehaviour {
 
         Vector3 heading = to - transform.localPosition;
         return Vector3.SignedAngle (transform.forward, heading, -transform.right);
+
+    }
+
+    public void RemoveUndetected () {
+
+        if (!Detected.Contains (Selected)) Selected = null;
+        foreach (Structure target in Locks.Keys.ToArray ())
+            if (target == null || !Detected.Contains (target))
+                Locks.Remove (target);
+
+    }
+
+    public bool Lock (Structure target) {
+
+        if (target == null) return false;
+        if (!Detected.Contains (target)) return false;
+        if (Locks.ContainsKey (target)) return false;
+        Locks[target] = 0;
+        PlayerController pc = PlayerController.GetInstance ();
+        if (pc.GetPlayer () == this) pc.LocksChangedChannel.OnEventRaised.Invoke ();
+        return true;
+
+    }
+
+    public bool Unlock (Structure target) {
+
+        if (target == null) return false;
+        if (!Locks.ContainsKey (target)) return false;
+        Locks.Remove (target);
+        PlayerController pc = PlayerController.GetInstance ();
+        if (pc.GetPlayer () == this) pc.LocksChangedChannel.OnEventRaised.Invoke ();
+        return true;
+
+    }
+
+    public void TickLocks () {
+
+        foreach (Structure target in Locks.Keys.ToArray ()) {
+
+            float progress = GetStatAppliedValue ("scanner_strength") * target.GetStatAppliedValue ("signature_size") * Time.deltaTime;
+            Locks[target] = Mathf.Min (Locks[target] + progress, 100);
+
+        }
+
+    }
+
+    public void Tick () {
+
+        RemoveUndetected ();
+        TickLocks ();
+
+        if (_ai == null) _ai = new AI (this);
+        if (_aiEnabled) _ai.Tick ();
+
+        foreach (EquipmentSlot slot in _equipmentSlots) slot.Tick ();
+
+    }
+
+    public void FixedTick () {
+
+        foreach (EquipmentSlot slot in _equipmentSlots) slot.FixedTick ();
+
+        if (_profile.SnapToPlane) {
+
+            // Set position and rotation
+            transform.LeanSetLocalPosY (0);
+            transform.localEulerAngles = new Vector3 (0, transform.eulerAngles.y, _rb.angularVelocity.y * -25);
+
+        }
 
     }
 

@@ -26,12 +26,9 @@ MonoBehaviour:
   Wear: 0
   Activatable: 1
   AutomaticallyRepeat: 0
+  RequireTarget: 1
   RequireCharge: 1
   Charges:
-  - {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c, type: 2}
-  - {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c, type: 2}
-  - {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c, type: 2}
-  - {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c, type: 2}
   - {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c, type: 2}
   ShowUI: 0
   DamageMultiplier:

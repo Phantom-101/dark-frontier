@@ -88,11 +88,11 @@ public class PlayerInfoUI : MonoBehaviour {
         _capFill.sizeDelta = new Vector2 (_capOutline.sizeDelta.x * storedCap / totalCap, _capFill.sizeDelta.y);
         _capImg.color = _capGradient.Evaluate (storedCap / totalCap);
 
-        if (_structure.Target == null) _direction.gameObject.SetActive (false);
+        if (_structure.Selected == null) _direction.gameObject.SetActive (false);
         else {
 
             _direction.gameObject.SetActive (true);
-            _direction.rotation = Quaternion.Euler (0, 0, -_structure.GetAngleTo (_structure.Target.transform.position));
+            _direction.rotation = Quaternion.Euler (0, 0, -_structure.GetAngleTo (_structure.Selected.transform.position));
 
         }
 

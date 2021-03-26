@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TargetInfoUI : MonoBehaviour {
+public class SelectedInfoUI : MonoBehaviour {
 
     [SerializeField] private Transform _hpIndicators;
     [SerializeField] private Image _hull;
@@ -15,6 +15,8 @@ public class TargetInfoUI : MonoBehaviour {
     [SerializeField] private Text _distance;
     [SerializeField] private Text _velocity;
     [SerializeField] private Transform _direction;
+    [SerializeField] private Button _lock;
+    [SerializeField] private VoidEventChannelSO _lockSelected;
 
     [SerializeField] protected Structure _structure;
 
@@ -26,6 +28,8 @@ public class TargetInfoUI : MonoBehaviour {
             return;
 
         }
+
+        _lock.onClick.AddListener (_lockSelected.OnEventRaised.Invoke);
 
         SetupShields ();
 
@@ -73,7 +77,6 @@ public class TargetInfoUI : MonoBehaviour {
         Rigidbody rb = _structure.GetComponent<Rigidbody> ();
         if (rb == null) _velocity.text = "0 m/s";
         else _velocity.text = rb.velocity.magnitude.ToString ("F2") + " m/s";
-
         _direction.rotation = Quaternion.Euler (0, 0, -_structure.GetAngleTo (PlayerController.GetInstance ().GetPlayer ().transform.position));
 
     }

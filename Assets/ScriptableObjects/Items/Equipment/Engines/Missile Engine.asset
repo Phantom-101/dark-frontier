@@ -26,6 +26,7 @@ MonoBehaviour:
   Wear: 0.01
   Activatable: 0
   AutomaticallyRepeat: 0
+  RequireTarget: 0
   RequireCharge: 0
   Charges: []
   ShowUI: 0
@@ -67,4 +68,4 @@ MonoBehaviour:
       x: 10
       y: 10
       z: 10
-  InertialFactor: 0
+  InertialFactor: 0.1

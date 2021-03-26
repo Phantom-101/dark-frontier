@@ -28,7 +28,9 @@ MonoBehaviour:
   Hull: 10000
   InventorySize: 100
   SensorStrength: 100
+  ScannerStrength: 5
   Detectability: 25
+  SignatureSize: 5
   DockingBaySize: 0
   OnDestroyedChannel: {fileID: 11400000, guid: c42055d3c124f174fa639daf99561b4e, type: 2}
   DropPercentage: 1

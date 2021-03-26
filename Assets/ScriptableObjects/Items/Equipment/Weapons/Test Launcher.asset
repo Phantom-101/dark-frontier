@@ -16,18 +16,21 @@ MonoBehaviour:
   Description: 
   Id: 
   Icon: {fileID: 21300000, guid: 470213ad1cffcfb4ebc0c5c9a34ec9a4, type: 3}
-  Size: 0
+  Volume: 0
   Usable: 0
   Tier: 1
+  Size: 0
   EnergyStorage: 1
   EnergyRechargeRate: 5
   Durability: 10
   Wear: 0
   Activatable: 1
   AutomaticallyRepeat: 1
+  RequireTarget: 1
   RequireCharge: 1
   Charges:
   - {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c, type: 2}
+  ShowUI: 0
   DamageMultiplier:
     DamageAmount: 1
     ShieldEffectiveness: 1

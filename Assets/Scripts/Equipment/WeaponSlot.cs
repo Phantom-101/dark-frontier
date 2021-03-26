@@ -3,12 +3,10 @@
 public class WeaponSlot : EquipmentSlot {
 
     [SerializeField] protected float _arc;
-    [SerializeField] protected Structure _target;
     [SerializeField] protected GameObject _projectile;
 
     public WeaponSO Weapon { get { return _equipment as WeaponSO; } }
     public float Arc { get => _arc; }
-    public Structure Target { get => _target; set => _target = value; }
     public GameObject Projectile { get => _projectile; set => _projectile = value; }
 
     public override void ResetValues () {

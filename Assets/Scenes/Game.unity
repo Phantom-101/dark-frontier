@@ -581,6 +581,7 @@ MonoBehaviour:
   _energy: 0
   _durability: 10
   _equipper: {fileID: 424208676}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
@@ -605,7 +606,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1284
+  m_Name: pb_Mesh-1296
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1226,12 +1227,12 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 424208676}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
   _showUI: 0
   _arc: 180
-  _target: {fileID: 0}
   _projectile: {fileID: 0}
 --- !u!4 &185225336
 Transform:
@@ -1952,7 +1953,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1756389784}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81770015
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2029,12 +2030,12 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 424208676}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
   _showUI: 0
   _arc: 180
-  _target: {fileID: 0}
   _projectile: {fileID: 0}
 --- !u!4 &284316930
 Transform:
@@ -2571,7 +2572,7 @@ MonoBehaviour:
     id: 0
   _initialAI: {fileID: 11400000, guid: 4b4647d3e66473c4f8c32220ecb98522, type: 2}
   _aiEnabled: 1
-  _target: {fileID: 0}
+  _selected: {fileID: 0}
   _sector: {fileID: 0}
   _detected: []
   _docked: []
@@ -2657,6 +2658,7 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 424208676}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
@@ -7798,6 +7800,7 @@ MonoBehaviour:
   _energy: 0
   _durability: 10
   _equipper: {fileID: 361155879}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
@@ -8100,7 +8103,7 @@ MonoBehaviour:
     id: 0
   _initialAI: {fileID: 11400000, guid: 4b4647d3e66473c4f8c32220ecb98522, type: 2}
   _aiEnabled: 1
-  _target: {fileID: 0}
+  _selected: {fileID: 0}
   _sector: {fileID: 0}
   _detected: []
   _docked: []
@@ -9185,12 +9188,12 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 361155879}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
   _showUI: 0
   _arc: 180
-  _target: {fileID: 0}
   _projectile: {fileID: 0}
 --- !u!4 &526042146
 Transform:
@@ -9654,7 +9657,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1342
+  m_Name: pb_Mesh-1350
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -10293,7 +10296,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00007065753}
+  m_AnchoredPosition: {x: 0, y: 0.04844592}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &667952833
@@ -10486,6 +10489,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 689208225}
   m_CullTransparentMesh: 0
+--- !u!1 &693035980
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 693035981}
+  - component: {fileID: 693035982}
+  m_Layer: 5
+  m_Name: Locked Targets
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &693035981
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693035980}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 906850841}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -550, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 1, y: 1}
+--- !u!114 &693035982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693035980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 500666aa6a2a81a4096093d5b36dbbce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transform: {fileID: 693035981}
+  _infoPanelPrefab: {fileID: 6092668408962847283, guid: 02ff22aefd8d729489b067baaa35cc1d,
+    type: 3}
 --- !u!1 &693142944
 GameObject:
   m_ObjectHideFlags: 0
@@ -10518,7 +10572,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00013125301}
+  m_AnchoredPosition: {x: 0, y: 0.048415527}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &693899846
@@ -11417,7 +11471,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00013125301}
+  m_AnchoredPosition: {x: 0, y: 0.048415527}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &786032463
@@ -11466,7 +11520,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 786032463}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -12135,12 +12189,12 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 361155879}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
   _showUI: 0
   _arc: 180
-  _target: {fileID: 0}
   _projectile: {fileID: 0}
 --- !u!4 &898213677
 Transform:
@@ -12374,7 +12428,7 @@ GameObject:
   - component: {fileID: 906850841}
   - component: {fileID: 906850842}
   m_Layer: 5
-  m_Name: Target Info
+  m_Name: Selected Info
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12390,7 +12444,8 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 693035981}
   m_Father: {fileID: 624854328}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12411,10 +12466,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9b6e8008663cf34bbb4c148cc705912, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canvas: {fileID: 906850841}
+  _transform: {fileID: 906850841}
   _infoPanelPrefab: {fileID: 4864166113814497008, guid: 6a79fc65ff27bd74fac4e70321ba0f4a,
     type: 3}
-  _targetChangedChannel: {fileID: 11400000, guid: c74811d228d8d05429304feaa7007bab,
+  _selectedChangedChannel: {fileID: 11400000, guid: c74811d228d8d05429304feaa7007bab,
     type: 2}
 --- !u!1 &907493059
 GameObject:
@@ -13003,6 +13058,7 @@ MonoBehaviour:
   _energy: 0
   _durability: 10
   _equipper: {fileID: 424208676}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
@@ -13134,12 +13190,12 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 361155879}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
   _showUI: 0
   _arc: 180
-  _target: {fileID: 0}
   _projectile: {fileID: 0}
 --- !u!4 &1049186401
 Transform:
@@ -13525,7 +13581,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00013125301}
+  m_AnchoredPosition: {x: 0, y: 0.048415527}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1111965878
@@ -13685,7 +13741,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 63040901}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81770015
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -14192,6 +14248,7 @@ MonoBehaviour:
   _energy: 0
   _durability: 10
   _equipper: {fileID: 361155879}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
@@ -14876,6 +14933,7 @@ MonoBehaviour:
   _energy: 0
   _durability: 10
   _equipper: {fileID: 424208676}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
@@ -15056,7 +15114,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1555295869}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81770027
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -15346,6 +15404,7 @@ MonoBehaviour:
   _energy: 0
   _durability: 10
   _equipper: {fileID: 361155879}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
@@ -15486,7 +15545,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1315371369}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -16118,12 +16177,12 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 424208676}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
   _showUI: 0
   _arc: 180
-  _target: {fileID: 0}
   _projectile: {fileID: 0}
 --- !u!4 &1417826399
 Transform:
@@ -17773,7 +17832,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00010104845}
+  m_AnchoredPosition: {x: 0, y: 0.04844592}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1611239337
@@ -17992,7 +18051,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 594368963}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81770015
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -18187,6 +18246,7 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 361155879}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
@@ -18346,7 +18406,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1703041294}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -19452,12 +19512,12 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 361155879}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
   _showUI: 0
   _arc: 180
-  _target: {fileID: 0}
   _projectile: {fileID: 0}
 --- !u!4 &2010811996
 Transform:
@@ -19747,7 +19807,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00013125301}
+  m_AnchoredPosition: {x: 0, y: 0.048415527}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &2064293340
@@ -20081,7 +20141,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 714580066}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.83480155
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -20459,12 +20519,12 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 424208676}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
   _showUI: 0
   _arc: 180
-  _target: {fileID: 0}
   _projectile: {fileID: 0}
 --- !u!4 &2134386376
 Transform:
@@ -20486,7 +20546,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1326
+  m_Name: pb_Mesh-1338
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -20726,7 +20786,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 948549184}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.81770015
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -21360,7 +21420,7 @@ MonoBehaviour:
     id: 0
   _initialAI: {fileID: 11400000, guid: 4b4647d3e66473c4f8c32220ecb98522, type: 2}
   _aiEnabled: 1
-  _target: {fileID: 0}
+  _selected: {fileID: 0}
   _sector: {fileID: 0}
   _detected: []
   _docked: []
@@ -21420,12 +21480,12 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 2869013932341164397}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
   _showUI: 0
   _arc: 180
-  _target: {fileID: 0}
   _projectile: {fileID: 0}
 --- !u!1 &2869013932575112533
 GameObject:
@@ -21475,6 +21535,7 @@ MonoBehaviour:
   _energy: 0
   _durability: 10
   _equipper: {fileID: 2869013932341164397}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
@@ -21513,12 +21574,12 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 2869013932341164397}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
   _showUI: 0
   _arc: 180
-  _target: {fileID: 0}
   _projectile: {fileID: 0}
 --- !u!1 &2869013932995593082
 GameObject:
@@ -21599,6 +21660,7 @@ MonoBehaviour:
   _energy: 0
   _durability: 10
   _equipper: {fileID: 2869013932341164397}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
@@ -21635,12 +21697,12 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 2869013932341164397}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
   _showUI: 0
   _arc: 180
-  _target: {fileID: 0}
   _projectile: {fileID: 0}
 --- !u!1 &2869013933386074047
 GameObject:
@@ -21807,12 +21869,12 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 2869013932341164397}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
   _showUI: 0
   _arc: 180
-  _target: {fileID: 0}
   _projectile: {fileID: 0}
 --- !u!1 &2869013933933264912
 GameObject:
@@ -21862,6 +21924,7 @@ MonoBehaviour:
   _energy: 0
   _durability: 10
   _equipper: {fileID: 2869013932341164397}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}
@@ -21897,6 +21960,7 @@ MonoBehaviour:
   _energy: 0
   _durability: 0
   _equipper: {fileID: 2869013932341164397}
+  _target: {fileID: 0}
   _currentState: 0
   _targetState: 0
   _charge: {fileID: 0}

@@ -15,7 +15,9 @@ public class StructureSO : ItemSO {
     public float Hull;
     public float InventorySize;
     public float SensorStrength;
+    public float ScannerStrength;
     public float Detectability;
+    public float SignatureSize;
     public float DockingBaySize;
     public StructureDestroyedEventChannelSO OnDestroyedChannel;
     public float DropPercentage;

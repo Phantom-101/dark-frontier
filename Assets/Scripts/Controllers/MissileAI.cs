@@ -21,9 +21,9 @@ public class MissileAI : AI {
 
     public void SetMissile (MissileSO missile) { _missile = missile; }
 
-    public void SetLauncher (LauncherSO launcher) {
+    public void SetLauncher (LauncherSO launcher, float lockProgress) {
 
-        _damageMultiplier = launcher.DamageMultiplier;
+        _damageMultiplier = new DamageProfile (launcher.DamageMultiplier, lockProgress / 100);
         _rangeMultiplier = launcher.RangeMultiplier;
 
         _structure.AddStatModifier (new StructureStatModifier ("Launcher Range Modifier", "linear_speed_multiplier", _rangeMultiplier, StructureStatModifierType.Multiplicative, 100));
