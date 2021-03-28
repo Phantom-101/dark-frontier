@@ -65,7 +65,7 @@ public class EngineSO : EquipmentSO {
         }
         // Angular
         for (int d = 0; d < 3; d++) {
-            float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity)[d] / MaxAngularSpeed;
+            float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity * Mathf.Rad2Deg)[d] / MaxAngularSpeed;
             float dif = engine.Settings[1][d] - cur;
             float mul = Mathf.Pow (Mathf.Abs (dif), InertialFactor) * Mathf.Sign (dif);
             res[1][d] = mul > 0 ? mul * AngularForce[0][d] : -mul * AngularForce[1][d];
@@ -90,7 +90,7 @@ public class EngineSO : EquipmentSO {
         }
         // Angular
         for (int d = 0; d < 3; d++) {
-            float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity)[d] / MaxAngularSpeed;
+            float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity * Mathf.Rad2Deg)[d] / MaxAngularSpeed;
             float dif = engine.Settings[1][d] - cur;
             float mul = Mathf.Pow (Mathf.Abs (dif), InertialFactor) * Mathf.Sign (dif);
             res += mul > 0 ? mul * AngularConsumption[0][d] : -mul * AngularConsumption[1][d];
