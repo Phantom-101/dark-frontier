@@ -1,0 +1,622 @@
+fileFormatVersion: 2
+guid: 4a8f875a8241f034f85fd99cf3eee1db
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7451771499657765821
+    second: Unlock_0
+  - first:
+      213: 1597167082804043468
+    second: Unlock_1
+  - first:
+      213: 4960712328845767599
+    second: Unlock_2
+  - first:
+      213: -4009958059853039726
+    second: Unlock_3
+  - first:
+      213: 2744383178465240054
+    second: Unlock_4
+  - first:
+      213: -8067401939426602366
+    second: Unlock_5
+  - first:
+      213: 1105067178119570217
+    second: Unlock_6
+  - first:
+      213: -5573252049762133710
+    second: Unlock_7
+  - first:
+      213: -5627593885012932572
+    second: Unlock_8
+  - first:
+      213: -5974836759650560201
+    second: Unlock_9
+  - first:
+      213: -4583422158358381605
+    second: Unlock_10
+  - first:
+      213: -1672077109082055516
+    second: Unlock_11
+  - first:
+      213: 1002608285037081642
+    second: Unlock_12
+  - first:
+      213: -4673453240706985649
+    second: Unlock_13
+  - first:
+      213: 2620630376329806324
+    second: Unlock_14
+  - first:
+      213: 7787001985632952361
+    second: Unlock_15
+  - first:
+      213: -3344109541669765412
+    second: Unlock_16
+  - first:
+      213: -7040018320799880105
+    second: Unlock_17
+  - first:
+      213: -5342184269542706308
+    second: Unlock_18
+  - first:
+      213: 7514702305661707078
+    second: Unlock_19
+  - first:
+      213: -7877514775327675889
+    second: Unlock_20
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Unlock_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db32b70a2b20a6760800000000000000
+      internalID: 7451771499657765821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_1
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cce5b79eff64a2610800000000000000
+      internalID: 1597167082804043468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_2
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa3b0c1849df7d440800000000000000
+      internalID: 4960712328845767599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_3
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 297be36e364c958c0800000000000000
+      internalID: -4009958059853039726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_4
+      rect:
+        serializedVersion: 2
+        x: 548
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f36affd5f1061620800000000000000
+      internalID: 2744383178465240054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_5
+      rect:
+        serializedVersion: 2
+        x: 685
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2821e24dda4da0090800000000000000
+      internalID: -8067401939426602366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_6
+      rect:
+        serializedVersion: 2
+        x: 822
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 923a2cc5ebcf55f00800000000000000
+      internalID: 1105067178119570217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_7
+      rect:
+        serializedVersion: 2
+        x: 959
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 239d5320ac4d7a2b0800000000000000
+      internalID: -5573252049762133710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_8
+      rect:
+        serializedVersion: 2
+        x: 1096
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 428c4a78d25c6e1b0800000000000000
+      internalID: -5627593885012932572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_9
+      rect:
+        serializedVersion: 2
+        x: 1233
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73715168f9d151da0800000000000000
+      internalID: -5974836759650560201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_10
+      rect:
+        serializedVersion: 2
+        x: 1370
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdbf46bb4d96460c0800000000000000
+      internalID: -4583422158358381605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_11
+      rect:
+        serializedVersion: 2
+        x: 1507
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ac1a147ab69bc8e0800000000000000
+      internalID: -1672077109082055516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_12
+      rect:
+        serializedVersion: 2
+        x: 1644
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a24bf765ceaf9ed00800000000000000
+      internalID: 1002608285037081642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_13
+      rect:
+        serializedVersion: 2
+        x: 1781
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f411341e90f842fb0800000000000000
+      internalID: -4673453240706985649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_14
+      rect:
+        serializedVersion: 2
+        x: 1918
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f18cbc41795e5420800000000000000
+      internalID: 2620630376329806324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_15
+      rect:
+        serializedVersion: 2
+        x: 2055
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 920e9e27c0df01c60800000000000000
+      internalID: 7787001985632952361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_16
+      rect:
+        serializedVersion: 2
+        x: 2192
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cde77c6f6165791d0800000000000000
+      internalID: -3344109541669765412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_17
+      rect:
+        serializedVersion: 2
+        x: 2329
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75c2b7803a4dc4e90800000000000000
+      internalID: -7040018320799880105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_18
+      rect:
+        serializedVersion: 2
+        x: 2466
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c733a3106bfbcd5b0800000000000000
+      internalID: -5342184269542706308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_19
+      rect:
+        serializedVersion: 2
+        x: 2603
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64366c1bee5994860800000000000000
+      internalID: 7514702305661707078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unlock_20
+      rect:
+        serializedVersion: 2
+        x: 2740
+        y: 0
+        width: 137.14285
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0ae3b77c027da290800000000000000
+      internalID: -7877514775327675889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 51bf89270b47d40469ffe9185ca993d5
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

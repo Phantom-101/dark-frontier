@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class LockedTargetUI : MonoBehaviour {
@@ -46,7 +47,8 @@ public class LockedTargetUI : MonoBehaviour {
         }
 
         _hull.fillAmount = _structure.Hull / _structure.Profile.Hull / 2;
-        ShieldSlot shield = _structure.GetEquipment<ShieldSlot> ()[0];
+        List<ShieldSlot> shields = _structure.GetEquipment<ShieldSlot> ();
+        ShieldSlot shield = shields.Count > 0 ? shields[0] : null;
         if (shield != null && shield.Shield != null) _shield.fillAmount = shield.Strength / shield.Shield.MaxStrength / 2;
         else _shield.fillAmount = 0;
         float fa = player.Locks[_structure] / 400;

@@ -20,12 +20,12 @@ MonoBehaviour:
   Usable: 0
   Tier: 1
   Size: 0
-  EnergyStorage: 1
+  EnergyStorage: 25
   EnergyRechargeRate: 5
   Durability: 10
   Wear: 0
   Activatable: 1
-  AutomaticallyRepeat: 1
+  AutomaticallyRepeat: 0
   RequireTarget: 1
   RequireCharge: 1
   Charges:

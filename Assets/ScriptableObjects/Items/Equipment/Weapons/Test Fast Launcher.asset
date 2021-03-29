@@ -29,13 +29,13 @@ MonoBehaviour:
   RequireTarget: 1
   RequireCharge: 1
   Charges:
-  - {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c, type: 2}
+  - {fileID: 11400000, guid: 739d9e3a7c76de0499f54f9d9c9f7e33, type: 2}
   ShowUI: 0
   DamageMultiplier:
-    DamageAmount: 5
+    DamageAmount: 1
     ShieldEffectiveness: 1
     ShieldPenetration: 0
     ShieldBypass: 0
     HullEffectiveness: 1
-  RangeMultiplier: 5
-  Spread: 0
+  RangeMultiplier: 1
+  Spread: 10

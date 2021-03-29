@@ -16,15 +16,15 @@ MonoBehaviour:
   Description: A light warhead.
   Id: items.charges.missiles.light-missile
   Icon: {fileID: 21300000, guid: 34502f7e93de60d40ac817b2a0f12f4a, type: 3}
-  Size: 0.1
+  Volume: 0
   Usable: 0
   MissileStructure: {fileID: 11400000, guid: 309930371c538784e99a1ce8bc180a91, type: 2}
   HeadingAllowance: 5
   DetonationRange: 1.5
   Damage:
-    DamageAmount: 50
+    DamageAmount: 250
     ShieldEffectiveness: 1
     ShieldPenetration: 0.3
     ShieldBypass: 0.2
     HullEffectiveness: 1
-  Range: 500
+  Range: 1000
