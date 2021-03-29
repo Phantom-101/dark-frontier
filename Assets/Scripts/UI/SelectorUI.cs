@@ -58,10 +58,7 @@ public class SelectorUI : MonoBehaviour {
                     LeanTween.value (gameObject, 1, 0, 0.5f).setOnUpdateParam (gameObject).setOnUpdateObject ((float value, object obj) => {
                         if (_anim == null || _anim.gameObject == null) return;
                         Image img = _anim.GetComponent<Image> ();
-                        if (img == null) return;
-                        Color c = img.color;
-                        c.a = value;
-                        img.color = c;
+                        SetAlpha (img, value);
                     });
                     Destroy (gameObject, 1);
                     return;
@@ -84,7 +81,19 @@ public class SelectorUI : MonoBehaviour {
             Vector3 screen = cam.WorldToScreenPoint (Structure.transform.position);
             Vector3 local = transform.parent.InverseTransformPoint (screen);
             transform.localPosition = local;
+            Image img = _anim.GetComponent<Image> ();
+            if (local.z > 0) SetAlpha (img, 1);
+            else SetAlpha (img, 0);
         }
+
+    }
+
+    private void SetAlpha (Image img, float a) {
+
+        if (img == null) return;
+        Color c = img.color;
+        c.a = a;
+        img.color = c;
 
     }
 

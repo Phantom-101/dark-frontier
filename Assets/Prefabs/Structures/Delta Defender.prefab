@@ -88,6 +88,61 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 12.596352, y: 26.898766, z: 78.8123}
   m_Center: {x: -0.385746, y: 0.32219505, z: -15.22892}
+--- !u!1 &1652723439414488874
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 648438712386321934}
+  - component: {fileID: 3267405386010158877}
+  m_Layer: 0
+  m_Name: Turret
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &648438712386321934
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652723439414488874}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 20, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2869013933443130346}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3267405386010158877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652723439414488874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slotSize: 0
+  _equipment: {fileID: 0}
+  _energy: 0
+  _durability: 0
+  _equipper: {fileID: 2869013932428447120}
+  _target: {fileID: 0}
+  _currentState: 0
+  _targetState: 0
+  _charge: {fileID: 0}
+  _showUI: 1
+  _arc: 360
+  _projectile: {fileID: 0}
 --- !u!1 &2019520047013029414
 GameObject:
   m_ObjectHideFlags: 0
@@ -9875,10 +9930,8 @@ MonoBehaviour:
   - {fileID: 2869013932910226454}
   - {fileID: 2869013934095021291}
   - {fileID: 2869013932810373259}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 3125990135425983647}
+  - {fileID: 3267405386010158877}
   _inventory:
     reorderableList:
       canAdd: 1
@@ -10091,6 +10144,8 @@ Transform:
   - {fileID: 6301218499175034379}
   - {fileID: 3059185677010520255}
   - {fileID: 3487047665977279189}
+  - {fileID: 8958893918886753871}
+  - {fileID: 648438712386321934}
   m_Father: {fileID: 2869013932428447121}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10349,6 +10404,61 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 80, y: 7.306385, z: 31.114365}
   m_Center: {x: 0, y: -7.469904, z: 13.258728}
+--- !u!1 &4646734014858552745
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8958893918886753871}
+  - component: {fileID: 3125990135425983647}
+  m_Layer: 0
+  m_Name: Turret
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8958893918886753871
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4646734014858552745}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -20, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2869013933443130346}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3125990135425983647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4646734014858552745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slotSize: 0
+  _equipment: {fileID: 0}
+  _energy: 0
+  _durability: 0
+  _equipper: {fileID: 2869013932428447120}
+  _target: {fileID: 0}
+  _currentState: 0
+  _targetState: 0
+  _charge: {fileID: 0}
+  _showUI: 1
+  _arc: 360
+  _projectile: {fileID: 0}
 --- !u!1 &5332621359681319714
 GameObject:
   m_ObjectHideFlags: 0
