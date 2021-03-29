@@ -15,12 +15,12 @@ MonoBehaviour:
   Name: Delta Defender
   Description: A large warship built by the Delta Navy to protect its interests.
   Id: items.structures.delta-defender
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 25dfa810c9f23844ea103f03c2c5aab7, type: 3}
   Volume: 0
   Usable: 0
   Prefab: {fileID: 2869013932428447122, guid: 01d3b3e41279c74489c131c0b41597bb, type: 3}
-  ApparentSize: 100
-  HullWireframe: {fileID: 21300000, guid: 5f730e73aeefc3341ac08b3b74b7d511, type: 3}
+  ApparentSize: 180
+  HullWireframe: {fileID: 21300000, guid: d064c0cb94318f742888f9dde0a38aff, type: 3}
   WorldToUIScale: 0.90476
   ShowBlip: 1
   DestructionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
