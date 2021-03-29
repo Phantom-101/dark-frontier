@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Structure : MonoBehaviour {
@@ -123,24 +124,28 @@ public class Structure : MonoBehaviour {
 
     public float GetStatBaseValue (string name) {
 
+        if (!_stats.ContainsKey (name)) return 0;
         return _stats[name].GetBaseValue ();
 
     }
 
     public float GetStatAppliedValue (string name) {
 
+        if (!_stats.ContainsKey (name)) return 0;
         return _stats[name].GetAppliedValue ();
 
     }
 
     public void AddStatModifier (StructureStatModifier modifier) {
 
+        if (!_stats.ContainsKey (modifier.GetTarget ())) return;
         _stats[modifier.GetTarget ()].AddModifier (modifier);
 
     }
 
     public void RemoveStatModifier (StructureStatModifier modifier) {
 
+        if (!_stats.ContainsKey (modifier.GetTarget ())) return;
         _stats[modifier.GetTarget ()].GetModifiers ().RemoveAll (m => m.GetName () == modifier.GetName ());
 
     }

@@ -47,13 +47,13 @@ public class FactionManager : MonoBehaviour {
         List<FactionSaveData> saveData = new List<FactionSaveData> ();
         _factions.ForEach (faction => { saveData.Add (faction.GetSaveData ()); });
 
-        SerializationManager.Save (Application.persistentDataPath + "/saves/" + saveName + "/" + timestamp, "factions.save", saveData);
+        SerializationManager.Save (Application.persistentDataPath + "/saves/" + saveName + "/" + timestamp, "factions.save", JsonHelper.ToJson (saveData));
 
     }
 
-    public void LoadGame (object saveData) {
+    public void LoadGame (string saveData) {
 
-        List<FactionSaveData> factions = saveData as List<FactionSaveData>;
+        List<FactionSaveData> factions = JsonHelper.ListFromJson<FactionSaveData> (saveData);
 
         _factions = new List<Faction> ();
 

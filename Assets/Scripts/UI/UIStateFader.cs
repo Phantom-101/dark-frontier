@@ -22,6 +22,12 @@ public class UIStateFader : MonoBehaviour {
 
     }
 
+    private void OnDestroy () {
+
+        _changed.OnEventRaised -= OnUIStateChanged;
+
+    }
+
     private void Initialize () {
 
         if (_group == null) {

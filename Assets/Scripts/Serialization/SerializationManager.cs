@@ -1,48 +1,33 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 public class SerializationManager {
 
-    public static bool Save (string directoryPath, string saveName, object saveData) {
-
-        BinaryFormatter formatter = GetBinaryFormatter ();
+    public static bool Save (string directoryPath, string saveName, string saveData) {
 
         if (!Directory.Exists (directoryPath)) Directory.CreateDirectory (directoryPath);
 
         string path = directoryPath + "/" + saveName;
         FileStream file = File.Create (path);
-        formatter.Serialize (file, saveData);
         file.Close ();
+        File.WriteAllText (path, saveData);
 
         return true;
 
     }
 
-    public static object Load (string path) {
+    public static string Load (string path) {
 
-        if (!File.Exists (path)) return null;
+        if (!File.Exists (path)) return "";
 
-        BinaryFormatter formatter = GetBinaryFormatter ();
-
-        FileStream file = File.Open (path, FileMode.Open);
-        try {
-
-            object save = formatter.Deserialize (file);
-            file.Close ();
-            return save;
-
-        } catch {
-
-            Debug.LogErrorFormat ("Failed to load file at {0}", path);
-            file.Close ();
-            return null;
-
-        }
+        return File.ReadAllText (path);
 
     }
 
+    [Obsolete ("Do not use BinaryFormatter! It is prone to security vulnerabilities. Use JsonUtility instead.", true)]
     public static BinaryFormatter GetBinaryFormatter () {
 
         BinaryFormatter formatter = new BinaryFormatter ();

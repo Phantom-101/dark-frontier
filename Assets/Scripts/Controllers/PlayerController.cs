@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private GraphicRaycaster _graphicsRaycaster;
     [SerializeField] private EventSystem _eventSystem;
 
-    private bool _rev;
+    [SerializeField] private bool _rev;
 
     private static PlayerController _instance;
 
@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour {
 
     public void SetFwd (float setting) {
 
-        if (!_rev) _player.GetEquipment<EngineSlot> ()[0].SetSetting (0, 2, setting);
+        if (!_rev || setting == -1) _player.GetEquipment<EngineSlot> ()[0].SetSetting (0, 2, setting);
 
     }
 
@@ -87,8 +87,9 @@ public class PlayerController : MonoBehaviour {
 
     private bool ClickingUI () {
 
-        PointerEventData ped = new PointerEventData (_eventSystem);
-        ped.position = Input.mousePosition;
+        PointerEventData ped = new PointerEventData (_eventSystem) {
+            position = Input.mousePosition
+        };
         List<RaycastResult> res = new List<RaycastResult> ();
         _graphicsRaycaster.Raycast (ped, res);
         return res.Count > 0;
