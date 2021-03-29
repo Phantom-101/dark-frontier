@@ -201,13 +201,13 @@ public class StructureManager : MonoBehaviour {
         List<StructureSaveData> saveData = new List<StructureSaveData> ();
         _structures.ForEach (structure => { saveData.Add (structure.GetSaveData ()); });
 
-        SerializationManager.Save (Application.persistentDataPath + "/saves/" + saveName + "/" + timestamp, "structures.save", saveData);
+        SerializationManager.Save (Application.persistentDataPath + "/saves/" + saveName + "/" + timestamp, "structures.save", JsonHelper.ToJson (saveData));
 
     }
 
-    public void LoadGame (object saveData) {
+    public void LoadGame (string saveData) {
 
-        List<StructureSaveData> structures = saveData as List<StructureSaveData>;
+        List<StructureSaveData> structures = JsonHelper.ListFromJson<StructureSaveData> (saveData);
 
         _structures.ForEach (structure => { Destroy (structure.gameObject); });
         _structures = new List<Structure> ();

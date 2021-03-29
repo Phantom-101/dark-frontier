@@ -40,13 +40,13 @@ public class SectorManager : MonoBehaviour {
         List<SectorSaveData> saveData = new List<SectorSaveData> ();
         _sectors.ForEach (sector => { saveData.Add (sector.GetSaveData ()); });
 
-        SerializationManager.Save (Application.persistentDataPath + "/saves/" + saveName + "/" + timestamp, "sectors.save", saveData);
+        SerializationManager.Save (Application.persistentDataPath + "/saves/" + saveName + "/" + timestamp, "sectors.save", JsonHelper.ToJson (saveData));
 
     }
 
-    public void LoadGame (object saveData) {
+    public void LoadGame (string saveData) {
 
-        List<SectorSaveData> sectors = saveData as List<SectorSaveData>;
+        List<SectorSaveData> sectors = JsonHelper.ListFromJson<SectorSaveData> (saveData);
 
         _sectors.ForEach (sector => { Destroy (sector.gameObject); });
         _sectors = new List<Sector> ();
