@@ -31,7 +31,7 @@ MonoBehaviour:
   Charges: []
   ShowUI: 0
   MaxLinearSpeed: 100
-  MaxAngularSpeed: 50
+  MaxAngularSpeed: 20
   LinearForce:
     c0:
       x: 500
