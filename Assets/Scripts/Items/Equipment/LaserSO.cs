@@ -20,7 +20,7 @@ public class LaserSO : WeaponSO {
 
     public override void OnCycleStart (EquipmentSlot slot) {
 
-        slot.Target.TakeDamage (new DamageProfile (Damage, slot.Equipper.Locks[slot.Target]), slot.transform.position);
+        slot.Target.TakeDamage (new DamageProfile (Damage, slot.Equipper.Locks[slot.Target] / 100), slot.transform.position);
 
     }
 

@@ -31,7 +31,7 @@ MonoBehaviour:
   Charges: []
   ShowUI: 0
   Damage:
-    DamageAmount: 10
+    DamageAmount: 100
     ShieldEffectiveness: 1
     ShieldPenetration: 0
     ShieldBypass: 0
