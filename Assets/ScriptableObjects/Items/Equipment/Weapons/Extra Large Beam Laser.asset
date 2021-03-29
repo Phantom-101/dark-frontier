@@ -10,32 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41d52547462b3ff4e9cc0c2c95033de5, type: 3}
-  m_Name: Plasma beam weapon
+  m_Name: Extra Large Beam Laser
   m_EditorClassIdentifier: 
-  Name: 
+  Name: Extra Large Beam Laser
   Description: 
-  Id: 
-  Icon: {fileID: 0}
-  Volume: 0
+  Id: items.equipment.weapons.extra-large-beam-laser
+  Icon: {fileID: 21300000, guid: 470213ad1cffcfb4ebc0c5c9a34ec9a4, type: 3}
+  Volume: 1
   Usable: 0
-  Tier: 0
-  Size: 0
-  EnergyStorage: 0
-  EnergyRechargeRate: 0
-  Durability: 0
+  Tier: 9
+  Size: 4
+  EnergyStorage: 480
+  EnergyRechargeRate: 480
+  Durability: 10
   Wear: 0
-  Activatable: 0
-  AutomaticallyRepeat: 0
+  Activatable: 1
+  AutomaticallyRepeat: 1
   RequireTarget: 1
   RequireCharge: 0
   Charges: []
-  ShowUI: 0
+  ShowUI: 1
   Damage:
-    DamageAmount: 0
+    DamageAmount: 160
     ShieldEffectiveness: 1
     ShieldPenetration: 0
     ShieldBypass: 0
     HullEffectiveness: 1
-  Range: 0
-  LaserVFX: {fileID: 0}
-  LaserWidth: 0
+  Range: 3038
+  LaserVFX: {fileID: 930999058288108214, guid: a55d7e9bdfdafaf49bea6eba1e2302d8, type: 3}
+  LaserWidth: 4

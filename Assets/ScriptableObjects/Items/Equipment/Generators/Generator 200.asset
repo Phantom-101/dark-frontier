@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cef603527002a5048b7565eeebbe2a92, type: 3}
-  m_Name: Test Generator
+  m_Name: Generator 200
   m_EditorClassIdentifier: 
   Name: 
   Description: 
@@ -19,7 +19,7 @@ MonoBehaviour:
   Volume: 0
   Usable: 0
   Tier: 1
-  Size: 0
+  Size: 2
   EnergyStorage: 0
   EnergyRechargeRate: 0
   Durability: 10
@@ -30,4 +30,4 @@ MonoBehaviour:
   RequireCharge: 0
   Charges: []
   ShowUI: 0
-  GenerationRate: 50
+  GenerationRate: 200

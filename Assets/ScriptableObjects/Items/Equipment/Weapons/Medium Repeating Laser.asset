@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41d52547462b3ff4e9cc0c2c95033de5, type: 3}
+  m_Name: Medium Repeating Laser
+  m_EditorClassIdentifier: 
+  Name: Medium Repeating Laser
+  Description: 
+  Id: items.equipment.weapons.medium-repeating-laser
+  Icon: {fileID: 21300000, guid: 470213ad1cffcfb4ebc0c5c9a34ec9a4, type: 3}
+  Volume: 1
+  Usable: 0
+  Tier: 5
+  Size: 2
+  EnergyStorage: 120
+  EnergyRechargeRate: 80
+  Durability: 10
+  Wear: 0
+  Activatable: 1
+  AutomaticallyRepeat: 1
+  RequireTarget: 1
+  RequireCharge: 0
+  Charges: []
+  ShowUI: 1
+  Damage:
+    DamageAmount: 120
+    ShieldEffectiveness: 1
+    ShieldPenetration: 0
+    ShieldBypass: 0
+    HullEffectiveness: 1
+  Range: 900
+  LaserVFX: {fileID: 930999058288108214, guid: 1a53d00be0c0d0f49a05fab213c2b948, type: 3}
+  LaserWidth: 3

@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour {
 
                     GameObject obj = hit.collider.transform.parent.gameObject;
                     Structure str = obj.GetComponent<Structure> ();
-                    if (str != _player) _player.Selected = str;
+                    if (str != _player && _player.Detected.Contains (str)) _player.Selected = str;
 
                 }
 

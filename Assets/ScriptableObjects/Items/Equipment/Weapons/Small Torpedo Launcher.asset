@@ -10,27 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22549a55720466d4d93b08082781b757, type: 3}
-  m_Name: Test Fast Launcher
+  m_Name: Small Torpedo Launcher
   m_EditorClassIdentifier: 
-  Name: Test Fast Launcher
+  Name: Small Torpedo Launcher
   Description: 
-  Id: 
+  Id: items.equipment.weapons.small-torpedo-launcher
   Icon: {fileID: 21300000, guid: 470213ad1cffcfb4ebc0c5c9a34ec9a4, type: 3}
-  Volume: 0
+  Volume: 1
   Usable: 0
   Tier: 1
-  Size: 0
-  EnergyStorage: 5
-  EnergyRechargeRate: 5
+  Size: 1
+  EnergyStorage: 320
+  EnergyRechargeRate: 40
   Durability: 10
   Wear: 0
   Activatable: 1
-  AutomaticallyRepeat: 0
+  AutomaticallyRepeat: 1
   RequireTarget: 1
   RequireCharge: 1
   Charges:
-  - {fileID: 11400000, guid: 739d9e3a7c76de0499f54f9d9c9f7e33, type: 2}
-  ShowUI: 0
+  - {fileID: 11400000, guid: edeb3eb540197f54bbcdaeb9cfd0a75e, type: 2}
+  ShowUI: 1
   DamageMultiplier:
     DamageAmount: 1
     ShieldEffectiveness: 1
@@ -38,4 +38,4 @@ MonoBehaviour:
     ShieldBypass: 0
     HullEffectiveness: 1
   RangeMultiplier: 1
-  Spread: 10
+  Spread: 0
