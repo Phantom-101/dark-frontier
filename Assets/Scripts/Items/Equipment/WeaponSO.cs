@@ -10,11 +10,8 @@
             if (slot.TargetState) {
 
                 slot.Target = slot.Equipper.Selected;
-                if (CanCycleStart (slot)) {
-
-                    slot.CurrentState = true;
-
-                } else slot.TargetState = false;
+                if (CanCycleStart (slot)) slot.CurrentState = true;
+                else slot.TargetState = false;
 
             } else slot.CurrentState = false;
 
@@ -35,6 +32,8 @@
                             OnCycleStart (slot);
                             slot.Durability -= Wear;
 
+                            if (!slot.Equipment.AutomaticallyRepeat) slot.TargetState = false;
+
                         } else slot.TargetState = false;
 
                     } else {
@@ -42,6 +41,8 @@
                         slot.Energy = 0;
                         OnCycleStart (slot);
                         slot.Durability -= Wear;
+
+                        if (!slot.Equipment.AutomaticallyRepeat) slot.TargetState = false;
 
                     }
 

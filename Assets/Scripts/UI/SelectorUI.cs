@@ -10,10 +10,13 @@ public class SelectorUI : MonoBehaviour {
     [SerializeField] private bool _current = false;
     [SerializeField] private int _target = 0;
     [SerializeField] private bool _destroy = false;
+    [SerializeField] private float _tweenAlpha = 1;
+    [SerializeField] private float _alphaMult = 1;
 
     PlayerController _pc;
     CameraController _cc;
     Button _button;
+    Image _img;
 
     private void Start () {
 
@@ -31,6 +34,7 @@ public class SelectorUI : MonoBehaviour {
             _anim = Instantiate (_unlock, transform).GetComponent<SpriteAnimationUI> ();
             _anim.Elapsed = 0;
             _anim.UpdateSprite ();
+            _img = _anim.GetComponent<Image> ();
 
         } else {
 
@@ -55,10 +59,12 @@ public class SelectorUI : MonoBehaviour {
                 _anim.TimeScale = 1;
                 if (!_current && _destroy && _anim.Completed ()) {
                     Destroy (this);
-                    LeanTween.value (gameObject, 1, 0, 0.5f).setOnUpdateParam (gameObject).setOnUpdateObject ((float value, object obj) => {
-                        if (_anim == null || _anim.gameObject == null) return;
-                        Image img = _anim.GetComponent<Image> ();
-                        SetAlpha (img, value);
+                    LeanTween.value (gameObject, 1, 0, 0.2f).setOnUpdateParam (gameObject).setOnUpdateObject ((float value, object obj) => {
+                        _tweenAlpha = value;
+                        if (_img == null) return;
+                        Color c = _img.color;
+                        c.a = _tweenAlpha * _alphaMult;
+                        _img.color = c;
                     });
                     Destroy (gameObject, 1);
                     return;
@@ -71,6 +77,7 @@ public class SelectorUI : MonoBehaviour {
                     _anim = Instantiate (_current ? _lock : _unlock, transform).GetComponent<SpriteAnimationUI> ();
                     _anim.Elapsed = 0;
                     _anim.UpdateSprite ();
+                    _img = _anim.GetComponent<Image> ();
                 }
             }
 
@@ -80,20 +87,21 @@ public class SelectorUI : MonoBehaviour {
             Camera cam = _cc.Camera;
             Vector3 screen = cam.WorldToScreenPoint (Structure.transform.position);
             Vector3 local = transform.parent.InverseTransformPoint (screen);
-            transform.localPosition = local;
-            Image img = _anim.GetComponent<Image> ();
-            if (local.z > 0) SetAlpha (img, 1);
-            else SetAlpha (img, 0);
+            transform.localPosition = new Vector3 (local.x, local.y);
+            if (local.z > 0) _alphaMult = 1;
+            else _alphaMult = 0;
         }
+
+        SetAlpha ();
 
     }
 
-    private void SetAlpha (Image img, float a) {
+    private void SetAlpha () {
 
-        if (img == null) return;
-        Color c = img.color;
-        c.a = a;
-        img.color = c;
+        if (_img == null) return;
+        Color c = _img.color;
+        c.a = _tweenAlpha * _alphaMult;
+        _img.color = c;
 
     }
 
