@@ -8,7 +8,7 @@ public class LocationUI : MonoBehaviour {
     private void Update () {
 
         Structure player = PlayerController.GetInstance ().GetPlayer ();
-
+        if (player == null) return;
         _text.text = player.Profile.Name + " \"" + player.gameObject.name + "\" (" + player.Sector.gameObject.name + ")";
 
     }

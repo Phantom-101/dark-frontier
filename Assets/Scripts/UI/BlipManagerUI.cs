@@ -10,6 +10,7 @@ public class BlipManagerUI : MonoBehaviour {
     private void Update () {
 
         Structure player = PlayerController.GetInstance ().GetPlayer ();
+        if (player == null) return;
         foreach (Structure s in player.Sector.InSector) {
 
             if (s != player && s.Profile.ShowBlip) {

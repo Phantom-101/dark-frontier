@@ -14,6 +14,7 @@ public class SectorManager : MonoBehaviour {
     private void Awake () {
 
         _instance = this;
+        Debug.Log ("SectorManager instance set");
 
     }
 

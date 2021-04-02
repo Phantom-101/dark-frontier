@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Engine 3
   Description: A large engine.
-  Id: items.equipment.engines.engine-500
+  Id: items.equipment.engines.engine-3
   Icon: {fileID: 21300000, guid: 34502f7e93de60d40ac817b2a0f12f4a, type: 3}
   Volume: 0
   Usable: 0

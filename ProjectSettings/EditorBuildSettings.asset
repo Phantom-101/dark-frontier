@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: a79746f449aa6ae428cbc47ea799b1da
+  - enabled: 1
+    path: Assets/Scenes/Omega Ships.unity
+    guid: 77ba7e3a12cb34d49b0b59cfd360a24b
+  - enabled: 1
+    path: Assets/Scenes/Test Start.unity
+    guid: 5b0bcdf9bca32d64eb6a9c83b5026192
   m_configObjects: {}

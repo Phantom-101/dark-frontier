@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cef603527002a5048b7565eeebbe2a92, type: 3}
   m_Name: Test Generator
   m_EditorClassIdentifier: 
-  Name: 
+  Name: Test Generator
   Description: 
-  Id: 
+  Id: items.equipment.generators.test-generator
   Icon: {fileID: 21300000, guid: 506212960e6485b4f86823f1b888cb0d, type: 3}
   Volume: 0
   Usable: 0
