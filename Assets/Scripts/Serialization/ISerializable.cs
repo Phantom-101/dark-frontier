@@ -1,5 +1,5 @@
 ﻿public interface ISerializable<T> {
 
-    StringToStringMap Serialize ();
+    StringToStringDictionary Serialize ();
 
 }
