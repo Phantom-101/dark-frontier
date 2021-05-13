@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class StructureInstance : IStructure, ISerializable<IStructure> {
     public string Id {
@@ -29,6 +31,11 @@ public class StructureInstance : IStructure, ISerializable<IStructure> {
         get;
         private set;
     }
+    public List<IStructureSegment> Segments {
+        get;
+        private set;
+    }
+
     public event OnDestroyedEventHandler OnDestroyed;
 
     public StructureInstance (InterfacedStructureSaveData serialized) {
@@ -39,21 +46,20 @@ public class StructureInstance : IStructure, ISerializable<IStructure> {
         Hitpoints = serialized.Hitpoints;
         SignatureSize = StatSaveDataType.Parse (serialized.SignatureSize) as StatInstance;
         MaxHitpoints = StatSaveDataType.Parse (serialized.MaxHitpoints) as StatInstance;
-    }
-
-    public bool CanInitialize () {
-        return true;
+        Segments = serialized.Segments.ConvertAll ((e) => StructureSegmentSaveDataType.Parse (e) as IStructureSegment);
     }
 
     public ISerialized<IStructure> GetSerialized () { return new InterfacedStructureSaveData (this); }
 
     public void Initialize () {
-        if (!CanInitialize ()) return;
+        if (string.IsNullOrWhiteSpace (Id)) Id = Guid.NewGuid ().ToString ();
+        if (SignatureSize == null) SignatureSize = new StatInstance (0, "Signature Size", "The size of the cross section on a scanner.");
+        if (MaxHitpoints == null) MaxHitpoints = new StatInstance (0, "Max Hitpoints", "The maximum number of hitpoints a structure can have.");
+        if (Segments == null) Segments = new List<IStructureSegment> ();
     }
 
     public void TakeDamage (float amount, IInfo damager) {
-        // TODO change to applied value
-        Hitpoints = Mathf.Clamp (Hitpoints - amount, 0, MaxHitpoints.BaseValue);
+        Hitpoints = Mathf.Clamp (Hitpoints - amount, 0, MaxHitpoints.AppliedValue);
         if (Hitpoints == 0) OnDestroyed?.Invoke (this, damager);
     }
 }

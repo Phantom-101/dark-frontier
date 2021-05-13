@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -10,6 +11,7 @@ public class InterfacedStructureSaveData : SerializedBase<IStructure> {
     public float Hitpoints;
     public string SignatureSize;
     public string MaxHitpoints;
+    public List<string> Segments;
 
     public InterfacedStructureSaveData (StructureInstance serializable) {
         DataType = StructureSaveDataType.Default;
@@ -20,6 +22,7 @@ public class InterfacedStructureSaveData : SerializedBase<IStructure> {
         Hitpoints = serializable.Hitpoints;
         SignatureSize = JsonUtility.ToJson (serializable.SignatureSize);
         MaxHitpoints = JsonUtility.ToJson (serializable.MaxHitpoints);
+        Segments = serializable.Segments.FindAll ((e) => e is ISerializable<IStructureSegment>).ConvertAll ((e) => JsonUtility.ToJson ((e as ISerializable<IStructureSegment>).GetSerialized ()));
     }
 
     public override ISerializable<IStructure> GetSerializable () { return new StructureInstance (this); }

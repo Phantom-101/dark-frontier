@@ -27,12 +27,8 @@ public class EntityPrototype : ScriptableObject, IEntity, IPrototype<IEntity> {
         throw new NotImplementedException ();
     }
 
-    public IInstance<IEntity> GetEntity () {
-        throw new NotImplementedException ();
-    }
+    public IInstance<IEntity> GetEntity () { return Instance; }
 
-    public float GetRelation (IEntity entity) {
-        throw new NotImplementedException ();
-    }
+    public float GetRelation (IEntity entity) { return Relations.ContainsKey (entity.Id) ? Relations[entity.Id] : 0; }
 }
 

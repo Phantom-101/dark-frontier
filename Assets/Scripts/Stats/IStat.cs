@@ -4,7 +4,10 @@ public interface IStat : IIdentifiable, IInfo {
     float BaseValue {
         get;
     }
-    List<IStatModifier> Modifiers {
+    Dictionary<string, IStatModifier> Modifiers {
+        get;
+    }
+    float AppliedValue {
         get;
     }
 }

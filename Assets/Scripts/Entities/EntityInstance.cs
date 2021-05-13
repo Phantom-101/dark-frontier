@@ -26,19 +26,11 @@ public class EntityInstance : IEntity, IInstance<IEntity>, ISerializable<IEntity
         throw new NotImplementedException ();
     }
 
-    public IInstance<IEntity> GetEntity () {
-        throw new NotImplementedException ();
-    }
+    public IInstance<IEntity> GetEntity () { return this; }
 
-    public float GetRelation (IEntity entity) {
-        throw new NotImplementedException ();
-    }
+    public float GetRelation (IEntity entity) { return Relations.ContainsKey (entity.Id) ? Relations[entity.Id] : 0; }
 
     public ISerialized<IEntity> GetSerialized () {
-        throw new NotImplementedException ();
-    }
-
-    public void LoadSaveData (string json) {
         throw new NotImplementedException ();
     }
 }
