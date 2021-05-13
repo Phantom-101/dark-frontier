@@ -1,21 +1,28 @@
 ﻿using System;
 
-public class EntityInstance : IEntity, IInstance<IEntity>, ISavable<IEntity> {
+public class EntityInstance : IEntity, IInstance<IEntity>, ISerializable<IEntity> {
     public StringToFloatDictionary Relations {
         get;
         private set;
     }
-
     public IPrototype<IEntity> Prototype {
+        get;
+        private set;
+    }
+    public string Id {
+        get;
+        private set;
+    }
+    public string Name {
+        get;
+        private set;
+    }
+    public string Description {
         get;
         private set;
     }
 
     public void Control (IControllable controllable) {
-        throw new NotImplementedException ();
-    }
-
-    public void FromPrototype (IPrototype<IEntity> prototype) {
         throw new NotImplementedException ();
     }
 
@@ -27,11 +34,11 @@ public class EntityInstance : IEntity, IInstance<IEntity>, ISavable<IEntity> {
         throw new NotImplementedException ();
     }
 
-    public ISaveData<IEntity> GetSaveData () {
+    public ISerialized<IEntity> GetSerialized () {
         throw new NotImplementedException ();
     }
 
-    public void LoadSaveData (ISaveData<IEntity> data) {
+    public void LoadSaveData (string json) {
         throw new NotImplementedException ();
     }
 }

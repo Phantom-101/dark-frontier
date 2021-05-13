@@ -1,5 +1,5 @@
 ﻿public interface IHitpoints {
-    StructureStat MaxHitpoints {
+    StatInstance MaxHitpoints {
         get;
     }
     float Hitpoints {

@@ -6,10 +6,21 @@ public class EntityPrototype : ScriptableObject, IEntity, IPrototype<IEntity> {
         get;
         private set;
     }
-
     public IInstance<IEntity> Instance {
         get;
-        private set;
+        set;
+    }
+    public string Id {
+        get;
+        set;
+    }
+    public string Name {
+        get;
+        set;
+    }
+    public string Description {
+        get;
+        set;
     }
 
     public void Control (IControllable controllable) {

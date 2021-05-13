@@ -1,6 +1,6 @@
 ﻿public interface ITargetable {
-    // Rename to DetectionCrossSection?
-    StructureStat SignatureSize {
+    // TODO Rename to DetectionCrossSection?
+    StatInstance SignatureSize {
         get;
     }
 }

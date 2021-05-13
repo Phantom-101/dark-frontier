@@ -2,6 +2,4 @@
     IPrototype<T> Prototype {
         get;
     }
-
-    void FromPrototype (IPrototype<T> prototype);
 }

@@ -1,4 +1,4 @@
-﻿public interface IEntity {
+﻿public interface IEntity : IIdentifiable, IInfo {
     StringToFloatDictionary Relations {
         get;
     }
