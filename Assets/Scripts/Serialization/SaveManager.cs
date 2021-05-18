@@ -5,7 +5,7 @@ using UnityEngine;
 public class SaveManager : MonoBehaviour {
 
     [SerializeField] private string _universe;
-    private SaveLoadJob _job;
+    private static SaveLoadJob _job;
 
     [SerializeField] private VoidEventChannelSO _saveGameChannel;
 
@@ -23,11 +23,17 @@ public class SaveManager : MonoBehaviour {
 
         if (_job != null) {
 
+            Debug.Log ("doing job");
+
             if (SectorManager.GetInstance () == null) return;
             if (FactionManager.GetInstance () == null) return;
             if (StructureManager.GetInstance () == null) return;
 
+            Debug.Log ("job started");
+
             string path = Application.persistentDataPath + "/saves/" + _job.Universe + "/" + _job.Save;
+
+            Debug.Log ($"path: {path}");
 
             SectorManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/sectors.save"));
             FactionManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/factions.save"));

@@ -11,6 +11,7 @@ public class FactionManager : MonoBehaviour {
     private void Awake () {
 
         _instance = this;
+        Debug.Log ("FactionManager instance set");
 
         _initialization.ForEach (faction => {
 

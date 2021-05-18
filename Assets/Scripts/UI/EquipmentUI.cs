@@ -12,6 +12,7 @@ public class EquipmentUI : MonoBehaviour {
     private void Update () {
 
         Structure player = PlayerController.GetInstance ().GetPlayer ();
+        if (player == null) return;
 
         foreach (EquipmentSlot key in _indicators.Keys.ToArray ())
             if (!player.Equipment.Contains (key)) {

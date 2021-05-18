@@ -46,5 +46,6 @@ public enum UIState {
     Log,
     SaveSelection,
     Settings,
+    NewGame,
 
 }

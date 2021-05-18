@@ -19,6 +19,7 @@ public class DockUndockButtonUI : MonoBehaviour {
 
     private void Update () {
 
+        if (_pc.GetPlayer () == null) return;
         bool i = _pc.GetPlayer ().CanDockTarget () || _pc.GetPlayer ().CanUndock ();
         _button.interactable = i;
 

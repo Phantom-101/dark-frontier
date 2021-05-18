@@ -69,18 +69,21 @@ public class PlayerController : MonoBehaviour {
 
     public void SetFwd (float setting) {
 
+        if (_player == null) return;
         if (!_rev || setting == -1) _player.GetEquipment<EngineSlot> ()[0].SetSetting (0, 2, setting);
 
     }
 
     public void SetYaw (float setting) {
 
+        if (_player == null) return;
         _player.GetEquipment<EngineSlot> ()[0].SetSetting (1, 1, setting);
 
     }
 
     public void SetPitch (float setting) {
 
+        if (_player == null) return;
         _player.GetEquipment<EngineSlot> ()[0].SetSetting (1, 0, setting);
 
     }

@@ -29,6 +29,7 @@ public class CameraController : MonoBehaviour {
     private void FixedUpdate () {
 
         Structure player = _pc.GetPlayer ();
+        if (player == null) return;
         Transform pt = _anchor?.GetTransform () == null ? player.transform : _anchor.GetTransform ();
 
         if (_target.GetTransform () == null) {
