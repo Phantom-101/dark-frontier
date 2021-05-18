@@ -17,9 +17,6 @@ public class StructureManager : MonoBehaviour {
 
     private void Awake () {
 
-        _instance = this;
-        Debug.Log ("StructureManager instance set");
-
         _invSpawnChannel.OnStructureCreated += OnInvSpawn;
         _siteSpawnChannel.OnStructureCreated += OnSiteSpawn;
         _buySpawnChannel.OnStructureCreated += OnBuySpawn;
@@ -27,6 +24,8 @@ public class StructureManager : MonoBehaviour {
         _shipDestroyedChannel.OnStructureDestroyed += OnShipDestroyed;
         _stationDestroyedChannel.OnStructureDestroyed += OnStationDestroyed;
         _cargoDestroyedChannel.OnStructureDestroyed += OnCargoDestroyed;
+
+        _instance = this;
 
     }
 
