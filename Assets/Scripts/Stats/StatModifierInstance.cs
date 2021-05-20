@@ -28,7 +28,7 @@
         private set;
     }
 
-    public StatModifierInstance (StatModifierSaveData serialized) {
+    public StatModifierInstance (StatModifierSerialized serialized) {
         Value = serialized.Value;
         ModifierType = (StatModifierType) serialized.ModifierType;
         Duration = serialized.Duration;
@@ -37,5 +37,5 @@
         Description = serialized.Description;
     }
 
-    public ISerialized<IStatModifier> GetSerialized () { return new StatModifierSaveData (this); }
+    public ISerialized<IStatModifier> GetSerialized () { return new StatModifierSerialized (this); }
 }

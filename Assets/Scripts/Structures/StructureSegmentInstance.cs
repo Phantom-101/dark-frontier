@@ -20,9 +20,9 @@ public class StructureSegmentInstance : IStructureSegment, ISerializable<IStruct
     }
     public event OnDestroyedEventHandler OnDestroyed;
 
-    public StructureSegmentInstance (StructureSegmentSaveData serialized) {
+    public StructureSegmentInstance (StructureSegmentSerialized serialized) {
         Id = serialized.Id;
-        MaxHitpoints = StatSaveDataType.Parse (serialized.MaxHitpoints) as IStat;
+        MaxHitpoints = StatSerializedParser.Parse (serialized.MaxHitpoints) as IStat;
         Hitpoints = serialized.Hitpoints;
         // TODO get structure from id
     }
@@ -39,6 +39,6 @@ public class StructureSegmentInstance : IStructureSegment, ISerializable<IStruct
         Structure?.TakeDamage (temp - Hitpoints, damager);
     }
 
-    public ISerialized<IStructureSegment> GetSerialized () { return new StructureSegmentSaveData (this); }
+    public ISerialized<IStructureSegment> GetSerialized () { return new StructureSegmentSerialized (this); }
 }
 

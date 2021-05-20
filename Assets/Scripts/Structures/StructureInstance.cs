@@ -45,24 +45,21 @@ public class StructureInstance : IStructure, ISerializable<IStructure> {
     }
     public event OnDestroyedEventHandler OnDestroyed;
 
-    public StructureInstance (InterfacedStructureSaveData serialized) {
+    public StructureInstance (StructureSerialized serialized) {
         Id = serialized.Id;
         Name = serialized.Name;
         Description = serialized.Description;
         // TODO find controller with id
         Hitpoints = serialized.Hitpoints;
-        SignatureSize = StatSaveDataType.Parse (serialized.SignatureSize) as IStat;
-        MaxHitpoints = StatSaveDataType.Parse (serialized.MaxHitpoints) as IStat;
-        ScannerStrength = StatSaveDataType.Parse (serialized.ScannerStrength) as IStat;
-        Segments = serialized.Segments.ConvertAll ((e) => StructureSegmentSaveDataType.Parse (e) as IStructureSegment);
+        SignatureSize = StatSerializedParser.Parse (serialized.SignatureSize) as IStat;
+        MaxHitpoints = StatSerializedParser.Parse (serialized.MaxHitpoints) as IStat;
+        ScannerStrength = StatSerializedParser.Parse (serialized.ScannerStrength) as IStat;
+        Segments = serialized.Segments.ConvertAll (e => StructureSegmentSerializedParser.Parse (e) as IStructureSegment);
         ActiveLocks = new Dictionary<ITargetable, float> ();
-        serialized.ActiveLockIds.ForEach ((id) => {
-            // TODO find ITargetable with id
-            //ActiveLocks[id] = serialized.ActiveLockProgresses[serialized.ActiveLockIds.IndexOf (id)];
-        });
+        // TODO find ITargetable with id and set active locks
     }
 
-    public ISerialized<IStructure> GetSerialized () { return new InterfacedStructureSaveData (this); }
+    public ISerialized<IStructure> GetSerialized () { return new StructureSerialized (this); }
 
     public void Initialize () {
         if (string.IsNullOrWhiteSpace (Id)) Id = Guid.NewGuid ().ToString ();

@@ -42,10 +42,10 @@ public class StatInstance : IStat, ISerializable<IStat> {
         Description = description;
     }
 
-    public StatInstance (StatSaveData serialized) {
+    public StatInstance (StatSerialized serialized) {
         BaseValue = serialized.BaseValue;
         Modifiers = new Dictionary<string, IStatModifier> ();
-        serialized.Modifiers.ConvertAll ((e) => StatModifierSaveDataType.Parse (e) as IStatModifier).ForEach ((e) => {
+        serialized.Modifiers.ConvertAll (e => StatModifierSerializedParser.Parse (e) as IStatModifier).ForEach (e => {
             Modifiers[e.Id] = e;
         });
         Id = serialized.Id;
@@ -53,5 +53,5 @@ public class StatInstance : IStat, ISerializable<IStat> {
         Description = serialized.Description;
     }
 
-    public ISerialized<IStat> GetSerialized () { return new StatSaveData (this); }
+    public ISerialized<IStat> GetSerialized () { return new StatSerialized (this); }
 }
