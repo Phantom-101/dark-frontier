@@ -1,7 +1,7 @@
 ﻿using System;
 
 [Serializable]
-public class EquipmentSlotInstance : ISerializable<IEquipmentSlot> {
+public class EquipmentSlotInstance : IEquipmentSlot, ISerializable<IEquipmentSlot> {
     public EquipmentSO Equipment {
         get;
         private set;
