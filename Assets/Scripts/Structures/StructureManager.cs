@@ -4,6 +4,7 @@ using UnityEngine;
 public class StructureManager : MonoBehaviour {
 
     [SerializeField] private List<Structure> _structures = new List<Structure> ();
+    [SerializeField] private Queue<Structure> _processQueue = new Queue<Structure> ();
 
     [SerializeField] private StructureCreatedEventChannelSO _invSpawnChannel;
     [SerializeField] private StructureCreatedEventChannelSO _siteSpawnChannel;
@@ -32,14 +33,23 @@ public class StructureManager : MonoBehaviour {
 
     private void Update () {
 
-        foreach (Structure structure in _structures.ToArray ()) structure.Detected = null;
-        foreach (Structure structure in _structures.ToArray ()) structure.Tick ();
+        _structures.RemoveAll (e => e == null);
+        _structures.ForEach (e => {
+            e.Tick ();
+            if (!_processQueue.Contains (e))
+                _processQueue.Enqueue (e);
+        });
+        Structure toProcess = null;
+        while (toProcess == null && _processQueue.Count > 0) toProcess = _processQueue.Dequeue ();
+        if (toProcess != null) {
+            toProcess.Detected = null;
+        }
 
     }
 
     private void FixedUpdate () {
 
-        foreach (Structure structure in _structures.ToArray ()) structure.FixedTick ();
+        _structures.ForEach (e => e.FixedTick ());
 
     }
 
