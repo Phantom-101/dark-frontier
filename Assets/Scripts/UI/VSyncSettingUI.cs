@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 
 public class VSyncSettingUI : MonoBehaviour {
+
     [SerializeField] private VoidEventChannelSO _decreaseVSyncCount;
     [SerializeField] private VoidEventChannelSO _increaseVSyncCount;
     [SerializeField] private Text _vSyncText;
@@ -11,6 +12,7 @@ public class VSyncSettingUI : MonoBehaviour {
 
         _vSyncCount = PlayerPrefs.HasKey ("VSyncCount") ? PlayerPrefs.GetInt ("VSyncCount") : 1;
         _vSyncText.text = _vSyncCount.ToString ();
+        QualitySettings.vSyncCount = _vSyncCount;
 
         _decreaseVSyncCount.OnEventRaised += () => { ChangeVSyncCount (-1); };
         _increaseVSyncCount.OnEventRaised += () => { ChangeVSyncCount (1); };
@@ -25,4 +27,5 @@ public class VSyncSettingUI : MonoBehaviour {
         PlayerPrefs.SetInt ("VSyncCount", _vSyncCount);
 
     }
+
 }

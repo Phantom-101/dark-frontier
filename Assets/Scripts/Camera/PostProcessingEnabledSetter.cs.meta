@@ -1,12 +1,12 @@
 fileFormatVersion: 2
-guid: e3d6e836c407e1042991eafe7eb6705d
+guid: 976e9903124aab14a81a584ed47ca3bc
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
   - _postProcessingEnabledToggled: {fileID: 11400000, guid: a89c87bfc13eff64193c23602d2db46d,
       type: 2}
-  - _toggle: {instanceID: 0}
+  - _cameraData: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
