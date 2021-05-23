@@ -18,8 +18,12 @@ public class SelectedUI : MonoBehaviour {
 
         if (_instantiated != null) Destroy (_instantiated);
 
-        _instantiated = Instantiate (_infoPanelPrefab, _transform);
-        _instantiated.GetComponent<SelectedInfoUI> ().SetStructure (PlayerController.GetInstance ().GetPlayer ().Selected);
+        if (PlayerController.GetInstance ().GetPlayer ().Selected != null) {
+
+            _instantiated = Instantiate (_infoPanelPrefab, _transform);
+            _instantiated.GetComponent<SelectedInfoUI> ().SetStructure (PlayerController.GetInstance ().GetPlayer ().Selected);
+
+        }
 
     }
 

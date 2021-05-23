@@ -370,7 +370,7 @@ public class Structure : MonoBehaviour {
 
     public void ManageSelectedAndLocks () {
 
-        if (!Detected.Contains (Selected)) Selected = null;
+        if (Selected != null && !Detected.Contains (Selected)) Selected = null;
         bool lockChanged = false;
         foreach (Structure target in Locks.Keys.ToArray ()) {
             if (target == null || !Detected.Contains (target) || Locks.Keys.Count > GetStatAppliedValue ("max_locks")) {
