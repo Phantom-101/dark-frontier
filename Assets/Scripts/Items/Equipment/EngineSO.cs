@@ -15,6 +15,8 @@ public class EngineSO : EquipmentSO {
     [Tooltip ("x+, x-\ny+, y-\nz+, z-")]
     public float3x2 AngularConsumption;
     public float InertialFactor;
+    public float LinearSleepThreshold;
+    public float AngularSleepThreshold;
 
     public override void SafeTick (EquipmentSlot slot) {
 
@@ -59,17 +61,21 @@ public class EngineSO : EquipmentSO {
         for (int d = 0; d < 3; d++) {
             float cur = slot.Equipper.transform.InverseTransformDirection (rb.velocity)[d] / MaxLinearSpeed;
             float dif = engine.Settings[0][d] - cur;
-            float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), InertialFactor)) * Mathf.Sign (dif);
-            res[0][d] = mul > 0 ? mul * LinearForce[0][d] : -mul * LinearForce[1][d];
-            res[0][d] *= slot.Equipper.GetStatAppliedValue ("linear_speed_multiplier");
+            if (Mathf.Abs (dif) > LinearSleepThreshold) {
+                float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), InertialFactor)) * Mathf.Sign (dif);
+                res[0][d] = mul > 0 ? mul * LinearForce[0][d] : -mul * LinearForce[1][d];
+                res[0][d] *= slot.Equipper.GetStatAppliedValue ("linear_speed_multiplier");
+            }
         }
         // Angular
         for (int d = 0; d < 3; d++) {
             float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity * Mathf.Rad2Deg)[d] / MaxAngularSpeed;
             float dif = engine.Settings[1][d] - cur;
-            float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), InertialFactor)) * Mathf.Sign (dif);
-            res[1][d] = mul > 0 ? mul * AngularForce[0][d] : -mul * AngularForce[1][d];
-            res[1][d] *= slot.Equipper.GetStatAppliedValue ("angular_speed_multiplier");
+            if (Mathf.Abs (dif) > AngularSleepThreshold) {
+                float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), InertialFactor)) * Mathf.Sign (dif);
+                res[1][d] = mul > 0 ? mul * AngularForce[0][d] : -mul * AngularForce[1][d];
+                res[1][d] *= slot.Equipper.GetStatAppliedValue ("angular_speed_multiplier");
+            }
         }
         return res;
 

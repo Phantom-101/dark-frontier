@@ -68,4 +68,6 @@ MonoBehaviour:
       x: 10
       y: 10
       z: 10
-  InertialFactor: 0.1
+  InertialFactor: 0.5
+  LinearSleepThreshold: 0.005
+  AngularSleepThreshold: 0.01
