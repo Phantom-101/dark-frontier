@@ -19,7 +19,7 @@ public class StructureSegmentInstance : IStructureSegment, ISerializable<IStruct
         get;
         private set;
     }
-    public List<IEquipmentSlot> EquipmentSlots {
+    public List<IEquipmentData> EquipmentSlots {
         get;
         private set;
     }
@@ -31,13 +31,13 @@ public class StructureSegmentInstance : IStructureSegment, ISerializable<IStruct
         MaxHitpoints = StatSerializedParser.Parse (serialized.MaxHitpoints) as IStat;
         Hitpoints = serialized.Hitpoints;
         // TODO get structure from id
-        EquipmentSlots = serialized.EquipmentSlots.ConvertAll (e => EquipmentSlotSerializedParser.Parse (e) as IEquipmentSlot);
+        EquipmentSlots = serialized.EquipmentSlots.ConvertAll (e => EquipmentDataSerializedParser.Parse (e) as IEquipmentData);
     }
 
     public void Initialize () {
         if (string.IsNullOrWhiteSpace (Id)) Id = Guid.NewGuid ().ToString ();
         if (MaxHitpoints == null) MaxHitpoints = new StatInstance (0, "Max Hitpoints", "The maximum number of hitpoints a segment can have.");
-        if (EquipmentSlots == null) EquipmentSlots = new List<IEquipmentSlot> ();
+        if (EquipmentSlots == null) EquipmentSlots = new List<IEquipmentData> ();
     }
 
     public void TakeDamage (float amount, IInfo damager) {

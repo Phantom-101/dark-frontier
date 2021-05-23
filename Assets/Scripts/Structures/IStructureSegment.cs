@@ -4,7 +4,7 @@ public interface IStructureSegment : IIdentifiable, IInitializable, IHitpoints {
     IStructure Structure {
         get;
     }
-    List<IEquipmentSlot> EquipmentSlots {
+    List<IEquipmentData> EquipmentSlots {
         get;
     }
 }

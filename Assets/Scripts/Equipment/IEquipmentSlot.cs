@@ -1,6 +1,5 @@
-﻿public interface IEquipmentSlot {
-    EquipmentSO Equipment {
+﻿public interface IEquipmentSlot : IIdentifiable, IInitializable, IUpdatable {
+    IEquipmentData Data {
         get;
     }
 }
-
