@@ -8,9 +8,15 @@ public class PostProcessingEnabledSetter : MonoBehaviour {
 
     private void Awake () {
 
-        SetPostProcessingEnabled ();
+        //SetPostProcessingEnabled ();
 
-        _postProcessingEnabledToggled.OnEventRaised += SetPostProcessingEnabled;
+        //_postProcessingEnabledToggled.OnEventRaised += SetPostProcessingEnabled;
+
+    }
+
+    private void Update () {
+
+        SetPostProcessingEnabled ();
 
     }
 
