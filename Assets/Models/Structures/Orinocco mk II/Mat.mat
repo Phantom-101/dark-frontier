@@ -46,7 +46,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
-        m_Texture: {fileID: 2800000, guid: cfbca960b066e0946bc1c5d0f4c7e221, type: 3}
+        m_Texture: {fileID: 2800000, guid: 30f0081c6d21bc34b824edf2be548992, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
@@ -74,7 +74,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 3.9533494, g: 3.9533494, b: 3.9533494, a: 1}
+    - _EmissionColor: {r: 1.8443027, g: 1.8443027, b: 1.8443027, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &8053836859358334011
