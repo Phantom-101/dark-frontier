@@ -28,11 +28,11 @@ MonoBehaviour:
     type: 3}
   Range: 1350
   Damage:
-    ShieldDamage: 32
-    HullDamage: 32
+    ShieldDamage: 16
+    HullDamage: 16
     EquipmentDamage: 3
     ShieldPenetration: 0
-  EnergyRequired: 120
+  EnergyRequired: 60
   RechargeRate: 120
   MaxHeat: 100
   HeatGeneration: 10

@@ -96,22 +96,7 @@ public class Structure : MonoBehaviour {
 
         if (string.IsNullOrEmpty (_id)) _id = Guid.NewGuid ().ToString ();
 
-        if (_stats.Keys.Count == 0) {
-
-            // Initialize structure stats
-
-            _stats.Add ("sensor_strength", new StructureStat ("sensor_strength", _profile.SensorStrength));
-            _stats.Add ("scanner_strength", new StructureStat ("scanner_strength", _profile.ScannerStrength));
-            _stats.Add ("max_locks", new StructureStat ("max_locks", _profile.MaxLocks));
-            _stats.Add ("detectability", new StructureStat ("detectability", _profile.Detectability));
-            _stats.Add ("signature_size", new StructureStat ("signature_size", _profile.SignatureSize));
-            _stats.Add ("docking_bay_size", new StructureStat ("docking_bay_size", _profile.DockingBaySize));
-            _stats.Add ("damage_multiplier", new StructureStat ("damage_multiplier", 1));
-            _stats.Add ("recharge_multiplier", new StructureStat ("recharge_multiplier", 1));
-            _stats.Add ("linear_speed_multiplier", new StructureStat ("linear_speed_multiplier", 1));
-            _stats.Add ("angular_speed_multiplier", new StructureStat ("angular_speed_multiplier", 1));
-
-        }
+        EnsureStats ();
 
         if (_initialFaction != null) _faction = FactionManager.GetInstance ().GetFaction (_initialFaction.Id);
         if (_initialAI != null) _ai = _initialAI.GetAI (this);
@@ -408,6 +393,19 @@ public class Structure : MonoBehaviour {
 
     }
 
+    private void EnsureStats () {
+        if (!_stats.ContainsKey (StructureStatNames.SensorStrength)) _stats[StructureStatNames.SensorStrength] = new StructureStat (StructureStatNames.SensorStrength, _profile.SensorStrength);
+        if (!_stats.ContainsKey (StructureStatNames.ScannerStrength)) _stats[StructureStatNames.ScannerStrength] = new StructureStat (StructureStatNames.ScannerStrength, _profile.ScannerStrength);
+        if (!_stats.ContainsKey (StructureStatNames.MaxLocks)) _stats[StructureStatNames.MaxLocks] = new StructureStat (StructureStatNames.MaxLocks, _profile.MaxLocks);
+        if (!_stats.ContainsKey (StructureStatNames.Detectability)) _stats[StructureStatNames.Detectability] = new StructureStat (StructureStatNames.Detectability, _profile.Detectability);
+        if (!_stats.ContainsKey (StructureStatNames.SignatureSize)) _stats[StructureStatNames.SignatureSize] = new StructureStat (StructureStatNames.SignatureSize, _profile.SignatureSize);
+        if (!_stats.ContainsKey (StructureStatNames.DockingBaySize)) _stats[StructureStatNames.DockingBaySize] = new StructureStat (StructureStatNames.DockingBaySize, _profile.DockingBaySize);
+        if (!_stats.ContainsKey (StructureStatNames.DamageMultiplier)) _stats[StructureStatNames.DamageMultiplier] = new StructureStat (StructureStatNames.DamageMultiplier, 1);
+        if (!_stats.ContainsKey (StructureStatNames.RechargeMultiplier)) _stats[StructureStatNames.RechargeMultiplier] = new StructureStat (StructureStatNames.RechargeMultiplier, 1);
+        if (!_stats.ContainsKey (StructureStatNames.LinearSpeedMultiplier)) _stats[StructureStatNames.LinearSpeedMultiplier] = new StructureStat (StructureStatNames.LinearSpeedMultiplier, 1);
+        if (!_stats.ContainsKey (StructureStatNames.AngularSpeedMultiplier)) _stats[StructureStatNames.AngularSpeedMultiplier] = new StructureStat (StructureStatNames.AngularSpeedMultiplier, 1);
+    }
+
     public StructureSaveData GetSaveData () {
         StructureSaveData data = new StructureSaveData {
             Name = gameObject.name,
@@ -415,7 +413,8 @@ public class Structure : MonoBehaviour {
             Rotation = transform.localRotation,
             Hull = _hull,
             InventoryIds = _inventory.Keys.Select (item => item.Id).ToList (),
-            InventoryCounts = _inventory.Values.ToList ()
+            InventoryCounts = _inventory.Values.ToList (),
+            Stats = _stats,
         };
         if (_profile != null) data.ProfileId = _profile.Id;
         if (_faction != null) data.FactionId = _faction.GetId ();
@@ -437,6 +436,9 @@ public class Structure : MonoBehaviour {
         for (int i = 0; i < saveData.InventoryIds.Count; i++) {
             _inventory[im.GetItem (saveData.InventoryIds[i])] = saveData.InventoryCounts[i];
         }
+        _stats = saveData.Stats;
+        if (_stats == null) _stats = new StringToStructureStatDictionary ();
+        EnsureStats ();
         _sector = SectorManager.GetInstance ().GetSector (saveData.SectorId);
         _sector.Entered (this);
         _aiEnabled = saveData.AIEnabled;
@@ -455,6 +457,7 @@ public class StructureSaveData {
     public List<EquipmentSlotSaveData> Equipment = new List<EquipmentSlotSaveData> ();
     public List<string> InventoryIds = new List<string> ();
     public List<int> InventoryCounts = new List<int> ();
+    public StringToStructureStatDictionary Stats = new StringToStructureStatDictionary ();
     public string SectorId;
     public bool AIEnabled;
     public bool IsPlayer;
