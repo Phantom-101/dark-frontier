@@ -1,8 +1,9 @@
 ﻿using System;
+using UnityEngine;
 
 public abstract class EquipmentSO : ItemSO {
     public float Durability;
-    public bool ShowUI;
+    public GameObject ButtonPrefab;
 
     public abstract void OnAwake (EquipmentSlot slot);
 

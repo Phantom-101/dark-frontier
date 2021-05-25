@@ -24,7 +24,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f894c2965e6369341a4ac7c73389c61b, type: 2}
   Usable: 0
   Durability: 10
-  ShowUI: 1
+  ButtonPrefab: {fileID: 4864166113814497008, guid: 2e5718df81c0c6544bf84f7f294a69bd,
+    type: 3}
   Range: 1350
   Damage:
     ShieldDamage: 32

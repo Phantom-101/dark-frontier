@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EquipmentUI : MonoBehaviour {
     [SerializeField] private Transform _parent;
-    [SerializeField] private GameObject _indicatorPrefab;
 
     private readonly Dictionary<EquipmentSlot, EquipmentIndicatorUI> _indicators = new Dictionary<EquipmentSlot, EquipmentIndicatorUI> ();
 
@@ -21,18 +20,20 @@ public class EquipmentUI : MonoBehaviour {
         }
 
         foreach (EquipmentSlot slot in player.Equipment)
-            if (slot.Data.Equipment != null && slot.Data.Equipment.ShowUI && !_indicators.ContainsKey (slot))
+            if (slot.Data.Equipment != null && slot.Data.Equipment.ButtonPrefab != null && !_indicators.ContainsKey (slot))
                 _indicators[slot] = null;
 
-        float height = _indicatorPrefab.GetComponent<RectTransform> ().sizeDelta.y;
+        float y = 0;
         foreach (EquipmentSlot key in _indicators.Keys.ToArray ()) {
-            if (key.Data.Equipment != null && key.Data.Equipment.ShowUI) {
+            if (key.Data.Equipment != null && key.Data.Equipment.ButtonPrefab != null) {
                 if (_indicators[key] == null) {
-                    GameObject indicator = Instantiate (_indicatorPrefab, _parent);
+                    GameObject indicator = Instantiate (key.Data.Equipment.ButtonPrefab, _parent);
                     RectTransform rect = indicator.GetComponent<RectTransform> ();
-                    rect.anchoredPosition = new Vector2 (0, height * (player.Equipment.Count - player.Equipment.IndexOf (key) - 1));
+                    rect.anchoredPosition = new Vector2 (0, y);
+                    y += rect.sizeDelta.y;
                     EquipmentIndicatorUI comp = indicator.GetComponent<EquipmentIndicatorUI> ();
                     comp.Slot = key;
+                    comp.Initialize ();
                     _indicators[key] = comp;
                 }
             }
