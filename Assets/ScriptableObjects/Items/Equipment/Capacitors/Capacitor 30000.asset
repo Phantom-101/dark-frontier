@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9871922d8343f804ba854316796f9cdf, type: 3}
+  m_Name: Capacitor 30000
+  m_EditorClassIdentifier: 
+  Name: Capacitor 30000
+  Description: 
+  Id: items.equipment.capacitors.capacitor-30000
+  Icon: {fileID: 21300000, guid: 608ebddc3abdb6547a511a17e26df53f, type: 3}
+  Volume: 0
+  Tags:
+  - {fileID: 11400000, guid: 6d63f9e2ddfb3cc428a6659d95414e48, type: 2}
+  - {fileID: 11400000, guid: fc8af7bcf304e714180392c7b857da40, type: 2}
+  - {fileID: 11400000, guid: f894c2965e6369341a4ac7c73389c61b, type: 2}
+  Usable: 0
+  Durability: 10
+  ShowUI: 0
+  Capacitance: 30000
+  MaxChargeRate: 1000
+  MaxDischargeRate: 1000

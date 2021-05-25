@@ -47,10 +47,12 @@ public class LockedTargetUI : MonoBehaviour {
         }
 
         _hull.fillAmount = _structure.Hull / _structure.Profile.Hull / 2;
-        List<ShieldSlot> shields = _structure.GetEquipment<ShieldSlot> ();
-        ShieldSlot shield = shields.Count > 0 ? shields[0] : null;
-        if (shield != null && shield.Shield != null) _shield.fillAmount = shield.Strength / shield.Shield.MaxStrength / 2;
-        else _shield.fillAmount = 0;
+        float strength = 0, maxStrength = 0;
+        _structure.GetEquipmentData<ShieldSlotData> ().ForEach (shield => {
+            strength += shield.Strength;
+            maxStrength += (shield.Equipment as ShieldSO).MaxStrength;
+        });
+        _shield.fillAmount = strength / (maxStrength == 0 ? 1 : maxStrength) / 2;
         float fa = player.Locks[_structure] / 400;
         _leftProgress.fillAmount = fa;
         _rightProgress.fillAmount = fa;

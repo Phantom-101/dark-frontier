@@ -141,20 +141,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 570406170461946248}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
+  m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotSize: 0
-  _equipment: {fileID: 0}
-  _energy: 0
-  _durability: 0
-  _equipper: {fileID: 570406170697649155}
-  _currentState: 0
-  _targetState: 0
-  _charge: {fileID: 0}
-  _arc: 180
-  _target: {fileID: 0}
-  _projectile: {fileID: 0}
+  Equipper: {fileID: 570406170697649155}
+  Data:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
+      data:
+        Slot: {fileID: 570406170461946250}
+        Equipment: {fileID: 0}
+        Durability: 0
 --- !u!1 &570406170697649159
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,8 +299,9 @@ MonoBehaviour:
     id: 0
   _initialAI: {fileID: 11400000, guid: 4b4647d3e66473c4f8c32220ecb98522, type: 2}
   _aiEnabled: 1
-  _target: {fileID: 0}
+  _selected: {fileID: 0}
   _sector: {fileID: 0}
+  _detected: []
   _docked: []
   _dockedIds: []
   _initialized: 0
@@ -322,7 +323,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 84
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!75 &570406170697649153
 ConstantForce:
@@ -376,20 +377,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 570406170817893537}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
+  m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotSize: 0
-  _equipment: {fileID: 0}
-  _energy: 0
-  _durability: 0
-  _equipper: {fileID: 570406170697649155}
-  _currentState: 0
-  _targetState: 0
-  _charge: {fileID: 0}
-  _arc: 180
-  _target: {fileID: 0}
-  _projectile: {fileID: 0}
+  Equipper: {fileID: 570406170697649155}
+  Data:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
+      data:
+        Slot: {fileID: 570406170817893539}
+        Equipment: {fileID: 0}
+        Durability: 0
 --- !u!1 &570406170929327935
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,20 +432,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 570406170929327935}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01053b7370665b441876274053f77c6a, type: 3}
+  m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotSize: 0
-  _equipment: {fileID: 0}
-  _energy: 0
-  _durability: 0
-  _equipper: {fileID: 570406170697649155}
-  _currentState: 0
-  _targetState: 0
-  _charge: {fileID: 0}
-  _forwardSetting: 0
-  _yawSetting: 0
-  _pitchSetting: 0
+  Equipper: {fileID: 570406170697649155}
+  Data:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
+      data:
+        Slot: {fileID: 570406170929327928}
+        Equipment: {fileID: 11400000, guid: abf43ae6957ce86429e39f40f4ba2e29, type: 2}
+        Durability: 0
 --- !u!1 &656550552423297607
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,17 +486,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 656550552423297607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83f791907cc86ce49bab998822102a42, type: 3}
+  m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotSize: 0
-  _equipment: {fileID: 0}
-  _energy: 0
-  _durability: 0
-  _equipper: {fileID: 570406170697649155}
-  _currentState: 0
-  _targetState: 0
-  _charge: {fileID: 0}
+  Equipper: {fileID: 570406170697649155}
+  Data:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
+      data:
+        Slot: {fileID: 4243406687337429255}
+        Equipment: {fileID: 11400000, guid: 4c16d1310a5b62f49bc0f04eb70f19fc, type: 2}
+        Durability: 0
 --- !u!1 &715498814549850700
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,18 +540,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 715498814549850700}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa6d949ca5ee17d40a39094cf8ff8360, type: 3}
+  m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotSize: 0
-  _equipment: {fileID: 0}
-  _energy: 0
-  _durability: 0
-  _equipper: {fileID: 570406170697649155}
-  _currentState: 0
-  _targetState: 0
-  _charge: {fileID: 0}
-  _strength: 0
+  Equipper: {fileID: 570406170697649155}
+  Data:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
+      data:
+        Slot: {fileID: 2291264407883949216}
+        Equipment: {fileID: 0}
+        Durability: 0
 --- !u!1 &2881743952618391353
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,17 +594,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2881743952618391353}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 146f05006976f0846b58023a17082494, type: 3}
+  m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotSize: 0
-  _equipment: {fileID: 0}
-  _energy: 0
-  _durability: 0
-  _equipper: {fileID: 570406170697649155}
-  _currentState: 0
-  _targetState: 0
-  _charge: {fileID: 0}
+  Equipper: {fileID: 570406170697649155}
+  Data:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
+      data:
+        Slot: {fileID: 8832517471513439344}
+        Equipment: {fileID: 11400000, guid: 3f6e308b812c2134698ea542b747320e, type: 2}
+        Durability: 0
 --- !u!1 &8314451955865055747
 GameObject:
   m_ObjectHideFlags: 0

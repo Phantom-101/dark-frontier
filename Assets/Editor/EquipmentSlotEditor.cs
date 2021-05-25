@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
+/*
 [CustomEditor (typeof (EquipmentSlot))]
 [CanEditMultipleObjects]
 public class EquipmentSlotEditor : Editor {
@@ -38,8 +39,8 @@ public class EquipmentSlotEditor : Editor {
 
         //EditorGUILayout.BeginHorizontal ();
         //EditorGUIUtility.labelWidth = 55;
-        EditorGUILayout.Slider (_energy, 0, _equipment.objectReferenceValue == null ? 0 : (_equipment.objectReferenceValue as EquipmentSO).EnergyStorage);
-        EditorGUILayout.Slider (_durability, 0, _equipment.objectReferenceValue == null ? 0 : (_equipment.objectReferenceValue as EquipmentSO).Durability);
+        EditorGUILayout.Slider (_energy, 0, _equipment.objectReferenceValue == null ? 0 : (_equipment.objectReferenceValue as NewEquipmentSO).EnergyStorage);
+        EditorGUILayout.Slider (_durability, 0, _equipment.objectReferenceValue == null ? 0 : (_equipment.objectReferenceValue as NewEquipmentSO).Durability);
         //EditorGUIUtility.labelWidth = _labelWidth;
         //EditorGUILayout.EndHorizontal ();
 
@@ -58,3 +59,4 @@ public class EquipmentSlotEditor : Editor {
     }
 
 }
+*/

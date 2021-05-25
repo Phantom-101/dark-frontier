@@ -17,14 +17,17 @@ MonoBehaviour:
   Id: items.charges.missiles.medium-torpedo
   Icon: {fileID: 21300000, guid: 34502f7e93de60d40ac817b2a0f12f4a, type: 3}
   Volume: 0.1
+  Tags:
+  - {fileID: 11400000, guid: 4c134e9b4fd8c4e4fba9632fd4bd0ff7, type: 2}
+  - {fileID: 11400000, guid: 81551225180891d4598e35466be8e272, type: 2}
+  - {fileID: 11400000, guid: f894c2965e6369341a4ac7c73389c61b, type: 2}
   Usable: 0
   MissileStructure: {fileID: 11400000, guid: 309930371c538784e99a1ce8bc180a91, type: 2}
   HeadingAllowance: 3
   DetonationRange: 1.5
   Damage:
-    DamageAmount: 240
-    ShieldEffectiveness: 1
+    ShieldDamage: 320
+    HullDamage: 320
+    EquipmentDamage: 3
     ShieldPenetration: 0
-    ShieldBypass: 0
-    HullEffectiveness: 1
   Range: 1800

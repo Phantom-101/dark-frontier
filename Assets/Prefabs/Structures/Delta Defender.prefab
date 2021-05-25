@@ -53,7 +53,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 648438712386321934}
-  - component: {fileID: 3267405386010158877}
+  - component: {fileID: 2576285590069773046}
   m_Layer: 0
   m_Name: Turret
   m_TagString: Untagged
@@ -75,7 +75,7 @@ Transform:
   m_Father: {fileID: 2869013932428447121}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3267405386010158877
+--- !u!114 &2576285590069773046
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -84,21 +84,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1652723439414488874}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
+  m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotSize: 2
-  _equipment: {fileID: 0}
-  _energy: 0
-  _durability: 0
-  _equipper: {fileID: 2869013932428447120}
-  _target: {fileID: 0}
-  _currentState: 0
-  _targetState: 0
-  _charge: {fileID: 0}
-  _showUI: 1
-  _arc: 360
-  _projectile: {fileID: 0}
+  Equipper: {fileID: 2869013932428447120}
+  Data:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
+      data:
+        Slot: {fileID: 2576285590069773046}
+        Equipment: {fileID: 11400000, guid: b4bcc1310fd094d4d90dc6125e68b4c1, type: 2}
+        Durability: 0
 --- !u!1 &1701054646738178629
 GameObject:
   m_ObjectHideFlags: 0
@@ -5065,7 +5064,7 @@ MonoBehaviour:
     _keyValues: []
     _keys: []
     _values: []
-  _hull: 10000
+  _hull: 4500
   _faction:
     _name: 
     _id: 
@@ -5099,12 +5098,12 @@ MonoBehaviour:
       _values: []
   _initialFaction: {fileID: 0}
   _equipmentSlots:
-  - {fileID: 2869013934242875144}
-  - {fileID: 2869013932910226454}
-  - {fileID: 2869013934095021291}
-  - {fileID: 2869013932810373259}
-  - {fileID: 3125990135425983647}
-  - {fileID: 3267405386010158877}
+  - {fileID: 9161962482777851408}
+  - {fileID: 6600085404695014259}
+  - {fileID: 2576285590069773046}
+  - {fileID: 3938042005856736322}
+  - {fileID: 5818075544933059250}
+  - {fileID: 7115233860060840377}
   _inventory:
     reorderableList:
       canAdd: 1
@@ -5159,7 +5158,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 84
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!75 &2869013932428447135
 ConstantForce:
@@ -5182,7 +5181,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2869013932810373260}
-  - component: {fileID: 2869013932810373259}
+  - component: {fileID: 9161962482777851408}
   m_Layer: 0
   m_Name: Shield
   m_TagString: Untagged
@@ -5204,7 +5203,7 @@ Transform:
   m_Father: {fileID: 2869013932428447121}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2869013932810373259
+--- !u!114 &9161962482777851408
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5213,20 +5212,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2869013932810373261}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa6d949ca5ee17d40a39094cf8ff8360, type: 3}
+  m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotSize: 0
-  _equipment: {fileID: 0}
-  _energy: 0
-  _durability: 0
-  _equipper: {fileID: 2869013932428447120}
-  _target: {fileID: 0}
-  _currentState: 0
-  _targetState: 0
-  _charge: {fileID: 0}
-  _showUI: 0
-  _strength: 0
+  Equipper: {fileID: 2869013932428447120}
+  Data:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
+      data:
+        Slot: {fileID: 9161962482777851408}
+        Equipment: {fileID: 11400000, guid: 6736820e02c121647963c6d6b1361bbc, type: 2}
+        Durability: 0
 --- !u!1 &2869013932910226440
 GameObject:
   m_ObjectHideFlags: 0
@@ -5236,7 +5235,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2869013932910226455}
-  - component: {fileID: 2869013932910226454}
+  - component: {fileID: 5818075544933059250}
   m_Layer: 0
   m_Name: Generator
   m_TagString: Untagged
@@ -5258,7 +5257,7 @@ Transform:
   m_Father: {fileID: 2869013932428447121}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2869013932910226454
+--- !u!114 &5818075544933059250
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5267,19 +5266,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2869013932910226440}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83f791907cc86ce49bab998822102a42, type: 3}
+  m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotSize: 2
-  _equipment: {fileID: 11400000, guid: 4c16d1310a5b62f49bc0f04eb70f19fc, type: 2}
-  _energy: 0
-  _durability: 0
-  _equipper: {fileID: 2869013932428447120}
-  _target: {fileID: 0}
-  _currentState: 0
-  _targetState: 0
-  _charge: {fileID: 0}
-  _showUI: 0
+  Equipper: {fileID: 2869013932428447120}
+  Data:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
+      data:
+        Slot: {fileID: 5818075544933059250}
+        Equipment: {fileID: 11400000, guid: 4c16d1310a5b62f49bc0f04eb70f19fc, type: 2}
+        Durability: 0
 --- !u!1 &2869013934095021293
 GameObject:
   m_ObjectHideFlags: 0
@@ -5289,7 +5289,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2869013934095021292}
-  - component: {fileID: 2869013934095021291}
+  - component: {fileID: 3938042005856736322}
   m_Layer: 0
   m_Name: Capacitor
   m_TagString: Untagged
@@ -5311,7 +5311,7 @@ Transform:
   m_Father: {fileID: 2869013932428447121}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2869013934095021291
+--- !u!114 &3938042005856736322
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5320,19 +5320,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2869013934095021293}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 146f05006976f0846b58023a17082494, type: 3}
+  m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotSize: 0
-  _equipment: {fileID: 0}
-  _energy: 0
-  _durability: 0
-  _equipper: {fileID: 2869013932428447120}
-  _target: {fileID: 0}
-  _currentState: 0
-  _targetState: 0
-  _charge: {fileID: 0}
-  _showUI: 0
+  Equipper: {fileID: 2869013932428447120}
+  Data:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
+      data:
+        Slot: {fileID: 3938042005856736322}
+        Equipment: {fileID: 11400000, guid: 3f6e308b812c2134698ea542b747320e, type: 2}
+        Durability: 0
 --- !u!1 &2869013934242875146
 GameObject:
   m_ObjectHideFlags: 0
@@ -5342,7 +5343,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2869013934242875145}
-  - component: {fileID: 2869013934242875144}
+  - component: {fileID: 7115233860060840377}
   m_Layer: 0
   m_Name: Engine
   m_TagString: Untagged
@@ -5367,7 +5368,7 @@ Transform:
   m_Father: {fileID: 2869013932428447121}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2869013934242875144
+--- !u!114 &7115233860060840377
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5376,28 +5377,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2869013934242875146}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01053b7370665b441876274053f77c6a, type: 3}
+  m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotSize: 0
-  _equipment: {fileID: 11400000, guid: 264ffc46fcf52454399b416dd2f3444a, type: 2}
-  _energy: 0
-  _durability: 0
-  _equipper: {fileID: 2869013932428447120}
-  _target: {fileID: 0}
-  _currentState: 0
-  _targetState: 0
-  _charge: {fileID: 0}
-  _showUI: 0
-  _settings:
-    c0:
-      x: 0
-      y: 0
-      z: 0
-    c1:
-      x: 0
-      y: 0
-      z: 0
+  Equipper: {fileID: 2869013932428447120}
+  Data:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
+      data:
+        Slot: {fileID: 7115233860060840377}
+        Equipment: {fileID: 11400000, guid: d5ce1a3bc11a30a4e9e6233bd163f7d2, type: 2}
+        Durability: 0
 --- !u!1 &3377422656699159163
 GameObject:
   m_ObjectHideFlags: 0
@@ -19962,7 +19955,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8958893918886753871}
-  - component: {fileID: 3125990135425983647}
+  - component: {fileID: 6600085404695014259}
   m_Layer: 0
   m_Name: Turret
   m_TagString: Untagged
@@ -19984,7 +19977,7 @@ Transform:
   m_Father: {fileID: 2869013932428447121}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3125990135425983647
+--- !u!114 &6600085404695014259
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19993,21 +19986,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 4646734014858552745}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7de3e49dc335d5547a086aab2a60ecab, type: 3}
+  m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slotSize: 2
-  _equipment: {fileID: 0}
-  _energy: 0
-  _durability: 0
-  _equipper: {fileID: 2869013932428447120}
-  _target: {fileID: 0}
-  _currentState: 0
-  _targetState: 0
-  _charge: {fileID: 0}
-  _showUI: 1
-  _arc: 360
-  _projectile: {fileID: 0}
+  Equipper: {fileID: 2869013932428447120}
+  Data:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
+      data:
+        Slot: {fileID: 6600085404695014259}
+        Equipment: {fileID: 11400000, guid: 44bd9c98f51eb3e4fb6d22dacd37c314, type: 2}
+        Durability: 0
 --- !u!1 &4649590968597685381
 GameObject:
   m_ObjectHideFlags: 0

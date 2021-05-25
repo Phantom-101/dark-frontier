@@ -32,9 +32,8 @@ public class StructureManager : MonoBehaviour {
     }
 
     private void Update () {
-
         _structures.RemoveAll (e => e == null);
-        _structures.ForEach (e => {
+        _structures.ConvertAll (e => e).ForEach (e => {
             e.Tick ();
             if (!_processQueue.Contains (e))
                 _processQueue.Enqueue (e);
@@ -44,13 +43,10 @@ public class StructureManager : MonoBehaviour {
         if (toProcess != null) {
             toProcess.Detected = null;
         }
-
     }
 
     private void FixedUpdate () {
-
-        _structures.ForEach (e => e.FixedTick ());
-
+        _structures.ConvertAll (e => e).ForEach (e => e.FixedTick ());
     }
 
     public List<Structure> GetStructures () { return _structures; }

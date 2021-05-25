@@ -503,22 +503,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4864166113814497008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3c9ddb7a3de9114e98c54f69241d322, type: 3}
+  m_Script: {fileID: 11500000, guid: 31af12d6cda949d45bfcbc3d58c64445, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slot: {fileID: 0}
-  _group: {fileID: 1930645538247589439}
-  _energy: {fileID: 4864166114998821404}
-  _energyMax: 1
-  _durability: {fileID: 4864166114428518562}
-  _durabilityMax: 1
-  _charges: {fileID: 5255684996810608773}
-  _chargesMax: 1
-  _icon: {fileID: 4864166113760634268}
-  _button: {fileID: 699393649472098231}
-  _tooltip: {fileID: 1507486446536549003}
-  _tooltipGroup: {fileID: 5068162466676363321}
-  _curAlpha: -1
+  Slot: {fileID: 0}
 --- !u!225 &1930645538247589439
 CanvasGroup:
   m_ObjectHideFlags: 0

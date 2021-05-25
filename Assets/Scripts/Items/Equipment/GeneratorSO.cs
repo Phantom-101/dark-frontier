@@ -1,31 +1,74 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 [CreateAssetMenu (menuName = "Items/Equipment/Generator")]
 public class GeneratorSO : EquipmentSO {
+    public float Generation;
 
-    public float GenerationRate;
-
-    public override void SafeTick (EquipmentSlot slot) {
-
-        List<CapacitorSlot> caps = slot.Equipper.GetEquipment<CapacitorSlot> ();
-        float left = GenerationRate * Time.deltaTime;
-        foreach (CapacitorSlot cap in caps) {
-
-            if (cap != null && cap.Equipment != null) {
-
-                float transferred = Mathf.Min (left, cap.Equipment.EnergyStorage - cap.Energy);
-                left -= transferred;
-                cap.Energy += transferred;
-
-                if (left <= 0) break;
-
-            }
-
-        }
-
-        slot.Durability -= Wear * Time.deltaTime;
-
+    public override void OnAwake (EquipmentSlot slot) {
+        EnsureDataType (slot);
     }
 
+    public override void OnEquip (EquipmentSlot slot) {
+        slot.Data = new GeneratorSlotData {
+            Slot = slot,
+            Equipment = this,
+            Durability = Durability,
+        };
+    }
+
+    public override void OnUnequip (EquipmentSlot slot) {
+        slot.Data = new EquipmentSlotData {
+            Slot = slot,
+            Equipment = null,
+            Durability = 0,
+        };
+    }
+
+    public override void Tick (EquipmentSlot slot) {
+        EnsureDataType (slot);
+
+        float pool = Generation * Time.deltaTime;
+        slot.Equipper.GetEquipmentData<CapacitorSlotData> ().ForEach (capacitor => {
+            float lack = (capacitor.Equipment as CapacitorSO).Capacitance - capacitor.Charge;
+            float allocated = Mathf.Min (pool, lack, capacitor.ChargeLeft);
+            capacitor.Charge += allocated;
+            capacitor.ChargeLeft -= allocated;
+            pool -= allocated;
+        });
+    }
+
+    public override void FixedTick (EquipmentSlot slot) { }
+
+    public override bool CanClick (EquipmentSlot slot) { return false; }
+
+    public override void OnClicked (EquipmentSlot slot) { }
+
+    public override void EnsureDataType (EquipmentSlot slot) {
+        if (!(slot.Data is GeneratorSlotData)) slot.Data = new GeneratorSlotData {
+            Slot = slot,
+            Equipment = this,
+            Durability = Durability,
+        };
+    }
+}
+
+[Serializable]
+public class GeneratorSlotData : EquipmentSlotData {
+    public override EquipmentSlotSaveData Save () {
+        return new GeneratorSlotSaveData {
+            EquipmentId = Equipment == null ? "" : Equipment.Id,
+            Durability = Durability,
+        };
+    }
+}
+
+[Serializable]
+public class GeneratorSlotSaveData : EquipmentSlotSaveData {
+    public override EquipmentSlotData Load () {
+        return new GeneratorSlotData {
+            Equipment = ItemManager.GetInstance ().GetItem (EquipmentId) as EquipmentSO,
+            Durability = Durability,
+        };
+    }
 }

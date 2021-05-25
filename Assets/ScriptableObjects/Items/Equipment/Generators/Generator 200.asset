@@ -9,25 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cef603527002a5048b7565eeebbe2a92, type: 3}
+  m_Script: {fileID: 11500000, guid: 130f65f58dcd7ae43a91827f01befa2d, type: 3}
   m_Name: Generator 200
   m_EditorClassIdentifier: 
-  Name: 
+  Name: Generator 200
   Description: 
-  Id: 
+  Id: items.equipment.generators.generator-200
   Icon: {fileID: 21300000, guid: 506212960e6485b4f86823f1b888cb0d, type: 3}
   Volume: 0
+  Tags:
+  - {fileID: 11400000, guid: 6d63f9e2ddfb3cc428a6659d95414e48, type: 2}
+  - {fileID: 11400000, guid: a26a9a6ed0189ea4d9c21bdd72735366, type: 2}
+  - {fileID: 11400000, guid: f894c2965e6369341a4ac7c73389c61b, type: 2}
   Usable: 0
-  Tier: 1
-  Size: 2
-  EnergyStorage: 0
-  EnergyRechargeRate: 0
   Durability: 10
-  Wear: 0
-  Activatable: 0
-  AutomaticallyRepeat: 0
-  RequireTarget: 0
-  RequireCharge: 0
-  Charges: []
   ShowUI: 0
-  GenerationRate: 200
+  Generation: 500

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class Structure : MonoBehaviour {
-
     [SerializeField] private StructureSO _profile;
     [SerializeField] private string _id;
 
@@ -150,18 +148,12 @@ public class Structure : MonoBehaviour {
 
     }
 
-    public List<T> GetEquipment<T> () where T : EquipmentSlot {
-
-        List<T> equipment = new List<T> ();
-
+    public List<T> GetEquipmentData<T> () where T : EquipmentSlotData {
+        List<T> data = new List<T> ();
         _equipmentSlots.ForEach (slot => {
-
-            if (slot is T) equipment.Add (slot as T);
-
+            if (slot.Data is T) data.Add (slot.Data as T);
         });
-
-        return equipment;
-
+        return data;
     }
 
     public int GetInventoryCount (ItemSO item) {
@@ -221,7 +213,7 @@ public class Structure : MonoBehaviour {
         foreach (Renderer r in renderers) r.enabled = false;
 
         // Disable all equipment
-        foreach (EquipmentSlot slot in docker.Equipment) slot.TargetState = false;
+        //foreach (NewEquipmentSlot slot in docker.Equipment) slot.TargetState = false;
 
         if (docker == PlayerController.GetInstance ().GetPlayer ()) {
 
@@ -306,52 +298,22 @@ public class Structure : MonoBehaviour {
 
     }
 
-    public void TakeDamage (DamageProfile damage, Vector3 from) {
-
-        Vector3 point = from;
-        if ((transform.position - point).sqrMagnitude > Profile.ApparentSize * Profile.ApparentSize / 4) point = transform.position + (point - transform.position).normalized * Profile.ApparentSize / 2;
-
-        List<ShieldSlot> shields = GetEquipment<ShieldSlot> ();
-        ShieldSlot damaged = null;
-        float maxInf = 0;
-        foreach (ShieldSlot shield in shields) {
-
-            if (shield.Shield != null) {
-
-                float inf = 1 - (Vector3.Distance (shield.transform.position, point) / shield.Shield.Radius);
-                if (inf >= maxInf) {
-
-                    maxInf = inf;
-                    damaged = shield;
-
-                }
-
-            }
-
-        }
-        if (damaged == null) Hull -= damage.DamageAmount * damage.HullEffectiveness;
-        else {
-
-            float strength = damaged.Strength;
-            float maxStrength = damaged.Shield.MaxStrength;
-            if (strength <= damage.ShieldBypass * maxStrength) Hull -= damage.DamageAmount * damage.HullEffectiveness;
+    public void TakeDamage (Damage damage, Vector3 from) {
+        ShieldSlotData closest = null;
+        GetEquipmentData<ShieldSlotData> ().ForEach (shield => {
+            if (closest == null) closest = shield;
             else {
-
-                Hull -= damage.DamageAmount * damage.ShieldPenetration * damage.HullEffectiveness;
-                float toShield = damage.DamageAmount * (1 - damage.ShieldPenetration);
-                float remain = toShield - (strength / damage.ShieldEffectiveness);
-                if (remain < 0) damaged.Strength -= toShield * damage.ShieldEffectiveness;
-                else {
-
-                    damaged.Strength = 0;
-                    Hull -= remain;
-
-                }
-
+                float disA = (from - closest.Slot.transform.position).sqrMagnitude;
+                float disB = (shield.Slot.transform.position - closest.Slot.transform.position).sqrMagnitude;
+                if (disB < disA) closest = shield;
             }
-
-        }
-
+        });
+        float ps = 0;
+        if (closest != null) ps = Mathf.Clamp01 (closest.Strength / damage.ShieldDamage) * (1 - damage.ShieldPenetration);
+        float ph = 1 - ps;
+        if (closest != null) closest.Strength -= damage.ShieldDamage * ps;
+        Hull -= damage.HullDamage * ph;
+        // TODO equipment damage damage.EquipmentDamage * ph
     }
 
     public float GetAngleTo (Vector3 to) {
@@ -447,52 +409,42 @@ public class Structure : MonoBehaviour {
     }
 
     public StructureSaveData GetSaveData () {
-
         StructureSaveData data = new StructureSaveData {
-
             Name = gameObject.name,
             Position = transform.localPosition,
             Rotation = transform.localRotation,
             Hull = _hull,
             InventoryIds = _inventory.Keys.Select (item => item.Id).ToList (),
             InventoryCounts = _inventory.Values.ToList ()
-
         };
         if (_profile != null) data.ProfileId = _profile.Id;
         if (_faction != null) data.FactionId = _faction.GetId ();
-        _equipmentSlots.ForEach (slot => { data.Equipment.Add (slot.GetSaveData ()); });
+        _equipmentSlots.ForEach (slot => { data.Equipment.Add (slot.Data.Save ()); });
         if (_sector != null) data.SectorId = _sector.GetId ();
         data.AIEnabled = _aiEnabled;
         if (PlayerController.GetInstance ().GetPlayer () == this) data.IsPlayer = true;
         return data;
-
     }
 
     public void SetSaveData (StructureSaveData saveData) {
-
         gameObject.name = saveData.Name;
         transform.localPosition = saveData.Position;
         transform.localRotation = saveData.Rotation;
         _hull = saveData.Hull;
         _faction = FactionManager.GetInstance ().GetFaction (saveData.FactionId);
-        for (int i = 0; i < _equipmentSlots.Count; i++) _equipmentSlots[i].LoadSaveData (saveData.Equipment[i]);
+        for (int i = 0; i < _equipmentSlots.Count; i++) _equipmentSlots[i].Data = saveData.Equipment[i].Load ();
         ItemManager im = ItemManager.GetInstance ();
         for (int i = 0; i < saveData.InventoryIds.Count; i++) {
-
             _inventory[im.GetItem (saveData.InventoryIds[i])] = saveData.InventoryCounts[i];
-
         }
         _sector = SectorManager.GetInstance ().GetSector (saveData.SectorId);
         _sector.Entered (this);
         _aiEnabled = saveData.AIEnabled;
-
     }
-
 }
 
 [Serializable]
 public class StructureSaveData {
-
     public string Name;
     public Vector3 Position;
     public Quaternion Rotation;
@@ -506,5 +458,4 @@ public class StructureSaveData {
     public string SectorId;
     public bool AIEnabled;
     public bool IsPlayer;
-
 }

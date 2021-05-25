@@ -9,65 +9,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31d2861d39624454d9ceb6fbb422ffa8, type: 3}
+  m_Script: {fileID: 11500000, guid: 161f4a9a7d2a8104d9c8c9c5d1f9fd9b, type: 3}
   m_Name: Engine 3
   m_EditorClassIdentifier: 
   Name: Engine 3
-  Description: A large engine.
-  Id: items.equipment.engines.engine-500
+  Description: 
+  Id: items.equipment.engines.engine-3
   Icon: {fileID: 21300000, guid: 34502f7e93de60d40ac817b2a0f12f4a, type: 3}
   Volume: 0
+  Tags:
+  - {fileID: 11400000, guid: 6d63f9e2ddfb3cc428a6659d95414e48, type: 2}
+  - {fileID: 11400000, guid: 361ae8a1dcad32343a0e7cb7be9ab845, type: 2}
+  - {fileID: 11400000, guid: 13cabe015e4f87f4ea807ff7d00e3ce0, type: 2}
   Usable: 0
-  Tier: 1
-  Size: 0
-  EnergyStorage: 50
-  EnergyRechargeRate: 25
   Durability: 10
-  Wear: 0.01
-  Activatable: 0
-  AutomaticallyRepeat: 0
-  RequireTarget: 0
-  RequireCharge: 0
-  Charges: []
   ShowUI: 0
   MaxLinearSpeed: 100
   MaxAngularSpeed: 50
-  LinearForce:
-    c0:
-      x: 3
-      y: 3
-      z: 3
-    c1:
-      x: -3
-      y: -3
-      z: -3
-  AngularForce:
-    c0:
-      x: 1
-      y: 1
-      z: 1
-    c1:
-      x: -1
-      y: -1
-      z: -1
-  LinearConsumption:
-    c0:
-      x: 10
-      y: 10
-      z: 10
-    c1:
-      x: 10
-      y: 10
-      z: 10
-  AngularConsumption:
-    c0:
-      x: 10
-      y: 10
-      z: 10
-    c1:
-      x: 10
-      y: 10
-      z: 10
+  LinearForcePos: {x: 3, y: 3, z: 3}
+  LinearForceNeg: {x: -3, y: -3, z: -3}
+  AngularForcePos: {x: 1, y: 1, z: 1}
+  AngularForceNeg: {x: -1, y: -1, z: -1}
+  LinearConsumptionPos: {x: 10, y: 10, z: 10}
+  LinearConsumptionNeg: {x: 10, y: 10, z: 10}
+  AngularConsumptionPos: {x: 10, y: 10, z: 10}
+  AngularConsumptionNeg: {x: 10, y: 10, z: 10}
   InertialFactor: 0.5
   LinearSleepThreshold: 0.005
   AngularSleepThreshold: 0.01

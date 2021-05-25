@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerInfoUI : MonoBehaviour {
-
     [SerializeField] private Transform _hpIndicators;
     [SerializeField] private Image _hull;
     [SerializeField] private Gradient _hullGradient;
@@ -18,13 +17,9 @@ public class PlayerInfoUI : MonoBehaviour {
     [SerializeField] private Structure _structure;
 
     private void Start () {
-
         _structure = PlayerController.GetInstance ().GetPlayer ();
-
         if (_structure == null) return;
-
         SetupShields ();
-
     }
 
     public Structure GetStructure () { return _structure; }
@@ -32,21 +27,14 @@ public class PlayerInfoUI : MonoBehaviour {
     public void SetStructure (Structure structure) { _structure = structure; }
 
     private void Update () {
-
         if (_structure != PlayerController.GetInstance ().GetPlayer ()) {
-
             _structure = PlayerController.GetInstance ().GetPlayer ();
             if (_structure == null) return;
-
             while (_shields.Count > 0) {
-
                 Destroy (_shields[0].transform.parent.gameObject);
                 _shields.RemoveAt (0);
-
             }
-
             SetupShields ();
-
         }
 
         if (_structure == null) return;
@@ -54,23 +42,12 @@ public class PlayerInfoUI : MonoBehaviour {
         _hull.sprite = _structure.Profile.HullWireframe;
         _hull.color = _hullGradient.Evaluate (_structure.Hull / _structure.Profile.Hull);
 
-        List<ShieldSlot> shields = _structure.GetEquipment<ShieldSlot> ();
+        List<ShieldSlotData> shields = _structure.GetEquipmentData<ShieldSlotData> ();
         for (int i = 0; i < _shields.Count; i++) {
-
-            RectTransform rt = _shields[i].GetComponent<RectTransform> ();
-            if (shields[i].Shield == null) {
-
-                rt.anchoredPosition = Vector3.zero;
-                rt.sizeDelta = Vector2.zero;
+            if (shields[i].Equipment == null) {
                 _shields[i].color = Color.clear;
-
             } else {
-
-                Vector3 scaled = shields[i].Offset * _structure.Profile.WorldToUIScale;
-                rt.anchoredPosition = new Vector2 (scaled.x, scaled.z);
-                rt.sizeDelta = Vector2.one * shields[i].Shield.Radius * _structure.Profile.WorldToUIScale;
-                _shields[i].color = _shieldGradient.Evaluate (shields[i].Strength / shields[i].Shield.MaxStrength);
-
+                _shields[i].color = _shieldGradient.Evaluate (shields[i].Strength / (shields[i].Equipment as ShieldSO).MaxStrength);
             }
         }
 
@@ -79,49 +56,29 @@ public class PlayerInfoUI : MonoBehaviour {
         //else _velocity.text = rb.velocity.magnitude.ToString ("F2") + " m/s";
 
         float storedCap = 0, totalCap = 0;
-        foreach (CapacitorSlot cap in _structure.GetEquipment<CapacitorSlot> ()) {
-
-            storedCap += cap.Energy;
-            totalCap += cap.Equipment.EnergyStorage;
-
-        }
+        _structure.GetEquipmentData<CapacitorSlotData> ().ForEach (capacitor => {
+            storedCap += capacitor.Charge;
+            totalCap += (capacitor.Equipment as CapacitorSO).Capacitance;
+        });
         _capFill.sizeDelta = new Vector2 (_capOutline.sizeDelta.x * storedCap / totalCap, _capFill.sizeDelta.y);
         _capImg.color = _capGradient.Evaluate (storedCap / totalCap);
-
         if (_structure.Selected == null) _direction.gameObject.SetActive (false);
         else {
-
             _direction.gameObject.SetActive (true);
             _direction.rotation = Quaternion.Euler (0, 0, -_structure.GetAngleTo (_structure.Selected.transform.position));
-
         }
-
     }
 
     private void SetupShields () {
-
-        List<ShieldSlot> shields = _structure.GetEquipment<ShieldSlot> ();
-        foreach (ShieldSlot shield in shields) {
-
+        List<ShieldSlotData> shields = _structure.GetEquipmentData<ShieldSlotData> ();
+        foreach (ShieldSlotData shield in shields) {
             GameObject instantiated = Instantiate (_shieldPrefab, _hpIndicators);
             instantiated.transform.SetAsFirstSibling ();
             RectTransform rt = instantiated.GetComponent<RectTransform> ();
-            if (shield.Shield == null) {
-
-                rt.anchoredPosition = Vector3.zero;
-                rt.sizeDelta = Vector2.zero;
-
-            } else {
-
-                Vector3 scaled = shield.Offset * _structure.Profile.WorldToUIScale;
-                rt.anchoredPosition = new Vector2 (scaled.x, scaled.z);
-                rt.sizeDelta = Vector2.one * shield.Shield.Radius * _structure.Profile.WorldToUIScale;
-
-            }
+            Vector3 scaled = (shield.Slot.transform.position - _structure.transform.position) * _structure.Profile.WorldToUIScale;
+            rt.anchoredPosition = new Vector2 (scaled.x, scaled.z);
+            rt.sizeDelta = Vector2.one * 100;
             _shields.Add (instantiated.GetComponent<Image> ());
-
         }
-
     }
-
 }
