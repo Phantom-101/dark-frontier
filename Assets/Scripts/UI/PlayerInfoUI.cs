@@ -60,8 +60,8 @@ public class PlayerInfoUI : MonoBehaviour {
             storedCap += capacitor.Charge;
             totalCap += (capacitor.Equipment as CapacitorSO).Capacitance;
         });
-        _capFill.sizeDelta = new Vector2 (_capOutline.sizeDelta.x * storedCap / totalCap, _capFill.sizeDelta.y);
-        _capImg.color = _capGradient.Evaluate (storedCap / totalCap);
+        _capFill.sizeDelta = new Vector2 (_capOutline.sizeDelta.x * storedCap / (totalCap == 0 ? 1 : totalCap), _capFill.sizeDelta.y);
+        _capImg.color = _capGradient.Evaluate (storedCap / (totalCap == 0 ? 1 : totalCap));
         if (_structure.Selected == null) _direction.gameObject.SetActive (false);
         else {
             _direction.gameObject.SetActive (true);
