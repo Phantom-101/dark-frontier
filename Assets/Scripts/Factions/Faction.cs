@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [Serializable]
 public class Faction {
-
     [SerializeField] private string _name;
     [SerializeField] private string _id;
     [SerializeField] private long _wealth;
@@ -51,42 +49,27 @@ public class Faction {
     public bool IsNeutral (Faction other) { return !IsAlly (other) && !IsEnemy (other); }
 
     public FactionSaveData GetSaveData () {
-
         FactionSaveData data = new FactionSaveData {
-
             Name = _name,
             Id = _id,
             Wealth = _wealth,
-            RelationIds = _relations.Keys.ToList (),
-            RelationValues = _relations.Values.ToList ()
-
+            Relations = _relations,
         };
         return data;
-
     }
 
     public void LoadSaveData (FactionSaveData saveData) {
-
         _name = saveData.Name;
         _id = saveData.Id;
         _wealth = saveData.Wealth;
-        for (int i = 0; i < saveData.RelationIds.Count; i++) {
-
-            _relations[saveData.RelationIds[i]] = saveData.RelationValues[i];
-
-        }
-
+        _relations = saveData.Relations;
     }
-
 }
 
 [Serializable]
 public class FactionSaveData {
-
     public string Name;
     public string Id;
     public long Wealth;
-    public List<string> RelationIds = new List<string> ();
-    public List<float> RelationValues = new List<float> ();
-
+    public StringToFloatDictionary Relations = new StringToFloatDictionary ();
 }

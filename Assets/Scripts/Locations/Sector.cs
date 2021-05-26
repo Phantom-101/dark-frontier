@@ -46,8 +46,8 @@ public class Sector : MonoBehaviour {
         SectorSaveData data = new SectorSaveData {
 
             Name = gameObject.name,
-            Position = transform.localPosition,
-            Rotation = transform.localRotation,
+            Position = new float[] { transform.localPosition.x, transform.localPosition.y, transform.localPosition.z },
+            Rotation = new float[] { transform.localRotation.x, transform.localRotation.y, transform.localRotation.z, transform.localRotation.w },
             Id = _id
 
         };
@@ -58,8 +58,8 @@ public class Sector : MonoBehaviour {
     public void SetSaveData (SectorSaveData saveData) {
 
         gameObject.name = saveData.Name;
-        transform.localPosition = saveData.Position;
-        transform.localRotation = saveData.Rotation;
+        transform.localPosition = new Vector3 (saveData.Position[0], saveData.Position[1], saveData.Position[2]);
+        transform.localRotation = new Quaternion (saveData.Rotation[0], saveData.Rotation[1], saveData.Rotation[2], saveData.Rotation[3]);
         _id = saveData.Id;
 
     }
@@ -71,8 +71,8 @@ public class Sector : MonoBehaviour {
 public class SectorSaveData {
 
     public string Name;
-    public Vector3 Position;
-    public Quaternion Rotation;
+    public float[] Position;
+    public float[] Rotation;
     public string Id;
 
 }

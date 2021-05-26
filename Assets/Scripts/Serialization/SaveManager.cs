@@ -3,7 +3,6 @@ using System.IO;
 using UnityEngine;
 
 public class SaveManager : MonoBehaviour {
-
     [SerializeField] private string _universe;
     private static SaveLoadJob _job;
 
@@ -12,39 +11,21 @@ public class SaveManager : MonoBehaviour {
     private static SaveManager _instance;
 
     private void Awake () {
-
         _instance = this;
-
         _saveGameChannel.OnEventRaised += Save;
-
     }
 
     private void Update () {
-
         if (_job != null) {
-
-            Debug.Log ("doing job");
-
             if (SectorManager.GetInstance () == null) return;
             if (FactionManager.GetInstance () == null) return;
             if (StructureManager.GetInstance () == null) return;
-
-            Debug.Log ("job started");
-
-            string path = Application.persistentDataPath + "/saves/" + _job.Universe + "/" + _job.Save;
-
-            Debug.Log ($"path: {path}");
-
-            SectorManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/sectors.save"));
-            FactionManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/factions.save"));
-            StructureManager.GetInstance ().LoadGame (SerializationManager.Load (path + "/structures.save"));
-
-            _universe = _job.Universe;
-
+            SectorManager.GetInstance ().LoadGame (_job.Directory);
+            FactionManager.GetInstance ().LoadGame (_job.Directory);
+            StructureManager.GetInstance ().LoadGame (_job.Directory);
+            _universe = _job.Directory.Parent.Name;
             _job = null;
-
         }
-
     }
 
     public string GetUniverse () { return _universe; }
@@ -54,96 +35,46 @@ public class SaveManager : MonoBehaviour {
     public static SaveManager GetInstance () { return _instance; }
 
     public void Save () {
+        Debug.Log ("saving");
 
         CreateSavesDirectoryIfNotExists ();
-
         string timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds ().ToString ();
-
-        StructureManager.GetInstance ().SaveGame (timestamp);
-        SectorManager.GetInstance ().SaveGame (timestamp);
-        FactionManager.GetInstance ().SaveGame (timestamp);
-
+        DirectoryInfo info = PathManager.GetSaveDirectory (_universe, timestamp);
+        if (!info.Exists) info.Create ();
+        StructureManager.GetInstance ().SaveGame (info);
+        SectorManager.GetInstance ().SaveGame (info);
+        FactionManager.GetInstance ().SaveGame (info);
     }
 
     public void Load (string universeName) {
-
         CreateSavesDirectoryIfNotExists ();
-
-        string[] saves = Directory.GetDirectories (Application.persistentDataPath + "/saves/" + universeName);
-
+        DirectoryInfo[] saves = PathManager.GetSaveDirectories (universeName);
         if (saves.Length == 0) return;
-
-        string latest = saves[0];
+        DirectoryInfo latest = saves[0];
         for (int i = 1; i < saves.Length; i++)
-            if (saves[i].CompareTo (latest) > 0)
+            if (saves[i].Name.CompareTo (latest.Name) > 0)
                 latest = saves[i];
-
         _job = new SaveLoadJob {
-
-            Universe = universeName,
-            Save = latest.Remove (0, Application.persistentDataPath.Length + universeName.Length + 2)
-
+            Directory = latest,
         };
-
-        SectorManager.GetInstance ().LoadGame (SerializationManager.Load (latest + "/sectors.save"));
-        FactionManager.GetInstance ().LoadGame (SerializationManager.Load (latest + "/factions.save"));
-        StructureManager.GetInstance ().LoadGame (SerializationManager.Load (latest + "/structures.save"));
-
-        _universe = universeName;
-
     }
 
     public void Load (string universeName, string saveName) {
-
         CreateSavesDirectoryIfNotExists ();
-
-        if (!Directory.Exists (Application.persistentDataPath + "/saves/" + universeName + "/" + saveName)) return;
-
+        DirectoryInfo info = PathManager.GetSaveDirectory (universeName, saveName);
+        if (!info.Exists) return;
         _job = new SaveLoadJob {
-
-            Universe = universeName,
-            Save = saveName
-
+            Directory = info,
         };
-
-    }
-
-    public string[] GetAllUniverses () {
-
-        CreateSavesDirectoryIfNotExists ();
-
-        DirectoryInfo[] infos = new DirectoryInfo (Application.persistentDataPath + "/saves/").GetDirectories ();
-        string[] names = new string[infos.Length];
-        for (int i = 0; i < infos.Length; i++) names[i] = infos[i].Name;
-        return names;
-
-    }
-
-    public string[] GetAllSaves (string universeName) {
-
-        CreateSavesDirectoryIfNotExists ();
-
-        if (!Directory.Exists (Application.persistentDataPath + "/saves/" + universeName)) return new string[0];
-
-        DirectoryInfo[] infos = new DirectoryInfo (Application.persistentDataPath + "/saves/" + universeName).GetDirectories ();
-        string[] names = new string[infos.Length];
-        for (int i = 0; i < infos.Length; i++) names[i] = infos[i].Name;
-        return names;
-
     }
 
     void CreateSavesDirectoryIfNotExists () {
-
-        if (!Directory.Exists (Application.persistentDataPath + "/saves/")) Directory.CreateDirectory (Application.persistentDataPath + "/saves/");
-
+        DirectoryInfo info = PathManager.GetUniversesDirectory ();
+        if (!info.Exists) info.Create ();
     }
-
 }
 
 [Serializable]
 public class SaveLoadJob {
-
-    public string Universe;
-    public string Save;
-
+    public DirectoryInfo Directory;
 }

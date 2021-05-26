@@ -3914,7 +3914,7 @@ PrefabInstance:
     - target: {fileID: 2587107806090879227, guid: 47176604bfeceb64ab446587bf83e58c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000505006
+      value: 0.0006015299
       objectReference: {fileID: 0}
     - target: {fileID: 2587107806121843496, guid: 47176604bfeceb64ab446587bf83e58c,
         type: 3}
@@ -4089,7 +4089,7 @@ PrefabInstance:
     - target: {fileID: 2587107806169442024, guid: 47176604bfeceb64ab446587bf83e58c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000505006
+      value: 0.0006015299
       objectReference: {fileID: 0}
     - target: {fileID: 2587107806200451356, guid: 47176604bfeceb64ab446587bf83e58c,
         type: 3}
@@ -4099,7 +4099,7 @@ PrefabInstance:
     - target: {fileID: 2587107806200451356, guid: 47176604bfeceb64ab446587bf83e58c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000505006
+      value: 0.0006015299
       objectReference: {fileID: 0}
     - target: {fileID: 2587107806211343755, guid: 47176604bfeceb64ab446587bf83e58c,
         type: 3}
@@ -4134,7 +4134,7 @@ PrefabInstance:
     - target: {fileID: 2587107806357566620, guid: 47176604bfeceb64ab446587bf83e58c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000019983023
+      value: 0.0005710281
       objectReference: {fileID: 0}
     - target: {fileID: 2587107806369818648, guid: 47176604bfeceb64ab446587bf83e58c,
         type: 3}
@@ -4254,7 +4254,7 @@ PrefabInstance:
     - target: {fileID: 2587107806821125561, guid: 47176604bfeceb64ab446587bf83e58c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000505006
+      value: 0.0006015299
       objectReference: {fileID: 0}
     - target: {fileID: 2587107806826516266, guid: 47176604bfeceb64ab446587bf83e58c,
         type: 3}
@@ -4334,7 +4334,7 @@ PrefabInstance:
     - target: {fileID: 2587107806967508999, guid: 47176604bfeceb64ab446587bf83e58c,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000505006
+      value: 0.0006015299
       objectReference: {fileID: 0}
     - target: {fileID: 2587107807030936610, guid: 47176604bfeceb64ab446587bf83e58c,
         type: 3}

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class StructureManager : MonoBehaviour {
@@ -201,26 +203,35 @@ public class StructureManager : MonoBehaviour {
 
     }
 
-    public void SaveGame (string timestamp) {
-
-        string saveName = SaveManager.GetInstance ().GetUniverse ();
-
+    public void SaveGame (DirectoryInfo directory) {
         List<StructureSaveData> saveData = new List<StructureSaveData> ();
         _structures.ForEach (structure => { saveData.Add (structure.GetSaveData ()); });
-
-        SerializationManager.Save (Application.persistentDataPath + "/saves/" + saveName + "/" + timestamp, "structures.save", JsonHelper.ToJson (saveData));
-
+        FileInfo file = PathManager.GetStructureFile (directory);
+        if (!file.Exists) file.Create ().Close ();
+        File.WriteAllText (
+            file.FullName,
+            JsonConvert.SerializeObject (
+                saveData,
+                Formatting.Indented,
+                new JsonSerializerSettings {
+                    TypeNameHandling = TypeNameHandling.All,
+                }
+            )
+        );
     }
 
-    public void LoadGame (string saveData) {
-
-        List<StructureSaveData> structures = JsonHelper.ListFromJson<StructureSaveData> (saveData);
-
+    public void LoadGame (DirectoryInfo directory) {
+        FileInfo file = PathManager.GetStructureFile (directory);
+        if (!file.Exists) return;
+        List<StructureSaveData> structures = JsonConvert.DeserializeObject (
+            File.ReadAllText (file.FullName),
+            new JsonSerializerSettings {
+                TypeNameHandling = TypeNameHandling.All,
+            }
+        ) as List<StructureSaveData>;
         _structures.ForEach (structure => { Destroy (structure.gameObject); });
         _structures = new List<Structure> ();
-
         structures.ForEach (data => {
-
             StructureSO profile = ItemManager.GetInstance ().GetItem (data.ProfileId) as StructureSO;
             GameObject structure = Instantiate (profile.Prefab, SectorManager.GetInstance ().GetSector (data.SectorId).transform);
             structure.name = profile.Name;
@@ -228,11 +239,8 @@ public class StructureManager : MonoBehaviour {
             comp.SetSaveData (data);
             _structures.Add (comp);
             if (data.IsPlayer) PlayerController.GetInstance ().SetPlayer (comp);
-
         });
-
     }
 
     public static StructureManager GetInstance () { return _instance; }
-
 }

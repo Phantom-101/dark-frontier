@@ -112,8 +112,8 @@ public class LauncherSlotData : EquipmentSlotData {
             Durability = Durability,
             Charge = Charge,
             Activated = Activated,
-            TargetId = Target.Id,
-            MissileId = Missile.Id,
+            TargetId = Target == null ? "" : Target.Id,
+            MissileId = Missile == null ? "" : Missile.Id,
         };
     }
 }

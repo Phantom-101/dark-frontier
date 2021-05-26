@@ -119,7 +119,7 @@ public class BeamLaserSlotData : EquipmentSlotData {
             Charge = Charge,
             Heat = Heat,
             Activated = Activated,
-            TargetId = Target.Id,
+            TargetId = Target == null ? "" : Target.Id,
         };
     }
 }

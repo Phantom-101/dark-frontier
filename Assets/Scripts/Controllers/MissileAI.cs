@@ -22,7 +22,14 @@ public class MissileAI : AI {
         _damageMultiplier = launcher.DamageMultiplier * lockProgress / 100;
         _rangeMultiplier = launcher.RangeMultiplier;
 
-        _structure.AddStatModifier (new StructureStatModifier ("Launcher Range Modifier", "linear_speed_multiplier", _rangeMultiplier, StructureStatModifierType.Multiplicative, 100));
+        _structure.AddStatModifier (new StructureStatModifier {
+            Name = "Launcher Range Modifier",
+            Id = "launcher-range-modifier",
+            Target = StructureStatNames.LinearSpeedMultiplier,
+            Value = _rangeMultiplier,
+            Type = StructureStatModifierType.Multiplicative,
+            Duration = 100,
+        });
     }
 
     public override void Tick () {

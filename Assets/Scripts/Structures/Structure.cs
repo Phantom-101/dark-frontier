@@ -106,31 +106,28 @@ public class Structure : MonoBehaviour {
     }
 
     public float GetStatBaseValue (string name) {
-
         if (!_stats.ContainsKey (name)) return 0;
-        return _stats[name].GetBaseValue ();
-
+        return _stats[name].BaseValue;
     }
 
     public float GetStatAppliedValue (string name) {
-
         if (!_stats.ContainsKey (name)) return 0;
         return _stats[name].GetAppliedValue ();
-
     }
 
     public void AddStatModifier (StructureStatModifier modifier) {
-
-        if (!_stats.ContainsKey (modifier.GetTarget ())) return;
-        _stats[modifier.GetTarget ()].AddModifier (modifier);
-
+        if (!_stats.ContainsKey (modifier.Target)) return;
+        _stats[modifier.Target].AddModifier (modifier);
     }
 
     public void RemoveStatModifier (StructureStatModifier modifier) {
+        if (!_stats.ContainsKey (modifier.Target)) return;
+        _stats[modifier.Target].RemoveModifier (modifier);
+    }
 
-        if (!_stats.ContainsKey (modifier.GetTarget ())) return;
-        _stats[modifier.GetTarget ()].GetModifiers ().RemoveAll (m => m.GetName () == modifier.GetName ());
-
+    public void RemoveStatModifier (string stat, string id) {
+        if (!_stats.ContainsKey (stat)) return;
+        _stats[stat].RemoveModifier (id);
     }
 
     public List<T> GetEquipmentData<T> () where T : EquipmentSlotData {
@@ -394,23 +391,23 @@ public class Structure : MonoBehaviour {
     }
 
     private void EnsureStats () {
-        if (!_stats.ContainsKey (StructureStatNames.SensorStrength)) _stats[StructureStatNames.SensorStrength] = new StructureStat (StructureStatNames.SensorStrength, _profile.SensorStrength);
-        if (!_stats.ContainsKey (StructureStatNames.ScannerStrength)) _stats[StructureStatNames.ScannerStrength] = new StructureStat (StructureStatNames.ScannerStrength, _profile.ScannerStrength);
-        if (!_stats.ContainsKey (StructureStatNames.MaxLocks)) _stats[StructureStatNames.MaxLocks] = new StructureStat (StructureStatNames.MaxLocks, _profile.MaxLocks);
-        if (!_stats.ContainsKey (StructureStatNames.Detectability)) _stats[StructureStatNames.Detectability] = new StructureStat (StructureStatNames.Detectability, _profile.Detectability);
-        if (!_stats.ContainsKey (StructureStatNames.SignatureSize)) _stats[StructureStatNames.SignatureSize] = new StructureStat (StructureStatNames.SignatureSize, _profile.SignatureSize);
-        if (!_stats.ContainsKey (StructureStatNames.DockingBaySize)) _stats[StructureStatNames.DockingBaySize] = new StructureStat (StructureStatNames.DockingBaySize, _profile.DockingBaySize);
-        if (!_stats.ContainsKey (StructureStatNames.DamageMultiplier)) _stats[StructureStatNames.DamageMultiplier] = new StructureStat (StructureStatNames.DamageMultiplier, 1);
-        if (!_stats.ContainsKey (StructureStatNames.RechargeMultiplier)) _stats[StructureStatNames.RechargeMultiplier] = new StructureStat (StructureStatNames.RechargeMultiplier, 1);
-        if (!_stats.ContainsKey (StructureStatNames.LinearSpeedMultiplier)) _stats[StructureStatNames.LinearSpeedMultiplier] = new StructureStat (StructureStatNames.LinearSpeedMultiplier, 1);
-        if (!_stats.ContainsKey (StructureStatNames.AngularSpeedMultiplier)) _stats[StructureStatNames.AngularSpeedMultiplier] = new StructureStat (StructureStatNames.AngularSpeedMultiplier, 1);
+        if (!_stats.ContainsKey (StructureStatNames.SensorStrength)) _stats[StructureStatNames.SensorStrength] = new StructureStat { Name = StructureStatNames.SensorStrength, BaseValue = _profile.SensorStrength };
+        if (!_stats.ContainsKey (StructureStatNames.ScannerStrength)) _stats[StructureStatNames.ScannerStrength] = new StructureStat { Name = StructureStatNames.ScannerStrength, BaseValue = _profile.ScannerStrength };
+        if (!_stats.ContainsKey (StructureStatNames.MaxLocks)) _stats[StructureStatNames.MaxLocks] = new StructureStat { Name = StructureStatNames.MaxLocks, BaseValue = _profile.MaxLocks };
+        if (!_stats.ContainsKey (StructureStatNames.Detectability)) _stats[StructureStatNames.Detectability] = new StructureStat { Name = StructureStatNames.Detectability, BaseValue = _profile.Detectability };
+        if (!_stats.ContainsKey (StructureStatNames.SignatureSize)) _stats[StructureStatNames.SignatureSize] = new StructureStat { Name = StructureStatNames.SignatureSize, BaseValue = _profile.SignatureSize };
+        if (!_stats.ContainsKey (StructureStatNames.DockingBaySize)) _stats[StructureStatNames.DockingBaySize] = new StructureStat { Name = StructureStatNames.DockingBaySize, BaseValue = _profile.DockingBaySize };
+        if (!_stats.ContainsKey (StructureStatNames.DamageMultiplier)) _stats[StructureStatNames.DamageMultiplier] = new StructureStat { Name = StructureStatNames.DamageMultiplier, BaseValue = 1 };
+        if (!_stats.ContainsKey (StructureStatNames.RechargeMultiplier)) _stats[StructureStatNames.RechargeMultiplier] = new StructureStat { Name = StructureStatNames.RechargeMultiplier, BaseValue = 1 };
+        if (!_stats.ContainsKey (StructureStatNames.LinearSpeedMultiplier)) _stats[StructureStatNames.LinearSpeedMultiplier] = new StructureStat { Name = StructureStatNames.LinearSpeedMultiplier, BaseValue = 1 };
+        if (!_stats.ContainsKey (StructureStatNames.AngularSpeedMultiplier)) _stats[StructureStatNames.AngularSpeedMultiplier] = new StructureStat { Name = StructureStatNames.AngularSpeedMultiplier, BaseValue = 1 };
     }
 
     public StructureSaveData GetSaveData () {
         StructureSaveData data = new StructureSaveData {
             Name = gameObject.name,
-            Position = transform.localPosition,
-            Rotation = transform.localRotation,
+            Position = new float[] { transform.localPosition.x, transform.localPosition.y, transform.localPosition.z },
+            Rotation = new float[] { transform.localRotation.x, transform.localRotation.y, transform.localRotation.z, transform.localRotation.w },
             Hull = _hull,
             InventoryIds = _inventory.Keys.Select (item => item.Id).ToList (),
             InventoryCounts = _inventory.Values.ToList (),
@@ -427,11 +424,14 @@ public class Structure : MonoBehaviour {
 
     public void SetSaveData (StructureSaveData saveData) {
         gameObject.name = saveData.Name;
-        transform.localPosition = saveData.Position;
-        transform.localRotation = saveData.Rotation;
+        transform.localPosition = new Vector3 (saveData.Position[0], saveData.Position[1], saveData.Position[2]);
+        transform.localRotation = new Quaternion (saveData.Rotation[0], saveData.Rotation[1], saveData.Rotation[2], saveData.Rotation[3]);
         _hull = saveData.Hull;
         _faction = FactionManager.GetInstance ().GetFaction (saveData.FactionId);
-        for (int i = 0; i < _equipmentSlots.Count; i++) _equipmentSlots[i].Data = saveData.Equipment[i].Load ();
+        for (int i = 0; i < _equipmentSlots.Count; i++) {
+            _equipmentSlots[i].Data = saveData.Equipment[i].Load ();
+            _equipmentSlots[i].Data.Slot = _equipmentSlots[i];
+        }
         ItemManager im = ItemManager.GetInstance ();
         for (int i = 0; i < saveData.InventoryIds.Count; i++) {
             _inventory[im.GetItem (saveData.InventoryIds[i])] = saveData.InventoryCounts[i];
@@ -448,8 +448,8 @@ public class Structure : MonoBehaviour {
 [Serializable]
 public class StructureSaveData {
     public string Name;
-    public Vector3 Position;
-    public Quaternion Rotation;
+    public float[] Position;
+    public float[] Rotation;
     public string ProfileId;
     public string Id;
     public float Hull;

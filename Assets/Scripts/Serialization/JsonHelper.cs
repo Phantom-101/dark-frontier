@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,11 +9,13 @@ public static class JsonHelper {
         return wrapper.Items;
     }
 
-    public static string ToJson<T> (T[] array, bool prettyPrint = false) {
+    public static string ToJson<T> (T[] array, Formatting formatting = Formatting.None) {
         ArrayWrapper<T> wrapper = new ArrayWrapper<T> {
             Items = array
         };
-        return JsonUtility.ToJson (wrapper, prettyPrint);
+        return JsonConvert.SerializeObject (wrapper, formatting, new JsonSerializerSettings {
+            TypeNameHandling = TypeNameHandling.All,
+        });
     }
 
     [Serializable]
@@ -25,11 +28,13 @@ public static class JsonHelper {
         return wrapper.Items;
     }
 
-    public static string ToJson<T> (List<T> list, bool prettyPrint = false) {
+    public static string ToJson<T> (List<T> list, Formatting formatting = Formatting.None) {
         ListWrapper<T> wrapper = new ListWrapper<T> {
             Items = list
         };
-        return JsonUtility.ToJson (wrapper, prettyPrint);
+        return JsonConvert.SerializeObject (wrapper, formatting, new JsonSerializerSettings {
+            TypeNameHandling = TypeNameHandling.All,
+        });
     }
 
     [Serializable]

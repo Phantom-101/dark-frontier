@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class SaveSelectionUI : MonoBehaviour {
@@ -41,64 +42,46 @@ public class SaveSelectionUI : MonoBehaviour {
     }
 
     private void Build () {
-
         SaveManager sm = SaveManager.GetInstance ();
-
         while (_instUniverses.Count > 0) {
-
             Destroy (_instUniverses[0].gameObject);
             _instUniverses.RemoveAt (0);
-
         }
         while (_instSaves.Count > 0) {
-
             Destroy (_instSaves[0].gameObject);
             _instSaves.RemoveAt (0);
-
         }
-
-        string[] universes = sm.GetAllUniverses ();
+        DirectoryInfo[] universes = PathManager.GetUniverseDirectories ();
         int offset = 0;
-        foreach (string universe in universes) {
-
+        foreach (DirectoryInfo universe in universes) {
             GameObject ugo = Instantiate (_universe, _content);
             ugo.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, -150 * offset);
             UniverseInfoUI uinfo = ugo.GetComponent<UniverseInfoUI> ();
             uinfo.GetButton ().onClick.AddListener (() => {
-                if (_expanded.Contains (universe)) _expanded.Remove (universe);
-                else _expanded.Add (universe);
+                if (_expanded.Contains (universe.Name)) _expanded.Remove (universe.Name);
+                else _expanded.Add (universe.Name);
                 Build ();
             });
-            uinfo.SetName (universe);
+            uinfo.SetName (universe.Name);
             _instUniverses.Add (uinfo);
             offset++;
-
-            if (_expanded.Contains (universe)) {
-
-                string[] saves = sm.GetAllSaves (universe);
-                foreach (string save in saves) {
-
+            if (_expanded.Contains (universe.Name)) {
+                DirectoryInfo[] saves = PathManager.GetSaveDirectories (universe);
+                foreach (DirectoryInfo save in saves) {
                     GameObject sgo = Instantiate (_save, _content);
                     sgo.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, -150 * offset);
                     SaveInfoUI sinfo = sgo.GetComponent<SaveInfoUI> ();
                     sinfo.GetButton ().onClick.AddListener (() => {
-
                         UIStateManager.GetInstance ().RemoveState ();
-                        SaveSelected (universe, save);
-
+                        SaveSelected (universe.Name, save.Name);
                     });
-                    sinfo.SetName (universe);
-                    sinfo.SetTime (save);
+                    sinfo.SetName (universe.Name);
+                    sinfo.SetTime (save.Name);
                     _instSaves.Add (sinfo);
                     offset++;
-
                 }
-
             }
-
         }
         _content.GetComponent<RectTransform> ().sizeDelta = new Vector2 (0, 150 * offset);
-
     }
-
 }

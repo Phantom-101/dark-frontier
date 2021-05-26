@@ -2,13 +2,17 @@
 using System.Linq;
 using UnityEngine;
 
-public class NewSaveManager {
+public class PathManager {
+    public static DirectoryInfo GetUniversesDirectory () {
+        return new DirectoryInfo ($"{Application.persistentDataPath}/saves");
+    }
+
     public static string[] GetUniverseNames () {
         return Directory.GetDirectories ($"{Application.persistentDataPath}/saves");
     }
 
     public static DirectoryInfo[] GetUniverseDirectories () {
-        return GetUniverseNames ().ToList ().ConvertAll (e => GetUniverseDirectory (e)).ToArray ();
+        return GetUniverseNames ().ToList ().ConvertAll (e => new DirectoryInfo (e)).ToArray ();
     }
 
     public static DirectoryInfo GetUniverseDirectory (string name) {
@@ -20,7 +24,7 @@ public class NewSaveManager {
     }
 
     public static DirectoryInfo[] GetSaveDirectories (string universe) {
-        return GetSaveNames (universe).ToList ().ConvertAll (e => GetSaveDirectory (universe, e)).ToArray ();
+        return GetSaveNames (universe).ToList ().ConvertAll (e => new DirectoryInfo (e)).ToArray ();
     }
 
     public static string[] GetSaveNames (DirectoryInfo universe) {
@@ -28,7 +32,7 @@ public class NewSaveManager {
     }
 
     public static DirectoryInfo[] GetSaveDirectories (DirectoryInfo universe) {
-        return GetSaveNames (universe).ToList ().ConvertAll (e => GetSaveDirectory (universe, e)).ToArray ();
+        return GetSaveNames (universe).ToList ().ConvertAll (e => new DirectoryInfo (e)).ToArray ();
     }
 
     public static DirectoryInfo GetSaveDirectory (string universe, string name) {

@@ -28,6 +28,8 @@ public class EquipmentSlotData {
     public EquipmentSO Equipment;
     public float Durability;
 
+    public EquipmentSlotData () { }
+
     public virtual EquipmentSlotSaveData Save () {
         return new EquipmentSlotSaveData {
             EquipmentId = Equipment == null ? "" : Equipment.Id,

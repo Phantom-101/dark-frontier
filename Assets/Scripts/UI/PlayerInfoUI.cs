@@ -75,7 +75,7 @@ public class PlayerInfoUI : MonoBehaviour {
             GameObject instantiated = Instantiate (_shieldPrefab, _hpIndicators);
             instantiated.transform.SetAsFirstSibling ();
             RectTransform rt = instantiated.GetComponent<RectTransform> ();
-            Vector3 scaled = (shield.Slot.transform.position - _structure.transform.position) * _structure.Profile.WorldToUIScale;
+            Vector3 scaled = (shield.Slot.transform.position - _structure.transform.position) * 100;
             rt.anchoredPosition = new Vector2 (scaled.x, scaled.z);
             rt.sizeDelta = Vector2.one * 100;
             _shields.Add (instantiated.GetComponent<Image> ());

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class FactionManager : MonoBehaviour {
@@ -41,31 +43,38 @@ public class FactionManager : MonoBehaviour {
 
     }
 
-    public void SaveGame (string timestamp) {
-
-        string saveName = SaveManager.GetInstance ().GetUniverse ();
-
+    public void SaveGame (DirectoryInfo directory) {
         List<FactionSaveData> saveData = new List<FactionSaveData> ();
         _factions.ForEach (faction => { saveData.Add (faction.GetSaveData ()); });
-
-        SerializationManager.Save (Application.persistentDataPath + "/saves/" + saveName + "/" + timestamp, "factions.save", JsonHelper.ToJson (saveData));
-
+        FileInfo file = PathManager.GetFactionFile (directory);
+        if (!file.Exists) file.Create ().Close ();
+        File.WriteAllText (
+            file.FullName,
+            JsonConvert.SerializeObject (
+                saveData,
+                Formatting.Indented,
+                new JsonSerializerSettings {
+                    TypeNameHandling = TypeNameHandling.All,
+                }
+            )
+        );
     }
 
-    public void LoadGame (string saveData) {
-
-        List<FactionSaveData> factions = JsonHelper.ListFromJson<FactionSaveData> (saveData);
-
+    public void LoadGame (DirectoryInfo directory) {
+        FileInfo file = PathManager.GetFactionFile (directory);
+        if (!file.Exists) return;
+        List<FactionSaveData> factions = JsonConvert.DeserializeObject (
+            File.ReadAllText (file.FullName),
+            new JsonSerializerSettings {
+                TypeNameHandling = TypeNameHandling.All,
+            }
+        ) as List<FactionSaveData>;
         _factions = new List<Faction> ();
-
         factions.ForEach (data => {
-
             Faction faction = new Faction ();
             faction.LoadSaveData (data);
             _factions.Add (faction);
-
         });
-
     }
 
     public static FactionManager GetInstance () { return _instance; }

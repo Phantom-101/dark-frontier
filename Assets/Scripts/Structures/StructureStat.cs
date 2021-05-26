@@ -4,82 +4,55 @@ using UnityEngine;
 
 [Serializable]
 public class StructureStat {
-
-    [SerializeField] private string _name;
-    [SerializeField] private float _baseValue;
-    [SerializeField] private List<StructureStatModifier> _modifiers;
+    public string Name;
+    public float BaseValue;
+    public Dictionary<string, StructureStatModifier> Modifiers = new Dictionary<string, StructureStatModifier> ();
     [SerializeField] private float _appliedValue;
-    [SerializeField] private bool _dirty;
+    [SerializeField] private bool _dirty = true;
 
-    public StructureStat (string name, float baseValue) : this (name, baseValue, new List<StructureStatModifier> ()) { }
-
-    public StructureStat (string name, float baseValue, List<StructureStatModifier> modifiers) {
-
-        _name = name;
-        _baseValue = baseValue;
-        _modifiers = modifiers;
-        _appliedValue = 0;
-        _dirty = true;
-
-    }
-
-    public string GetName () { return _name; }
-
-    public float GetBaseValue () { return _baseValue; }
-
-    public List<StructureStatModifier> GetModifiers () { return _modifiers; }
+    public StructureStat () { }
 
     public void AddModifier (StructureStatModifier modifier) {
-
-        if (!_modifiers.Contains (modifier)) {
-
-            _modifiers.Add (modifier);
-            _dirty = true;
-
-        }
-
+        Modifiers[modifier.Id] = modifier;
+        _dirty = true;
     }
 
     public void RemoveModifier (StructureStatModifier modifier) {
-
-        _modifiers.Remove (modifier);
+        Modifiers.Remove (modifier.Id);
         _dirty = true;
+    }
 
+    public void RemoveModifier (string id) {
+        Modifiers.Remove (id);
+        _dirty = true;
     }
 
     public float GetAppliedValue () {
-
         if (!_dirty) return _appliedValue;
 
         float add = 0, multiply = 1, percentAdd = 0;
-        foreach (StructureStatModifier modifier in _modifiers) {
-
-            switch (modifier.GetModifierType ()) {
-
+        foreach (StructureStatModifier modifier in Modifiers.Values) {
+            switch (modifier.Type) {
                 case StructureStatModifierType.Additive:
-                    add += modifier.GetValue ();
+                    add += modifier.Value;
                     break;
                 case StructureStatModifierType.Multiplicative:
-                    multiply *= modifier.GetValue ();
+                    multiply *= modifier.Value;
                     break;
                 case StructureStatModifierType.PercentAdditive:
-                    percentAdd += modifier.GetValue ();
+                    percentAdd += modifier.Value;
                     break;
                 default:
                     Debug.Log ("Unknown modifier type applied.");
                     break;
-
             }
-
         }
 
-        _appliedValue = _baseValue + add + _baseValue * (multiply - 1) + _baseValue * percentAdd;
+        _appliedValue = BaseValue + add + BaseValue * (multiply - 1) + BaseValue * percentAdd;
         _dirty = false;
 
         return _appliedValue;
-
     }
-
 }
 
 public class StructureStatNames {
@@ -91,6 +64,6 @@ public class StructureStatNames {
     public static string DockingBaySize = "docking-bay-size";
     public static string DamageMultiplier = "damage-multiplier";
     public static string RechargeMultiplier = "recharge-multiplier";
-    public static string LinearSpeedMultiplier = "linear-speed_multiplier";
-    public static string AngularSpeedMultiplier = "angular-speed_multiplier";
+    public static string LinearSpeedMultiplier = "linear-speed-multiplier";
+    public static string AngularSpeedMultiplier = "angular-speed-multiplier";
 }
