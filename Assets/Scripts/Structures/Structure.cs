@@ -258,7 +258,7 @@ public class Structure : MonoBehaviour {
         // Enough space?
         float size = 0;
         foreach (Structure c in _docked) size += c.Profile.ApparentSize;
-        if (docker.Profile.ApparentSize > _stats["docking_bay_size"].GetAppliedValue () - size) return false;
+        if (docker.Profile.ApparentSize > _stats[StructureStatNames.DockingBaySize].GetAppliedValue () - size) return false;
 
         return true;
 
@@ -320,7 +320,7 @@ public class Structure : MonoBehaviour {
         if (Selected != null && !Detected.Contains (Selected)) Selected = null;
         bool lockChanged = false;
         foreach (Structure target in Locks.Keys.ToArray ()) {
-            if (target == null || !Detected.Contains (target) || Locks.Keys.Count > GetStatAppliedValue ("max_locks")) {
+            if (target == null || !Detected.Contains (target) || Locks.Keys.Count > GetStatAppliedValue (StructureStatNames.MaxLocks)) {
                 Locks.Remove (target);
                 lockChanged = true;
             }
@@ -337,7 +337,7 @@ public class Structure : MonoBehaviour {
         if (target == null) return false;
         if (!Detected.Contains (target)) return false;
         if (Locks.ContainsKey (target)) return false;
-        if (Locks.Keys.Count >= GetStatAppliedValue ("max_locks")) return false;
+        if (Locks.Keys.Count >= GetStatAppliedValue (StructureStatNames.MaxLocks)) return false;
         Locks[target] = 0;
         PlayerController pc = PlayerController.GetInstance ();
         if (pc.GetPlayer () == this) pc.LocksChangedChannel.OnEventRaised.Invoke ();
@@ -360,7 +360,7 @@ public class Structure : MonoBehaviour {
 
         foreach (Structure target in Locks.Keys.ToArray ()) {
 
-            float progress = GetStatAppliedValue ("scanner_strength") * target.GetStatAppliedValue ("signature_size") * Time.deltaTime;
+            float progress = GetStatAppliedValue (StructureStatNames.ScannerStrength) * target.GetStatAppliedValue (StructureStatNames.SignatureSize) * Time.deltaTime;
             Locks[target] = Mathf.Min (Locks[target] + progress, 100);
 
         }

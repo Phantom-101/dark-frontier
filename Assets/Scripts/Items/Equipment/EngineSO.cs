@@ -70,7 +70,7 @@ public class EngineSO : EquipmentSO {
         if (data.EnergySatisfaction > 0) {
             if (rb.velocity.sqrMagnitude > MaxLinearSpeed * MaxLinearSpeed) rb.velocity = rb.velocity.normalized * MaxLinearSpeed;
             rb.maxAngularVelocity = MaxAngularSpeed * Mathf.Deg2Rad;
-        }
+        } else rb.maxAngularVelocity = 0;
 
         Vector3[] accels = GetAccelerations (slot);
         cf.relativeForce = accels[0] * data.EnergySatisfaction;
@@ -104,7 +104,7 @@ public class EngineSO : EquipmentSO {
             if (Mathf.Abs (dif) > LinearSleepThreshold) {
                 float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), InertialFactor)) * Mathf.Sign (dif);
                 res[0][d] = Lerp (mul, LinearForcePos[d], LinearForceNeg[d]);
-                res[0][d] *= slot.Equipper.GetStatAppliedValue ("linear_speed_multiplier");
+                res[0][d] *= slot.Equipper.GetStatAppliedValue (StructureStatNames.LinearSpeedMultiplier);
             }
         }
         // Angular
@@ -114,7 +114,7 @@ public class EngineSO : EquipmentSO {
             if (Mathf.Abs (dif) > AngularSleepThreshold) {
                 float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), InertialFactor)) * Mathf.Sign (dif);
                 res[1][d] = Lerp (mul, AngularForcePos[d], AngularForceNeg[d]);
-                res[1][d] *= slot.Equipper.GetStatAppliedValue ("angular_speed_multiplier");
+                res[1][d] *= slot.Equipper.GetStatAppliedValue (StructureStatNames.AngularSpeedMultiplier);
             }
         }
         return res;

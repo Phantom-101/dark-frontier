@@ -72,7 +72,7 @@ public class StructureManager : MonoBehaviour {
         if (a.Sector != b.Sector) return false;
 
         float sqrDis = (a.transform.localPosition - b.transform.localPosition).sqrMagnitude;
-        float range = a.GetStatAppliedValue ("sensor_strength") * b.GetStatAppliedValue ("detectability");
+        float range = a.GetStatAppliedValue (StructureStatNames.SensorStrength) * b.GetStatAppliedValue (StructureStatNames.Detectability);
         float sqrRange = range * range;
         return sqrDis <= sqrRange;
 
