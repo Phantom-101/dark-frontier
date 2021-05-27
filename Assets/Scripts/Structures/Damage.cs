@@ -18,6 +18,10 @@ public struct Damage {
         ShieldPenetration = p;
     }
 
+    public static Damage operator + (Damage a, Damage b) {
+        return new Damage (a.ShieldDamage + b.ShieldDamage, a.HullDamage + b.HullDamage, a.EquipmentDamage + b.EquipmentDamage, (a.ShieldPenetration + b.ShieldPenetration) / 2);
+    }
+
     public static Damage operator * (float factor, Damage damage) {
         return new Damage (damage.ShieldDamage * factor, damage.HullDamage * factor, damage.EquipmentDamage * factor, damage.ShieldPenetration);
     }

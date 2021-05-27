@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa1a2429bea78d74eb4d33eddb4baf89, type: 3}
+  m_Name: Medium Missile
+  m_EditorClassIdentifier: 
+  Name: Medium Missile
+  Description: 
+  Id: items.charges.missiles.medium-missile
+  Icon: {fileID: 21300000, guid: 34502f7e93de60d40ac817b2a0f12f4a, type: 3}
+  Volume: 0.1
+  Tags:
+  - {fileID: 11400000, guid: 4c134e9b4fd8c4e4fba9632fd4bd0ff7, type: 2}
+  - {fileID: 11400000, guid: 81551225180891d4598e35466be8e272, type: 2}
+  - {fileID: 11400000, guid: f894c2965e6369341a4ac7c73389c61b, type: 2}
+  - {fileID: 11400000, guid: 8f662fdbac4b6bc43afee78abbe926c7, type: 2}
+  Usable: 0
+  MissileStructure: {fileID: 11400000, guid: 309930371c538784e99a1ce8bc180a91, type: 2}
+  HeadingAllowance: 3
+  DetonationRange: 1.5
+  Damage:
+    ShieldDamage: 260
+    HullDamage: 260
+    EquipmentDamage: 32
+    ShieldPenetration: 0
+  Range: 1350

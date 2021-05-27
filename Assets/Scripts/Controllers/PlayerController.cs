@@ -31,6 +31,9 @@ public class PlayerController : MonoBehaviour {
             _player.GetEquipmentData<BeamLaserSlotData> ().ForEach (data => {
                 if (!data.Activated) data.Equipment.OnClicked (data.Slot);
             });
+            _player.GetEquipmentData<PulseLaserSlotData> ().ForEach (data => {
+                if (!data.Activated) data.Equipment.OnClicked (data.Slot);
+            });
             _player.GetEquipmentData<LauncherSlotData> ().ForEach (data => {
                 if (!data.Activated) data.Equipment.OnClicked (data.Slot);
             });

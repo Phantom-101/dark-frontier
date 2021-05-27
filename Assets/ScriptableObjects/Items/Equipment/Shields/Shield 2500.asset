@@ -17,10 +17,14 @@ MonoBehaviour:
   Id: items.equipment.shields.shield-2500
   Icon: {fileID: 21300000, guid: b673ec6c543a9564f806864ac12a3476, type: 3}
   Volume: 0
-  Tags: []
+  Tags:
+  - {fileID: 11400000, guid: 864ac46dbd147684badf2e57a60f32c0, type: 2}
+  - {fileID: 11400000, guid: 6d63f9e2ddfb3cc428a6659d95414e48, type: 2}
+  - {fileID: 11400000, guid: 7b0c3fb7c811d174bac2c23fcfd69162, type: 2}
+  - {fileID: 11400000, guid: f894c2965e6369341a4ac7c73389c61b, type: 2}
   Usable: 0
   Durability: 10
-  ShowUI: 0
+  ButtonPrefab: {fileID: 0}
   MaxStrength: 2500
-  RechargeConsumption: 25
+  RechargeConsumption: 2.5
   RechargeEfficiency: 1

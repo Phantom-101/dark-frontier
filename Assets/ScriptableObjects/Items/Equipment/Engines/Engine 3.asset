@@ -21,9 +21,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6d63f9e2ddfb3cc428a6659d95414e48, type: 2}
   - {fileID: 11400000, guid: 361ae8a1dcad32343a0e7cb7be9ab845, type: 2}
   - {fileID: 11400000, guid: 13cabe015e4f87f4ea807ff7d00e3ce0, type: 2}
+  - {fileID: 11400000, guid: 864ac46dbd147684badf2e57a60f32c0, type: 2}
   Usable: 0
   Durability: 10
-  ShowUI: 0
+  ButtonPrefab: {fileID: 0}
   MaxLinearSpeed: 100
   MaxAngularSpeed: 50
   LinearForcePos: {x: 3, y: 3, z: 3}

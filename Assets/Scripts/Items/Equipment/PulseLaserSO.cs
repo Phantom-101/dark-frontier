@@ -1,21 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu (menuName = "Items/Equipment/Weapons/Launcher")]
-public class LauncherSO : EquipmentSO {
+[CreateAssetMenu (menuName = "Items/Equipment/Weapons/Pulse Laser")]
+public class PulseLaserSO : EquipmentSO {
+    public float Range;
+    public Damage Damage;
     public float EnergyRequired;
     public float RechargeRate;
-    public List<MissileSO> CompatibleMissiles;
-    public Damage DamageMultiplier;
-    public float RangeMultiplier;
+    public AnimationCurve PreemptiveDamageMultiplier;
+    public AnimationCurve PreemptiveRangeMultiplier;
+    public GameObject BeamPrefab;
+    public float BeamWidth;
 
     public override void OnAwake (EquipmentSlot slot) {
         EnsureDataType (slot);
     }
 
     public override void OnEquip (EquipmentSlot slot) {
-        slot.Data = new LauncherSlotData {
+        slot.Data = new PulseLaserSlotData {
             Slot = slot,
             Equipment = this,
             Durability = Durability,
@@ -36,7 +38,7 @@ public class LauncherSO : EquipmentSO {
     public override void Tick (EquipmentSlot slot) {
         EnsureDataType (slot);
 
-        LauncherSlotData data = slot.Data as LauncherSlotData;
+        PulseLaserSlotData data = slot.Data as PulseLaserSlotData;
 
         float consumption = RechargeRate * Time.deltaTime;
         float lack = EnergyRequired - data.Charge;
@@ -52,19 +54,26 @@ public class LauncherSO : EquipmentSO {
         });
         data.Charge += given;
 
-        if (data.Activated && (data.Target == null || data.Missile == null || !CompatibleMissiles.Contains (data.Missile) || !slot.Equipper.Locks.ContainsKey (data.Target) || !slot.Equipper.HasInventoryCount (data.Missile, 1) || (data.Target.transform.position - slot.Equipper.transform.position).sqrMagnitude > data.Missile.Range * data.Missile.Range)) data.Activated = false;
+        if (data.Activated && (data.Target == null || !slot.Equipper.Locks.ContainsKey (data.Target) || (data.Target.transform.position - slot.Equipper.transform.position).sqrMagnitude > GetRange (slot) * GetRange (slot))) data.Activated = false;
 
-        if (data.Activated && data.Charge >= EnergyRequired) {
+        if (data.Activated) {
+            GameObject beam = Instantiate (BeamPrefab, slot.transform);
+            beam.transform.LookAt (data.Target.transform);
+            beam.transform.localScale = Vector3.one;
+            beam.transform.localScale = new Vector3 (
+                BeamWidth / beam.transform.lossyScale.x,
+                BeamWidth / beam.transform.lossyScale.y,
+                Vector3.Distance (slot.transform.position, data.Target.transform.position) / beam.transform.lossyScale.z
+            );
+            Destroy (beam, 0.2f);
+            /* Use raycast?
+            if (Physics.Raycast (slot.Equipper.transform.position, data.Target.transform.position - slot.Equipper.transform.position, out RaycastHit hit, Range)) {
+                Structure structure = hit.transform.gameObject.GetComponentInParent<Structure> ();
+                if (structure != null) structure.TakeDamage (Damage * HeatDamageMultiplier.Evaluate (data.Heat / MaxHeat), hit.point);
+            }
+            */
+            data.Target.TakeDamage (Damage * PreemptiveDamageMultiplier.Evaluate (data.Charge / EnergyRequired), slot.Equipper.transform.position);
             data.Charge = 0;
-            GameObject vfx = Instantiate (data.Missile.MissileStructure.Prefab, slot.transform);
-            vfx.transform.parent = slot.Equipper.transform.parent;
-            Structure s = vfx.GetComponent<Structure> ();
-            s.Initialize ();
-            MissileAI ai = s.AI as MissileAI;
-            ai.SetTarget (data.Target);
-            ai.SetMissile (data.Missile);
-            ai.SetLauncher (this, slot.Equipper.Locks[data.Target]);
-            slot.Equipper.ChangeInventoryCount (data.Missile, -1);
             data.Activated = false;
         }
     }
@@ -73,23 +82,19 @@ public class LauncherSO : EquipmentSO {
 
     public override bool CanClick (EquipmentSlot slot) {
         if (slot.Equipper.Selected == null) return false;
-        LauncherSlotData data = slot.Data as LauncherSlotData;
-        if (data.Missile == null) return false;
-        if (!CompatibleMissiles.Contains (data.Missile)) return false;
         if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
-        if (!slot.Equipper.HasInventoryCount (data.Missile, 1)) return false;
-        if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > data.Missile.Range * data.Missile.Range) return false;
+        if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > GetRange (slot) * GetRange (slot)) return false;
         return true;
     }
 
     public override void OnClicked (EquipmentSlot slot) {
-        LauncherSlotData data = slot.Data as LauncherSlotData;
+        PulseLaserSlotData data = slot.Data as PulseLaserSlotData;
         data.Activated = !data.Activated;
         if (data.Activated) data.Target = slot.Equipper.Selected;
     }
 
     public override void EnsureDataType (EquipmentSlot slot) {
-        if (!(slot.Data is LauncherSlotData)) slot.Data = new LauncherSlotData {
+        if (!(slot.Data is PulseLaserSlotData)) slot.Data = new PulseLaserSlotData {
             Slot = slot,
             Equipment = this,
             Durability = Durability,
@@ -98,42 +103,46 @@ public class LauncherSO : EquipmentSO {
             Target = null,
         };
     }
+
+    public float GetRange (EquipmentSlot slot) {
+        return Range * GetRangeMultiplier (slot);
+    }
+
+    public float GetRangeMultiplier (EquipmentSlot slot) {
+        return PreemptiveRangeMultiplier.Evaluate ((slot.Data as PulseLaserSlotData).Charge / EnergyRequired);
+    }
 }
 
 [Serializable]
-public class LauncherSlotData : EquipmentSlotData {
+public class PulseLaserSlotData : EquipmentSlotData {
     public float Charge;
     public bool Activated;
     public Structure Target;
-    public MissileSO Missile;
 
     public override EquipmentSlotSaveData Save () {
-        return new LauncherSlotSaveData {
+        return new PulseLaserSlotSaveData {
             EquipmentId = Equipment == null ? "" : Equipment.Id,
             Durability = Durability,
             Charge = Charge,
             Activated = Activated,
             TargetId = Target == null ? "" : Target.Id,
-            MissileId = Missile == null ? "" : Missile.Id,
         };
     }
 }
 
 [Serializable]
-public class LauncherSlotSaveData : EquipmentSlotSaveData {
+public class PulseLaserSlotSaveData : EquipmentSlotSaveData {
     public float Charge;
     public bool Activated;
     public string TargetId;
-    public string MissileId;
 
     public override EquipmentSlotData Load () {
-        return new LauncherSlotData {
+        return new PulseLaserSlotData {
             Equipment = ItemManager.GetInstance ().GetItem (EquipmentId) as EquipmentSO,
             Durability = Durability,
             Charge = Charge,
             Activated = Activated,
             Target = StructureManager.GetInstance ().GetStructure (TargetId),
-            Missile = ItemManager.GetInstance ().GetItem (MissileId) as MissileSO,
         };
     }
 }

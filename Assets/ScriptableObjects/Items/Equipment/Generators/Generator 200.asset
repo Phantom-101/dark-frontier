@@ -21,7 +21,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6d63f9e2ddfb3cc428a6659d95414e48, type: 2}
   - {fileID: 11400000, guid: a26a9a6ed0189ea4d9c21bdd72735366, type: 2}
   - {fileID: 11400000, guid: f894c2965e6369341a4ac7c73389c61b, type: 2}
+  - {fileID: 11400000, guid: 864ac46dbd147684badf2e57a60f32c0, type: 2}
   Usable: 0
   Durability: 10
-  ShowUI: 0
+  ButtonPrefab: {fileID: 0}
   Generation: 500

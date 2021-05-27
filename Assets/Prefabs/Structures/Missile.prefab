@@ -4856,6 +4856,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Equipper: {fileID: 2275213966916876646}
+  Filters: []
   Data:
     id: 0
   references:
@@ -14534,6 +14535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Equipper: {fileID: 2275213966916876646}
+  Filters: []
   Data:
     id: 0
   references:
@@ -14707,7 +14709,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7653010515942224295}
   serializedVersion: 2
-  m_Mass: 5
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 1
   m_UseGravity: 1
@@ -14881,6 +14883,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Equipper: {fileID: 2275213966916876646}
+  Filters: []
   Data:
     id: 0
   references:

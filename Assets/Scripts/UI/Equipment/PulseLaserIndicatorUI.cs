@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class BeamLaserIndicatorUI : EquipmentIndicatorUI {
+public class PulseLaserIndicatorUI : EquipmentIndicatorUI {
     public Button Button;
     public Image Icon;
     public Image Center;
@@ -10,10 +10,10 @@ public class BeamLaserIndicatorUI : EquipmentIndicatorUI {
     public CanvasGroup TooltipGroup;
     public Text Tooltip;
 
-    private BeamLaserSO cache;
+    private PulseLaserSO cache;
 
     public override void Initialize () {
-        cache = Slot.Data.Equipment as BeamLaserSO;
+        cache = Slot.Data.Equipment as PulseLaserSO;
         Icon.sprite = cache.Icon;
         Tooltip.text = Slot.Data.Equipment.name;
         TooltipGroup.alpha = 0;
@@ -26,10 +26,10 @@ public class BeamLaserIndicatorUI : EquipmentIndicatorUI {
             return;
         }
 
-        BeamLaserSlotData data = Slot.Data as BeamLaserSlotData;
+        PulseLaserSlotData data = Slot.Data as PulseLaserSlotData;
         Button.interactable = cache.CanClick (Slot);
-        Center.fillAmount = data.AccumulatedDamageMultiplier / cache.DamageInterval;
-        Side.fillAmount = data.Heat / cache.MaxHeat;
+        Center.fillAmount = data.Charge / cache.EnergyRequired;
+        Side.fillAmount = cache.GetRangeMultiplier (Slot) / cache.PreemptiveRangeMultiplier.Evaluate (0);
         Bottom.fillAmount = data.Durability / cache.Durability;
     }
 }
