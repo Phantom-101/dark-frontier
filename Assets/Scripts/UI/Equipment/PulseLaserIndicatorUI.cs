@@ -7,6 +7,7 @@ public class PulseLaserIndicatorUI : EquipmentIndicatorUI {
     public Image Center;
     public Image Side;
     public Image Bottom;
+    public Button DumpButton;
     public CanvasGroup TooltipGroup;
     public Text Tooltip;
 
@@ -18,6 +19,7 @@ public class PulseLaserIndicatorUI : EquipmentIndicatorUI {
         Tooltip.text = Slot.Data.Equipment.name;
         TooltipGroup.alpha = 0;
         Button.onClick.AddListener (() => cache.OnClicked (Slot));
+        DumpButton.onClick.AddListener (() => (Slot.Data as PulseLaserSlotData).Charge = 0);
     }
 
     private void Update () {
