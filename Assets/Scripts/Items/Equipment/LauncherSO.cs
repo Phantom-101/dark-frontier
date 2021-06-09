@@ -132,7 +132,7 @@ public class LauncherSlotSaveData : EquipmentSlotSaveData {
             Durability = Durability,
             Charge = Charge,
             Activated = Activated,
-            Target = StructureManager.GetInstance ().GetStructure (TargetId),
+            Target = StructureManager.Instance.GetStructure (TargetId),
             Missile = ItemManager.GetInstance ().GetItem (MissileId) as MissileSO,
         };
     }

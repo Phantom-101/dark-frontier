@@ -1,44 +1,28 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
-public class SectorManager : MonoBehaviour {
+public class SectorManager : SingletonBase<SectorManager> {
 
-    [SerializeField] private List<Sector> _sectors;
+    private HashSet<Sector> _sectors = new HashSet<Sector> ();
 
-    [SerializeField] private StructureDestroyedEventChannelSO _shipDestroyedChannel;
-    [SerializeField] private StructureDestroyedEventChannelSO _stationDestroyedChannel;
-    [SerializeField] private StructureDestroyedEventChannelSO _cargoDestroyedChannel;
-
-    private static SectorManager _instance;
-
-    private void Awake () {
-
-        _instance = this;
-        Debug.Log ("SectorManager instance set");
-
-    }
-
-    public void AddSector (Sector sector) { if (!_sectors.Contains (sector)) _sectors.Add (sector); }
+    public void AddSector (Sector sector) { _sectors.Add (sector); }
 
     public void RemoveSector (Sector sector) { _sectors.Remove (sector); }
 
     public Sector GetSector (string id) {
-
         Sector found = null;
-        _sectors.ForEach (sector => {
-
+        _sectors.ToList ().ForEach (sector => {
             if (sector.GetId () == id) found = sector;
-
         });
         return found;
-
     }
 
     public void SaveGame (DirectoryInfo directory) {
         List<SectorSaveData> saveData = new List<SectorSaveData> ();
-        _sectors.ForEach (sector => { saveData.Add (sector.GetSaveData ()); });
+        _sectors.ToList ().ForEach (sector => { saveData.Add (sector.GetSaveData ()); });
         FileInfo file = PathManager.GetSectorFile (directory);
         if (!file.Exists) file.Create ().Close ();
         File.WriteAllText (
@@ -62,17 +46,14 @@ public class SectorManager : MonoBehaviour {
                 TypeNameHandling = TypeNameHandling.All,
             }
         ) as List<SectorSaveData>;
-        _sectors.ForEach (sector => { Destroy (sector.gameObject); });
-        _sectors = new List<Sector> ();
+        _sectors.ToList ().ForEach (sector => { Destroy (sector.gameObject); });
+        _sectors = new HashSet<Sector> ();
         sectors.ForEach (data => {
             GameObject sector = new GameObject ();
             Sector comp = sector.AddComponent<Sector> ();
             comp.SetSaveData (data);
-            comp.SetupChannels (_shipDestroyedChannel, _stationDestroyedChannel, _cargoDestroyedChannel);
             _sectors.Add (comp);
         });
     }
-
-    public static SectorManager GetInstance () { return _instance; }
 
 }

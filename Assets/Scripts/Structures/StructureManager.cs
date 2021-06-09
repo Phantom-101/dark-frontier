@@ -3,35 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class StructureManager : MonoBehaviour {
+public class StructureManager : SingletonBase<StructureManager> {
 
     [SerializeField] private List<Structure> _structures = new List<Structure> ();
     [SerializeField] private Queue<Structure> _processQueue = new Queue<Structure> ();
-
-    [SerializeField] private StructureCreatedEventChannelSO _invSpawnChannel;
-    [SerializeField] private StructureCreatedEventChannelSO _siteSpawnChannel;
-    [SerializeField] private StructureCreatedEventChannelSO _buySpawnChannel;
-
-    [SerializeField] private StructureDestroyedEventChannelSO _shipDestroyedChannel;
-    [SerializeField] private StructureDestroyedEventChannelSO _stationDestroyedChannel;
-    [SerializeField] private StructureDestroyedEventChannelSO _cargoDestroyedChannel;
-
-    private static StructureManager _instance;
-
-    private void Awake () {
-
-        _instance = this;
-        Debug.Log ("StructureManager instance set");
-
-        _invSpawnChannel.OnStructureCreated += OnInvSpawn;
-        _siteSpawnChannel.OnStructureCreated += OnSiteSpawn;
-        _buySpawnChannel.OnStructureCreated += OnBuySpawn;
-
-        _shipDestroyedChannel.OnStructureDestroyed += OnShipDestroyed;
-        _stationDestroyedChannel.OnStructureDestroyed += OnStationDestroyed;
-        _cargoDestroyedChannel.OnStructureDestroyed += OnCargoDestroyed;
-
-    }
 
     private void Update () {
         _structures.RemoveAll (e => e == null);
@@ -91,7 +66,7 @@ public class StructureManager : MonoBehaviour {
 
     }
 
-    private void OnInvSpawn (StructureSO profile, Faction owner, Sector sector, Location location) {
+    public void OnInvSpawn (StructureSO profile, Faction owner, Sector sector, Location location) {
 
         GameObject structure = Instantiate (profile.Prefab, sector.transform);
         structure.name = profile.Name;
@@ -101,7 +76,7 @@ public class StructureManager : MonoBehaviour {
 
     }
 
-    private void OnSiteSpawn (StructureSO profile, Faction owner, Sector sector, Location location) {
+    public void OnSiteSpawn (StructureSO profile, Faction owner, Sector sector, Location location) {
 
         GameObject structure = Instantiate (profile.Prefab, sector.transform);
         structure.name = profile.Name;
@@ -112,7 +87,7 @@ public class StructureManager : MonoBehaviour {
 
     }
 
-    private void OnBuySpawn (StructureSO profile, Faction owner, Sector sector, Location location) {
+    public void OnBuySpawn (StructureSO profile, Faction owner, Sector sector, Location location) {
 
         GameObject structure = Instantiate (profile.Prefab, location.GetTransform ());
         structure.name = profile.Name;
@@ -122,7 +97,7 @@ public class StructureManager : MonoBehaviour {
 
     }
 
-    private void OnShipDestroyed (Structure destroyedStructure) {
+    public void OnShipDestroyed (Structure destroyedStructure) {
 
         _structures.Remove (destroyedStructure);
 
@@ -151,7 +126,7 @@ public class StructureManager : MonoBehaviour {
 
     }
 
-    private void OnStationDestroyed (Structure destroyedStructure) {
+    public void OnStationDestroyed (Structure destroyedStructure) {
 
         _structures.Remove (destroyedStructure);
 
@@ -182,7 +157,7 @@ public class StructureManager : MonoBehaviour {
 
     }
 
-    private void OnCargoDestroyed (Structure destroyedStructure) {
+    public void OnCargoDestroyed (Structure destroyedStructure) {
 
         _structures.Remove (destroyedStructure);
 
@@ -233,7 +208,7 @@ public class StructureManager : MonoBehaviour {
         _structures = new List<Structure> ();
         structures.ForEach (data => {
             StructureSO profile = ItemManager.GetInstance ().GetItem (data.ProfileId) as StructureSO;
-            GameObject structure = Instantiate (profile.Prefab, SectorManager.GetInstance ().GetSector (data.SectorId).transform);
+            GameObject structure = Instantiate (profile.Prefab, SectorManager.Instance.GetSector (data.SectorId).transform);
             structure.name = profile.Name;
             Structure comp = structure.GetComponent<Structure> ();
             comp.SetSaveData (data);
@@ -241,6 +216,4 @@ public class StructureManager : MonoBehaviour {
             if (data.IsPlayer) PlayerController.GetInstance ().SetPlayer (comp);
         });
     }
-
-    public static StructureManager GetInstance () { return _instance; }
 }

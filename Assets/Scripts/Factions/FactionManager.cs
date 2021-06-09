@@ -1,51 +1,31 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
-public class FactionManager : MonoBehaviour {
-
-    [SerializeField] private List<Faction> _factions = new List<Faction> ();
+public class FactionManager : SingletonBase<FactionManager> {
+    private HashSet<Faction> _factions = new HashSet<Faction> ();
     [SerializeField] private List<FactionSO> _initialization = new List<FactionSO> ();
 
-    private static FactionManager _instance;
-
     private void Awake () {
-
-        _instance = this;
-        Debug.Log ("FactionManager instance set");
-
         _initialization.ForEach (faction => {
-
             _factions.Add (faction.GetFaction ());
-
         });
-
         _initialization = new List<FactionSO> ();
-
     }
 
-    public List<Faction> GetFactions () { return _factions; }
+    public HashSet<Faction> GetFactions () { return _factions; }
 
-    public void AddFaction (Faction faction) { if (!_factions.Contains (faction)) _factions.Add (faction); }
+    public void AddFaction (Faction faction) { _factions.Add (faction); }
 
     public void RemoveFaction (Faction faction) { _factions.Remove (faction); }
 
-    public Faction GetFaction (string id) {
-
-        Faction found = null;
-        _factions.ForEach (faction => {
-
-            if (faction.GetId () == id) found = faction;
-
-        });
-        return found;
-
-    }
+    public Faction GetFaction (string id) { return _factions.Where (e => e.GetId () == id).FirstOrDefault (); }
 
     public void SaveGame (DirectoryInfo directory) {
         List<FactionSaveData> saveData = new List<FactionSaveData> ();
-        _factions.ForEach (faction => { saveData.Add (faction.GetSaveData ()); });
+        _factions.ToList ().ForEach (faction => { saveData.Add (faction.GetSaveData ()); });
         FileInfo file = PathManager.GetFactionFile (directory);
         if (!file.Exists) file.Create ().Close ();
         File.WriteAllText (
@@ -69,14 +49,11 @@ public class FactionManager : MonoBehaviour {
                 TypeNameHandling = TypeNameHandling.All,
             }
         ) as List<FactionSaveData>;
-        _factions = new List<Faction> ();
+        _factions = new HashSet<Faction> ();
         factions.ForEach (data => {
             Faction faction = new Faction ();
             faction.LoadSaveData (data);
             _factions.Add (faction);
         });
     }
-
-    public static FactionManager GetInstance () { return _instance; }
-
 }

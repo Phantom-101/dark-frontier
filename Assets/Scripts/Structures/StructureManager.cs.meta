@@ -3,7 +3,17 @@ guid: cd99cde2fd7f8304389f33591cb12920
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _invSpawnChannel: {fileID: 11400000, guid: d3ac81668ab4b7e4ca7365b9f34b1028, type: 2}
+  - _siteSpawnChannel: {fileID: 11400000, guid: 5fe533a9bddb68d48bb5542e0c9bf338,
+      type: 2}
+  - _buySpawnChannel: {fileID: 11400000, guid: 64562bd321aac024cb1c8373ac6e5e31, type: 2}
+  - _shipDestroyedChannel: {fileID: 11400000, guid: c42055d3c124f174fa639daf99561b4e,
+      type: 2}
+  - _stationDestroyedChannel: {fileID: 11400000, guid: 4ec892e024a0ffb47a407d1f3a8b5008,
+      type: 2}
+  - _cargoDestroyedChannel: {fileID: 11400000, guid: be50e1a829ee826499500d59f0b88d02,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

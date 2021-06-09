@@ -11,7 +11,7 @@ public class FactionSO : ScriptableObject {
 
     public Faction GetFaction () {
 
-        Faction f = FactionManager.GetInstance ().GetFaction (Id);
+        Faction f = FactionManager.Instance.GetFaction (Id);
         if (f != null) return f;
 
         f = new Faction ();

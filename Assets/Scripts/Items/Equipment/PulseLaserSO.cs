@@ -142,7 +142,7 @@ public class PulseLaserSlotSaveData : EquipmentSlotSaveData {
             Durability = Durability,
             Charge = Charge,
             Activated = Activated,
-            Target = StructureManager.GetInstance ().GetStructure (TargetId),
+            Target = StructureManager.Instance.GetStructure (TargetId),
         };
     }
 }

@@ -17,12 +17,9 @@ public class SaveManager : MonoBehaviour {
 
     private void Update () {
         if (_job != null) {
-            if (SectorManager.GetInstance () == null) return;
-            if (FactionManager.GetInstance () == null) return;
-            if (StructureManager.GetInstance () == null) return;
-            SectorManager.GetInstance ().LoadGame (_job.Directory);
-            FactionManager.GetInstance ().LoadGame (_job.Directory);
-            StructureManager.GetInstance ().LoadGame (_job.Directory);
+            SectorManager.Instance.LoadGame (_job.Directory);
+            FactionManager.Instance.LoadGame (_job.Directory);
+            StructureManager.Instance.LoadGame (_job.Directory);
             _universe = _job.Directory.Parent.Name;
             _job = null;
         }
@@ -35,15 +32,13 @@ public class SaveManager : MonoBehaviour {
     public static SaveManager GetInstance () { return _instance; }
 
     public void Save () {
-        Debug.Log ("saving");
-
         CreateSavesDirectoryIfNotExists ();
         string timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds ().ToString ();
         DirectoryInfo info = PathManager.GetSaveDirectory (_universe, timestamp);
         if (!info.Exists) info.Create ();
-        StructureManager.GetInstance ().SaveGame (info);
-        SectorManager.GetInstance ().SaveGame (info);
-        FactionManager.GetInstance ().SaveGame (info);
+        StructureManager.Instance.SaveGame (info);
+        SectorManager.Instance.SaveGame (info);
+        FactionManager.Instance.SaveGame (info);
     }
 
     public void Load (string universeName) {

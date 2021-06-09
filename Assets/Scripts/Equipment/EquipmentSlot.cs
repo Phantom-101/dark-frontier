@@ -6,9 +6,15 @@ public class EquipmentSlot : MonoBehaviour {
     public List<ItemConditionSO> Filters = new List<ItemConditionSO> ();
     [SerializeReference] public EquipmentSlotData Data = new EquipmentSlotData ();
 
-    public void Tick () { if (Data.Equipment != null) Data.Equipment.Tick (this); }
+    public void Tick () {
+        Data.Slot = this;
+        if (Data.Equipment != null) Data.Equipment.Tick (this);
+    }
 
-    public void FixedTick () { if (Data.Equipment != null) Data.Equipment.FixedTick (this); }
+    public void FixedTick () {
+        Data.Slot = this;
+        if (Data.Equipment != null) Data.Equipment.FixedTick (this);
+    }
 
     public bool ChangeEquipment (EquipmentSO target) {
         foreach (ItemConditionSO filter in Filters)

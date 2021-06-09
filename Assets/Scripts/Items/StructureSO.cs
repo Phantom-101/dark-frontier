@@ -20,7 +20,6 @@ public class StructureSO : ItemSO {
     public float Detectability;
     public float SignatureSize;
     public float DockingBaySize;
-    public StructureDestroyedEventChannelSO OnDestroyedChannel;
     public float DropPercentage;
     public bool SnapToPlane;
 

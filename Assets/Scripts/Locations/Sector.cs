@@ -11,15 +11,7 @@ public class Sector : MonoBehaviour {
 
     private void Start () {
 
-        SectorManager.GetInstance ().AddSector (this);
-
-    }
-
-    public void SetupChannels (StructureDestroyedEventChannelSO ship, StructureDestroyedEventChannelSO station, StructureDestroyedEventChannelSO cargo) {
-
-        ship.OnStructureDestroyed += Exited;
-        station.OnStructureDestroyed += Exited;
-        cargo.OnStructureDestroyed += Exited;
+        SectorManager.Instance.AddSector (this);
 
     }
 

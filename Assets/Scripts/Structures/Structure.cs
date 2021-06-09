@@ -44,7 +44,7 @@ public class Structure : MonoBehaviour {
 
                 if (Faction != null) Faction.RemoveProperty (this);
                 if (Sector != null) Sector.Exited (this);
-                Profile.OnDestroyedChannel.RaiseEvent (this);
+                StructureManager.Instance.OnShipDestroyed (this);
 
             }
 
@@ -67,7 +67,7 @@ public class Structure : MonoBehaviour {
     }
     public Dictionary<Structure, float> Locks { get => _locks; set => _locks = value; }
     public Sector Sector { get => _sector; set => _sector = value; }
-    public List<Structure> Detected { get { if (_detected == null) _detected = StructureManager.GetInstance ().GetDetected (this); return _detected; } set => _detected = value; }
+    public List<Structure> Detected { get { if (_detected == null) _detected = StructureManager.Instance.GetDetected (this); return _detected; } set => _detected = value; }
 
     private void Awake () {
 
@@ -92,13 +92,13 @@ public class Structure : MonoBehaviour {
 
         _initialized = true;
 
-        if (StructureManager.GetInstance () != null) StructureManager.GetInstance ().AddStructure (this);
+        StructureManager.Instance.AddStructure (this);
 
         if (string.IsNullOrEmpty (_id)) _id = Guid.NewGuid ().ToString ();
 
         EnsureStats ();
 
-        if (_initialFaction != null) _faction = FactionManager.GetInstance ().GetFaction (_initialFaction.Id);
+        if (_initialFaction != null) _faction = FactionManager.Instance.GetFaction (_initialFaction.Id);
         if (_initialAI != null) _ai = _initialAI.GetAI (this);
 
         if (_faction != null) _faction.AddProperty (this);
@@ -427,7 +427,7 @@ public class Structure : MonoBehaviour {
         transform.localPosition = new Vector3 (saveData.Position[0], saveData.Position[1], saveData.Position[2]);
         transform.localRotation = new Quaternion (saveData.Rotation[0], saveData.Rotation[1], saveData.Rotation[2], saveData.Rotation[3]);
         _hull = saveData.Hull;
-        _faction = FactionManager.GetInstance ().GetFaction (saveData.FactionId);
+        _faction = FactionManager.Instance.GetFaction (saveData.FactionId);
         for (int i = 0; i < _equipmentSlots.Count; i++) {
             _equipmentSlots[i].Data = saveData.Equipment[i].Load ();
             _equipmentSlots[i].Data.Slot = _equipmentSlots[i];
@@ -439,7 +439,7 @@ public class Structure : MonoBehaviour {
         _stats = saveData.Stats;
         if (_stats == null) _stats = new StringToStructureStatDictionary ();
         EnsureStats ();
-        _sector = SectorManager.GetInstance ().GetSector (saveData.SectorId);
+        _sector = SectorManager.Instance.GetSector (saveData.SectorId);
         _sector.Entered (this);
         _aiEnabled = saveData.AIEnabled;
     }
