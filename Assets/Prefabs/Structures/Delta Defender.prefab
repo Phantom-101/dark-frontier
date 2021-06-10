@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Equipper: {fileID: 2869013932428447120}
+  Filters: []
   Data:
     id: 0
   references:
@@ -5216,6 +5217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Equipper: {fileID: 2869013932428447120}
+  Filters: []
   Data:
     id: 0
   references:
@@ -5270,6 +5272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Equipper: {fileID: 2869013932428447120}
+  Filters: []
   Data:
     id: 0
   references:
@@ -5324,6 +5327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Equipper: {fileID: 2869013932428447120}
+  Filters: []
   Data:
     id: 0
   references:
@@ -5381,6 +5385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Equipper: {fileID: 2869013932428447120}
+  Filters: []
   Data:
     id: 0
   references:
@@ -19990,6 +19995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Equipper: {fileID: 2869013932428447120}
+  Filters: []
   Data:
     id: 0
   references:
@@ -29804,11 +29810,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5749213555626689594, guid: 281f31c8567f38d4c89cad001d57a6dd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 80cac39eb133b514a8ae8a09ea916c63, type: 2}
+    - target: {fileID: -4467140617721233170, guid: 281f31c8567f38d4c89cad001d57a6dd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 80cac39eb133b514a8ae8a09ea916c63, type: 2}
+    - target: {fileID: -3583955489970928457, guid: 281f31c8567f38d4c89cad001d57a6dd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 80cac39eb133b514a8ae8a09ea916c63, type: 2}
+    - target: {fileID: -3029586899238759695, guid: 281f31c8567f38d4c89cad001d57a6dd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 80cac39eb133b514a8ae8a09ea916c63, type: 2}
     - target: {fileID: 919132149155446097, guid: 281f31c8567f38d4c89cad001d57a6dd,
         type: 3}
       propertyPath: m_Name
       value: Defender MK II
       objectReference: {fileID: 0}
+    - target: {fileID: 6212166038246041875, guid: 281f31c8567f38d4c89cad001d57a6dd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 80cac39eb133b514a8ae8a09ea916c63, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 281f31c8567f38d4c89cad001d57a6dd, type: 3}
 --- !u!4 &2914343253419579282 stripped
