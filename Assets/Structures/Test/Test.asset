@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b631ed5d83fe9f45ac195241758721a, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  Name: Test
+  Description: Test structure.
+  Id: items.structures.test
+  Icon: {fileID: 0}
+  Volume: 0
+  Tags: []
+  Usable: 0
+  Prefab: {fileID: 570406170697649159, guid: 5d77e42a310acd34a8faa8b4ce2a5ff6, type: 3}
+  ApparentSize: 2
+  HullWireframe: {fileID: 21300000, guid: 8453e92a589dba340bd7e965ad55e6af, type: 3}
+  WorldToUIScale: 0
+  ShowBlip: 1
+  DestructionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
+    type: 3}
+  Hull: 100
+  InventorySize: 100
+  SensorStrength: 30
+  ScannerStrength: 15
+  MaxLocks: 3
+  Detectability: 5
+  SignatureSize: 2
+  DockingBaySize: 0
+  DropPercentage: 1
+  SnapToPlane: 1

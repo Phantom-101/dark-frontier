@@ -12,7 +12,7 @@ public class FactionsUI : LogTabUI {
         foreach (FactionInfoUI info in _instantiated) Destroy (info.gameObject);
         _instantiated = new List<FactionInfoUI> ();
 
-        HashSet<Faction> factions = FactionManager.Instance.GetFactions ();
+        HashSet<Faction> factions = FactionManager.Instance.Factions;
         int index = 0;
         foreach (Faction f in factions) {
 

@@ -104,7 +104,7 @@ public class EngineSO : EquipmentSO {
             if (Mathf.Abs (dif) > LinearSleepThreshold) {
                 float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), InertialFactor)) * Mathf.Sign (dif);
                 res[0][d] = Lerp (mul, LinearForcePos[d], LinearForceNeg[d]);
-                res[0][d] *= slot.Equipper.GetStatAppliedValue (StructureStatNames.LinearSpeedMultiplier);
+                res[0][d] *= slot.Equipper.GetStatAppliedValue (StructureStatType.LinearSpeedMultiplier, 1);
             }
         }
         // Angular
@@ -114,7 +114,7 @@ public class EngineSO : EquipmentSO {
             if (Mathf.Abs (dif) > AngularSleepThreshold) {
                 float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), InertialFactor)) * Mathf.Sign (dif);
                 res[1][d] = Lerp (mul, AngularForcePos[d], AngularForceNeg[d]);
-                res[1][d] *= slot.Equipper.GetStatAppliedValue (StructureStatNames.AngularSpeedMultiplier);
+                res[1][d] *= slot.Equipper.GetStatAppliedValue (StructureStatType.AngularSpeedMultiplier, 1);
             }
         }
         return res;

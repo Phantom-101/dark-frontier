@@ -2,14 +2,12 @@
 using UnityEngine.UI;
 
 public class WealthUI : MonoBehaviour {
-
     [SerializeField] private Text _text;
 
     private void Update () {
-
-        if (PlayerController.GetInstance ().GetPlayer () == null) return;
-        _text.text = (PlayerController.GetInstance ().GetPlayer ().Faction?.GetWealth ().ToString () ?? "0") + " Cr";
-
+        Structure player = PlayerController.Instance.Player;
+        if (player == null) return;
+        if (player.Faction == null) _text.text = "0 Cr";
+        else _text.text = $"{PlayerController.Instance.Player.Faction.Wealth} Cr";
     }
-
 }

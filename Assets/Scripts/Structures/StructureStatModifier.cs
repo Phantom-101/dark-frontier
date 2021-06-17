@@ -5,7 +5,6 @@ using UnityEngine;
 public class StructureStatModifier {
     public string Name;
     public string Id;
-    public string Target;
     public float Value;
     public StructureStatModifierType Type;
     public float Duration;
@@ -20,7 +19,6 @@ public class StructureStatModifier {
         return new StructureStatModifier {
             Name = Name,
             Id = Id,
-            Target = Target,
             Value = Value,
             Type = Type,
             Duration = Duration,

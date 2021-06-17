@@ -9,7 +9,7 @@ public class EquipmentUI : MonoBehaviour {
 
     private void Update () {
 
-        Structure player = PlayerController.GetInstance ().GetPlayer ();
+        Structure player = PlayerController.Instance.Player;
         if (player == null) return;
 
         foreach (EquipmentSlot key in _indicators.Keys.ToArray ()) {

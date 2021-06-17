@@ -55,15 +55,18 @@ public class StructureStat {
     }
 }
 
-public class StructureStatNames {
-    public static string SensorStrength = "sensor-strength";
-    public static string ScannerStrength = "scanner-strength";
-    public static string MaxLocks = "max-locks";
-    public static string Detectability = "detectability";
-    public static string SignatureSize = "signature-size";
-    public static string DockingBaySize = "docking-bay-size";
-    public static string DamageMultiplier = "damage-multiplier";
-    public static string RechargeMultiplier = "recharge-multiplier";
-    public static string LinearSpeedMultiplier = "linear-speed-multiplier";
-    public static string AngularSpeedMultiplier = "angular-speed-multiplier";
+public enum StructureStatType {
+    MaxHull,
+    MaxShieldStrengthMultiplier,
+    SensorStrength,
+    ScannerStrength,
+    Detectability,
+    SignatureSize,
+    MaxLocks,
+    DockingBaySize,
+    DamageMultiplier,
+    RechargeMultiplier,
+    LinearSpeedMultiplier,
+    AngularSpeedMultiplier,
+    DropPercentage,
 }

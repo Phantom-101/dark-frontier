@@ -7,7 +7,7 @@ public class ForwardSliderUI : MonoBehaviour {
 
     private void Update () {
 
-        PlayerController.GetInstance ().SetFwd (_slider.value);
+        PlayerController.Instance.SetFwd (_slider.value);
 
     }
 

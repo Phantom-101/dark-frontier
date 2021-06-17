@@ -11,7 +11,7 @@ public class DockUndockButtonUI : MonoBehaviour {
 
     private void Start () {
 
-        _pc = PlayerController.GetInstance ();
+        _pc = PlayerController.Instance;
 
         _button.onClick.AddListener (Toggle);
 
@@ -19,11 +19,11 @@ public class DockUndockButtonUI : MonoBehaviour {
 
     private void Update () {
 
-        if (_pc.GetPlayer () == null) return;
-        bool i = _pc.GetPlayer ().CanDockTarget () || _pc.GetPlayer ().CanUndock ();
+        if (_pc.Player == null) return;
+        bool i = _pc.Player.CanDockTarget () || _pc.Player.CanUndock ();
         _button.interactable = i;
 
-        if (_pc.GetPlayer ().CanDockTarget ()) {
+        if (_pc.Player.CanDockTarget ()) {
             _dock.enabled = true;
             _undock.enabled = false;
         } else {
@@ -35,20 +35,20 @@ public class DockUndockButtonUI : MonoBehaviour {
 
     void Toggle () {
 
-        if (_pc.GetPlayer ().IsDocked ()) Undock ();
+        if (_pc.Player.IsDocked ()) Undock ();
         else Dock ();
 
     }
 
     void Dock () {
 
-        _pc.GetPlayer ().DockTarget ();
+        _pc.Player.DockTarget ();
 
     }
 
     void Undock () {
 
-        _pc.GetPlayer ().Undock ();
+        _pc.Player.Undock ();
 
     }
 

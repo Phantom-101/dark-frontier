@@ -13,13 +13,13 @@ public class SelectorsUI : MonoBehaviour {
 
     private void Start () {
 
-        _pc = PlayerController.GetInstance ();
+        _pc = PlayerController.Instance;
 
     }
 
     private void Update () {
 
-        Structure player = _pc.GetPlayer ();
+        Structure player = _pc.Player;
         if (player == null) return;
 
         foreach (Structure key in _instantiated.Keys.ToArray ())

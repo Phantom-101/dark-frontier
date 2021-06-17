@@ -8,10 +8,10 @@ public class MissileAI : AI {
     [SerializeField] protected Damage _damageMultiplier;
     [SerializeField] protected float _rangeMultiplier;
 
-    protected NavigationManager _nm;
+    protected NavigationManager _navigationManager;
 
     public MissileAI (Structure structure) : base (structure) {
-        _nm = NavigationManager.GetInstance ();
+        _navigationManager = NavigationManager.Instance;
     }
 
     public void SetTarget (Structure target) { _target = target; }
@@ -22,10 +22,9 @@ public class MissileAI : AI {
         _damageMultiplier = launcher.DamageMultiplier * lockProgress / 100;
         _rangeMultiplier = launcher.RangeMultiplier;
 
-        _structure.AddStatModifier (new StructureStatModifier {
+        _structure.AddStatModifier (StructureStatType.LinearSpeedMultiplier, new StructureStatModifier {
             Name = "Launcher Range Modifier",
             Id = "launcher-range-modifier",
-            Target = StructureStatNames.LinearSpeedMultiplier,
             Value = _rangeMultiplier,
             Type = StructureStatModifierType.Multiplicative,
             Duration = 100,
@@ -54,7 +53,7 @@ public class MissileAI : AI {
             engine.AngularSetting = target[1];
         });
 
-        if (_nm.GetLocalDistance (_target, _structure) <= _missile.DetonationRange) {
+        if (_navigationManager.GetLocalDistance (_target, _structure) <= _missile.DetonationRange) {
             _target.TakeDamage (_missile.Damage * _damageMultiplier, _structure.transform.position);
             _structure.Hull = 0;
         }

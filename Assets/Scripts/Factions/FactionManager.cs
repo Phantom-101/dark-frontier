@@ -6,26 +6,15 @@ using UnityEngine;
 
 public class FactionManager : SingletonBase<FactionManager> {
     private HashSet<Faction> _factions = new HashSet<Faction> ();
-    [SerializeField] private List<FactionSO> _initialization = new List<FactionSO> ();
+    public HashSet<Faction> Factions { get => _factions; private set => _factions = value; }
 
-    private void Awake () {
-        _initialization.ForEach (faction => {
-            _factions.Add (faction.GetFaction ());
-        });
-        _initialization = new List<FactionSO> ();
-    }
-
-    public HashSet<Faction> GetFactions () { return _factions; }
-
-    public void AddFaction (Faction faction) { _factions.Add (faction); }
-
-    public void RemoveFaction (Faction faction) { _factions.Remove (faction); }
-
-    public Faction GetFaction (string id) { return _factions.Where (e => e.GetId () == id).FirstOrDefault (); }
+    public void AddFaction (Faction faction) { Factions.Add (faction); }
+    public void RemoveFaction (Faction faction) { Factions.Remove (faction); }
+    public Faction GetFaction (string id) { return Factions.Where (e => e.Id == id).FirstOrDefault (); }
 
     public void SaveGame (DirectoryInfo directory) {
         List<FactionSaveData> saveData = new List<FactionSaveData> ();
-        _factions.ToList ().ForEach (faction => { saveData.Add (faction.GetSaveData ()); });
+        Factions.ToList ().ForEach (faction => { saveData.Add (faction.GetSaveData ()); });
         FileInfo file = PathManager.GetFactionFile (directory);
         if (!file.Exists) file.Create ().Close ();
         File.WriteAllText (
@@ -49,11 +38,11 @@ public class FactionManager : SingletonBase<FactionManager> {
                 TypeNameHandling = TypeNameHandling.All,
             }
         ) as List<FactionSaveData>;
-        _factions = new HashSet<Faction> ();
+        Factions = new HashSet<Faction> ();
         factions.ForEach (data => {
-            Faction faction = new Faction ();
+            Faction faction = ScriptableObject.CreateInstance<Faction> ();
             faction.LoadSaveData (data);
-            _factions.Add (faction);
+            Factions.Add (faction);
         });
     }
 }

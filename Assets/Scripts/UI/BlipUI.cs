@@ -21,7 +21,7 @@ public class BlipUI : MonoBehaviour {
 
         }
 
-        Structure player = PlayerController.GetInstance ().GetPlayer ();
+        Structure player = PlayerController.Instance.Player;
         Faction pf = player.Faction;
 
         if (_target == player) Destroy (gameObject);

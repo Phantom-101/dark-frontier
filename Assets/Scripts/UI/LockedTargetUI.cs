@@ -23,8 +23,8 @@ public class LockedTargetUI : MonoBehaviour {
 
     private void Start () {
 
-        _pc = PlayerController.GetInstance ();
-        _button.onClick.AddListener (() => { _pc.GetPlayer ().Selected = _structure; });
+        _pc = PlayerController.Instance;
+        _button.onClick.AddListener (() => { _pc.Player.Selected = _structure; });
 
     }
 
@@ -37,7 +37,7 @@ public class LockedTargetUI : MonoBehaviour {
 
         }
 
-        Structure player = _pc.GetPlayer ();
+        Structure player = _pc.Player;
 
         if (!player.Locks.ContainsKey (_structure)) {
 
@@ -57,12 +57,12 @@ public class LockedTargetUI : MonoBehaviour {
         _leftProgress.fillAmount = fa;
         _rightProgress.fillAmount = fa;
         _name.text = _structure.gameObject.name;
-        _faction.text = _structure.Faction.GetName ();
-        _distance.text = Vector3.Distance (PlayerController.GetInstance ().GetPlayer ().transform.position, _structure.transform.position).ToString ("F0") + " m";
+        _faction.text = _structure.Faction.Name;
+        _distance.text = Vector3.Distance (PlayerController.Instance.Player.transform.position, _structure.transform.position).ToString ("F0") + " m";
         Rigidbody rb = _structure.GetComponent<Rigidbody> ();
         if (rb == null) _velocity.text = "0 m/s";
         else _velocity.text = rb.velocity.magnitude.ToString ("F0") + " m/s";
-        _direction.rotation = Quaternion.Euler (0, 0, -_structure.GetAngleTo (PlayerController.GetInstance ().GetPlayer ().transform.position));
+        _direction.rotation = Quaternion.Euler (0, 0, -_structure.GetAngleTo (PlayerController.Instance.Player.transform.position));
 
     }
 

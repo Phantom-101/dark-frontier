@@ -22,13 +22,13 @@ public class CameraController : MonoBehaviour {
 
     private void Start () {
 
-        _pc = PlayerController.GetInstance ();
+        _pc = PlayerController.Instance;
 
     }
 
     private void FixedUpdate () {
 
-        Structure player = _pc.GetPlayer ();
+        Structure player = _pc.Player;
         if (player == null) return;
         Transform pt = _anchor?.GetTransform () == null ? player.transform : _anchor.GetTransform ();
 

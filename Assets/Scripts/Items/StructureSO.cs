@@ -2,7 +2,6 @@
 
 [CreateAssetMenu (menuName = "Items/Structure")]
 public class StructureSO : ItemSO {
-
     [Header ("Graphics")]
     public GameObject Prefab;
     public float ApparentSize;
@@ -22,5 +21,5 @@ public class StructureSO : ItemSO {
     public float DockingBaySize;
     public float DropPercentage;
     public bool SnapToPlane;
-
+    public StructureStatTypeToStructureStatDictionary Stats;
 }

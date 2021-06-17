@@ -22,7 +22,7 @@ public class PlayerTurnJoystickUI : MonoBehaviour {
 
     private void Start () {
 
-        pc = PlayerController.GetInstance ();
+        pc = PlayerController.Instance;
 
     }
 

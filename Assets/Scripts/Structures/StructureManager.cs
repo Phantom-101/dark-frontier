@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class StructureManager : SingletonBase<StructureManager> {
@@ -45,25 +46,21 @@ public class StructureManager : SingletonBase<StructureManager> {
     }
 
     public bool Detects (Structure a, Structure b) {
-
         if (a.Sector != b.Sector) return false;
 
         float sqrDis = (a.transform.localPosition - b.transform.localPosition).sqrMagnitude;
-        float range = a.GetStatAppliedValue (StructureStatNames.SensorStrength) * b.GetStatAppliedValue (StructureStatNames.Detectability);
+        float range = a.GetStatAppliedValue (StructureStatType.SensorStrength, 0) * b.GetStatAppliedValue (StructureStatType.Detectability, 0);
         float sqrRange = range * range;
         return sqrDis <= sqrRange;
-
     }
 
     public List<Structure> GetDetected (Structure structure) {
-
         List<Structure> inSector = structure.Sector.InSector;
         List<Structure> res = new List<Structure> ();
         foreach (Structure candidate in inSector)
             if (candidate != structure && Detects (structure, candidate))
                 res.Add (candidate);
         return res;
-
     }
 
     public void OnInvSpawn (StructureSO profile, Faction owner, Sector sector, Location location) {
@@ -97,85 +94,30 @@ public class StructureManager : SingletonBase<StructureManager> {
 
     }
 
-    public void OnShipDestroyed (Structure destroyedStructure) {
+    public void OnStructureDestroyed (Structure destroyedStructure) {
+        destroyedStructure.GetDocked ().ForEach (e => OnStructureDestroyed (e));
 
         _structures.Remove (destroyedStructure);
 
         if (destroyedStructure.Profile.DestructionEffect != null) {
-
             GameObject effect = Instantiate (destroyedStructure.Profile.DestructionEffect, destroyedStructure.transform.parent);
             effect.transform.localPosition = destroyedStructure.transform.localPosition;
             effect.transform.localScale = Vector3.one * destroyedStructure.Profile.ApparentSize;
             Destroy (effect, 3);
-
         }
 
         // Drop stuff according to StructureSO.DropPercentage
 
         LeanTween.value (destroyedStructure.gameObject, 0, 1, 5).setOnUpdateParam (destroyedStructure.gameObject).setOnUpdateObject ((float value, object obj) => {
-
             GameObject go = obj as GameObject;
-            go.GetComponentInChildren<MeshRenderer> ().material.SetFloat ("_DissolveAmount", value);
-
+            go.GetComponentsInChildren<MeshRenderer> ().ToList ().ForEach (e => e.material.SetFloat ("_DissolveAmount", value));
         });
 
         Destroy (destroyedStructure.GetComponent<ConstantForce> ());
+        destroyedStructure.GetComponentsInChildren<ParticleSystem> ().ToList ().ForEach (e => Destroy (e));
 
         Destroy (destroyedStructure);
         Destroy (destroyedStructure.gameObject, 6);
-
-    }
-
-    public void OnStationDestroyed (Structure destroyedStructure) {
-
-        _structures.Remove (destroyedStructure);
-
-        if (destroyedStructure.Profile.DestructionEffect != null) {
-
-            GameObject effect = Instantiate (destroyedStructure.Profile.DestructionEffect, destroyedStructure.transform.parent);
-            effect.transform.localPosition = destroyedStructure.transform.localPosition;
-            effect.transform.localScale = Vector3.one * destroyedStructure.Profile.ApparentSize;
-            Destroy (effect, 3);
-
-        }
-
-        // Drop stuff according to StructureSO.DropPercentage
-
-        // Destroy docked ships
-
-        LeanTween.value (destroyedStructure.gameObject, 0, 1, 10).setOnUpdateParam (destroyedStructure.gameObject).setOnUpdateObject ((float value, object obj) => {
-
-            GameObject go = obj as GameObject;
-            go.GetComponentInChildren<MeshRenderer> ().material.SetFloat ("_DissolveAmount", value);
-
-        });
-
-        Destroy (destroyedStructure.GetComponent<ConstantForce> ());
-
-        Destroy (destroyedStructure);
-        Destroy (destroyedStructure.gameObject, 11);
-
-    }
-
-    public void OnCargoDestroyed (Structure destroyedStructure) {
-
-        _structures.Remove (destroyedStructure);
-
-        if (destroyedStructure.Profile.DestructionEffect != null) {
-
-            GameObject effect = Instantiate (destroyedStructure.Profile.DestructionEffect, destroyedStructure.transform.parent);
-            effect.transform.localPosition = destroyedStructure.transform.localPosition;
-            effect.transform.localScale = Vector3.one * destroyedStructure.Profile.ApparentSize;
-            Destroy (effect, 3);
-
-        }
-
-        Destroy (destroyedStructure.GetComponent<ConstantForce> ());
-        Destroy (destroyedStructure.GetComponent<Rigidbody> ());
-
-        Destroy (destroyedStructure);
-        Destroy (destroyedStructure.gameObject);
-
     }
 
     public void SaveGame (DirectoryInfo directory) {
@@ -213,7 +155,7 @@ public class StructureManager : SingletonBase<StructureManager> {
             Structure comp = structure.GetComponent<Structure> ();
             comp.SetSaveData (data);
             _structures.Add (comp);
-            if (data.IsPlayer) PlayerController.GetInstance ().SetPlayer (comp);
+            if (data.IsPlayer) PlayerController.Instance.Player = comp;
         });
     }
 }

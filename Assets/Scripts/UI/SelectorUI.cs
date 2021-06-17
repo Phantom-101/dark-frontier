@@ -20,10 +20,10 @@ public class SelectorUI : MonoBehaviour {
 
     private void Start () {
 
-        _pc = PlayerController.GetInstance ();
+        _pc = PlayerController.Instance;
         _cc = CameraController.GetInstance ();
         _button = GetComponent<Button> ();
-        _button.onClick.AddListener (() => { if (_pc.GetPlayer () != null && _pc.GetPlayer () != Structure) _pc.GetPlayer ().Selected = Structure; });
+        _button.onClick.AddListener (() => { if (_pc.Player != null && _pc.Player != Structure) _pc.Player.Selected = Structure; });
 
     }
 
@@ -38,7 +38,7 @@ public class SelectorUI : MonoBehaviour {
 
         } else {
 
-            Structure player = _pc.GetPlayer ();
+            Structure player = _pc.Player;
             if (player == null || Structure == null || player == Structure) {
                 _target = 0;
                 _destroy = true;
