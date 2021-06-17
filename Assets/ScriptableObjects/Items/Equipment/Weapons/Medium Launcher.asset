@@ -29,6 +29,7 @@ MonoBehaviour:
     type: 3}
   EnergyRequired: 320
   RechargeRate: 80
+  AutoCycle: 0
   CompatibleMissiles:
   - {fileID: 11400000, guid: 0809d17cefb6d2f46a9b248df6598e09, type: 2}
   DamageMultiplier:

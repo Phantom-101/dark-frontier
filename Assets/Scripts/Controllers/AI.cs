@@ -1,14 +1,13 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-[Serializable]
-public class AI {
-    [SerializeField] protected Structure _structure;
+[CreateAssetMenu (menuName = "AI/Base")]
+public class AI : ScriptableObject {
+    public virtual AI GetAI () {
+        return CreateInstance<AI> ();
+    }
 
-    public AI (Structure structure) { _structure = structure; }
-
-    public virtual void Tick () {
-        _structure.GetEquipmentData<EngineSlotData> ().ForEach (engine => {
+    public virtual void Tick (Structure structure) {
+        structure.GetEquipmentData<EngineSlotData> ().ForEach (engine => {
             engine.LinearSetting = Vector3.zero;
             engine.AngularSetting = Vector3.zero;
         });

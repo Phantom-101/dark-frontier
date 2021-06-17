@@ -1,61 +1,58 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-[Serializable]
+[CreateAssetMenu (menuName = "AI/Missile")]
 public class MissileAI : AI {
-    [SerializeField] protected Structure _target;
-    [SerializeField] protected MissileSO _missile;
-    [SerializeField] protected Damage _damageMultiplier;
-    [SerializeField] protected float _rangeMultiplier;
+    public Structure Target;
+    public MissileSO Missile;
+    public Damage DamageMultiplier;
+    public float RangeMultiplier;
 
-    protected NavigationManager _navigationManager;
+    protected StructureStatModifier statModifier;
 
-    public MissileAI (Structure structure) : base (structure) {
-        _navigationManager = NavigationManager.Instance;
+    public override AI GetAI () {
+        MissileAI ai = CreateInstance<MissileAI> ();
+        ai.Missile = Missile;
+        ai.DamageMultiplier = DamageMultiplier;
+        ai.RangeMultiplier = RangeMultiplier;
+        return ai;
     }
 
-    public void SetTarget (Structure target) { _target = target; }
-
-    public void SetMissile (MissileSO missile) { _missile = missile; }
-
-    public void SetLauncher (LauncherSO launcher, float lockProgress) {
-        _damageMultiplier = launcher.DamageMultiplier * lockProgress / 100;
-        _rangeMultiplier = launcher.RangeMultiplier;
-
-        _structure.AddStatModifier (StructureStatType.LinearSpeedMultiplier, new StructureStatModifier {
-            Name = "Launcher Range Modifier",
-            Id = "launcher-range-modifier",
-            Value = _rangeMultiplier,
-            Type = StructureStatModifierType.Multiplicative,
-            Duration = 100,
-        });
-    }
-
-    public override void Tick () {
-        if (_target == null || _missile == null) {
-            _structure.Hull = 0;
+    public override void Tick (Structure structure) {
+        if (Target == null || Missile == null) {
+            structure.Hull = 0;
             return;
+        }
+
+        if (statModifier == null) {
+            statModifier = new StructureStatModifier {
+                Name = "Launcher Range Modifier",
+                Id = "launcher-range-modifier",
+                Value = RangeMultiplier,
+                Type = StructureStatModifierType.Multiplicative,
+                Duration = 100,
+            };
+            structure.AddStatModifier (StructureStatType.LinearSpeedMultiplier, statModifier);
         }
 
         Vector3[] target = new Vector3[2];
         target[0].z = 1;
 
-        float angle = _structure.GetAngleTo (_target.transform.localPosition);
-        if (angle > _missile.HeadingAllowance) target[1].y = 1;
-        else if (angle < -_missile.HeadingAllowance) target[1].y = -1;
+        float angle = structure.GetAngleTo (Target.transform.localPosition);
+        if (angle > Missile.HeadingAllowance) target[1].y = 1;
+        else if (angle < -Missile.HeadingAllowance) target[1].y = -1;
 
-        float elevation = _structure.GetElevationTo (_target.transform.localPosition);
-        if (elevation > _missile.HeadingAllowance) target[1].x = -1;
-        else if (elevation < -_missile.HeadingAllowance) target[1].x = 1;
+        float elevation = structure.GetElevationTo (Target.transform.localPosition);
+        if (elevation > Missile.HeadingAllowance) target[1].x = -1;
+        else if (elevation < -Missile.HeadingAllowance) target[1].x = 1;
 
-        _structure.GetEquipmentData<EngineSlotData> ().ForEach (engine => {
+        structure.GetEquipmentData<EngineSlotData> ().ForEach (engine => {
             engine.LinearSetting = target[0];
             engine.AngularSetting = target[1];
         });
 
-        if (_navigationManager.GetLocalDistance (_target, _structure) <= _missile.DetonationRange) {
-            _target.TakeDamage (_missile.Damage * _damageMultiplier, _structure.transform.position);
-            _structure.Hull = 0;
+        if (NavigationManager.Instance.GetLocalDistance (Target, structure) <= Missile.DetonationRange) {
+            Target.TakeDamage (Missile.Damage * DamageMultiplier, structure.transform.position);
+            structure.Hull = 0;
         }
     }
 }

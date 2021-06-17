@@ -6,6 +6,7 @@ using UnityEngine;
 public class LauncherSO : EquipmentSO {
     public float EnergyRequired;
     public float RechargeRate;
+    public bool AutoCycle;
     public List<MissileSO> CompatibleMissiles;
     public Damage DamageMultiplier;
     public float RangeMultiplier;
@@ -61,11 +62,12 @@ public class LauncherSO : EquipmentSO {
             Structure s = vfx.GetComponent<Structure> ();
             s.Initialize ();
             MissileAI ai = s.AI as MissileAI;
-            ai.SetTarget (data.Target);
-            ai.SetMissile (data.Missile);
-            ai.SetLauncher (this, slot.Equipper.Locks[data.Target]);
+            ai.Target = data.Target;
+            ai.Missile = data.Missile;
+            ai.RangeMultiplier = RangeMultiplier;
+            ai.DamageMultiplier = DamageMultiplier * slot.Equipper.Locks[data.Target] / 100;
             slot.Equipper.ChangeInventoryCount (data.Missile, -1);
-            data.Activated = false;
+            data.Activated = AutoCycle;
         }
     }
 

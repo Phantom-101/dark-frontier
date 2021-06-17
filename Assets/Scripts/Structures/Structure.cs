@@ -9,13 +9,12 @@ public class Structure : MonoBehaviour {
 
     [SerializeField] private StructureStatTypeToStructureStatDictionary _stats = new StructureStatTypeToStructureStatDictionary ();
     [SerializeField] private float _hull;
-    [SerializeField, Expandable] private Faction _faction;
+    [SerializeReference, Expandable] private Faction _faction;
 
     [SerializeField] private List<EquipmentSlot> _equipmentSlots = new List<EquipmentSlot> ();
     [SerializeField] private ItemSOToIntDictionary _inventory = new ItemSOToIntDictionary ();
 
-    [SerializeReference] private AI _ai;
-    [SerializeField] private AISO _initialAI;
+    [SerializeReference, Expandable] private AI _ai;
     [SerializeField] private bool _aiEnabled;
 
     [SerializeField] private Structure _selected;
@@ -25,7 +24,6 @@ public class Structure : MonoBehaviour {
     [SerializeField] private List<Structure> _detected;
 
     [SerializeField] private List<Structure> _docked;
-    [SerializeField] private List<string> _dockedIds;
 
     [SerializeField] private bool _initialized;
 
@@ -68,10 +66,12 @@ public class Structure : MonoBehaviour {
     }
 
     private void Start () {
-        if (!_initialized) Initialize ();
+        Initialize ();
     }
 
     public void Initialize () {
+        if (_initialized) return;
+
         _initialized = true;
 
         StructureManager.Instance.AddStructure (this);
@@ -80,7 +80,8 @@ public class Structure : MonoBehaviour {
 
         EnsureStats ();
 
-        if (_initialAI != null) _ai = _initialAI.GetAI (this);
+        if (_ai == null) _ai = ScriptableObject.CreateInstance<AI> ();
+        else _ai = _ai.GetAI ();
 
         if (_faction != null) {
             FactionManager.Instance.AddFaction (_faction);
@@ -318,8 +319,7 @@ public class Structure : MonoBehaviour {
         ManageSelectedAndLocks ();
         TickLocks ();
 
-        if (_ai == null) _ai = new AI (this);
-        if (_aiEnabled) _ai.Tick ();
+        if (_aiEnabled) _ai.Tick (this);
 
         foreach (EquipmentSlot slot in _equipmentSlots) slot.Tick ();
     }
