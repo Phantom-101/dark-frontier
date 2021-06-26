@@ -178,7 +178,7 @@ public class Structure : MonoBehaviour {
             NotificationUI.GetInstance ().AddNotification ("Docked at " + gameObject.name);
 
             // Update UI
-            UIStateManager.GetInstance ().AddState (UIState.Docked);
+            //UIStateManager.Instance.AddState (UIState.Docked);
 
             // Update camera anchor
             CameraController.GetInstance ().SetAnchor (new Location (transform));
@@ -201,7 +201,7 @@ public class Structure : MonoBehaviour {
                 NotificationUI.GetInstance ().AddNotification ("Undocked from " + gameObject.name);
 
                 // Update UI
-                UIStateManager.GetInstance ().RemoveState ();
+                UIStateManager.Instance.RemoveState ();
 
                 // Update camera anchor
                 CameraController.GetInstance ().RemoveAnchor ();
