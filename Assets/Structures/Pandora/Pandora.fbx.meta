@@ -13,7 +13,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Pandora
-    second: {fileID: 2100000, guid: 1075eb55f696f2946980130910faad76, type: 2}
+    second: {fileID: 2100000, guid: 338512b80221a9b4f81263a1a1b70c0b, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Delta I
-    second: {fileID: 2100000, guid: df4f628d05b572447bc6f1b53d2369c8, type: 2}
+    second: {fileID: 2100000, guid: e8998c02c23013242966e2bc7c917737, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule

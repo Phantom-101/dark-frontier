@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Victroia
-    second: {fileID: 2100000, guid: 8c6c6b53d961d434fa1f115c4f6da6ba, type: 2}
+    second: {fileID: 2100000, guid: 59c906a7108062848aaa1cc4566ab77a, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

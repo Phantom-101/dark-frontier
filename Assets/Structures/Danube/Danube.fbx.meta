@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Danube
-    second: {fileID: 2100000, guid: e011b662d6f841748b1a6253076946c9, type: 2}
+    second: {fileID: 2100000, guid: 61bfd2d8af02a5a42bce6bc2f87f73c1, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

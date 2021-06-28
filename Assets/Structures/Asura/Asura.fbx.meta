@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Asura
-    second: {fileID: 2100000, guid: f4d5824872e285a42b74de5fae900110, type: 2}
+    second: {fileID: 2100000, guid: 04f7f52e93d38ad49a83cd4f0f0fac51, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

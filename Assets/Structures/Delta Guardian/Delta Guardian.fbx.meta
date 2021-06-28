@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: gAURDIAN
-    second: {fileID: 2100000, guid: 169b79c013bd1584a95fc97a4f679517, type: 2}
+    second: {fileID: 2100000, guid: 5ab8ad3a58bea29489f9a9da9517bf0b, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

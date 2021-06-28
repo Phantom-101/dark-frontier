@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: tURRET
-    second: {fileID: 2100000, guid: 7a5f106973bb085478734fd32b92aca8, type: 2}
+    second: {fileID: 2100000, guid: 84e1556014f596e42b1124fba3e16d0d, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

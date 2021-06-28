@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Defender MK III
-    second: {fileID: 2100000, guid: 80cac39eb133b514a8ae8a09ea916c63, type: 2}
+    second: {fileID: 2100000, guid: e6448f2ff6e2c9c4aa272f9fcdfb9cea, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

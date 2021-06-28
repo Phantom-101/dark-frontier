@@ -21,7 +21,7 @@ MonoBehaviour:
   Usable: 0
   Prefab: {fileID: 570406170697649159, guid: 5d77e42a310acd34a8faa8b4ce2a5ff6, type: 3}
   ApparentSize: 2
-  HullWireframe: {fileID: 21300000, guid: 8453e92a589dba340bd7e965ad55e6af, type: 3}
+  HullWireframe: {fileID: 21300000, guid: 21db48d8619e7a946a2bff74625762c1, type: 3}
   WorldToUIScale: 0
   ShowBlip: 1
   DestructionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
@@ -35,4 +35,30 @@ MonoBehaviour:
   SignatureSize: 2
   DockingBaySize: 0
   DropPercentage: 1
-  SnapToPlane: 1
+  SnapToPlane: 0
+  Stats:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 0
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: 
+    _keys: 
+    _values: []

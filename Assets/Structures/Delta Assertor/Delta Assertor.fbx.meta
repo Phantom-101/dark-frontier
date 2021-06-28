@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Assertor
-    second: {fileID: 2100000, guid: 5353b4f6444bbd84d9ffac1a8dafef78, type: 2}
+    second: {fileID: 2100000, guid: 54f2d4d7a3f3e1148aaf12fc5c4a91d3, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Delta III
-    second: {fileID: 2100000, guid: b48f3726647cb3c41a91518f5b8a5932, type: 2}
+    second: {fileID: 2100000, guid: 6e3377d01f9ff0647957937a4a5dc3db, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
