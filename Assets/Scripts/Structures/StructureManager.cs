@@ -95,29 +95,19 @@ public class StructureManager : SingletonBase<StructureManager> {
     }
 
     public void OnStructureDestroyed (Structure destroyedStructure) {
+        // Destroy docked structures
         destroyedStructure.GetDocked ().ForEach (e => OnStructureDestroyed (e));
-
+        // Remove structure from list
         _structures.Remove (destroyedStructure);
-
+        // Spawn destruction effect
         if (destroyedStructure.Profile.DestructionEffect != null) {
             GameObject effect = Instantiate (destroyedStructure.Profile.DestructionEffect, destroyedStructure.transform.parent);
             effect.transform.localPosition = destroyedStructure.transform.localPosition;
             effect.transform.localScale = Vector3.one * destroyedStructure.Profile.ApparentSize;
-            Destroy (effect, 3);
         }
-
-        // Drop stuff according to StructureSO.DropPercentage
-
-        LeanTween.value (destroyedStructure.gameObject, 0, 1, 5).setOnUpdateParam (destroyedStructure.gameObject).setOnUpdateObject ((float value, object obj) => {
-            GameObject go = obj as GameObject;
-            go.GetComponentsInChildren<MeshRenderer> ().ToList ().ForEach (e => e.material.SetFloat ("_DissolveAmount", value));
-        });
-
-        Destroy (destroyedStructure.GetComponent<ConstantForce> ());
-        destroyedStructure.GetComponentsInChildren<ParticleSystem> ().ToList ().ForEach (e => Destroy (e));
-
-        Destroy (destroyedStructure);
-        Destroy (destroyedStructure.gameObject, 6);
+        // TODO Drop stuff according to StructureSO.DropPercentage
+        // Destroy structure game object
+        Destroy (destroyedStructure.gameObject);
     }
 
     public void SaveGame (DirectoryInfo directory) {

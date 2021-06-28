@@ -59,7 +59,7 @@
 				return col;
 			}
 			ENDCG
-		}
+			}
 
 		Pass
 			{
