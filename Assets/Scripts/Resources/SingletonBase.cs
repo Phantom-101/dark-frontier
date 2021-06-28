@@ -13,15 +13,15 @@ public class SingletonBase<T> : MonoBehaviour where T : MonoBehaviour {
             }
             lock (_lock) {
                 if (_instance == null) {
-                    // Search for existing instance.
+                    // Search for existing instance
                     _instance = FindObjectOfType<T> ();
-                    // Create new instance if one doesn't already exist.
+                    // Create new instance if one doesn't already exist
                     if (_instance == null) {
-                        // Need to create a new GameObject to attach the singleton to.
+                        // Need to create a new GameObject to attach the singleton to
                         var singletonObject = new GameObject ();
                         _instance = singletonObject.AddComponent<T> ();
                         singletonObject.name = typeof (T).ToString () + " (Singleton)";
-                        // Make instance persistent.
+                        // Make instance persistent
                         DontDestroyOnLoad (singletonObject);
                     }
                 }

@@ -1,41 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneUtils : MonoBehaviour {
-    public static SceneUtils Instance { get; private set; }
-
-    private void Awake () {
-
-        if (Instance != null) {
-
-            Destroy (gameObject);
-            return;
-
-        }
-        Instance = this;
-
-    }
-
+public class SceneUtils : SingletonBase<SceneUtils> {
     public void LoadScene (string name) {
-
-        Debug.Log ($"Loading scene {name}");
-
+        UIStateManager.Instance.PurgeStates ();
         SceneManager.LoadScene (name);
-
     }
 
     public void LoadScene (int id) {
-
-        Debug.Log ($"Loading scene #{id}");
-
+        UIStateManager.Instance.PurgeStates ();
         SceneManager.LoadScene (id);
-
     }
 
     public void Quit () {
-
         Application.Quit ();
-
     }
-
 }

@@ -17,15 +17,21 @@ public class UIStateManager : SingletonBase<UIStateManager> {
         return false;
     }
 
-    public void AddState (CanvasGroup group) {
+    public void AddState (CanvasGroup group, string name = null, bool showBelow = false, bool alwaysShow = false) {
+        // Ignore if canvas group is null
+        // We need to do this here even if AddState (UIState) already does so because we need to retrieve the name of the game object the group is on
+        // Also, this saves some execution time if group is indeed null
+        if (group == null) return;
         // Create UI state
-        // No need to check if group is non-null because AddState automatically does that
         UIState state = new UIState {
+            Name = name ?? group.gameObject.name,
             Group = group,
+            ShowBelow = showBelow,
+            AlwaysShow = alwaysShow,
         };
         // Add the UI state
         AddState (state);
-        // No need to notify listeners here as AddState(UIState) already does so
+        // No need to notify listeners here as AddState (UIState) already does so
     }
 
     public void AddState (UIState state) {
@@ -48,7 +54,14 @@ public class UIStateManager : SingletonBase<UIStateManager> {
     public void RemoveState () {
         // Remove the state and its associated info
         RemoveState (_states.Last ());
-        // No need to notify listeners here as RemoveState(UIState) already does so
+        // No need to notify listeners here as RemoveState (UIState) already does so
+    }
+
+    public void PurgeStates () {
+        // Remove all states
+        while (_states.Count > 0) {
+            RemoveState ();
+        }
     }
 
     private void RemoveState (UIState state) {
@@ -118,7 +131,7 @@ public class UIStateManager : SingletonBase<UIStateManager> {
             UIState state = _states[i];
             UIStateInfo info = _infos[state];
             // If a change is necessary, perform it
-            if (info.State != show) AdjustState (state, show);
+            if (info.State != (show || state.AlwaysShow)) AdjustState (state, show || state.AlwaysShow);
             // Update show boolean
             show = show && state.ShowBelow;
             // Decrement index to move on to a lower layer
@@ -152,6 +165,10 @@ public class UIState {
     /// Whether or not UI states below this will be shown.
     /// </summary>
     public bool ShowBelow;
+    /// <summary>
+    /// Whether or not this UI state will always show regardless of higher UI states.
+    /// </summary>
+    public bool AlwaysShow;
 }
 
 [Serializable]

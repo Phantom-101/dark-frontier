@@ -32,24 +32,24 @@ public class SaveSelectionUI : UIStateView {
             foreach (DirectoryInfo universe in universes) {
                 GameObject ugo = Instantiate (_universe, _content);
                 UniverseInfoUI uinfo = ugo.GetComponent<UniverseInfoUI> ();
-                uinfo.GetButton ().onClick.AddListener (() => {
+                uinfo.Button.onClick.AddListener (() => {
                     if (_expanded.Contains (universe.Name)) _expanded.Remove (universe.Name);
                     else _expanded.Add (universe.Name);
                     StateChanged ();
                 });
-                uinfo.SetName (universe.Name);
+                uinfo.Name = universe.Name;
                 _instUniverses.Add (uinfo);
                 if (_expanded.Contains (universe.Name)) {
                     DirectoryInfo[] saves = PathManager.GetSaveDirectories (universe);
                     foreach (DirectoryInfo save in saves) {
                         GameObject sgo = Instantiate (_save, _content);
                         SaveInfoUI sinfo = sgo.GetComponent<SaveInfoUI> ();
-                        sinfo.GetButton ().onClick.AddListener (() => {
+                        sinfo.Button.onClick.AddListener (() => {
                             UIStateManager.RemoveState ();
                             SaveSelected (universe.Name, save.Name);
                         });
-                        sinfo.SetName (universe.Name);
-                        sinfo.SetTime (save.Name);
+                        sinfo.Name = universe.Name;
+                        sinfo.Time = save.Name;
                         _instSaves.Add (sinfo);
                     }
                 }

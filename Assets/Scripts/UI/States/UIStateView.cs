@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent (typeof (CanvasGroup))]
 public class UIStateView : MonoBehaviour {
@@ -12,22 +13,31 @@ public class UIStateView : MonoBehaviour {
     public bool IsShown {
         get { return UIStateManager.IsShown (Group); }
     }
-    private UIStateManager _uIStateManager;
+    private UIStateManager _uiStateManager;
     public UIStateManager UIStateManager {
         get {
-            if (_uIStateManager == null) _uIStateManager = UIStateManager.Instance;
-            return _uIStateManager;
+            if (_uiStateManager == null) _uiStateManager = UIStateManager.Instance;
+            return _uiStateManager;
         }
     }
 
     private void Awake () {
-        UIStateManager.StatesChanged += (_, __) => StateChanged ();
+        if (UIStateManager != null) {
+            UIStateManager.StatesChanged += HandleStateChange;
+        }
     }
 
     private void Update () {
         UpdateUI ();
     }
 
+    private void OnDestroy () {
+        if (UIStateManager != null) {
+            UIStateManager.StatesChanged -= HandleStateChange;
+        }
+    }
+
+    private void HandleStateChange (object sender, EventArgs args) { StateChanged (); }
     protected virtual void StateChanged () { }
     protected virtual void UpdateUI () { }
 }
