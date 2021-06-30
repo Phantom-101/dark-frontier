@@ -173,7 +173,7 @@ public class EngineSlotSaveData : EquipmentSlotSaveData {
 
     public override EquipmentSlotData Load () {
         return new EngineSlotData {
-            Equipment = ItemManager.GetInstance ().GetItem (EquipmentId) as EquipmentSO,
+            Equipment = ItemManager.Instance.GetItem (EquipmentId) as EquipmentSO,
             Durability = Durability,
             LinearSetting = new Vector3 (LinearSetting[0], LinearSetting[1], LinearSetting[2]),
             AngularSetting = new Vector3 (AngularSetting[0], AngularSetting[1], AngularSetting[2]),

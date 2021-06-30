@@ -9,7 +9,6 @@ public class LauncherSO : EquipmentSO {
     public bool AutoCycle;
     public List<MissileSO> CompatibleMissiles;
     public Damage DamageMultiplier;
-    public float RangeMultiplier;
 
     public override void OnAwake (EquipmentSlot slot) {
         EnsureDataType (slot);
@@ -61,10 +60,10 @@ public class LauncherSO : EquipmentSO {
             vfx.transform.parent = slot.Equipper.transform.parent;
             Structure s = vfx.GetComponent<Structure> ();
             s.Initialize ();
-            MissileAI ai = s.AI as MissileAI;
+            MissileAI ai = CreateInstance<MissileAI> ();
+            s.AI = ai;
             ai.Target = data.Target;
             ai.Missile = data.Missile;
-            ai.RangeMultiplier = RangeMultiplier;
             ai.DamageMultiplier = DamageMultiplier * slot.Equipper.Locks[data.Target] / 100;
             slot.Equipper.ChangeInventoryCount (data.Missile, -1);
             data.Activated = AutoCycle;
@@ -74,20 +73,49 @@ public class LauncherSO : EquipmentSO {
     public override void FixedTick (EquipmentSlot slot) { }
 
     public override bool CanClick (EquipmentSlot slot) {
-        if (slot.Equipper.Selected == null) return false;
         LauncherSlotData data = slot.Data as LauncherSlotData;
-        if (data.Missile == null) return false;
-        if (!CompatibleMissiles.Contains (data.Missile)) return false;
-        if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
-        if (!slot.Equipper.HasInventoryCount (data.Missile, 1)) return false;
-        if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > data.Missile.Range * data.Missile.Range) return false;
-        return true;
+        if (data.Activated) {
+            // If equipment is activated and selected is null
+            // Assume user wants to deactivate equipment
+            if (slot.Equipper.Selected == null) return true;
+            // If equipment is activated and selected is not null
+            // Assume user wants to change target
+            else {
+                if (data.Missile == null) return false;
+                if (!CompatibleMissiles.Contains (data.Missile)) return false;
+                if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
+                if (!slot.Equipper.HasInventoryCount (data.Missile, 1)) return false;
+                if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > data.Missile.Range * data.Missile.Range) return false;
+                return true;
+            }
+        } else {
+            // If equipment is not activated
+            // Assume user wants to activate equipment
+            if (slot.Equipper.Selected == null) return false;
+            if (data.Missile == null) return false;
+            if (!CompatibleMissiles.Contains (data.Missile)) return false;
+            if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
+            if (!slot.Equipper.HasInventoryCount (data.Missile, 1)) return false;
+            if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > data.Missile.Range * data.Missile.Range) return false;
+            return true;
+        }
     }
 
     public override void OnClicked (EquipmentSlot slot) {
         LauncherSlotData data = slot.Data as LauncherSlotData;
-        data.Activated = !data.Activated;
-        if (data.Activated) data.Target = slot.Equipper.Selected;
+        if (data.Activated) {
+            // If equipment is activated and selected is null
+            // Assume user wants to deactivate equipment
+            if (slot.Equipper.Selected == null) data.Activated = false;
+            // If equipment is activated and selected is not null
+            // Assume user wants to change target
+            else data.Target = slot.Equipper.Selected;
+        } else {
+            // If equipment is not activated
+            // Assume user wants to activate equipment
+            data.Activated = true;
+            data.Target = slot.Equipper.Selected;
+        }
     }
 
     public override void EnsureDataType (EquipmentSlot slot) {
@@ -130,12 +158,12 @@ public class LauncherSlotSaveData : EquipmentSlotSaveData {
 
     public override EquipmentSlotData Load () {
         return new LauncherSlotData {
-            Equipment = ItemManager.GetInstance ().GetItem (EquipmentId) as EquipmentSO,
+            Equipment = ItemManager.Instance.GetItem (EquipmentId) as EquipmentSO,
             Durability = Durability,
             Charge = Charge,
             Activated = Activated,
             Target = StructureManager.Instance.GetStructure (TargetId),
-            Missile = ItemManager.GetInstance ().GetItem (MissileId) as MissileSO,
+            Missile = ItemManager.Instance.GetItem (MissileId) as MissileSO,
         };
     }
 }

@@ -67,7 +67,7 @@ public class GeneratorSlotData : EquipmentSlotData {
 public class GeneratorSlotSaveData : EquipmentSlotSaveData {
     public override EquipmentSlotData Load () {
         return new GeneratorSlotData {
-            Equipment = ItemManager.GetInstance ().GetItem (EquipmentId) as EquipmentSO,
+            Equipment = ItemManager.Instance.GetItem (EquipmentId) as EquipmentSO,
             Durability = Durability,
         };
     }

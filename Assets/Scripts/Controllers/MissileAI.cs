@@ -5,15 +5,11 @@ public class MissileAI : AI {
     public Structure Target;
     public MissileSO Missile;
     public Damage DamageMultiplier;
-    public float RangeMultiplier;
-
-    protected StructureStatModifier statModifier;
 
     public override AI GetAI () {
         MissileAI ai = CreateInstance<MissileAI> ();
         ai.Missile = Missile;
         ai.DamageMultiplier = DamageMultiplier;
-        ai.RangeMultiplier = RangeMultiplier;
         return ai;
     }
 
@@ -21,17 +17,6 @@ public class MissileAI : AI {
         if (Target == null || Missile == null) {
             structure.Hull = 0;
             return;
-        }
-
-        if (statModifier == null) {
-            statModifier = new StructureStatModifier {
-                Name = "Launcher Range Modifier",
-                Id = "launcher-range-modifier",
-                Value = RangeMultiplier,
-                Type = StructureStatModifierType.Multiplicative,
-                Duration = 100,
-            };
-            structure.AddStatModifier (StructureStatType.LinearSpeedMultiplier, statModifier);
         }
 
         Vector3[] target = new Vector3[2];

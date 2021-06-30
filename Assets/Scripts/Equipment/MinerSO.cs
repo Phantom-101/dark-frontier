@@ -95,17 +95,45 @@ public class MinerSO : EquipmentSO {
     public override void FixedTick (EquipmentSlot slot) { }
 
     public override bool CanClick (EquipmentSlot slot) {
-        if (slot.Equipper.Selected == null) return false;
-        if (!StructureDamageMultipliers.ContainsKey (slot.Equipper.Selected.Profile)) return false;
-        if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
-        if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range) return false;
-        return true;
+        MinerSlotData data = slot.Data as MinerSlotData;
+        if (data.Activated) {
+            // If equipment is activated and selected is null
+            // Assume user wants to deactivate equipment
+            if (slot.Equipper.Selected == null) return true;
+            // If equipment is activated and selected is not null
+            // Assume user wants to change target
+            else {
+                if (!StructureDamageMultipliers.ContainsKey (slot.Equipper.Selected.Profile)) return false;
+                if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
+                if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range) return false;
+                return true;
+            }
+        } else {
+            // If equipment is not activated
+            // Assume user wants to activate equipment
+            if (slot.Equipper.Selected == null) return false;
+            if (!StructureDamageMultipliers.ContainsKey (slot.Equipper.Selected.Profile)) return false;
+            if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
+            if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range) return false;
+            return true;
+        }
     }
 
     public override void OnClicked (EquipmentSlot slot) {
         MinerSlotData data = slot.Data as MinerSlotData;
-        data.Activated = !data.Activated;
-        if (data.Activated) data.Target = slot.Equipper.Selected;
+        if (data.Activated) {
+            // If equipment is activated and selected is null
+            // Assume user wants to deactivate equipment
+            if (slot.Equipper.Selected == null) data.Activated = false;
+            // If equipment is activated and selected is not null
+            // Assume user wants to change target
+            else data.Target = slot.Equipper.Selected;
+        } else {
+            // If equipment is not activated
+            // Assume user wants to activate equipment
+            data.Activated = true;
+            data.Target = slot.Equipper.Selected;
+        }
     }
 
     public override void EnsureDataType (EquipmentSlot slot) {
@@ -150,7 +178,7 @@ public class MinerSlotSaveData : EquipmentSlotSaveData {
 
     public override EquipmentSlotData Load () {
         return new MinerSlotData {
-            Equipment = ItemManager.GetInstance ().GetItem (EquipmentId) as EquipmentSO,
+            Equipment = ItemManager.Instance.GetItem (EquipmentId) as EquipmentSO,
             Durability = Durability,
             AccumulatedDamageMultiplier = AccumulatedDamageMultiplier,
             Heat = Heat,

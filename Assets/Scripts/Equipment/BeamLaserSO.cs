@@ -94,16 +94,43 @@ public class BeamLaserSO : EquipmentSO {
     public override void FixedTick (EquipmentSlot slot) { }
 
     public override bool CanClick (EquipmentSlot slot) {
-        if (slot.Equipper.Selected == null) return false;
-        if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
-        if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range) return false;
-        return true;
+        BeamLaserSlotData data = slot.Data as BeamLaserSlotData;
+        if (data.Activated) {
+            // If equipment is activated and selected is null
+            // Assume user wants to deactivate equipment
+            if (slot.Equipper.Selected == null) return true;
+            // If equipment is activated and selected is not null
+            // Assume user wants to change target
+            else {
+                if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
+                if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range) return false;
+                return true;
+            }
+        } else {
+            // If equipment is not activated
+            // Assume user wants to activate equipment
+            if (slot.Equipper.Selected == null) return false;
+            if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
+            if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range) return false;
+            return true;
+        }
     }
 
     public override void OnClicked (EquipmentSlot slot) {
         BeamLaserSlotData data = slot.Data as BeamLaserSlotData;
-        data.Activated = !data.Activated;
-        if (data.Activated) data.Target = slot.Equipper.Selected;
+        if (data.Activated) {
+            // If equipment is activated and selected is null
+            // Assume user wants to deactivate equipment
+            if (slot.Equipper.Selected == null) data.Activated = false;
+            // If equipment is activated and selected is not null
+            // Assume user wants to change target
+            else data.Target = slot.Equipper.Selected;
+        } else {
+            // If equipment is not activated
+            // Assume user wants to activate equipment
+            data.Activated = true;
+            data.Target = slot.Equipper.Selected;
+        }
     }
 
     public override void EnsureDataType (EquipmentSlot slot) {
@@ -148,7 +175,7 @@ public class BeamLaserSlotSaveData : EquipmentSlotSaveData {
 
     public override EquipmentSlotData Load () {
         return new BeamLaserSlotData {
-            Equipment = ItemManager.GetInstance ().GetItem (EquipmentId) as EquipmentSO,
+            Equipment = ItemManager.Instance.GetItem (EquipmentId) as EquipmentSO,
             Durability = Durability,
             AccumulatedDamageMultiplier = AccumulatedDamageMultiplier,
             Heat = Heat,

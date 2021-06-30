@@ -84,7 +84,7 @@ public class ShieldSlotSaveData : EquipmentSlotSaveData {
 
     public override EquipmentSlotData Load () {
         return new ShieldSlotData {
-            Equipment = ItemManager.GetInstance ().GetItem (EquipmentId) as EquipmentSO,
+            Equipment = ItemManager.Instance.GetItem (EquipmentId) as EquipmentSO,
             Durability = Durability,
             Strength = Strength,
         };

@@ -371,7 +371,7 @@ public class Structure : MonoBehaviour {
             _equipmentSlots[i].Data = saveData.Equipment[i].Load ();
             _equipmentSlots[i].Data.Slot = _equipmentSlots[i];
         }
-        ItemManager im = ItemManager.GetInstance ();
+        ItemManager im = ItemManager.Instance;
         for (int i = 0; i < saveData.InventoryIds.Count; i++) {
             _inventory[im.GetItem (saveData.InventoryIds[i])] = saveData.InventoryCounts[i];
         }

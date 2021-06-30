@@ -6,19 +6,12 @@ public abstract class EquipmentSO : ItemSO {
     public GameObject ButtonPrefab;
 
     public abstract void OnAwake (EquipmentSlot slot);
-
     public abstract void OnEquip (EquipmentSlot slot);
-
     public abstract void OnUnequip (EquipmentSlot slot);
-
     public abstract void Tick (EquipmentSlot slot);
-
     public abstract void FixedTick (EquipmentSlot slot);
-
     public abstract bool CanClick (EquipmentSlot slot);
-
     public abstract void OnClicked (EquipmentSlot slot);
-
     public abstract void EnsureDataType (EquipmentSlot slot);
 }
 
@@ -43,7 +36,7 @@ public class EquipmentSlotSaveData {
 
     public virtual EquipmentSlotData Load () {
         return new EquipmentSlotData {
-            Equipment = ItemManager.GetInstance ().GetItem (EquipmentId) as EquipmentSO,
+            Equipment = ItemManager.Instance.GetItem (EquipmentId) as EquipmentSO,
             Durability = Durability,
         };
     }

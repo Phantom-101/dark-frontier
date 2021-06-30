@@ -82,7 +82,7 @@ public class CapacitorSlotSaveData : EquipmentSlotSaveData {
 
     public override EquipmentSlotData Load () {
         return new CapacitorSlotData {
-            Equipment = ItemManager.GetInstance ().GetItem (EquipmentId) as EquipmentSO,
+            Equipment = ItemManager.Instance.GetItem (EquipmentId) as EquipmentSO,
             Durability = Durability,
             Charge = Charge,
             ChargeLeft = ChargeLeft,

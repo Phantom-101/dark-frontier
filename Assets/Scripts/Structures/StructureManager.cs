@@ -139,7 +139,7 @@ public class StructureManager : SingletonBase<StructureManager> {
         _structures.ForEach (structure => { Destroy (structure.gameObject); });
         _structures = new List<Structure> ();
         structures.ForEach (data => {
-            StructureSO profile = ItemManager.GetInstance ().GetItem (data.ProfileId) as StructureSO;
+            StructureSO profile = ItemManager.Instance.GetItem (data.ProfileId) as StructureSO;
             GameObject structure = Instantiate (profile.Prefab, SectorManager.Instance.GetSector (data.SectorId).transform);
             structure.name = profile.Name;
             Structure comp = structure.GetComponent<Structure> ();
