@@ -1547,7 +1547,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Data.Equipment
       value: 
-      objectReference: {fileID: 11400000, guid: b4bcc1310fd094d4d90dc6125e68b4c1,
+      objectReference: {fileID: 11400000, guid: 44bd9c98f51eb3e4fb6d22dacd37c314,
         type: 2}
     - target: {fileID: 6867831576667458145, guid: 01d3b3e41279c74489c131c0b41597bb,
         type: 3}
