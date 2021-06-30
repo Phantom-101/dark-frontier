@@ -49,7 +49,7 @@ public class StructureManager : SingletonBase<StructureManager> {
         if (a.Sector != b.Sector) return false;
 
         float sqrDis = (a.transform.localPosition - b.transform.localPosition).sqrMagnitude;
-        float range = a.GetStatAppliedValue (StructureStatType.SensorStrength, 0) * b.GetStatAppliedValue (StructureStatType.Detectability, 0);
+        float range = a.GetStatAppliedValue (StatType.SensorStrength, 0) * b.GetStatAppliedValue (StatType.Detectability, 0);
         float sqrRange = range * range;
         return sqrDis <= sqrRange;
     }

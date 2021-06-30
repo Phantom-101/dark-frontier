@@ -7,7 +7,7 @@ public class Structure : MonoBehaviour {
     [SerializeField] private StructureSO _profile;
     [SerializeField] private string _id;
 
-    [SerializeField] private StructureStatTypeToStructureStatDictionary _stats = new StructureStatTypeToStructureStatDictionary ();
+    [SerializeField] private StatTypeToStatDictionary _stats = new StatTypeToStatDictionary ();
     [SerializeField] private float _hull;
     [SerializeReference, Expandable] private Faction _faction;
 
@@ -34,7 +34,7 @@ public class Structure : MonoBehaviour {
     public float Hull {
         get => _hull;
         set {
-            _hull = Mathf.Min (value, GetProfileValue (StructureStatType.MaxHull, 1));
+            _hull = Mathf.Min (value, GetProfileValue (StatType.MaxHull, 1));
             if (_hull <= 0) {
                 if (Faction != null) Faction.RemoveProperty (this);
                 if (Sector != null) Sector.Exited (this);
@@ -89,31 +89,31 @@ public class Structure : MonoBehaviour {
         }
     }
 
-    public float GetProfileValue (StructureStatType type, float value) {
+    public float GetProfileValue (StatType type, float value) {
         if (_profile == null || _profile.Stats == null) return value;
         if (_profile.Stats.ContainsKey (type)) return _profile.Stats[type].BaseValue;
         return value;
     }
 
-    public float GetStatBaseValue (StructureStatType type, float value) {
-        _stats.TryAdd (type, new StructureStat { Name = type.ToString (), BaseValue = value });
+    public float GetStatBaseValue (StatType type, float value) {
+        _stats.TryAdd (type, new Stat { Name = type.ToString (), BaseValue = value });
         return _stats[type].BaseValue;
     }
 
-    public float GetStatAppliedValue (StructureStatType type, float value) {
-        _stats.TryAdd (type, new StructureStat { Name = type.ToString (), BaseValue = value });
-        return _stats[type].GetAppliedValue ();
+    public float GetStatAppliedValue (StatType type, float value) {
+        _stats.TryAdd (type, new Stat { Name = type.ToString (), BaseValue = value });
+        return _stats[type].AppliedValue;
     }
 
-    public void AddStatModifier (StructureStatType type, StructureStatModifier modifier) {
+    public void AddStatModifier (StatType type, StatModifier modifier) {
         _stats.TryGet (type, null)?.AddModifier (modifier);
     }
 
-    public void RemoveStatModifier (StructureStatType type, StructureStatModifier modifier) {
+    public void RemoveStatModifier (StatType type, StatModifier modifier) {
         _stats.TryGet (type, null)?.RemoveModifier (modifier);
     }
 
-    public void RemoveStatModifier (StructureStatType type, string id) {
+    public void RemoveStatModifier (StatType type, string id) {
         _stats.TryGet (type, null)?.RemoveModifier (id);
     }
 
@@ -221,7 +221,7 @@ public class Structure : MonoBehaviour {
         // Enough space?
         float size = 0;
         foreach (Structure c in _docked) size += c.Profile.ApparentSize;
-        if (docker.Profile.ApparentSize > GetStatAppliedValue (StructureStatType.DockingBaySize, 0) - size) return false;
+        if (docker.Profile.ApparentSize > GetStatAppliedValue (StatType.DockingBaySize, 0) - size) return false;
 
         return true;
     }
@@ -277,7 +277,7 @@ public class Structure : MonoBehaviour {
         if (Selected != null && !Detected.Contains (Selected)) Selected = null;
         bool lockChanged = false;
         foreach (Structure target in Locks.Keys.ToArray ()) {
-            if (target == null || !Detected.Contains (target) || Locks.Keys.Count > GetStatAppliedValue (StructureStatType.MaxLocks, 0)) {
+            if (target == null || !Detected.Contains (target) || Locks.Keys.Count > GetStatAppliedValue (StatType.MaxLocks, 0)) {
                 Locks.Remove (target);
                 lockChanged = true;
             }
@@ -292,7 +292,7 @@ public class Structure : MonoBehaviour {
         if (target == null) return false;
         if (!Detected.Contains (target)) return false;
         if (Locks.ContainsKey (target)) return false;
-        if (Locks.Keys.Count >= GetStatAppliedValue (StructureStatType.MaxLocks, 0)) return false;
+        if (Locks.Keys.Count >= GetStatAppliedValue (StatType.MaxLocks, 0)) return false;
         Locks[target] = 0;
         PlayerController pc = PlayerController.Instance;
         if (pc.Player == this) pc.LocksChanged.Invoke (this, EventArgs.Empty);
@@ -310,7 +310,7 @@ public class Structure : MonoBehaviour {
 
     public void TickLocks () {
         foreach (Structure target in Locks.Keys.ToArray ()) {
-            float progress = GetStatAppliedValue (StructureStatType.ScannerStrength, 0) * target.GetStatAppliedValue (StructureStatType.SignatureSize, 0) * Time.deltaTime;
+            float progress = GetStatAppliedValue (StatType.ScannerStrength, 0) * target.GetStatAppliedValue (StatType.SignatureSize, 0) * Time.deltaTime;
             Locks[target] = Mathf.Min (Locks[target] + progress, 100);
         }
     }
@@ -336,8 +336,8 @@ public class Structure : MonoBehaviour {
 
     private void EnsureStats () {
         if (_profile != null && _profile.Stats != null) {
-            foreach (StructureStatType key in _profile.Stats.Keys) {
-                _stats.TryAdd (key, new StructureStat { Name = key.ToString (), BaseValue = _profile.Stats[key].BaseValue });
+            foreach (StatType key in _profile.Stats.Keys) {
+                _stats.TryAdd (key, new Stat { Name = key.ToString (), BaseValue = _profile.Stats[key].BaseValue });
             }
         }
     }
@@ -376,7 +376,7 @@ public class Structure : MonoBehaviour {
             _inventory[im.GetItem (saveData.InventoryIds[i])] = saveData.InventoryCounts[i];
         }
         _stats = saveData.Stats;
-        if (_stats == null) _stats = new StructureStatTypeToStructureStatDictionary ();
+        if (_stats == null) _stats = new StatTypeToStatDictionary ();
         EnsureStats ();
         _sector = SectorManager.Instance.GetSector (saveData.SectorId);
         _sector.Entered (this);
@@ -396,7 +396,7 @@ public class StructureSaveData {
     public List<EquipmentSlotSaveData> Equipment = new List<EquipmentSlotSaveData> ();
     public List<string> InventoryIds = new List<string> ();
     public List<int> InventoryCounts = new List<int> ();
-    public StructureStatTypeToStructureStatDictionary Stats = new StructureStatTypeToStructureStatDictionary ();
+    public StatTypeToStatDictionary Stats = new StatTypeToStatDictionary ();
     public string SectorId;
     public bool AIEnabled;
     public bool IsPlayer;

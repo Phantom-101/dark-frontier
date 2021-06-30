@@ -2,21 +2,18 @@
 using UnityEngine;
 
 [Serializable]
-public class StructureStatModifier {
+public class StatModifier {
     public string Name;
     public string Id;
     public float Value;
-    public StructureStatModifierType Type;
+    public StatModifierType Type;
     public float Duration;
-
     public bool Expired { get => Duration <= 0; }
-
-    public StructureStatModifier () { }
-
+    
     public void Tick () { Duration -= Time.deltaTime; }
 
-    public StructureStatModifier Copy () {
-        return new StructureStatModifier {
+    public StatModifier Copy () {
+        return new StatModifier {
             Name = Name,
             Id = Id,
             Value = Value,
@@ -26,7 +23,7 @@ public class StructureStatModifier {
     }
 }
 
-public enum StructureStatModifierType {
+public enum StatModifierType {
     Additive,
     Multiplicative,
     PercentAdditive,
