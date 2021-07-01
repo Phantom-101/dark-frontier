@@ -13,9 +13,10 @@ public class EngineSO : EquipmentSO {
     public Vector3 LinearConsumptionNeg;
     public Vector3 AngularConsumptionPos;
     public Vector3 AngularConsumptionNeg;
-    public float InertialFactor;
+    public float CorrectionSlack;
     public float LinearSleepThreshold;
     public float AngularSleepThreshold;
+    public float BankAmount;
 
     public override void OnAwake (EquipmentSlot slot) {
         EnsureDataType (slot);
@@ -75,6 +76,8 @@ public class EngineSO : EquipmentSO {
         Vector3[] accels = GetAccelerations (slot);
         cf.relativeForce = accels[0] * data.EnergySatisfaction;
         cf.relativeTorque = accels[1] * data.EnergySatisfaction;
+
+        foreach (Transform t in slot.Equipper.transform) t.localEulerAngles = new Vector3 (0, 0, -BankAmount * rb.angularVelocity.y);
     }
 
     public override bool CanClick (EquipmentSlot slot) { return false; }
@@ -102,7 +105,7 @@ public class EngineSO : EquipmentSO {
             float cur = slot.Equipper.transform.InverseTransformDirection (rb.velocity)[d] / MaxLinearSpeed;
             float dif = data.LinearSetting[d] - cur;
             if (Mathf.Abs (dif) > LinearSleepThreshold) {
-                float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), InertialFactor)) * Mathf.Sign (dif);
+                float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
                 res[0][d] = Lerp (mul, LinearForcePos[d], LinearForceNeg[d]);
                 res[0][d] *= slot.Equipper.GetStatAppliedValue (StatType.LinearSpeedMultiplier, 1);
             }
@@ -112,7 +115,7 @@ public class EngineSO : EquipmentSO {
             float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity * Mathf.Rad2Deg)[d] / MaxAngularSpeed;
             float dif = data.AngularSetting[d] - cur;
             if (Mathf.Abs (dif) > AngularSleepThreshold) {
-                float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), InertialFactor)) * Mathf.Sign (dif);
+                float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
                 res[1][d] = Lerp (mul, AngularForcePos[d], AngularForceNeg[d]);
                 res[1][d] *= slot.Equipper.GetStatAppliedValue (StatType.AngularSpeedMultiplier, 1);
             }
@@ -129,14 +132,14 @@ public class EngineSO : EquipmentSO {
         for (int d = 0; d < 3; d++) {
             float cur = slot.Equipper.transform.InverseTransformDirection (rb.velocity)[d] / MaxLinearSpeed;
             float dif = data.LinearSetting[d] - cur;
-            float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), InertialFactor)) * Mathf.Sign (dif);
+            float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
             res += Lerp (mul, LinearConsumptionPos[d], LinearConsumptionNeg[d]);
         }
         // Angular
         for (int d = 0; d < 3; d++) {
             float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity * Mathf.Rad2Deg)[d] / MaxAngularSpeed;
             float dif = data.AngularSetting[d] - cur;
-            float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), InertialFactor)) * Mathf.Sign (dif);
+            float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
             res += Lerp (mul, AngularConsumptionPos[d], AngularConsumptionNeg[d]);
         }
         return res;

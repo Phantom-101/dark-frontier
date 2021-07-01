@@ -35,6 +35,7 @@ MonoBehaviour:
   LinearConsumptionNeg: {x: 1, y: 1, z: 1}
   AngularConsumptionPos: {x: 1, y: 1, z: 1}
   AngularConsumptionNeg: {x: 1, y: 1, z: 1}
-  InertialFactor: 0.1
+  CorrectionSlack: 0.1
   LinearSleepThreshold: 0.005
   AngularSleepThreshold: 0.01
+  BankAmount: 25

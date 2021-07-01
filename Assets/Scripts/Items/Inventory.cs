@@ -49,6 +49,8 @@ public class Inventory {
         return removed;
     }
 
+    public List<ItemSO> GetStoredItems () => _quantities.Keys.ToList ();
+
     private void Optimize () => _quantities.Where (pair => pair.Value == 0).ToList ().ForEach (pair => _quantities.Remove (pair.Key));
     private float RoundToPrecision (float value) => (float) Math.Round (value, _precision);
     private float GetVolume (ItemSO item, int amount) => RoundToPrecision (RoundToPrecision (item.Volume) * amount);

@@ -16,3 +16,4 @@ MonoBehaviour:
   _material: {fileID: 0}
   _audioClip: {fileID: 0}
   _itemSO: {fileID: 11400000, guid: e6686b177d04d6b4397af0df3385eb78, type: 2}
+  _structureSO: {fileID: 11400000, guid: 72aba58902639954090d201c68fa7849, type: 2}
