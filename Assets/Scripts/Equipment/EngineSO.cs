@@ -60,23 +60,23 @@ public class EngineSO : EquipmentSO {
 
     public override void FixedTick (EquipmentSlot slot) {
         EnsureDataType (slot);
-
+        // Get data and references
         EngineSlotData data = slot.Data as EngineSlotData;
         Rigidbody rb = slot.Equipper.GetComponent<Rigidbody> ();
         ConstantForce cf = slot.Equipper.GetComponent<ConstantForce> ();
-
+        // Set drags to 0
         rb.drag = 0;
         rb.angularDrag = 0;
-
+        // Clamp velocities
         if (data.EnergySatisfaction > 0) {
             if (rb.velocity.sqrMagnitude > MaxLinearSpeed * MaxLinearSpeed) rb.velocity = rb.velocity.normalized * MaxLinearSpeed;
             rb.maxAngularVelocity = MaxAngularSpeed * Mathf.Deg2Rad;
         } else rb.maxAngularVelocity = 0;
-
+        // Apply force
         Vector3[] accels = GetAccelerations (slot);
         cf.relativeForce = accels[0] * data.EnergySatisfaction;
         cf.relativeTorque = accels[1] * data.EnergySatisfaction;
-
+        // Bank
         foreach (Transform t in slot.Equipper.transform) t.localEulerAngles = new Vector3 (0, 0, -BankAmount * rb.angularVelocity.y);
     }
 
@@ -102,21 +102,31 @@ public class EngineSO : EquipmentSO {
         Vector3[] res = new Vector3[2];
         // Linear
         for (int d = 0; d < 3; d++) {
-            float cur = slot.Equipper.transform.InverseTransformDirection (rb.velocity)[d] / MaxLinearSpeed;
-            float dif = data.LinearSetting[d] - cur;
-            if (Mathf.Abs (dif) > LinearSleepThreshold) {
-                float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
-                res[0][d] = Lerp (mul, LinearForcePos[d], LinearForceNeg[d]);
+            if (data.ManagedPropulsion) {
+                float cur = slot.Equipper.transform.InverseTransformDirection (rb.velocity)[d] / MaxLinearSpeed;
+                float dif = data.LinearSetting[d] - cur;
+                if (Mathf.Abs (dif) > LinearSleepThreshold) {
+                    float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
+                    res[0][d] = Lerp (mul, LinearForcePos[d], LinearForceNeg[d]);
+                    res[0][d] *= slot.Equipper.GetStatAppliedValue (StatType.LinearSpeedMultiplier, 1);
+                }
+            } else {
+                res[0][d] = Lerp (data.LinearSetting[d], LinearForcePos[d], LinearForceNeg[d]);
                 res[0][d] *= slot.Equipper.GetStatAppliedValue (StatType.LinearSpeedMultiplier, 1);
             }
         }
         // Angular
         for (int d = 0; d < 3; d++) {
-            float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity * Mathf.Rad2Deg)[d] / MaxAngularSpeed;
-            float dif = data.AngularSetting[d] - cur;
-            if (Mathf.Abs (dif) > AngularSleepThreshold) {
-                float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
-                res[1][d] = Lerp (mul, AngularForcePos[d], AngularForceNeg[d]);
+            if (data.ManagedPropulsion) {
+                float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity * Mathf.Rad2Deg)[d] / MaxAngularSpeed;
+                float dif = data.AngularSetting[d] - cur;
+                if (Mathf.Abs (dif) > AngularSleepThreshold) {
+                    float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
+                    res[1][d] = Lerp (mul, AngularForcePos[d], AngularForceNeg[d]);
+                    res[1][d] *= slot.Equipper.GetStatAppliedValue (StatType.AngularSpeedMultiplier, 1);
+                }
+            } else {
+                res[1][d] = Lerp (data.AngularSetting[d], AngularForcePos[d], AngularForceNeg[d]);
                 res[1][d] *= slot.Equipper.GetStatAppliedValue (StatType.AngularSpeedMultiplier, 1);
             }
         }
@@ -156,6 +166,7 @@ public class EngineSlotData : EquipmentSlotData {
     public Vector3 LinearSetting;
     public Vector3 AngularSetting;
     public float EnergySatisfaction;
+    public bool ManagedPropulsion;
 
     public override EquipmentSlotSaveData Save () {
         return new EngineSlotSaveData {
@@ -164,6 +175,7 @@ public class EngineSlotData : EquipmentSlotData {
             LinearSetting = new float[] { LinearSetting.x, LinearSetting.y, LinearSetting.z },
             AngularSetting = new float[] { AngularSetting.x, AngularSetting.y, AngularSetting.z },
             EnergySatisfaction = EnergySatisfaction,
+            ManagedPropulsion = ManagedPropulsion,
         };
     }
 }
@@ -173,6 +185,7 @@ public class EngineSlotSaveData : EquipmentSlotSaveData {
     public float[] LinearSetting;
     public float[] AngularSetting;
     public float EnergySatisfaction;
+    public bool ManagedPropulsion;
 
     public override EquipmentSlotData Load () {
         return new EngineSlotData {
@@ -181,6 +194,7 @@ public class EngineSlotSaveData : EquipmentSlotSaveData {
             LinearSetting = new Vector3 (LinearSetting[0], LinearSetting[1], LinearSetting[2]),
             AngularSetting = new Vector3 (AngularSetting[0], AngularSetting[1], AngularSetting[2]),
             EnergySatisfaction = EnergySatisfaction,
+            ManagedPropulsion = ManagedPropulsion,
         };
     }
 }
