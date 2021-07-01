@@ -12,7 +12,7 @@ public class Structure : MonoBehaviour {
     [SerializeReference, Expandable] private Faction _faction;
 
     [SerializeField] private List<EquipmentSlot> _equipmentSlots = new List<EquipmentSlot> ();
-    [SerializeField] private ItemSOToIntDictionary _inventory = new ItemSOToIntDictionary ();
+    [SerializeField] private Inventory _inventory;
 
     [SerializeReference, Expandable] private AI _ai;
     [SerializeField] private bool _aiEnabled;
@@ -44,7 +44,7 @@ public class Structure : MonoBehaviour {
     }
     public Faction Faction { get => _faction; set => _faction = value; }
     public List<EquipmentSlot> Equipment { get => _equipmentSlots; }
-    public ItemSOToIntDictionary Inventory { get => _inventory; }
+    public Inventory Inventory { get => _inventory; }
     public AI AI { get => _ai; set => _ai = value; }
     public Structure Selected {
         get => _selected;
@@ -57,14 +57,6 @@ public class Structure : MonoBehaviour {
     public Sector Sector { get => _sector; set => _sector = value; }
     public List<Structure> Detected { get { if (_detected == null) _detected = StructureManager.Instance.GetDetected (this); return _detected; } set => _detected = value; }
 
-    private void Awake () {
-        if (transform.parent != null) {
-            _sector = GetComponentInParent<Sector> ();
-            if (_sector != null) _sector.Entered (this);
-        }
-        _rb = GetComponent<Rigidbody> ();
-    }
-
     private void Start () {
         Initialize ();
     }
@@ -73,6 +65,12 @@ public class Structure : MonoBehaviour {
         if (_initialized) return;
 
         _initialized = true;
+
+        if (transform.parent != null) {
+            _sector = GetComponentInParent<Sector> ();
+            if (_sector != null) _sector.Entered (this);
+        }
+        _rb = GetComponent<Rigidbody> ();
 
         StructureManager.Instance.AddStructure (this);
 
@@ -87,12 +85,19 @@ public class Structure : MonoBehaviour {
             FactionManager.Instance.AddFaction (_faction);
             _faction.AddProperty (this);
         }
+
+        if (_inventory == null) _inventory = new Inventory (GetStat (StatType.InventoryVolume, 0), 1);
     }
 
     public float GetProfileValue (StatType type, float value) {
         if (_profile == null || _profile.Stats == null) return value;
         if (_profile.Stats.ContainsKey (type)) return _profile.Stats[type].BaseValue;
         return value;
+    }
+
+    public Stat GetStat (StatType type, float value) {
+        _stats.TryAdd (type, new Stat { Name = type.ToString (), BaseValue = value });
+        return _stats[type];
     }
 
     public float GetStatBaseValue (StatType type, float value) {
@@ -124,39 +129,6 @@ public class Structure : MonoBehaviour {
         });
         return data;
     }
-
-    public int GetInventoryCount (ItemSO item) {
-        if (item == null) return 0;
-        return _inventory.ContainsKey (item) ? _inventory[item] : 0;
-    }
-
-    public void SetInventoryCount (ItemSO item, int count) {
-        if (item == null) return;
-        _inventory[item] = count;
-    }
-
-    public void ChangeInventoryCount (ItemSO item, int delta) {
-        if (item == null) return;
-        SetInventoryCount (item, GetInventoryCount (item) + delta);
-    }
-
-    public bool HasInventoryCount (ItemSO item, int condition) {
-        if (item == null) return false;
-        return GetInventoryCount (item) >= condition;
-    }
-
-    public float GetTotalInventorySize () { return _profile.InventorySize; }
-
-    public float GetUsedInventorySize () {
-        float used = 0;
-        foreach (ItemSO item in _inventory.Keys) used += item.Volume * _inventory[item];
-        return used;
-    }
-
-    public float GetFreeInventorySize () { return GetTotalInventorySize () - GetUsedInventorySize (); }
-
-    public bool CanAddInventoryItem (ItemSO item, int count) { return GetFreeInventorySize () >= item.Volume * count; }
-
     public List<Structure> GetDocked () { return _docked; }
 
     public bool AddDocker (Structure docker) {
@@ -348,8 +320,7 @@ public class Structure : MonoBehaviour {
             Position = new float[] { transform.localPosition.x, transform.localPosition.y, transform.localPosition.z },
             Rotation = new float[] { transform.localRotation.x, transform.localRotation.y, transform.localRotation.z, transform.localRotation.w },
             Hull = _hull,
-            InventoryIds = _inventory.Keys.Select (item => item.Id).ToList (),
-            InventoryCounts = _inventory.Values.ToList (),
+            Inventory = _inventory.Save (),
             Stats = _stats,
         };
         if (_profile != null) data.ProfileId = _profile.Id;
@@ -371,10 +342,7 @@ public class Structure : MonoBehaviour {
             _equipmentSlots[i].Data = saveData.Equipment[i].Load ();
             _equipmentSlots[i].Data.Slot = _equipmentSlots[i];
         }
-        ItemManager im = ItemManager.Instance;
-        for (int i = 0; i < saveData.InventoryIds.Count; i++) {
-            _inventory[im.GetItem (saveData.InventoryIds[i])] = saveData.InventoryCounts[i];
-        }
+        _inventory = saveData.Inventory.Load ();
         _stats = saveData.Stats;
         if (_stats == null) _stats = new StatTypeToStatDictionary ();
         EnsureStats ();
@@ -393,10 +361,9 @@ public class StructureSaveData {
     public string Id;
     public float Hull;
     public string FactionId;
-    public List<EquipmentSlotSaveData> Equipment = new List<EquipmentSlotSaveData> ();
-    public List<string> InventoryIds = new List<string> ();
-    public List<int> InventoryCounts = new List<int> ();
-    public StatTypeToStatDictionary Stats = new StatTypeToStatDictionary ();
+    public List<EquipmentSlotSaveData> Equipment;
+    public InventorySaveData Inventory;
+    public StatTypeToStatDictionary Stats;
     public string SectorId;
     public bool AIEnabled;
     public bool IsPlayer;

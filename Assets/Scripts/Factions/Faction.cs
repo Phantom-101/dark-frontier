@@ -47,5 +47,5 @@ public class FactionSaveData {
     public string Name;
     public string Id;
     public long Wealth;
-    public StringToFloatDictionary Relations = new StringToFloatDictionary ();
+    public StringToFloatDictionary Relations;
 }

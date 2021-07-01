@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public class Inventory {
+public class Inventory : ISaveTo<InventorySaveData> {
     [SerializeField]
     private ItemSOToIntDictionary _quantities;
     [SerializeField]
@@ -61,5 +61,23 @@ public class Inventory {
         foreach (KeyValuePair<ItemSO, int> pair in _quantities) {
             _storedVolume = RoundToPrecision (_storedVolume + GetVolume (pair.Key, pair.Value));
         }
+    }
+
+    public InventorySaveData Save () {
+        return new InventorySaveData {
+            Quantities = _quantities.ToDictionary (p => p.Key.Id, p => p.Value),
+            Volume = _volume,
+            Precision = _precision,
+        };
+    }
+}
+
+public class InventorySaveData : ILoadTo<Inventory> {
+    public Dictionary<string, int> Quantities;
+    public Stat Volume;
+    public int Precision;
+
+    public Inventory Load () {
+        return new Inventory (Quantities.ToDictionary (p => ItemManager.Instance.GetItem (p.Key), p => p.Value).ToSerializable<ItemSO, int, ItemSOToIntDictionary> (), Volume, Precision);
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using RotaryHeart.Lib.SerializableDictionary;
+using System;
+using System.Collections.Generic;
 
 public static class DictionaryExtensionMethods {
     public static bool TryAdd<K, V> (this IDictionary<K, V> dict, K key, V value) {
@@ -14,5 +16,11 @@ public static class DictionaryExtensionMethods {
 
     public static void TryCopyTo<K, V> (this IDictionary<K, V> dict, IDictionary<K, V> target) {
         foreach (K key in dict.Keys) target.TryAdd (key, dict[key]);
+    }
+
+    public static D ToSerializable<K, V, D> (this IDictionary<K, V> dict) where D : SerializableDictionaryBase<K, V> {
+        D ret = Activator.CreateInstance (typeof (D)) as D;
+        foreach (KeyValuePair<K, V> pair in dict) ret[pair.Key] = pair.Value;
+        return ret;
     }
 }

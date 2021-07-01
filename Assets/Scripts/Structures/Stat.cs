@@ -36,7 +36,7 @@ public class Stat {
     }
     [SerializeField]
     private bool _dirty = true;
-    
+
     public void AddModifier (StatModifier modifier) {
         Modifiers[modifier.Id] = modifier;
         _dirty = true;
@@ -67,4 +67,5 @@ public enum StatType {
     LinearSpeedMultiplier,
     AngularSpeedMultiplier,
     DropPercentage,
+    InventoryVolume,
 }

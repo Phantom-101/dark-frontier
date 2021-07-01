@@ -52,7 +52,7 @@ public class LauncherSO : EquipmentSO {
         });
         data.Charge += given;
 
-        if (data.Activated && (data.Target == null || data.Missile == null || !CompatibleMissiles.Contains (data.Missile) || !slot.Equipper.Locks.ContainsKey (data.Target) || !slot.Equipper.HasInventoryCount (data.Missile, 1) || (data.Target.transform.position - slot.Equipper.transform.position).sqrMagnitude > data.Missile.Range * data.Missile.Range)) data.Activated = false;
+        if (data.Activated && (data.Target == null || data.Missile == null || !CompatibleMissiles.Contains (data.Missile) || !slot.Equipper.Locks.ContainsKey (data.Target) || !slot.Equipper.Inventory.HasQuantity (data.Missile, 1) || (data.Target.transform.position - slot.Equipper.transform.position).sqrMagnitude > data.Missile.Range * data.Missile.Range)) data.Activated = false;
 
         if (data.Activated && data.Charge >= EnergyRequired) {
             data.Charge = 0;
@@ -65,7 +65,7 @@ public class LauncherSO : EquipmentSO {
             ai.Target = data.Target;
             ai.Missile = data.Missile;
             ai.DamageMultiplier = DamageMultiplier * slot.Equipper.Locks[data.Target] / 100;
-            slot.Equipper.ChangeInventoryCount (data.Missile, -1);
+            slot.Equipper.Inventory.RemoveQuantity (data.Missile, 1);
             data.Activated = AutoCycle;
         }
     }
@@ -84,7 +84,7 @@ public class LauncherSO : EquipmentSO {
                 if (data.Missile == null) return false;
                 if (!CompatibleMissiles.Contains (data.Missile)) return false;
                 if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
-                if (!slot.Equipper.HasInventoryCount (data.Missile, 1)) return false;
+                if (!slot.Equipper.Inventory.HasQuantity (data.Missile, 1)) return false;
                 if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > data.Missile.Range * data.Missile.Range) return false;
                 return true;
             }
@@ -95,7 +95,7 @@ public class LauncherSO : EquipmentSO {
             if (data.Missile == null) return false;
             if (!CompatibleMissiles.Contains (data.Missile)) return false;
             if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
-            if (!slot.Equipper.HasInventoryCount (data.Missile, 1)) return false;
+            if (!slot.Equipper.Inventory.HasQuantity (data.Missile, 1)) return false;
             if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > data.Missile.Range * data.Missile.Range) return false;
             return true;
         }

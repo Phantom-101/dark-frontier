@@ -20,7 +20,7 @@ public class LauncherIndicatorUI : EquipmentIndicatorUI {
         TooltipGroup.alpha = 0;
         Button.onClick.AddListener (() => cache.OnClicked (Slot));
         SwitchButton.onClick.AddListener (() => {
-            List<MissileSO> candidates = cache.CompatibleMissiles.FindAll (e => Slot.Equipper.HasInventoryCount (e, 1));
+            List<MissileSO> candidates = cache.CompatibleMissiles.FindAll (e => Slot.Equipper.Inventory.HasQuantity (e, 1));
             LauncherSlotData data = Slot.Data as LauncherSlotData;
             if (candidates.Count == 0) data.Missile = null;
             else data.Missile = candidates[(candidates.IndexOf (data.Missile) + 1) % candidates.Count];
