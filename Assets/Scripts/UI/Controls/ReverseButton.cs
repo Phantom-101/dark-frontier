@@ -1,5 +1,5 @@
-﻿public class ReverseButtonUI : SingletonBase<ReverseButtonUI> {
-    public bool Reversing;
+﻿public class ReverseButton : SingletonBase<ReverseButton> {
+    public bool Reversing { get; private set; }
 
     public void PointerDown () {
         Reversing = true;

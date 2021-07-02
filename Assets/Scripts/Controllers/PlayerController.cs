@@ -16,25 +16,15 @@ public class PlayerController : SingletonBase<PlayerController> {
     private GraphicRaycaster _graphicRaycaster;
     private EventSystem _eventSystem;
 
-    private ReverseButtonUI _reverseButtonUI;
+    private ReverseButton _reverseButtonUI;
 
     private void Awake () {
         _graphicRaycaster = FindObjectOfType<GraphicRaycaster> ();
         _eventSystem = EventSystem.current;
 
-        _reverseButtonUI = ReverseButtonUI.Instance;
+        _reverseButtonUI = ReverseButton.Instance;
 
-        FireAllButtonUI.Instance.FireAll += (sender, args) => {
-            Player.GetEquipmentData<BeamLaserSlotData> ().ForEach (data => {
-                if (!data.Activated) data.Equipment.OnClicked (data.Slot);
-            });
-            Player.GetEquipmentData<PulseLaserSlotData> ().ForEach (data => {
-                if (!data.Activated) data.Equipment.OnClicked (data.Slot);
-            });
-            Player.GetEquipmentData<LauncherSlotData> ().ForEach (data => {
-                if (!data.Activated) data.Equipment.OnClicked (data.Slot);
-            });
-        };
+        FireAllButton.Instance.FireAll += FireAll;
 
         LockSelected += (sender, args) => { if (Player != null) Player.Lock (Player.Selected); };
     }
@@ -58,6 +48,10 @@ public class PlayerController : SingletonBase<PlayerController> {
         if (_reverseButtonUI.Reversing) SetFwd (-1);
     }
 
+    private void OnDestroy () {
+        if (FireAllButton.Instance != null) FireAllButton.Instance.FireAll -= FireAll;
+    }
+
     public void SetFwd (float setting) {
         if (Player == null) return;
         if (!_reverseButtonUI.Reversing || setting == -1) Player.GetEquipmentData<EngineSlotData> ().ForEach (engine => engine.LinearSetting = new Vector3 (engine.LinearSetting.x, engine.LinearSetting.y, setting));
@@ -71,6 +65,18 @@ public class PlayerController : SingletonBase<PlayerController> {
     public void SetPitch (float setting) {
         if (Player == null) return;
         Player.GetEquipmentData<EngineSlotData> ().ForEach (engine => engine.AngularSetting = new Vector3 (setting, engine.AngularSetting.y, engine.AngularSetting.z));
+    }
+
+    private void FireAll (object sender, EventArgs args) {
+        Player.GetEquipmentData<BeamLaserSlotData> ().ForEach (data => {
+            if (!data.Activated) data.Equipment.OnClicked (data.Slot);
+        });
+        Player.GetEquipmentData<PulseLaserSlotData> ().ForEach (data => {
+            if (!data.Activated) data.Equipment.OnClicked (data.Slot);
+        });
+        Player.GetEquipmentData<LauncherSlotData> ().ForEach (data => {
+            if (!data.Activated) data.Equipment.OnClicked (data.Slot);
+        });
     }
 
     private bool ClickingUI () {
