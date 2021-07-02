@@ -75,9 +75,9 @@ public class LauncherSO : EquipmentSO {
     public override bool CanClick (EquipmentSlot slot) {
         LauncherSlotData data = slot.Data as LauncherSlotData;
         if (data.Activated) {
-            // If equipment is activated and selected is null
+            // If equipment is activated and selected is null or target
             // Assume user wants to deactivate equipment
-            if (slot.Equipper.Selected == null) return true;
+            if (slot.Equipper.Selected == null || slot.Equipper.Selected == data.Target) return true;
             // If equipment is activated and selected is not null
             // Assume user wants to change target
             else {
@@ -104,9 +104,9 @@ public class LauncherSO : EquipmentSO {
     public override void OnClicked (EquipmentSlot slot) {
         LauncherSlotData data = slot.Data as LauncherSlotData;
         if (data.Activated) {
-            // If equipment is activated and selected is null
+            // If equipment is activated and selected is null or target
             // Assume user wants to deactivate equipment
-            if (slot.Equipper.Selected == null) data.Activated = false;
+            if (slot.Equipper.Selected == null || slot.Equipper.Selected == data.Target) data.Activated = false;
             // If equipment is activated and selected is not null
             // Assume user wants to change target
             else data.Target = slot.Equipper.Selected;
