@@ -1374,10 +1374,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bad5f67d1bdd5346a0960ae44a12195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _decreaseTargetFrameRate: {fileID: 11400000, guid: 1ab7a118e0dfb954d92d56ca8a94c363,
-    type: 2}
-  _increaseTargetFrameRate: {fileID: 11400000, guid: 0bce407d86146b644badd2b0a49512dd,
-    type: 2}
+  _increaseTargetFPSButton: {fileID: 723472988}
+  _decreaseTargetFPSButton: {fileID: 523055260}
   _frameRateText: {fileID: 1754161111}
   _targetFrameRate: 0
 --- !u!1 &450343985
@@ -4108,8 +4106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 976e9903124aab14a81a584ed47ca3bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _postProcessingEnabledToggled: {fileID: 11400000, guid: a89c87bfc13eff64193c23602d2db46d,
-    type: 2}
+  _postProcessingEnabledToggled: {fileID: 0}
   _cameraData: {fileID: 924936494}
 --- !u!1 &956877599
 GameObject:
@@ -4239,13 +4236,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 983753592}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09f31ef578eacfb41bddcf131de6f92d, type: 3}
+  m_Script: {fileID: 11500000, guid: 56945d38f752cf349953d98844e8531e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _decreaseScale: {fileID: 11400000, guid: 2a86ec484aedc184da2f762a0739c9a8, type: 2}
-  _increaseScale: {fileID: 11400000, guid: da474de9867635645883d6bb6b9f828a, type: 2}
+  _increaseScaleButton: {fileID: 1079070024}
+  _decreaseScaleButton: {fileID: 484840257}
   _scaleText: {fileID: 2062838935}
-  _scale: 1
+  _scale: 0
 --- !u!1 &1079070022
 GameObject:
   m_ObjectHideFlags: 0
@@ -4586,10 +4583,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3d6e836c407e1042991eafe7eb6705d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _postProcessingEnabledToggled: {fileID: 11400000, guid: a89c87bfc13eff64193c23602d2db46d,
-    type: 2}
   _toggle: {fileID: 1842087047}
-  _on: 0
 --- !u!1 &1214178098
 GameObject:
   m_ObjectHideFlags: 0
@@ -5793,8 +5787,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70dc5881685d83d488320accb90f9804, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _decreaseQuality: {fileID: 11400000, guid: ba4eb1132dc5fa14b993f250c65843a4, type: 2}
-  _increaseQuality: {fileID: 11400000, guid: 80fa92e08de881e4daea5a1eeb29df3c, type: 2}
+  _increaseQualityButton: {fileID: 35290243}
+  _decreaseQualityButton: {fileID: 487729964}
   _qualityText: {fileID: 1563279504}
 --- !u!1 &1579866983
 GameObject:
@@ -7479,14 +7473,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2065811680}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bd72a12f147c8c45acbdc10d003fb45, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e4f032c45258d44f9065507c616d24f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _decreaseVSyncCount: {fileID: 11400000, guid: f6124062e7dc6e44781d95f23c3c6005,
-    type: 2}
-  _increaseVSyncCount: {fileID: 11400000, guid: 5e72bf64d9010c34b8e72173ed979424,
-    type: 2}
-  _vSyncText: {fileID: 512716938}
+  _increaseVSyncCountButton: {fileID: 1226974570}
+  _decreaseVSyncCountButton: {fileID: 206461071}
+  _vSyncCountText: {fileID: 512716938}
   _vSyncCount: 0
 --- !u!1 &2107071925
 GameObject:
