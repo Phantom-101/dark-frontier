@@ -19,7 +19,7 @@ public class Inventory : ISaveTo<InventorySaveData> {
     public bool Overburdened { get => _storedVolume > _volume.AppliedValue; }
 
     public Inventory (float size) : this (size, 1) { }
-    public Inventory (float size, int precision) : this (new Stat { BaseValue = size }, precision) { }
+    public Inventory (float size, int precision) : this (new Stat (StatNames.InventoryVolume, size), precision) { }
     public Inventory (Stat size, int precision) : this (new ItemSOToIntDictionary (), size, precision) { }
     public Inventory (ItemSOToIntDictionary quantities, Stat size, int precision) {
         _quantities = quantities;

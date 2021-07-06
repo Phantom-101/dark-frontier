@@ -108,11 +108,11 @@ public class EngineSO : EquipmentSO {
                 if (Mathf.Abs (dif) > LinearSleepThreshold) {
                     float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
                     res[0][d] = Lerp (mul, LinearForcePos[d], LinearForceNeg[d]);
-                    res[0][d] *= slot.Equipper.GetStatAppliedValue (StatType.LinearSpeedMultiplier, 1);
+                    res[0][d] *= slot.Equipper.Stats.GetAppliedValue (StatNames.LinearAccelerationMultiplier, 1);
                 }
             } else {
                 res[0][d] = Lerp (data.LinearSetting[d], LinearForcePos[d], LinearForceNeg[d]);
-                res[0][d] *= slot.Equipper.GetStatAppliedValue (StatType.LinearSpeedMultiplier, 1);
+                res[0][d] *= slot.Equipper.Stats.GetAppliedValue (StatNames.LinearAccelerationMultiplier, 1);
             }
         }
         // Angular
@@ -123,11 +123,11 @@ public class EngineSO : EquipmentSO {
                 if (Mathf.Abs (dif) > AngularSleepThreshold) {
                     float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
                     res[1][d] = Lerp (mul, AngularForcePos[d], AngularForceNeg[d]);
-                    res[1][d] *= slot.Equipper.GetStatAppliedValue (StatType.AngularSpeedMultiplier, 1);
+                    res[1][d] *= slot.Equipper.Stats.GetAppliedValue (StatNames.AngularAccelerationMultiplier, 1);
                 }
             } else {
                 res[1][d] = Lerp (data.AngularSetting[d], AngularForcePos[d], AngularForceNeg[d]);
-                res[1][d] *= slot.Equipper.GetStatAppliedValue (StatType.AngularSpeedMultiplier, 1);
+                res[1][d] *= slot.Equipper.Stats.GetAppliedValue (StatNames.AngularAccelerationMultiplier, 1);
             }
         }
         return res;

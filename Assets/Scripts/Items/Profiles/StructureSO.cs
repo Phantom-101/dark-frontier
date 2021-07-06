@@ -21,5 +21,5 @@ public class StructureSO : ItemSO {
     public float DockingBaySize;
     public float DropPercentage;
     public bool SnapToPlane;
-    public StatTypeToStatDictionary Stats;
+    public StatList Stats;
 }
