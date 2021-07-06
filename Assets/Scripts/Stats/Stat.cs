@@ -32,8 +32,8 @@ public class Stat : ISaveTo<StatSaveData> {
         get => modifiers;
     }
     [SerializeField] private List<StatModifier> modifiers = new List<StatModifier> ();
-    public ILookup<string, StatModifier> ModifiersLookup {
-        get => modifiers.ToLookup (m => m.Id, m => m);
+    public Dictionary<string, StatModifier> ModifiersDictionary {
+        get => modifiers.ToDictionary (m => m.Id, m => m);
     }
 
     // Denotes whether or not applied value needs to be recalculated
@@ -58,7 +58,7 @@ public class Stat : ISaveTo<StatSaveData> {
     }
 
     public void AddModifier (StatModifier modifier) {
-        if (!ModifiersLookup.Contains (modifier.Id)) {
+        if (!ModifiersDictionary.ContainsKey (modifier.Id)) {
             modifiers.Add (modifier);
             isDirty = true;
         }

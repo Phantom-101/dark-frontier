@@ -9,8 +9,8 @@ public class StatList : ISaveTo<StatListSaveData> {
         get => stats;
     }
     [SerializeField] private List<Stat> stats = new List<Stat> ();
-    public ILookup<string, Stat> StatsLookup {
-        get => stats.ToLookup (s => s.Name, s => s);
+    public Dictionary<string, Stat> StatsDictionary {
+        get => stats.ToDictionary (s => s.Name, s => s);
     }
 
     // Default constructor
@@ -18,16 +18,13 @@ public class StatList : ISaveTo<StatListSaveData> {
     // From save data
     public StatList (StatListSaveData saveData) => stats = saveData.Stats.ConvertAll (s => s.Load ());
 
-    public Stat GetStat (string name, float baseValue) {
-        if (StatsLookup.Contains (name)) return StatsLookup[name].First ();
-        return new Stat (name, baseValue);
-    }
+    public Stat GetStat (string name, float baseValue) => StatsDictionary.TryGet (name, new Stat (name, baseValue));
     public float GetBaseValue (string name, float baseValue) => GetStat (name, baseValue).BaseValue;
     public float GetAppliedValue (string name, float baseValue) => GetStat (name, baseValue).AppliedValue;
     public List<StatModifier> GetModifiers (string name) => GetStat (name, 0).Modifiers;
     public bool GetIsDirty (string name) => GetStat (name, 0).IsDirty;
     public void AddStat (Stat stat) {
-        if (!StatsLookup.Contains (stat.Name)) {
+        if (!StatsDictionary.ContainsKey (stat.Name)) {
             stats.Add (stat);
         }
     }
