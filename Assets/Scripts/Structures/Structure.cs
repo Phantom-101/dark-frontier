@@ -315,7 +315,7 @@ public class Structure : MonoBehaviour {
     private void EnsureStats () {
         if (_profile != null && _profile.Stats != null) {
             foreach (Stat stat in _profile.Stats.Stats) {
-                stats.TryAddStat (stat.Copy ());
+                stats.AddStat (stat.Copy ());
             }
         }
     }

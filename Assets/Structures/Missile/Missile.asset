@@ -38,124 +38,18 @@ MonoBehaviour:
   SnapToPlane: 0
   Stats:
     stats:
-      reorderableList:
-        canAdd: 1
-        canRemove: 1
-        draggable: 1
-        expandable: 1
-        multipleSelection: 1
-        isExpanded: 1
-        label:
-          m_Text: Keys
-          m_Image: {fileID: 0}
-          m_Tooltip: 
-        headerHeight: 18
-        footerHeight: 13
-        slideEasing: 0.15
-        verticalSpacing: 2
-        showDefaultBackground: 1
-        elementDisplayType: 0
-        elementNameProperty: 
-        elementNameOverride: 
-        elementIcon: {fileID: 0}
-      reqReferences: {fileID: 0}
-      isExpanded: 1
-      _keyValues:
-      - Max Hull
-      - Detectability
-      - Signature Size
-      _keys:
-      - Max Hull
-      - Detectability
-      - Signature Size
-      _values:
-      - name: Max Hull
-        baseValue: 1
-        appliedValue: 0
-        modifiers:
-          reorderableList:
-            canAdd: 1
-            canRemove: 1
-            draggable: 1
-            expandable: 1
-            multipleSelection: 1
-            isExpanded: 0
-            label:
-              m_Text: Keys
-              m_Image: {fileID: 0}
-              m_Tooltip: 
-            headerHeight: 18
-            footerHeight: 13
-            slideEasing: 0.15
-            verticalSpacing: 2
-            showDefaultBackground: 1
-            elementDisplayType: 0
-            elementNameProperty: 
-            elementNameOverride: 
-            elementIcon: {fileID: 0}
-          reqReferences: {fileID: 0}
-          isExpanded: 0
-          _keyValues: []
-          _keys: []
-          _values: []
-        isDirty: 0
-      - name: Detectability
-        baseValue: 5
-        appliedValue: 0
-        modifiers:
-          reorderableList:
-            canAdd: 1
-            canRemove: 1
-            draggable: 1
-            expandable: 1
-            multipleSelection: 1
-            isExpanded: 0
-            label:
-              m_Text: Keys
-              m_Image: {fileID: 0}
-              m_Tooltip: 
-            headerHeight: 18
-            footerHeight: 13
-            slideEasing: 0.15
-            verticalSpacing: 2
-            showDefaultBackground: 1
-            elementDisplayType: 0
-            elementNameProperty: 
-            elementNameOverride: 
-            elementIcon: {fileID: 0}
-          reqReferences: {fileID: 0}
-          isExpanded: 0
-          _keyValues: []
-          _keys: []
-          _values: []
-        isDirty: 0
-      - name: Signature Size
-        baseValue: 5
-        appliedValue: 0
-        modifiers:
-          reorderableList:
-            canAdd: 1
-            canRemove: 1
-            draggable: 1
-            expandable: 1
-            multipleSelection: 1
-            isExpanded: 0
-            label:
-              m_Text: Keys
-              m_Image: {fileID: 0}
-              m_Tooltip: 
-            headerHeight: 18
-            footerHeight: 13
-            slideEasing: 0.15
-            verticalSpacing: 2
-            showDefaultBackground: 1
-            elementDisplayType: 0
-            elementNameProperty: 
-            elementNameOverride: 
-            elementIcon: {fileID: 0}
-          reqReferences: {fileID: 0}
-          isExpanded: 0
-          _keyValues: []
-          _keys: []
-          _values: []
-        isDirty: 0
+    - name: Max Hull
+      baseValue: 1
+      appliedValue: 0
+      modifiers: []
+      isDirty: 0
+    - name: Detectability
+      baseValue: 5
+      appliedValue: 0
+      modifiers: []
+      isDirty: 0
+    - name: Signature Size
+      baseValue: 5
+      appliedValue: 0
+      modifiers: []
+      isDirty: 0

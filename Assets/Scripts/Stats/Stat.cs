@@ -29,9 +29,12 @@ public class Stat : ISaveTo<StatSaveData> {
 
     // Collection of modifiers which modify the base value
     public List<StatModifier> Modifiers {
-        get => modifiers.Values.ToList ();
+        get => modifiers;
     }
-    [SerializeField] private StringToStatModifierDictionary modifiers = new StringToStatModifierDictionary ();
+    [SerializeField] private List<StatModifier> modifiers = new List<StatModifier> ();
+    public ILookup<string, StatModifier> ModifiersLookup {
+        get => modifiers.ToLookup (m => m.Id, m => m);
+    }
 
     // Denotes whether or not applied value needs to be recalculated
     public bool IsDirty {
@@ -45,28 +48,32 @@ public class Stat : ISaveTo<StatSaveData> {
     public Stat (string name, float baseValue, List<StatModifier> modifiers) {
         this.name = name;
         this.baseValue = baseValue;
-        this.modifiers = modifiers.ToDictionary (m => m.Id, m => m).ToSerializable<string, StatModifier, StringToStatModifierDictionary> ();
+        modifiers.ForEach (m => AddModifier (m));
     }
     // From save data
     public Stat (StatSaveData saveData) {
         name = saveData.Name;
         baseValue = saveData.BaseValue;
-        modifiers = saveData.Modifiers.ToDictionary (m => m.Id, m => m).ToSerializable<string, StatModifier, StringToStatModifierDictionary> ();
+        saveData.Modifiers.ForEach (m => AddModifier (m));
     }
 
     public void AddModifier (StatModifier modifier) {
-        modifiers[modifier.Id] = modifier;
-        isDirty = true;
+        if (!ModifiersLookup.Contains (modifier.Id)) {
+            modifiers.Add (modifier);
+            isDirty = true;
+        }
     }
 
     public void RemoveModifier (StatModifier modifier) {
-        modifiers.Remove (modifier.Id);
-        isDirty = true;
+        if (modifiers.Remove (modifier)) {
+            isDirty = true;
+        }
     }
 
     public void RemoveModifier (string id) {
-        modifiers.Remove (id);
-        isDirty = true;
+        if (modifiers.RemoveAll (m => m.Id == id) > 0) {
+            isDirty = true;
+        }
     }
 
     private float GetAppliedValue () {
@@ -75,7 +82,7 @@ public class Stat : ISaveTo<StatSaveData> {
         // Prepare variables
         float add = 0, multiply = 1, percentAdd = 0;
         // Iterate through modifiers and add to respective variables
-        foreach (StatModifier modifier in modifiers.Values) {
+        foreach (StatModifier modifier in modifiers) {
             if (modifier.Type == StatModifierType.Additive) add += modifier.Value;
             else if (modifier.Type == StatModifierType.Multiplicative) multiply *= modifier.Value;
             else if (modifier.Type == StatModifierType.PercentAdditive) percentAdd += modifier.Value;
