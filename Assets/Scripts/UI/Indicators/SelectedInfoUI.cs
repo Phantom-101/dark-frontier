@@ -34,7 +34,7 @@ public class SelectedInfoUI : MonoBehaviour {
         TweenTo (1);
 
         _hull.sprite = selected.Profile.HullWireframe;
-        _hull.color = _hullGradient.Evaluate (selected.Hull / selected.Profile.Hull);
+        _hull.color = _hullGradient.Evaluate (selected.Hull / selected.Stats.GetBaseValue (StatNames.MaxHull, 1));
 
         float curStrength = 0, totalStrength = 0;
         selected.GetEquipmentData<ShieldSlotData> ().ForEach (shield => {

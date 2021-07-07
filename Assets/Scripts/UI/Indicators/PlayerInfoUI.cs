@@ -20,7 +20,7 @@ public class PlayerInfoUI : MonoBehaviour {
 
         // Hull wireframe indicator
         _hull.sprite = player.Profile.HullWireframe;
-        _hull.color = _hullGradient.Evaluate (player.Hull / player.Profile.Hull);
+        _hull.color = _hullGradient.Evaluate (player.Hull / player.Stats.GetBaseValue (StatNames.MaxHull, 1));
 
         // Shield bubble indicator
         float curStrength = 0, totalStrength = 0;

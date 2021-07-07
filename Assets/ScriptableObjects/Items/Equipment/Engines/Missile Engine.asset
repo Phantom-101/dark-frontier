@@ -37,5 +37,5 @@ MonoBehaviour:
   AngularConsumptionNeg: {x: 1, y: 1, z: 1}
   CorrectionSlack: 0.1
   LinearSleepThreshold: 0.001
-  AngularSleepThreshold: 0.001
+  AngularSleepThreshold: 0.002
   BankAmount: 25

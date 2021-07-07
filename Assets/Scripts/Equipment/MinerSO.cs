@@ -12,7 +12,7 @@ public class MinerSO : EquipmentSO {
     public float CoolingRate;
     public float OverheatDamage;
     public AnimationCurve HeatDamageMultiplier;
-    public StructureSOToFloatDictionary StructureDamageMultipliers;
+    public StructureSOToFloatDictionary AsteroidDamageMultipliers;
     public GameObject BeamPrefab;
     public float BeamWidth;
 
@@ -78,7 +78,7 @@ public class MinerSO : EquipmentSO {
             }
             */
             if (data.AccumulatedDamageMultiplier >= DamageInterval) {
-                data.Target.TakeDamage (DamagePerSecond * data.AccumulatedDamageMultiplier * HeatDamageMultiplier.Evaluate (data.Heat / MaxHeat) * StructureDamageMultipliers[data.Target.Profile], slot.Equipper.transform.position);
+                data.Target.TakeDamage (DamagePerSecond * data.AccumulatedDamageMultiplier * HeatDamageMultiplier.Evaluate (data.Heat / MaxHeat) * AsteroidDamageMultipliers[data.Target.Profile], slot.Equipper.transform.position);
                 data.AccumulatedDamageMultiplier = 0;
             }
         } else {
@@ -103,7 +103,7 @@ public class MinerSO : EquipmentSO {
             // If equipment is activated and selected is not null
             // Assume user wants to change target
             else {
-                if (!StructureDamageMultipliers.ContainsKey (slot.Equipper.Selected.Profile)) return false;
+                if (!AsteroidDamageMultipliers.ContainsKey (slot.Equipper.Selected.Profile)) return false;
                 if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
                 if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range) return false;
                 return true;
@@ -112,7 +112,7 @@ public class MinerSO : EquipmentSO {
             // If equipment is not activated
             // Assume user wants to activate equipment
             if (slot.Equipper.Selected == null) return false;
-            if (!StructureDamageMultipliers.ContainsKey (slot.Equipper.Selected.Profile)) return false;
+            if (!AsteroidDamageMultipliers.ContainsKey (slot.Equipper.Selected.Profile)) return false;
             if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
             if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range) return false;
             return true;

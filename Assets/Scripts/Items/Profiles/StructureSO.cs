@@ -9,17 +9,8 @@ public class StructureSO : ItemSO {
     public float WorldToUIScale;
     public bool ShowBlip;
     public GameObject DestructionEffect;
+    public bool SnapToPlane;
 
     [Header ("Stats")]
-    public float Hull;
-    public float InventorySize;
-    public float SensorStrength;
-    public float ScannerStrength;
-    public int MaxLocks;
-    public float Detectability;
-    public float SignatureSize;
-    public float DockingBaySize;
-    public float DropPercentage;
-    public bool SnapToPlane;
     public StatList Stats;
 }

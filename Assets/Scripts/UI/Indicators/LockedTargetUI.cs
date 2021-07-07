@@ -46,7 +46,7 @@ public class LockedTargetUI : MonoBehaviour {
 
         }
 
-        _hull.fillAmount = _structure.Hull / _structure.Profile.Hull / 2;
+        _hull.fillAmount = _structure.Hull / _structure.Stats.GetBaseValue (StatNames.MaxHull, 1) / 2;
         float strength = 0, maxStrength = 0;
         _structure.GetEquipmentData<ShieldSlotData> ().ForEach (shield => {
             strength += shield.Strength;

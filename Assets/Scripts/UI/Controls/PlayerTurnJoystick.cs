@@ -1,64 +1,56 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class PlayerTurnJoystick : MonoBehaviour {
-    [SerializeField]
-    private RectTransform _areaTransform;
-    [SerializeField]
-    private RectTransform _buttonTransform;
-    [SerializeField]
-    private RectTransform _topTransform;
-    [SerializeField]
-    private bool _held;
-    [SerializeField]
-    private Touch _touch;
-    [SerializeField]
-    private bool _mouseTouch;
+    // Transforms
+    [SerializeField] private RectTransform areaTransform;
+    [SerializeField] private RectTransform buttonTransform;
+    [SerializeField] private RectTransform topTransform;
+    // Variables for keeping track of touches
+    [SerializeField] private bool held;
+    [SerializeField] private bool shouldGetNewTouch;
+    [SerializeField] private Touch touch;
 
-    PlayerController _pc;
+    PlayerController playerController;
+    TouchManager touchManager;
 
     private void Awake () {
-        _pc = PlayerController.Instance;
+        playerController = PlayerController.Instance;
+        touchManager = TouchManager.Instance;
     }
 
     private void Update () {
-        float radius = Vector3.Distance (transform.position, _topTransform.position);
-        float localRadius = _topTransform.anchoredPosition.y;
+        float radius = Vector3.Distance (transform.position, topTransform.position);
+        float localRadius = topTransform.anchoredPosition.y;
 
-        if (_held) {
-            if (_mouseTouch) _touch = new Touch {
-                position = Input.mousePosition
-            };
-            Vector2 targetPos = new Vector2 (_touch.position.x - _areaTransform.position.x, _touch.position.y - _areaTransform.position.y);
+        if (held) {
+            if (shouldGetNewTouch) {
+                List<Touch> beganTouches = touchManager.GetBeganTouches ();
+                if (beganTouches.Count > 0) {
+                    touch = beganTouches[0];
+                    shouldGetNewTouch = false;
+                }
+            }
+            touch = touchManager.GetNextTouch (touch);
+            Vector2 targetPos = new Vector2 (touch.position.x - areaTransform.position.x, touch.position.y - areaTransform.position.y);
             targetPos /= radius / localRadius;
             float mag = targetPos.magnitude;
-            if (mag <= localRadius) _buttonTransform.anchoredPosition = targetPos;
-            else _buttonTransform.anchoredPosition = targetPos.normalized * localRadius;
+            if (mag <= localRadius) buttonTransform.anchoredPosition = targetPos;
+            else buttonTransform.anchoredPosition = targetPos.normalized * localRadius;
         } else {
-            _buttonTransform.anchoredPosition = Vector2.zero;
+            buttonTransform.anchoredPosition = Vector2.zero;
         }
 
-        _pc.SetYaw (_buttonTransform.anchoredPosition.x / radius);
-        _pc.SetPitch (-_buttonTransform.anchoredPosition.y / radius);
+        playerController.SetYaw (buttonTransform.anchoredPosition.x / radius);
+        playerController.SetPitch (-buttonTransform.anchoredPosition.y / radius);
     }
 
     public void PointerDown () {
-        _held = true;
-        _touch = GetTouch ();
+        held = true;
+        shouldGetNewTouch = true;
     }
 
     public void PointerUp () {
-        _held = false;
-    }
-
-    private Touch GetTouch () {
-        if (Input.GetMouseButtonDown (0)) {
-            Touch touch = new Touch {
-                position = Input.mousePosition
-            };
-            _mouseTouch = true;
-            return touch;
-        }
-        _mouseTouch = false;
-        return Input.touches[Input.touches.Length - 1];
+        held = false;
     }
 }

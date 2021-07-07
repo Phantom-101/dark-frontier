@@ -5457,33 +5457,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _profile: {fileID: 11400000, guid: fcdbd2a9249b25e40ac467b856edd045, type: 2}
   _id: 
-  _stats:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
-      isExpanded: 0
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues: 
-    _keys: 
-    _values: []
-  _hull: 4500
+  stats:
+    stats: []
+  hull: 4500
   _faction: {fileID: 0}
   _equipmentSlots:
   - {fileID: 6600085404695014259}
@@ -5493,31 +5469,40 @@ MonoBehaviour:
   - {fileID: 5818075544933059250}
   - {fileID: 7115233860060840377}
   _inventory:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
+    _quantities:
+      reorderableList:
+        canAdd: 0
+        canRemove: 0
+        draggable: 0
+        expandable: 0
+        multipleSelection: 0
+        isExpanded: 0
+        label:
+          m_Text: 
+          m_Image: {fileID: 0}
+          m_Tooltip: 
+        headerHeight: 0
+        footerHeight: 0
+        slideEasing: 0
+        verticalSpacing: 0
+        showDefaultBackground: 0
+        elementDisplayType: 0
+        elementNameProperty: 
+        elementNameOverride: 
+        elementIcon: {fileID: 0}
+      reqReferences: {fileID: 0}
       isExpanded: 0
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 11400000, guid: 3d6785e46e940b843aa5fbe4ca729d60, type: 2}
-    isExpanded: 0
-    _keyValues: []
-    _keys: []
-    _values: 
+      _keyValues: []
+      _keys: []
+      _values: 
+    _volume:
+      name: 
+      baseValue: 0
+      appliedValue: 0
+      modifiers: []
+      isDirty: 0
+    _precision: 0
+    _storedVolume: 0
   _ai: {fileID: 0}
   _aiEnabled: 1
   _selected: {fileID: 0}

@@ -10055,11 +10055,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ed765b713538024b91aa4c1af2bb3d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _areaTransform: {fileID: 2587107805946781069}
-  _buttonTransform: {fileID: 2587107805545901219}
-  _topTransform: {fileID: 2587107806506633996}
-  _held: 0
-  _mouseTouch: 0
+  areaTransform: {fileID: 2587107805946781069}
+  buttonTransform: {fileID: 2587107805545901219}
+  topTransform: {fileID: 2587107806506633996}
+  held: 0
+  shouldGetNewTouch: 0
 --- !u!1 &2587107807400130183
 GameObject:
   m_ObjectHideFlags: 0
@@ -10746,7 +10746,7 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
-  m_ReverseArrangement: 1
+  m_ReverseArrangement: 0
 --- !u!114 &974284391237550751
 MonoBehaviour:
   m_ObjectHideFlags: 0

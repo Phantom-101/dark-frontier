@@ -50,7 +50,7 @@ public class StructureHPIndicatorUI : MonoBehaviour {
     private void Update () {
 
         _hull.sprite = _structure.Profile.HullWireframe;
-        _hull.color = _hullGradient.Evaluate (_structure.Hull / _structure.Profile.Hull);
+        _hull.color = _hullGradient.Evaluate (_structure.Hull / _structure.Stats.GetBaseValue (StatNames.MaxHull, 1));
         /*
         ShieldStrengths strengths = _structure.GetEquipment<ShieldSlot> ()[0].GetStrengths ();
         if (strengths.GetSectorCount () != _shields.Count) Initialize ();
