@@ -5,6 +5,11 @@ public class EquipmentSlot : MonoBehaviour {
     public Structure Equipper;
     public List<ItemConditionSO> Filters = new List<ItemConditionSO> ();
     [SerializeReference] public EquipmentSlotData Data = new EquipmentSlotData ();
+    public Vector3 LocalPosition { get => transform.position - Equipper.transform.position + Equipper.transform.localPosition; }
+
+    private void Start () {
+        if (Equipper == null) Equipper = GetComponentInParent<Structure> ();
+    }
 
     public void Tick () {
         Data.Slot = this;

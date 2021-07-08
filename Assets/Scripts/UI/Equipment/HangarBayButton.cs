@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class BeamLaserIndicatorUI : EquipmentIndicatorUI {
+public class HangarBayButton : EquipmentButton {
     public Button Button;
     public Image Icon;
     public Image Center;
@@ -10,10 +10,10 @@ public class BeamLaserIndicatorUI : EquipmentIndicatorUI {
     public CanvasGroup TooltipGroup;
     public Text Tooltip;
 
-    private BeamLaserSO cache;
+    private HangarBaySO cache;
 
     public override void Initialize () {
-        cache = Slot.Data.Equipment as BeamLaserSO;
+        cache = Slot.Data.Equipment as HangarBaySO;
         Icon.sprite = cache.Icon;
         Tooltip.text = Slot.Data.Equipment.name;
         TooltipGroup.alpha = 0;
@@ -26,10 +26,10 @@ public class BeamLaserIndicatorUI : EquipmentIndicatorUI {
             return;
         }
 
-        BeamLaserSlotData data = Slot.Data as BeamLaserSlotData;
+        HangarBaySlotData data = Slot.Data as HangarBaySlotData;
         Button.interactable = cache.CanClick (Slot);
-        Center.fillAmount = data.AccumulatedDamageMultiplier / cache.DamageInterval;
-        Side.fillAmount = data.Heat / cache.MaxHeat;
+        Center.fillAmount = (float) data.ActiveCrafts.Count / cache.MaxSquadronSize;
+        Side.fillAmount = (float) data.StowedCrafts.Quantity / cache.MaxSquadronSize;
         Bottom.fillAmount = data.Durability / cache.Durability;
     }
 }

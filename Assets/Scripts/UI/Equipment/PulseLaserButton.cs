@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class PulseLaserIndicatorUI : EquipmentIndicatorUI {
+public class PulseLaserButton : EquipmentButton {
     public Button Button;
     public Image Icon;
     public Image Center;

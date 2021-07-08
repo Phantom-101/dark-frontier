@@ -30,9 +30,9 @@ public class CameraController : MonoBehaviour {
 
         Structure player = _pc.Player;
         if (player == null) return;
-        Transform pt = _anchor?.GetTransform () == null ? player.transform : _anchor.GetTransform ();
+        Transform pt = _anchor?.Transform == null ? player.transform : _anchor.Transform;
 
-        if (_target.GetTransform () == null) {
+        if (_target.Transform == null) {
 
             Vector3 scOff = _offset * player.Profile.ApparentSize;
             Vector3 targetPos = pt.position + pt.rotation * scOff;

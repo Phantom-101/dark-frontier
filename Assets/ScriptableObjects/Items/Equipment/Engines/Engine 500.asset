@@ -31,10 +31,10 @@ MonoBehaviour:
   LinearForceNeg: {x: -500, y: -500, z: -500}
   AngularForcePos: {x: 10000, y: 10000, z: 10000}
   AngularForceNeg: {x: -10000, y: -10000, z: -10000}
-  LinearConsumptionPos: {x: 10, y: 10, z: 10}
-  LinearConsumptionNeg: {x: 10, y: 10, z: 10}
-  AngularConsumptionPos: {x: 10, y: 10, z: 10}
-  AngularConsumptionNeg: {x: 10, y: 10, z: 10}
+  LinearConsumptionPos: {x: 100, y: 100, z: 100}
+  LinearConsumptionNeg: {x: 100, y: 100, z: 100}
+  AngularConsumptionPos: {x: 50, y: 50, z: 50}
+  AngularConsumptionNeg: {x: 50, y: 50, z: 50}
   CorrectionSlack: 0.3
   LinearSleepThreshold: 0.001
   AngularSleepThreshold: 0.002

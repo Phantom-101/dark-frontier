@@ -6,7 +6,6 @@ public class StructureSO : ItemSO {
     public GameObject Prefab;
     public float ApparentSize;
     public Sprite HullWireframe;
-    public float WorldToUIScale;
     public bool ShowBlip;
     public GameObject DestructionEffect;
     public bool SnapToPlane;

@@ -57,7 +57,7 @@ public class LockedTargetUI : MonoBehaviour {
         _leftProgress.fillAmount = fa;
         _rightProgress.fillAmount = fa;
         _name.text = _structure.gameObject.name;
-        _faction.text = _structure.Faction.Name;
+        _faction.text = _structure.Faction == null ? "" : _structure.Faction.Name;
         _distance.text = Vector3.Distance (PlayerController.Instance.Player.transform.position, _structure.transform.position).ToString ("F0") + " m";
         Rigidbody rb = _structure.GetComponent<Rigidbody> ();
         if (rb == null) _velocity.text = "0 m/s";

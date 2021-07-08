@@ -13,23 +13,38 @@ public class StatList : ISaveTo<StatListSaveData> {
         get => stats.ToDictionary (s => s.Name, s => s);
     }
 
-    // Default constructor
     public StatList () { }
-    // From save data
     public StatList (StatListSaveData saveData) => stats = saveData.Stats.ConvertAll (s => s.Load ());
 
-    public Stat GetStat (string name, float baseValue) => StatsDictionary.TryGet (name, new Stat (name, baseValue));
+    public Stat GetStat (string name, float baseValue) {
+        Stat ret = StatsDictionary.TryGet (name, new Stat (name, baseValue));
+        SetStat (ret);
+        return ret;
+    }
+
     public float GetBaseValue (string name, float baseValue) => GetStat (name, baseValue).BaseValue;
     public float GetAppliedValue (string name, float baseValue) => GetStat (name, baseValue).AppliedValue;
     public List<StatModifier> GetModifiers (string name) => GetStat (name, 0).Modifiers;
     public bool GetIsDirty (string name) => GetStat (name, 0).IsDirty;
-    public void AddStat (Stat stat) {
+
+    public bool AddStat (Stat stat) {
         if (!StatsDictionary.ContainsKey (stat.Name)) {
             stats.Add (stat);
+            return true;
         }
+        return false;
     }
+
+    public bool SetStat (Stat stat) {
+        int c = stats.RemoveAll (s => s.Name == stat.Name);
+        stats.Add (stat);
+        return c > 0;
+    }
+
     public void RemoveStat (Stat stat) => stats.Remove (stat);
     public void RemoveStat (string name) => stats.RemoveAll (s => s.Name == name);
+
+    public void Tick () => stats.ForEach (s => s.Modifiers.ForEach (m => m.Tick ()));
 
     public StatListSaveData Save () {
         return new StatListSaveData {

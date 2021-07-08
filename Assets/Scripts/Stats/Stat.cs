@@ -42,7 +42,6 @@ public class Stat : ISaveTo<StatSaveData> {
     }
     [SerializeField] private bool isDirty = true;
 
-    // Constructors
     public Stat (string name) : this (name, 0) { }
     public Stat (string name, float baseValue) : this (name, baseValue, new List<StatModifier> ()) { }
     public Stat (string name, float baseValue, List<StatModifier> modifiers) {
@@ -50,7 +49,6 @@ public class Stat : ISaveTo<StatSaveData> {
         this.baseValue = baseValue;
         modifiers.ForEach (m => AddModifier (m));
     }
-    // From save data
     public Stat (StatSaveData saveData) {
         name = saveData.Name;
         baseValue = saveData.BaseValue;
@@ -94,9 +92,7 @@ public class Stat : ISaveTo<StatSaveData> {
         return appliedValue;
     }
 
-    public Stat Copy () {
-        return new Stat (name, baseValue, Modifiers.ConvertAll (m => m.Copy ()));
-    }
+    public Stat Copy () => new Stat (name, baseValue, Modifiers.ConvertAll (m => m.Copy ()));
 
     public StatSaveData Save () {
         return new StatSaveData {
@@ -118,6 +114,8 @@ public class StatSaveData : ILoadTo<Stat> {
 
 public class StatNames {
     public static string MaxHull = "Max Hull";
+    public static string LinearMaxSpeedMultiplier = "Linear Max Speed Multiplier";
+    public static string AngularMaxSpeedMultiplier = "Angular Max Speed Multiplier";
     public static string LinearAccelerationMultiplier = "Linear Acceleration Multiplier";
     public static string AngularAccelerationMultiplier = "Angular Acceleration Multiplier";
     public static string SensorStrength = "Sensor Strength";

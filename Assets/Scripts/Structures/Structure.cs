@@ -26,7 +26,7 @@ public class Structure : MonoBehaviour {
             if (hull <= 0) {
                 if (Faction != null) Faction.RemoveProperty (this);
                 if (Sector != null) Sector.Exited (this);
-                StructureManager.Instance.OnStructureDestroyed (this);
+                StructureManager.Instance.DestroyStructure (this);
             }
         }
     }
@@ -113,7 +113,7 @@ public class Structure : MonoBehaviour {
         EnsureStats ();
 
         if (_ai == null) _ai = ScriptableObject.CreateInstance<AI> ();
-        else _ai = _ai.GetAI ();
+        else _ai = _ai.Copy ();
 
         if (_faction != null) {
             FactionManager.Instance.AddFaction (_faction);
@@ -191,7 +191,7 @@ public class Structure : MonoBehaviour {
         // In the same sector or already docked?
         if (docker.transform.parent != transform.parent) return false;
         // Good relations?
-        if (_faction.IsEnemy (docker.Faction)) return false;
+        if (_faction == null || _faction.IsEnemy (docker.Faction)) return false;
         // Within range?
         if (NavigationManager.Instance.GetLocalDistance (this, docker) > 50) return false;
         // Already children?
@@ -300,6 +300,8 @@ public class Structure : MonoBehaviour {
         if (_aiEnabled) _ai.Tick (this);
 
         foreach (EquipmentSlot slot in _equipmentSlots) slot.Tick ();
+
+        stats.Tick ();
     }
 
     public void FixedTick () {

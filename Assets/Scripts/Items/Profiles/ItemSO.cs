@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu (menuName = "Items/Item")]
 public class ItemSO : ScriptableObject {
     public string Name;
-    public string Description;
+    [TextArea] public string Description;
     public string Id;
     public Sprite Icon;
     public float Volume;

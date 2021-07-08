@@ -69,8 +69,8 @@ public class EngineSO : EquipmentSO {
         rb.angularDrag = 0;
         // Clamp velocities
         if (data.EnergySatisfaction > 0) {
-            if (rb.velocity.sqrMagnitude > MaxLinearSpeed * MaxLinearSpeed) rb.velocity = rb.velocity.normalized * MaxLinearSpeed;
-            rb.maxAngularVelocity = MaxAngularSpeed * Mathf.Deg2Rad;
+            if (rb.velocity.sqrMagnitude > Sqr (GetLinearMaxSpeed (slot))) rb.velocity = rb.velocity.normalized * GetLinearMaxSpeed (slot);
+            rb.maxAngularVelocity = GetAngularMaxSpeed (slot) * Mathf.Deg2Rad;
         } else rb.maxAngularVelocity = 0;
         // Apply force
         Vector3[] accels = GetAccelerations (slot);
@@ -103,32 +103,24 @@ public class EngineSO : EquipmentSO {
         // Linear
         for (int d = 0; d < 3; d++) {
             if (data.ManagedPropulsion) {
-                float cur = slot.Equipper.transform.InverseTransformDirection (rb.velocity)[d] / MaxLinearSpeed;
+                float cur = slot.Equipper.transform.InverseTransformDirection (rb.velocity)[d] / GetLinearMaxSpeed (slot);
                 float dif = data.LinearSetting[d] - cur;
                 if (Mathf.Abs (dif) > LinearSleepThreshold) {
                     float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
-                    res[0][d] = Lerp (mul, LinearForcePos[d], LinearForceNeg[d]);
-                    res[0][d] *= slot.Equipper.Stats.GetAppliedValue (StatNames.LinearAccelerationMultiplier, 1);
+                    res[0][d] = GetLinearAcceleration (slot, d, mul);
                 }
-            } else {
-                res[0][d] = Lerp (data.LinearSetting[d], LinearForcePos[d], LinearForceNeg[d]);
-                res[0][d] *= slot.Equipper.Stats.GetAppliedValue (StatNames.LinearAccelerationMultiplier, 1);
-            }
+            } else res[0][d] = GetLinearAcceleration (slot, d, data.LinearSetting[d]);
         }
         // Angular
         for (int d = 0; d < 3; d++) {
             if (data.ManagedPropulsion) {
-                float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity * Mathf.Rad2Deg)[d] / MaxAngularSpeed;
+                float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity * Mathf.Rad2Deg)[d] / GetAngularMaxSpeed (slot);
                 float dif = data.AngularSetting[d] - cur;
                 if (Mathf.Abs (dif) > AngularSleepThreshold) {
                     float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
-                    res[1][d] = Lerp (mul, AngularForcePos[d], AngularForceNeg[d]);
-                    res[1][d] *= slot.Equipper.Stats.GetAppliedValue (StatNames.AngularAccelerationMultiplier, 1);
+                    res[1][d] = GetAngularAcceleration (slot, d, mul);
                 }
-            } else {
-                res[1][d] = Lerp (data.AngularSetting[d], AngularForcePos[d], AngularForceNeg[d]);
-                res[1][d] *= slot.Equipper.Stats.GetAppliedValue (StatNames.AngularAccelerationMultiplier, 1);
-            }
+            } else res[1][d] = GetAngularAcceleration (slot, d, data.AngularSetting[d]);
         }
         return res;
     }
@@ -154,6 +146,12 @@ public class EngineSO : EquipmentSO {
         }
         return res;
     }
+
+    private float GetLinearMaxSpeed (EquipmentSlot slot) => MaxLinearSpeed * slot.Equipper.Stats.GetAppliedValue (StatNames.LinearMaxSpeedMultiplier, 1);
+    private float GetAngularMaxSpeed (EquipmentSlot slot) => MaxAngularSpeed * slot.Equipper.Stats.GetAppliedValue (StatNames.AngularMaxSpeedMultiplier, 1);
+    private float GetLinearAcceleration (EquipmentSlot slot, int d, float s) => Lerp (s, LinearForcePos[d], LinearForceNeg[d]) * slot.Equipper.Stats.GetAppliedValue (StatNames.LinearAccelerationMultiplier, 1);
+    private float GetAngularAcceleration (EquipmentSlot slot, int d, float s) => Lerp (s, AngularForcePos[d], AngularForceNeg[d]) * slot.Equipper.Stats.GetAppliedValue (StatNames.AngularAccelerationMultiplier, 1);
+    private float Sqr (float n) => n * n;
 
     private float Lerp (float p, float pos, float neg) {
         if (p >= 0) return p * pos;

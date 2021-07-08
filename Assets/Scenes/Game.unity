@@ -1217,7 +1217,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Data.Equipment
       value: 
-      objectReference: {fileID: 11400000, guid: 6dd3333f71377ee4db6e24ae3bcd50c7,
+      objectReference: {fileID: 11400000, guid: a4b9332cb6bc8ca4f863c2f5dc9fb863,
         type: 2}
     - target: {fileID: 2869013932428447120, guid: 01d3b3e41279c74489c131c0b41597bb,
         type: 3}
@@ -3113,12 +3113,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _camera: {fileID: 1256516358}
   _anchor:
-    _transform: {fileID: 0}
-    _position: {x: 0, y: 0, z: 0}
-  _offset: {x: 0, y: 2.5, z: -5}
+    transform: {fileID: 0}
+    position: {x: 0, y: 0, z: 0}
+  _offset: {x: 0, y: 0.5, z: -1}
   _target:
-    _transform: {fileID: 0}
-    _position: {x: 0, y: 0, z: 0}
+    transform: {fileID: 0}
+    position: {x: 0, y: 0, z: 0}
   _followSpeed: 2
 --- !u!1001 &1299847792
 PrefabInstance:

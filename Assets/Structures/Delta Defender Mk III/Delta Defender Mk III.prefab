@@ -168,7 +168,7 @@ MonoBehaviour:
       type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
       data:
         Slot: {fileID: 2576285590069773046}
-        Equipment: {fileID: 11400000, guid: b4bcc1310fd094d4d90dc6125e68b4c1, type: 2}
+        Equipment: {fileID: 11400000, guid: 44bd9c98f51eb3e4fb6d22dacd37c314, type: 2}
         Durability: 0
 --- !u!1 &1701054646738178629
 GameObject:
@@ -5469,7 +5469,7 @@ MonoBehaviour:
   - {fileID: 5818075544933059250}
   - {fileID: 7115233860060840377}
   _inventory:
-    _quantities:
+    quantities:
       reorderableList:
         canAdd: 0
         canRemove: 0
@@ -5495,14 +5495,14 @@ MonoBehaviour:
       _keyValues: []
       _keys: []
       _values: 
-    _volume:
+    volume:
       name: 
       baseValue: 0
       appliedValue: 0
       modifiers: []
       isDirty: 0
-    _precision: 0
-    _storedVolume: 0
+    storedVolume: 0
+    precision: 0
   _ai: {fileID: 0}
   _aiEnabled: 1
   _selected: {fileID: 0}
@@ -5520,8 +5520,8 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 25
   m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_AngularDrag: 0
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0

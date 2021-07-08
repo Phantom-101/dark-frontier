@@ -3,42 +3,22 @@ using UnityEngine;
 
 [Serializable]
 public class Location {
+    public Transform Transform { get => transform; }
+    [SerializeField] private Transform transform;
+    public Vector3 Position { get => GetPosition (); }
+    [SerializeField] private Vector3 position;
+    public Vector3 LocalPosition { get => GetLocalPosition (); }
 
-    [SerializeField] private Transform _transform;
-    [SerializeField] private Vector3 _position;
-
-    public Location (Transform transform) {
-
-        _transform = transform;
-
-    }
-
-    public Location (Vector3 position) {
-
-        _position = position;
-
-    }
-
-    public Transform GetTransform () {
-
-        return _transform;
-
-    }
+    public Location (Transform transform) => this.transform = transform;
+    public Location (Vector3 position) => this.position = position;
 
     public Vector3 GetPosition () {
-
-        if (_transform != null) return _transform.position;
-
-        return _position;
-
+        if (transform != null) return transform.position;
+        return position;
     }
 
     public Vector3 GetLocalPosition () {
-
-        if (_transform != null) return _transform.localPosition;
-
-        return _position;
-
+        if (transform != null) return transform.localPosition;
+        return position;
     }
-
 }

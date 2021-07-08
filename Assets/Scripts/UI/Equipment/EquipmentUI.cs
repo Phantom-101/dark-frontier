@@ -6,7 +6,7 @@ public class EquipmentUI : MonoBehaviour {
     [SerializeField]
     private Transform _parent;
 
-    private readonly Dictionary<EquipmentSlot, EquipmentIndicatorUI> _indicators = new Dictionary<EquipmentSlot, EquipmentIndicatorUI> ();
+    private readonly Dictionary<EquipmentSlot, EquipmentButton> _indicators = new Dictionary<EquipmentSlot, EquipmentButton> ();
 
     private void Update () {
         Structure player = PlayerController.Instance.Player;
@@ -27,7 +27,7 @@ public class EquipmentUI : MonoBehaviour {
             if (key.Data.Equipment != null && key.Data.Equipment.ButtonPrefab != null) {
                 if (_indicators[key] == null) {
                     GameObject indicator = Instantiate (key.Data.Equipment.ButtonPrefab, _parent);
-                    EquipmentIndicatorUI comp = indicator.GetComponent<EquipmentIndicatorUI> ();
+                    EquipmentButton comp = indicator.GetComponent<EquipmentButton> ();
                     comp.Slot = key;
                     comp.Initialize ();
                     _indicators[key] = comp;

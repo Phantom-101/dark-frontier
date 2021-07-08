@@ -10,20 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b631ed5d83fe9f45ac195241758721a, type: 3}
-  m_Name: Delta Defender Mk III
+  m_Name: Seine
   m_EditorClassIdentifier: 
-  Name: Delta Defender Mk III
-  Description: An advanced warship and escort. This is the 3rd iteration of this
-    class and has successfully deterred many raids on Delta supply lines and shipyards.
-  Id: items.structures.delta-defender-mk-iii
-  Icon: {fileID: 21300000, guid: 2edd48736cc841a40b05446b5ae47c48, type: 3}
+  Name: Seine
+  Description: A light fighter designed to defend atmospheric bases with some spaceflight
+    capabilities, these craft are extremely difficult to accurately hit and have
+    a suprisingly high survival rate, though they would not fare so well if they
+    were rammed.
+  Id: items.structures.seine
+  Icon: {fileID: 21300000, guid: 9d33dc9820692f34789377f7a13532d2, type: 3}
   Volume: 0
   Tags: []
   Usable: 0
-  Prefab: {fileID: 2869013932428447122, guid: 01d3b3e41279c74489c131c0b41597bb, type: 3}
-  ApparentSize: 125
-  HullWireframe: {fileID: 21300000, guid: 5f56fb9ca780c664e94278c0651f1afe, type: 3}
-  WorldToUIScale: 0.90476
+  Prefab: {fileID: 2512073521162136224, guid: 9051b6e2ef2402542b096eb2538e4c2d, type: 3}
+  ApparentSize: 15
+  HullWireframe: {fileID: 21300000, guid: b336c6dd358ff4c42981e325d81d3201, type: 3}
   ShowBlip: 1
   DestructionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
     type: 3}
@@ -31,17 +32,17 @@ MonoBehaviour:
   Stats:
     stats:
     - name: Max Hull
-      baseValue: 4500
+      baseValue: 300
       appliedValue: 0
       modifiers: []
       isDirty: 0
     - name: Sensor Strength
-      baseValue: 100
+      baseValue: 10
       appliedValue: 0
       modifiers: []
       isDirty: 0
     - name: Detectability
-      baseValue: 25
+      baseValue: 5
       appliedValue: 0
       modifiers: []
       isDirty: 0
@@ -56,12 +57,12 @@ MonoBehaviour:
       modifiers: []
       isDirty: 0
     - name: Max Target Locks
-      baseValue: 3
+      baseValue: 2
       appliedValue: 0
       modifiers: []
       isDirty: 0
     - name: Cargo Drop Percentage
-      baseValue: 1
+      baseValue: 0.5
       appliedValue: 0
       modifiers: []
       isDirty: 0

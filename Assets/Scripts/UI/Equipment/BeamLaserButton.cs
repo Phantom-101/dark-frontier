@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class MinerIndicatorUI : EquipmentIndicatorUI {
+public class BeamLaserButton : EquipmentButton {
     public Button Button;
     public Image Icon;
     public Image Center;
@@ -10,10 +10,10 @@ public class MinerIndicatorUI : EquipmentIndicatorUI {
     public CanvasGroup TooltipGroup;
     public Text Tooltip;
 
-    private MinerSO cache;
+    private BeamLaserSO cache;
 
     public override void Initialize () {
-        cache = Slot.Data.Equipment as MinerSO;
+        cache = Slot.Data.Equipment as BeamLaserSO;
         Icon.sprite = cache.Icon;
         Tooltip.text = Slot.Data.Equipment.name;
         TooltipGroup.alpha = 0;
@@ -26,7 +26,7 @@ public class MinerIndicatorUI : EquipmentIndicatorUI {
             return;
         }
 
-        MinerSlotData data = Slot.Data as MinerSlotData;
+        BeamLaserSlotData data = Slot.Data as BeamLaserSlotData;
         Button.interactable = cache.CanClick (Slot);
         Center.fillAmount = data.AccumulatedDamageMultiplier / cache.DamageInterval;
         Side.fillAmount = data.Heat / cache.MaxHeat;

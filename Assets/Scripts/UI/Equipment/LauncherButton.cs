@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LauncherIndicatorUI : EquipmentIndicatorUI {
+public class LauncherButton : EquipmentButton {
     public Button Button;
     public Image Icon;
     public Image Center;

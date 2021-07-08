@@ -8,11 +8,8 @@ public class LauncherSO : EquipmentSO {
     public float RechargeRate;
     public bool AutoCycle;
     public List<MissileSO> CompatibleMissiles;
-    public Damage DamageMultiplier;
 
-    public override void OnAwake (EquipmentSlot slot) {
-        EnsureDataType (slot);
-    }
+    public override void OnAwake (EquipmentSlot slot) => EnsureDataType (slot);
 
     public override void OnEquip (EquipmentSlot slot) {
         slot.Data = new LauncherSlotData {
@@ -64,7 +61,7 @@ public class LauncherSO : EquipmentSO {
             s.AI = ai;
             ai.Target = data.Target;
             ai.Missile = data.Missile;
-            ai.DamageMultiplier = DamageMultiplier * slot.Equipper.Locks[data.Target] / 100;
+            ai.DamageMultiplier = slot.Equipper.Locks[data.Target] / 100;
             slot.Equipper.Inventory.RemoveQuantity (data.Missile, 1);
             data.Activated = AutoCycle;
         }

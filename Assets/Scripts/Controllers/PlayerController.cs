@@ -69,13 +69,19 @@ public class PlayerController : SingletonBase<PlayerController> {
 
     private void FireAll (object sender, EventArgs args) {
         Player.GetEquipmentData<BeamLaserSlotData> ().ForEach (data => {
-            if (!data.Activated) data.Equipment.OnClicked (data.Slot);
+            data.Activated = false;
+            data.Equipment.OnClicked (data.Slot);
+            data.Activated = true;
         });
         Player.GetEquipmentData<PulseLaserSlotData> ().ForEach (data => {
-            if (!data.Activated) data.Equipment.OnClicked (data.Slot);
+            data.Activated = false;
+            data.Equipment.OnClicked (data.Slot);
+            data.Activated = true;
         });
         Player.GetEquipmentData<LauncherSlotData> ().ForEach (data => {
-            if (!data.Activated) data.Equipment.OnClicked (data.Slot);
+            data.Activated = false;
+            data.Equipment.OnClicked (data.Slot);
+            data.Activated = true;
         });
     }
 

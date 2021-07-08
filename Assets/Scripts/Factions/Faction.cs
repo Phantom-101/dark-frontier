@@ -11,14 +11,14 @@ public class Faction : ScriptableObject {
     public HashSet<Structure> Property = new HashSet<Structure> ();
 
     public void ChangeWealth (long delta) { Wealth += delta; }
-    public bool HasWealth (long condition) { return Wealth >= condition ? true : false; }
+    public bool HasWealth (long condition) { return Wealth >= condition; }
     public HashSet<Structure> GetProperty () { return Property; }
     public void AddProperty (Structure structure) { Property.Add (structure); }
     public void RemoveProperty (Structure structure) { Property.Remove (structure); }
     public void SetRelations (StringToFloatDictionary map) { Relations = map; }
-    public float GetRelation (Faction other) { return Relations.ContainsKey (other.Id) ? Relations[other.Id] : 0; }
-    public void SetRelation (Faction other, float target) { Relations[other.Id] = Mathf.Clamp (target, -1, 1); other.SetRelationBack (this, target); }
-    private void SetRelationBack (Faction back, float target) { Relations[back.Id] = Mathf.Clamp (target, -1, 1); }
+    public float GetRelation (Faction other) { return other == null ? 0 : Relations.TryGet (other.Id, 0); }
+    public void SetRelation (Faction other, float target) { if (other != null) { Relations[other.Id] = Mathf.Clamp (target, -1, 1); other.SetRelationBack (this, target); } }
+    private void SetRelationBack (Faction back, float target) { if (back != null) { Relations[back.Id] = Mathf.Clamp (target, -1, 1); } }
     public void ChangeRelation (Faction other, float delta) { SetRelation (other, GetRelation (other) + delta); }
     public bool IsAlly (Faction other) { return GetRelation (other) > 0.75f; }
     public bool IsEnemy (Faction other) { return GetRelation (other) < -0.75f; }

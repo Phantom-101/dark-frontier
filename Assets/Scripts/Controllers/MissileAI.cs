@@ -4,14 +4,7 @@
 public class MissileAI : AI {
     public Structure Target;
     public MissileSO Missile;
-    public Damage DamageMultiplier;
-
-    public override AI GetAI () {
-        MissileAI ai = CreateInstance<MissileAI> ();
-        ai.Missile = Missile;
-        ai.DamageMultiplier = DamageMultiplier;
-        return ai;
-    }
+    public float DamageMultiplier;
 
     public override void Tick (Structure structure) {
         if (Target == null || Missile == null) {
@@ -39,5 +32,13 @@ public class MissileAI : AI {
             Target.TakeDamage (Missile.Damage * DamageMultiplier, structure.transform.position);
             structure.Hull = 0;
         }
+    }
+
+    public override AI Copy () {
+        MissileAI ret = CreateInstance<MissileAI> ();
+        ret.Target = Target;
+        ret.Missile = Missile;
+        ret.DamageMultiplier = DamageMultiplier;
+        return ret;
     }
 }

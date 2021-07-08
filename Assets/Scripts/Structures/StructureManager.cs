@@ -63,51 +63,39 @@ public class StructureManager : SingletonBase<StructureManager> {
         return res;
     }
 
-    public void OnInvSpawn (StructureSO profile, Faction owner, Sector sector, Location location) {
-
-        GameObject structure = Instantiate (profile.Prefab, sector.transform);
-        structure.name = profile.Name;
-        structure.transform.localPosition = location.GetPosition ();
-        structure.GetComponent<Structure> ().Faction = owner;
-        structure.GetComponent<Structure> ().Sector = sector;
-
+    public Structure SpawnStructure (StructureSO profile, Faction owner, Sector sector, Location location) {
+        GameObject go = Instantiate (profile.Prefab, sector.transform);
+        go.name = profile.Name;
+        go.transform.localPosition = location.GetPosition ();
+        Structure structure = go.GetComponent<Structure> ();
+        structure.Faction = owner;
+        structure.Sector = sector;
+        return structure;
     }
 
-    public void OnSiteSpawn (StructureSO profile, Faction owner, Sector sector, Location location) {
-
-        GameObject structure = Instantiate (profile.Prefab, sector.transform);
-        structure.name = profile.Name;
-        structure.transform.localPosition = location.GetPosition ();
-        structure.GetComponent<Structure> ().Faction = owner;
-        structure.GetComponent<Structure> ().Sector = sector;
-        // Spawn structure of profile at random location around location.GetPosition
-
-    }
-
-    public void OnBuySpawn (StructureSO profile, Faction owner, Sector sector, Location location) {
-
-        GameObject structure = Instantiate (profile.Prefab, location.GetTransform ());
-        structure.name = profile.Name;
-        structure.transform.localPosition = Vector3.zero;
-        structure.GetComponent<Structure> ().Faction = owner;
-        structure.GetComponent<Structure> ().Sector = sector;
-
-    }
-
-    public void OnStructureDestroyed (Structure destroyedStructure) {
+    public void DestroyStructure (Structure structure) {
         // Destroy docked structures
-        destroyedStructure.GetDocked ().ForEach (e => OnStructureDestroyed (e));
+        structure.GetDocked ().ForEach (e => DestroyStructure (e));
         // Remove structure from list
-        _structures.Remove (destroyedStructure);
+        _structures.Remove (structure);
         // Spawn destruction effect
-        if (destroyedStructure.Profile.DestructionEffect != null) {
-            GameObject effect = Instantiate (destroyedStructure.Profile.DestructionEffect, destroyedStructure.transform.parent);
-            effect.transform.localPosition = destroyedStructure.transform.localPosition;
-            effect.transform.localScale = Vector3.one * destroyedStructure.Profile.ApparentSize;
+        if (structure.Profile.DestructionEffect != null) {
+            GameObject effect = Instantiate (structure.Profile.DestructionEffect, structure.transform.parent);
+            effect.transform.localPosition = structure.transform.localPosition;
+            effect.transform.localScale = Vector3.one * structure.Profile.ApparentSize;
         }
         // TODO Drop stuff according to StructureSO.DropPercentage
         // Destroy structure game object
-        Destroy (destroyedStructure.gameObject);
+        Destroy (structure.gameObject);
+    }
+
+    public void DisposeStructure (Structure structure) {
+        // Destroy docked structures
+        structure.GetDocked ().ForEach (e => DisposeStructure (e));
+        // Remove structure from list
+        _structures.Remove (structure);
+        // Destroy structure game object
+        Destroy (structure.gameObject);
     }
 
     public void SaveGame (DirectoryInfo directory) {
