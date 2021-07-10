@@ -99,6 +99,7 @@ public class LauncherSO : EquipmentSO {
     }
 
     public override void OnClicked (EquipmentSlot slot) {
+        if (!CanClick (slot)) return;
         LauncherSlotData data = slot.Data as LauncherSlotData;
         if (data.Activated) {
             // If equipment is activated and selected is null or target

@@ -46,7 +46,7 @@ public class Structure : MonoBehaviour {
     public Inventory Inventory {
         get => _inventory;
     }
-    [SerializeField] private Inventory _inventory;
+    [SerializeReference] private Inventory _inventory;
 
     public AI AI {
         get => _ai;
@@ -76,14 +76,10 @@ public class Structure : MonoBehaviour {
     }
     [SerializeField] private Sector _sector;
 
-    public List<Structure> Detected {
-        get {
-            if (_detected == null) _detected = StructureManager.Instance.GetDetected (this);
-            return _detected;
-        }
-        set => _detected = value;
+    public HashSet<Structure> Detected {
+        get => detected ?? (detected = StructureManager.Instance.GetDetected (this));
     }
-    [SerializeField] private List<Structure> _detected;
+    [SerializeField] private HashSet<Structure> detected;
 
     [SerializeField] private List<Structure> _docked;
 
@@ -121,6 +117,10 @@ public class Structure : MonoBehaviour {
         }
 
         if (_inventory == null) _inventory = new Inventory (stats.GetAppliedValue (StatNames.InventoryVolume, 0), 1);
+        _inventory.Synchronize (this);
+
+        StructureInventoryAdder adder = GetComponent<StructureInventoryAdder> ();
+        if (adder != null) adder.Run (this);
     }
 
     public float GetProfileValue (string name, float baseValue) {
@@ -297,8 +297,6 @@ public class Structure : MonoBehaviour {
         ManageSelectedAndLocks ();
         TickLocks ();
 
-        if (_aiEnabled) _ai.Tick (this);
-
         foreach (EquipmentSlot slot in _equipmentSlots) slot.Tick ();
 
         stats.Tick ();
@@ -312,6 +310,12 @@ public class Structure : MonoBehaviour {
             transform.LeanSetLocalPosY (0);
             transform.localEulerAngles = new Vector3 (0, transform.eulerAngles.y, _rb.angularVelocity.y * -25);
         }
+    }
+
+    public void ExpensiveTick () {
+        detected = null;
+
+        if (_aiEnabled) _ai.Tick (this);
     }
 
     private void EnsureStats () {

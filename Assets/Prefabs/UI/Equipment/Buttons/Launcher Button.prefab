@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 3500025443714661672}
   - component: {fileID: 6414994907839060473}
   m_Layer: 5
-  m_Name: Dump
+  m_Name: Switch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -356,71 +356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: LinearEquipmentIndicatorUI, Assembly-CSharp
-          m_MethodName: ShowTooltip
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: LinearEquipmentIndicatorUI, Assembly-CSharp
-          m_MethodName: HideTooltip
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: LinearEquipmentIndicatorUI, Assembly-CSharp
-          m_MethodName: ShowTooltip
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: LinearEquipmentIndicatorUI, Assembly-CSharp
-          m_MethodName: HideTooltip
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+  m_Delegates: []
 --- !u!1 &4647616167918594426
 GameObject:
   m_ObjectHideFlags: 0
@@ -585,9 +521,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4864166113814497009}
   - component: {fileID: 1930645538247589439}
-  - component: {fileID: 1749915644297461739}
+  - component: {fileID: 7602952923179102485}
   m_Layer: 5
-  m_Name: Pulse Laser Equipment Indicator
+  m_Name: Launcher Equipment Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -627,7 +563,7 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &1749915644297461739
+--- !u!114 &7602952923179102485
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -636,7 +572,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4864166113814497008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2dcdff4a132d84448e7fcfaafe90403, type: 3}
+  m_Script: {fileID: 11500000, guid: a1738c372a819fb44a1b90026048c5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Slot: {fileID: 0}
@@ -645,7 +581,7 @@ MonoBehaviour:
   Center: {fileID: 4864166114998821404}
   Side: {fileID: 5255684996810608773}
   Bottom: {fileID: 4864166114428518562}
-  DumpButton: {fileID: 6414994907839060473}
+  SwitchButton: {fileID: 6414994907839060473}
   TooltipGroup: {fileID: 5068162466676363321}
   Tooltip: {fileID: 1507486446536549003}
 --- !u!1 &4864166114428518560
@@ -899,17 +835,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8034428788667423917}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6076843343920849600}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 30, y: 30}
+  m_SizeDelta: {x: 50, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4453345803915022729
 CanvasRenderer:
@@ -939,7 +875,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 824af60ac0e90bb4185b11d641665517, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 21db48d8619e7a946a2bff74625762c1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

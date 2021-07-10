@@ -17,26 +17,27 @@ public class UIStateManager : SingletonBase<UIStateManager> {
         return false;
     }
 
-    public void AddState (CanvasGroup group, string name = null, bool showBelow = false, bool alwaysShow = false) {
+    public bool AddState (CanvasGroup group, string name = null, bool showBelow = false, bool alwaysShow = false, bool ephemeral = false) {
         // Ignore if canvas group is null
         // We need to do this here even if AddState (UIState) already does so because we need to retrieve the name of the game object the group is on
         // Also, this saves some execution time if group is indeed null
-        if (group == null) return;
+        if (group == null) return false;
         // Create UI state
         UIState state = new UIState {
             Name = name ?? group.gameObject.name,
             Group = group,
             ShowBelow = showBelow,
             AlwaysShow = alwaysShow,
+            Ephemeral = ephemeral,
         };
         // Add the UI state
-        AddState (state);
+        return AddState (state);
         // No need to notify listeners here as AddState (UIState) already does so
     }
 
-    public void AddState (UIState state) {
+    public bool AddState (UIState state) {
         // Ignore states without a canvas group
-        if (state.Group == null) return;
+        if (state.Group == null) return false;
         // Remove previous references
         _states.RemoveAll (s => s == state);
         // Add the state
@@ -49,6 +50,29 @@ public class UIStateManager : SingletonBase<UIStateManager> {
         RecalculateShown ();
         // Notify listeners
         StatesChanged?.Invoke (this, EventArgs.Empty);
+        return true;
+    }
+
+    public bool AddState (GameObject target, string name = null, bool showBelow = false, bool alwaysShow = false, bool ephemeral = false) {
+        // Ignore null game objects
+        if (target == null) return false;
+        // Ignore game objects without a canvas group
+        CanvasGroup group = target.GetComponent<CanvasGroup> ();
+        if (group == null) return false;
+        // Add state
+        return AddState (group, name, showBelow, alwaysShow, ephemeral);
+    }
+
+    public GameObject AddStateFromPrefab (GameObject prefab, string name = null, bool showBelow = false, bool alwaysShow = false, bool ephemeral = true) {
+        // Ignore null prefabs
+        if (prefab == null) return null;
+        // Ignore prefabs without a canvas group
+        if (prefab.GetComponent<CanvasGroup> () == null) return null;
+        // Instantiate
+        GameObject instantiated = Instantiate (prefab, PrefabViewRoot.Instance.transform);
+        CanvasGroup group = instantiated.GetComponent<CanvasGroup> ();
+        AddState (group, name, showBelow, alwaysShow, ephemeral);
+        return instantiated;
     }
 
     public void RemoveState () {
@@ -109,7 +133,11 @@ public class UIStateManager : SingletonBase<UIStateManager> {
             // Cancel preexisting tween if there is one
             LeanTween.cancel (state.Group.gameObject, info.TweenId);
             // Create new tween
-            info.TweenId = LeanTween.value (state.Group.gameObject, state.Group.alpha, 0, 0.2f).setOnUpdate (value => state.Group.alpha = value).id;
+            info.TweenId = LeanTween.value (state.Group.gameObject, state.Group.alpha, 0, 0.2f)
+                .setOnUpdate (value => state.Group.alpha = value)
+                .setOnComplete (() => {
+                    if (state.Ephemeral) Destroy (state.Group.gameObject);
+                }).id;
         }
     }
 
@@ -169,6 +197,10 @@ public class UIState {
     /// Whether or not this UI state will always show regardless of higher UI states.
     /// </summary>
     public bool AlwaysShow;
+    /// <summary>
+    /// Whether or not this UI state should be destroyed after it is exited out of.
+    /// </summary>
+    public bool Ephemeral;
 }
 
 [Serializable]

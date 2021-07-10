@@ -1,49 +1,35 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 
 public class StructureManager : SingletonBase<StructureManager> {
 
-    [SerializeField] private List<Structure> _structures = new List<Structure> ();
-    [SerializeField] private Queue<Structure> _processQueue = new Queue<Structure> ();
+    [SerializeField] private List<Structure> structures = new List<Structure> ();
+    [SerializeField] private Queue<Structure> processQueue = new Queue<Structure> ();
 
     private void Update () {
-        _structures.RemoveAll (e => e == null);
-        _structures.ConvertAll (e => e).ForEach (e => {
+        structures.RemoveAll (e => e == null);
+        new List<Structure> (structures).ForEach (e => {
             e.Tick ();
-            if (!_processQueue.Contains (e))
-                _processQueue.Enqueue (e);
+            if (!processQueue.Contains (e)) processQueue.Enqueue (e);
         });
         Structure toProcess = null;
-        while (toProcess == null && _processQueue.Count > 0) toProcess = _processQueue.Dequeue ();
-        if (toProcess != null) {
-            toProcess.Detected = null;
-        }
+        while (toProcess == null && processQueue.Count > 0) toProcess = processQueue.Dequeue ();
+        if (toProcess != null) toProcess.ExpensiveTick ();
     }
 
     private void FixedUpdate () {
-        _structures.ConvertAll (e => e).ForEach (e => e.FixedTick ());
+        new List<Structure> (structures).ForEach (e => e.FixedTick ());
     }
 
-    public List<Structure> GetStructures () { return _structures; }
+    public List<Structure> GetStructures () => structures;
 
-    public void AddStructure (Structure structure) { if (!_structures.Contains (structure)) _structures.Add (structure); }
+    public void AddStructure (Structure structure) => structures.Add (structure);
 
-    public void RemoveStructure (Structure structure) { _structures.Remove (structure); }
+    public void RemoveStructure (Structure structure) => structures.Remove (structure);
 
-    public Structure GetStructure (string id) {
-
-        Structure found = null;
-        _structures.ForEach (structure => {
-
-            if (structure.Id == id) found = structure;
-
-        });
-        return found;
-
-    }
+    public Structure GetStructure (string id) => structures.Find (s => s.Id == id);
 
     public bool Detects (Structure a, Structure b) {
         if (a.Sector != b.Sector) return false;
@@ -54,13 +40,13 @@ public class StructureManager : SingletonBase<StructureManager> {
         return sqrDis <= sqrRange;
     }
 
-    public List<Structure> GetDetected (Structure structure) {
+    public HashSet<Structure> GetDetected (Structure structure) {
         List<Structure> inSector = structure.Sector.InSector;
-        List<Structure> res = new List<Structure> ();
+        HashSet<Structure> ret = new HashSet<Structure> ();
         foreach (Structure candidate in inSector)
             if (candidate != structure && Detects (structure, candidate))
-                res.Add (candidate);
-        return res;
+                ret.Add (candidate);
+        return ret;
     }
 
     public Structure SpawnStructure (StructureSO profile, Faction owner, Sector sector, Location location) {
@@ -77,7 +63,7 @@ public class StructureManager : SingletonBase<StructureManager> {
         // Destroy docked structures
         structure.GetDocked ().ForEach (e => DestroyStructure (e));
         // Remove structure from list
-        _structures.Remove (structure);
+        structures.Remove (structure);
         // Spawn destruction effect
         if (structure.Profile.DestructionEffect != null) {
             GameObject effect = Instantiate (structure.Profile.DestructionEffect, structure.transform.parent);
@@ -93,14 +79,14 @@ public class StructureManager : SingletonBase<StructureManager> {
         // Destroy docked structures
         structure.GetDocked ().ForEach (e => DisposeStructure (e));
         // Remove structure from list
-        _structures.Remove (structure);
+        structures.Remove (structure);
         // Destroy structure game object
         Destroy (structure.gameObject);
     }
 
     public void SaveGame (DirectoryInfo directory) {
         List<StructureSaveData> saveData = new List<StructureSaveData> ();
-        _structures.ForEach (structure => { saveData.Add (structure.GetSaveData ()); });
+        structures.ForEach (structure => { saveData.Add (structure.GetSaveData ()); });
         FileInfo file = PathManager.GetStructureFile (directory);
         if (!file.Exists) file.Create ().Close ();
         File.WriteAllText (
@@ -124,15 +110,15 @@ public class StructureManager : SingletonBase<StructureManager> {
                 TypeNameHandling = TypeNameHandling.All,
             }
         ) as List<StructureSaveData>;
-        _structures.ForEach (structure => { Destroy (structure.gameObject); });
-        _structures = new List<Structure> ();
+        this.structures.ForEach (structure => { Destroy (structure.gameObject); });
+        this.structures = new List<Structure> ();
         structures.ForEach (data => {
             StructureSO profile = ItemManager.Instance.GetItem (data.ProfileId) as StructureSO;
             GameObject structure = Instantiate (profile.Prefab, SectorManager.Instance.GetSector (data.SectorId).transform);
             structure.name = profile.Name;
             Structure comp = structure.GetComponent<Structure> ();
             comp.SetSaveData (data);
-            _structures.Add (comp);
+            this.structures.Add (comp);
             if (data.IsPlayer) PlayerController.Instance.Player = comp;
         });
     }

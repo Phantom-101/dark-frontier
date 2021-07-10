@@ -6,7 +6,7 @@ public class TurnButtonUI : UIStateView {
     [SerializeField] private Image _image;
     [SerializeField] private EventTrigger _eventTrigger;
 
-    protected override void StateChanged () {
+    protected override void OnStateChanged () {
         if (IsShown) {
             _image.raycastTarget = true;
             _eventTrigger.enabled = true;

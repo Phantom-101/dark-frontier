@@ -117,6 +117,7 @@ public class BeamLaserSO : EquipmentSO {
     }
 
     public override void OnClicked (EquipmentSlot slot) {
+        if (!CanClick (slot)) return;
         BeamLaserSlotData data = slot.Data as BeamLaserSlotData;
         if (data.Activated) {
             // If equipment is activated and selected is null or target

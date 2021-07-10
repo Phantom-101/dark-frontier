@@ -5490,7 +5490,7 @@ MonoBehaviour:
         elementNameProperty: 
         elementNameOverride: 
         elementIcon: {fileID: 0}
-      reqReferences: {fileID: 0}
+      reqReferences: {fileID: 11400000, guid: 3d6785e46e940b843aa5fbe4ca729d60, type: 2}
       isExpanded: 0
       _keyValues: []
       _keys: []
@@ -5498,16 +5498,13 @@ MonoBehaviour:
     volume:
       name: 
       baseValue: 0
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
     storedVolume: 0
     precision: 0
   _ai: {fileID: 0}
   _aiEnabled: 1
   _selected: {fileID: 0}
   _sector: {fileID: 0}
-  _detected: []
   _docked: []
   _initialized: 0
 --- !u!54 &2869013932428447134

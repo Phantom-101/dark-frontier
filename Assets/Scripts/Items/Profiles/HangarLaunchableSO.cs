@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu (menuName = "Items/Craft")]
-public class CraftSO : StructureSO {
+[CreateAssetMenu (menuName = "Items/Hangar Launchable")]
+public class HangarLaunchableSO : StructureSO {
+    public float LoadingPreparation;
+    public float LaunchingPreparation;
     public float FuelCapacity;
     public float FuelConsumption;
     public float NoFuelMaxSpeedPenalty;

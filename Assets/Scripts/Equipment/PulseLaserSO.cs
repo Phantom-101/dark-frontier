@@ -104,6 +104,7 @@ public class PulseLaserSO : EquipmentSO {
     }
 
     public override void OnClicked (EquipmentSlot slot) {
+        if (!CanClick (slot)) return;
         PulseLaserSlotData data = slot.Data as PulseLaserSlotData;
         if (data.Activated) {
             // If equipment is activated and selected is null or target

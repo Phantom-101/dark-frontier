@@ -11,7 +11,7 @@ public class NewGameUI : UIStateView {
         SceneUtils.Instance.LoadScene (selected.SceneName);
     }
 
-    protected override void StateChanged () {
+    protected override void OnStateChanged () {
         // Destroy instantiated prefabs
         _instPresets.ForEach (e => Destroy (e.gameObject));
         _instPresets = new List<GamePresetUI> ();

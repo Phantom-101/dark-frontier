@@ -3,7 +3,6 @@ using System.Linq;
 using UnityEngine;
 
 public class UIStateInjector : MonoBehaviour {
-    public UIStateManagerReference Reference;
     public string Name;
     public CanvasGroup Group;
     public bool ShowBelow;
@@ -22,14 +21,12 @@ public class UIStateInjector : MonoBehaviour {
         UIStateManager uiStateManager = UIStateManager.Instance;
         // Iterate through injectors in order and inject state
         foreach (UIStateInjector injector in injectors) {
-            if (injector.Reference != null) {
-                injector.Reference.AddState (new UIState {
-                    Name = injector.Name,
-                    Group = injector.Group,
-                    ShowBelow = injector.ShowBelow,
-                    AlwaysShow = injector.AlwaysShown,
-                });
-            }
+            UIStateManager.Instance.AddState (new UIState {
+                Name = injector.Name,
+                Group = injector.Group,
+                ShowBelow = injector.ShowBelow,
+                AlwaysShow = injector.AlwaysShown,
+            });
             // Destroy injector
             Destroy (injector);
         }

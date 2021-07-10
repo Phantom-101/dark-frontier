@@ -23,7 +23,6 @@ MonoBehaviour:
   Prefab: {fileID: 2869013932428447122, guid: 01d3b3e41279c74489c131c0b41597bb, type: 3}
   ApparentSize: 125
   HullWireframe: {fileID: 21300000, guid: 5f56fb9ca780c664e94278c0651f1afe, type: 3}
-  WorldToUIScale: 0.90476
   ShowBlip: 1
   DestructionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
     type: 3}
@@ -32,36 +31,25 @@ MonoBehaviour:
     stats:
     - name: Max Hull
       baseValue: 4500
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
     - name: Sensor Strength
       baseValue: 100
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
     - name: Detectability
       baseValue: 25
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
     - name: Scanner Strength
       baseValue: 5
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
     - name: Signature Size
       baseValue: 5
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
     - name: Max Target Locks
       baseValue: 3
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
     - name: Cargo Drop Percentage
       baseValue: 1
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
+    - name: Inventory Volume
+      baseValue: 10000
+      modifiers: []

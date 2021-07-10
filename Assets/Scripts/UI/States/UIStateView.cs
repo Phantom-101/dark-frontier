@@ -3,23 +3,23 @@ using UnityEngine;
 
 [RequireComponent (typeof (CanvasGroup))]
 public class UIStateView : MonoBehaviour {
-    private CanvasGroup _group;
     public CanvasGroup Group {
         get {
             if (_group == null) _group = GetComponent<CanvasGroup> ();
             return _group;
         }
     }
-    public bool IsShown {
-        get { return UIStateManager.IsShown (Group); }
-    }
-    private UIStateManager _uiStateManager;
+    private CanvasGroup _group;
+
+    public bool IsShown { get => UIStateManager.IsShown (Group); }
+
     public UIStateManager UIStateManager {
         get {
             if (_uiStateManager == null) _uiStateManager = UIStateManager.Instance;
             return _uiStateManager;
         }
     }
+    private UIStateManager _uiStateManager;
 
     private void Awake () {
         if (UIStateManager != null) {
@@ -28,7 +28,7 @@ public class UIStateView : MonoBehaviour {
     }
 
     private void Update () {
-        UpdateUI ();
+        OnUpdate ();
     }
 
     private void OnDestroy () {
@@ -37,7 +37,7 @@ public class UIStateView : MonoBehaviour {
         }
     }
 
-    private void HandleStateChange (object sender, EventArgs args) { StateChanged (); }
-    protected virtual void StateChanged () { }
-    protected virtual void UpdateUI () { }
+    private void HandleStateChange (object sender, EventArgs args) { OnStateChanged (); }
+    protected virtual void OnStateChanged () { }
+    protected virtual void OnUpdate () { }
 }

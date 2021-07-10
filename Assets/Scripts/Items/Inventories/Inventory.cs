@@ -55,6 +55,8 @@ public class Inventory : IInventory, ISaveTo<InventorySaveData> {
 
     public List<ItemSO> GetStoredItems () => quantities.Keys.ToList ();
 
+    public void Synchronize (Structure structure) => volume = structure.Stats.GetStat (StatNames.InventoryVolume, 0);
+
     private void Optimize () => quantities.Where (pair => pair.Value == 0).ToList ().ForEach (pair => quantities.Remove (pair.Key));
     private float RoundToPrecision (float value) => (float) Math.Round (value, precision);
     private float GetVolume (ItemSO item, int amount) => RoundToPrecision (RoundToPrecision (item.Volume) * amount);

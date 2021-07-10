@@ -120,6 +120,7 @@ public class MinerSO : EquipmentSO {
     }
 
     public override void OnClicked (EquipmentSlot slot) {
+        if (!CanClick (slot)) return;
         MinerSlotData data = slot.Data as MinerSlotData;
         if (data.Activated) {
             // If equipment is activated and selected is null or target

@@ -1217,7 +1217,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Data.Equipment
       value: 
-      objectReference: {fileID: 11400000, guid: a4b9332cb6bc8ca4f863c2f5dc9fb863,
+      objectReference: {fileID: 11400000, guid: af9625b284a89c941aff0f9255cfb275,
         type: 2}
     - target: {fileID: 2869013932428447120, guid: 01d3b3e41279c74489c131c0b41597bb,
         type: 3}
@@ -1236,65 +1236,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 775ef2390595a0b419935e4d1a62e1f5,
         type: 2}
-    - target: {fileID: 2869013932428447120, guid: 01d3b3e41279c74489c131c0b41597bb,
-        type: 3}
-      propertyPath: _inventory.isExpanded
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2869013932428447120, guid: 01d3b3e41279c74489c131c0b41597bb,
-        type: 3}
-      propertyPath: _inventory._keys.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2869013932428447120, guid: 01d3b3e41279c74489c131c0b41597bb,
-        type: 3}
-      propertyPath: _inventory._values.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2869013932428447120, guid: 01d3b3e41279c74489c131c0b41597bb,
-        type: 3}
-      propertyPath: _inventory._keys.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: 0809d17cefb6d2f46a9b248df6598e09,
-        type: 2}
-    - target: {fileID: 2869013932428447120, guid: 01d3b3e41279c74489c131c0b41597bb,
-        type: 3}
-      propertyPath: _inventory._keys.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c,
-        type: 2}
-    - target: {fileID: 2869013932428447120, guid: 01d3b3e41279c74489c131c0b41597bb,
-        type: 3}
-      propertyPath: _inventory._keyValues.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2869013932428447120, guid: 01d3b3e41279c74489c131c0b41597bb,
-        type: 3}
-      propertyPath: _inventory._values.Array.data[0]
-      value: 2000
-      objectReference: {fileID: 0}
-    - target: {fileID: 2869013932428447120, guid: 01d3b3e41279c74489c131c0b41597bb,
-        type: 3}
-      propertyPath: _inventory._values.Array.data[1]
-      value: 2000
-      objectReference: {fileID: 0}
-    - target: {fileID: 2869013932428447120, guid: 01d3b3e41279c74489c131c0b41597bb,
-        type: 3}
-      propertyPath: _inventory._keyValues.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: 0809d17cefb6d2f46a9b248df6598e09,
-        type: 2}
-    - target: {fileID: 2869013932428447120, guid: 01d3b3e41279c74489c131c0b41597bb,
-        type: 3}
-      propertyPath: _inventory._keyValues.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: 44a7abd7541b96847ba0465400e2c01c,
-        type: 2}
-    - target: {fileID: 2869013932428447120, guid: 01d3b3e41279c74489c131c0b41597bb,
-        type: 3}
-      propertyPath: _inventory.reorderableList.isExpanded
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2869013932428447121, guid: 01d3b3e41279c74489c131c0b41597bb,
         type: 3}
       propertyPath: m_RootOrder
@@ -2748,6 +2689,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ef4cd38eea10164a9047353b040ad1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &977397470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977397465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35c5f1f87210c4749bba844a28f1ce5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 11400000, guid: 3d6785e46e940b843aa5fbe4ca729d60, type: 2}
+    isExpanded: 1
+    _keyValues:
+    - {fileID: 11400000, guid: 8be95cdc9bbb7764ea30a118020641f8, type: 2}
+    _keys:
+    - {fileID: 11400000, guid: 8be95cdc9bbb7764ea30a118020641f8, type: 2}
+    _values: 64000000
 --- !u!1001 &979115570
 PrefabInstance:
   m_ObjectHideFlags: 0

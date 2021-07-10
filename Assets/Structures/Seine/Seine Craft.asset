@@ -33,43 +33,31 @@ MonoBehaviour:
     stats:
     - name: Max Hull
       baseValue: 300
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
     - name: Sensor Strength
       baseValue: 10
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
     - name: Detectability
       baseValue: 5
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
     - name: Scanner Strength
       baseValue: 5
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
     - name: Signature Size
       baseValue: 5
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
     - name: Max Target Locks
       baseValue: 2
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
     - name: Cargo Drop Percentage
       baseValue: 0.5
-      appliedValue: 0
       modifiers: []
-      isDirty: 0
+  LoadingPreparation: 100
+  LaunchingPreparation: 100
   FuelCapacity: 100
   FuelConsumption: 1
   NoFuelMaxSpeedPenalty: 0.2
   NoFuelAccelerationPenalty: 0.2
   MaxOperationalRange: 1000
-  SignalConnectionRange: 0
+  SignalConnectionRange: 2000
   HeadingAllowance: 5

@@ -15,7 +15,7 @@ public class SaveSelectionUI : UIStateView {
         SaveManager.GetInstance ().Load (universe, name);
     }
 
-    protected override void StateChanged () {
+    protected override void OnStateChanged () {
         // Destroy instantiated prefabs
         while (_instUniverses.Count > 0) {
             Destroy (_instUniverses[0].gameObject);
@@ -35,7 +35,7 @@ public class SaveSelectionUI : UIStateView {
                 uinfo.Button.onClick.AddListener (() => {
                     if (_expanded.Contains (universe.Name)) _expanded.Remove (universe.Name);
                     else _expanded.Add (universe.Name);
-                    StateChanged ();
+                    OnStateChanged ();
                 });
                 uinfo.Name = universe.Name;
                 _instUniverses.Add (uinfo);

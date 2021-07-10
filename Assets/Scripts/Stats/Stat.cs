@@ -16,16 +16,16 @@ public class Stat : ISaveTo<StatSaveData> {
         get => baseValue;
         set {
             baseValue = value;
-            isDirty = true;
+            appliedValue = null;
         }
     }
     [SerializeField] private float baseValue;
 
     // The effective value of this stat after all modifiers have been taken into account
     public float AppliedValue {
-        get => GetAppliedValue ();
+        get => appliedValue ?? (appliedValue = GetAppliedValue ()).Value;
     }
-    [SerializeField] private float appliedValue;
+    [SerializeField] private float? appliedValue;
 
     // Collection of modifiers which modify the base value
     public List<StatModifier> Modifiers {
@@ -33,14 +33,9 @@ public class Stat : ISaveTo<StatSaveData> {
     }
     [SerializeField] private List<StatModifier> modifiers = new List<StatModifier> ();
     public Dictionary<string, StatModifier> ModifiersDictionary {
-        get => modifiers.ToDictionary (m => m.Id, m => m);
+        get => modifiersDictionary ?? (modifiersDictionary = modifiers.ToDictionary (m => m.Id, m => m));
     }
-
-    // Denotes whether or not applied value needs to be recalculated
-    public bool IsDirty {
-        get => isDirty;
-    }
-    [SerializeField] private bool isDirty = true;
+    private Dictionary<string, StatModifier> modifiersDictionary;
 
     public Stat (string name) : this (name, 0) { }
     public Stat (string name, float baseValue) : this (name, baseValue, new List<StatModifier> ()) { }
@@ -58,25 +53,27 @@ public class Stat : ISaveTo<StatSaveData> {
     public void AddModifier (StatModifier modifier) {
         if (!ModifiersDictionary.ContainsKey (modifier.Id)) {
             modifiers.Add (modifier);
-            isDirty = true;
+            appliedValue = null;
+            modifiersDictionary = null;
         }
     }
 
     public void RemoveModifier (StatModifier modifier) {
-        if (modifiers.Remove (modifier)) {
-            isDirty = true;
+        if (modifier == null) return;
+        if (modifiers.RemoveAll (m => m.Id == modifier.Id) > 0) {
+            appliedValue = null;
+            modifiersDictionary = null;
         }
     }
 
     public void RemoveModifier (string id) {
         if (modifiers.RemoveAll (m => m.Id == id) > 0) {
-            isDirty = true;
+            appliedValue = null;
+            modifiersDictionary = null;
         }
     }
 
     private float GetAppliedValue () {
-        // If not dirty, then return cached value
-        if (!isDirty) return appliedValue;
         // Prepare variables
         float add = 0, multiply = 1, percentAdd = 0;
         // Iterate through modifiers and add to respective variables
@@ -85,11 +82,8 @@ public class Stat : ISaveTo<StatSaveData> {
             else if (modifier.Type == StatModifierType.Multiplicative) multiply *= modifier.Value;
             else if (modifier.Type == StatModifierType.PercentAdditive) percentAdd += modifier.Value;
         }
-        // Calculate applied value and set dirty to false
-        appliedValue = BaseValue + add + BaseValue * (multiply - 1) + BaseValue * percentAdd;
-        isDirty = false;
-        // Return result
-        return appliedValue;
+        // Calculate applied value
+        return BaseValue + add + BaseValue * (multiply - 1) + BaseValue * percentAdd;
     }
 
     public Stat Copy () => new Stat (name, baseValue, Modifiers.ConvertAll (m => m.Copy ()));

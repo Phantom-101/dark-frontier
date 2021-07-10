@@ -10,39 +10,59 @@ public class StatList : ISaveTo<StatListSaveData> {
     }
     [SerializeField] private List<Stat> stats = new List<Stat> ();
     public Dictionary<string, Stat> StatsDictionary {
-        get => stats.ToDictionary (s => s.Name, s => s);
+        get => statsDictionary ?? (statsDictionary = stats.ToDictionary (s => s.Name, s => s));
     }
+    private Dictionary<string, Stat> statsDictionary;
 
     public StatList () { }
     public StatList (StatListSaveData saveData) => stats = saveData.Stats.ConvertAll (s => s.Load ());
 
     public Stat GetStat (string name, float baseValue) {
-        Stat ret = StatsDictionary.TryGet (name, new Stat (name, baseValue));
-        SetStat (ret);
+        if (StatsDictionary.ContainsKey (name)) return StatsDictionary[name];
+        Stat ret = new Stat (name, baseValue);
+        AddStat (ret);
         return ret;
     }
 
     public float GetBaseValue (string name, float baseValue) => GetStat (name, baseValue).BaseValue;
     public float GetAppliedValue (string name, float baseValue) => GetStat (name, baseValue).AppliedValue;
     public List<StatModifier> GetModifiers (string name) => GetStat (name, 0).Modifiers;
-    public bool GetIsDirty (string name) => GetStat (name, 0).IsDirty;
 
     public bool AddStat (Stat stat) {
         if (!StatsDictionary.ContainsKey (stat.Name)) {
             stats.Add (stat);
+            statsDictionary = null;
             return true;
         }
         return false;
     }
 
     public bool SetStat (Stat stat) {
-        int c = stats.RemoveAll (s => s.Name == stat.Name);
-        stats.Add (stat);
-        return c > 0;
+        if (StatsDictionary.TryGet (stat.Name, null) != stat) {
+            int c = stats.RemoveAll (s => s.Name == stat.Name);
+            stats.Add (stat);
+            statsDictionary = null;
+            return c > 0;
+        }
+        return false;
     }
 
-    public void RemoveStat (Stat stat) => stats.Remove (stat);
-    public void RemoveStat (string name) => stats.RemoveAll (s => s.Name == name);
+    public bool RemoveStat (Stat stat) {
+        if (stats.Remove (stat)) {
+            statsDictionary = null;
+            return true;
+        }
+        return false;
+    }
+
+    public bool RemoveStat (string name) {
+        int c = stats.RemoveAll (s => s.Name == name);
+        if (c > 0) {
+            statsDictionary = null;
+            return true;
+        }
+        return false;
+    }
 
     public void Tick () => stats.ForEach (s => s.Modifiers.ForEach (m => m.Tick ()));
 

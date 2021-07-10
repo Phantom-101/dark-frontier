@@ -1,35 +1,26 @@
 ﻿using UnityEngine;
 
 public class HangarManagedCraftAI : AI {
-    public CraftSO Craft;
+    public HangarLaunchableSO Launchable;
     public HangarBaySlotData HangarBay;
 
     public override void Tick (Structure structure) {
-        if (HangarBay.Target == null) {
-            structure.GetEquipmentData<EngineSlotData> ().ForEach (engine => {
-                engine.ManagedPropulsion = true;
-                engine.LinearSetting = Vector3.zero;
-                engine.AngularSetting = Vector3.zero;
-            });
+        if (Launchable == null || HangarBay.Slot == null) {
+            structure.Hull = 0;
             return;
         }
 
-        Vector3[] target = new Vector3[2];
-        target[0].z = 1;
+        float disToHangar = NavigationManager.Instance.GetLocalDistance (structure, HangarBay.Slot.Equipper);
+        float disFromHangarToTarget = NavigationManager.Instance.GetLocalDistance (HangarBay.Target, HangarBay.Slot.Equipper);
 
-        float angle = structure.GetAngleTo (HangarBay.Target.transform.localPosition);
-        if (angle > Craft.HeadingAllowance) target[1].y = 1;
-        else if (angle < -Craft.HeadingAllowance) target[1].y = -1;
+        if (disToHangar > Launchable.SignalConnectionRange) return;
 
-        float elevation = structure.GetElevationTo (HangarBay.Target.transform.localPosition);
-        if (elevation > Craft.HeadingAllowance) target[1].x = -1;
-        else if (elevation < -Craft.HeadingAllowance) target[1].x = 1;
+        if (HangarBay.Target == null || disFromHangarToTarget > Launchable.MaxOperationalRange) {
+            MoveTo (structure, HangarBay.Slot.Equipper);
+            return;
+        }
 
-        structure.GetEquipmentData<EngineSlotData> ().ForEach (engine => {
-            engine.ManagedPropulsion = true;
-            engine.LinearSetting = target[0];
-            engine.AngularSetting = target[1];
-        });
+        MoveTo (structure, HangarBay.Target);
 
         structure.Selected = HangarBay.Target;
         structure.Lock (structure.Selected);
@@ -50,9 +41,28 @@ public class HangarManagedCraftAI : AI {
         });
     }
 
+    private void MoveTo (Structure structure, Structure target) {
+        Vector3[] targetSettings = new Vector3[2];
+        targetSettings[0].z = 1;
+
+        float angle = structure.GetAngleTo (target.transform.localPosition);
+        if (angle > Launchable.HeadingAllowance) targetSettings[1].y = 1;
+        else if (angle < -Launchable.HeadingAllowance) targetSettings[1].y = -1;
+
+        float elevation = structure.GetElevationTo (target.transform.localPosition);
+        if (elevation > Launchable.HeadingAllowance) targetSettings[1].x = -1;
+        else if (elevation < -Launchable.HeadingAllowance) targetSettings[1].x = 1;
+
+        structure.GetEquipmentData<EngineSlotData> ().ForEach (engine => {
+            engine.ManagedPropulsion = true;
+            engine.LinearSetting = targetSettings[0];
+            engine.AngularSetting = targetSettings[1];
+        });
+    }
+
     public override AI Copy () {
         HangarManagedCraftAI ret = CreateInstance<HangarManagedCraftAI> ();
-        ret.Craft = Craft;
+        ret.Launchable = Launchable;
         ret.HangarBay = HangarBay;
         return ret;
     }

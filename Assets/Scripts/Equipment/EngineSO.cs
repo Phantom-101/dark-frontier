@@ -147,11 +147,16 @@ public class EngineSO : EquipmentSO {
         return res;
     }
 
-    private float GetLinearMaxSpeed (EquipmentSlot slot) => MaxLinearSpeed * slot.Equipper.Stats.GetAppliedValue (StatNames.LinearMaxSpeedMultiplier, 1);
-    private float GetAngularMaxSpeed (EquipmentSlot slot) => MaxAngularSpeed * slot.Equipper.Stats.GetAppliedValue (StatNames.AngularMaxSpeedMultiplier, 1);
-    private float GetLinearAcceleration (EquipmentSlot slot, int d, float s) => Lerp (s, LinearForcePos[d], LinearForceNeg[d]) * slot.Equipper.Stats.GetAppliedValue (StatNames.LinearAccelerationMultiplier, 1);
-    private float GetAngularAcceleration (EquipmentSlot slot, int d, float s) => Lerp (s, AngularForcePos[d], AngularForceNeg[d]) * slot.Equipper.Stats.GetAppliedValue (StatNames.AngularAccelerationMultiplier, 1);
+    private float GetLinearMaxSpeed (EquipmentSlot slot) => MaxLinearSpeed * GetLinearMaxSpeedMultiplierStat (slot).AppliedValue;
+    private float GetAngularMaxSpeed (EquipmentSlot slot) => MaxAngularSpeed * GetAngularMaxSpeedMultiplierStat (slot).AppliedValue;
+    private float GetLinearAcceleration (EquipmentSlot slot, int d, float s) => Lerp (s, LinearForcePos[d], LinearForceNeg[d]) * GetLinearAccelerationMultiplierStat (slot).AppliedValue;
+    private float GetAngularAcceleration (EquipmentSlot slot, int d, float s) => Lerp (s, AngularForcePos[d], AngularForceNeg[d]) * GetAngularAccelerationMultiplierStat (slot).AppliedValue;
     private float Sqr (float n) => n * n;
+
+    private Stat GetLinearMaxSpeedMultiplierStat (EquipmentSlot slot) => (slot.Data as EngineSlotData).LinearMaxSpeedMultiplierStat ?? ((slot.Data as EngineSlotData).LinearMaxSpeedMultiplierStat = slot.Equipper.Stats.GetStat (StatNames.LinearMaxSpeedMultiplier, 1));
+    private Stat GetAngularMaxSpeedMultiplierStat (EquipmentSlot slot) => (slot.Data as EngineSlotData).AngularMaxSpeedMultiplierStat ?? ((slot.Data as EngineSlotData).AngularMaxSpeedMultiplierStat = slot.Equipper.Stats.GetStat (StatNames.AngularMaxSpeedMultiplier, 1));
+    private Stat GetLinearAccelerationMultiplierStat (EquipmentSlot slot) => (slot.Data as EngineSlotData).LinearAccelerationMultiplierStat ?? ((slot.Data as EngineSlotData).LinearAccelerationMultiplierStat = slot.Equipper.Stats.GetStat (StatNames.LinearAccelerationMultiplier, 1));
+    private Stat GetAngularAccelerationMultiplierStat (EquipmentSlot slot) => (slot.Data as EngineSlotData).AngularAccelerationMultiplierStat ?? ((slot.Data as EngineSlotData).AngularAccelerationMultiplierStat = slot.Equipper.Stats.GetStat (StatNames.AngularAccelerationMultiplier, 1));
 
     private float Lerp (float p, float pos, float neg) {
         if (p >= 0) return p * pos;
@@ -165,6 +170,10 @@ public class EngineSlotData : EquipmentSlotData {
     public Vector3 AngularSetting;
     public float EnergySatisfaction;
     public bool ManagedPropulsion;
+    public Stat LinearMaxSpeedMultiplierStat;
+    public Stat AngularMaxSpeedMultiplierStat;
+    public Stat LinearAccelerationMultiplierStat;
+    public Stat AngularAccelerationMultiplierStat;
 
     public override EquipmentSlotSaveData Save () {
         return new EngineSlotSaveData {

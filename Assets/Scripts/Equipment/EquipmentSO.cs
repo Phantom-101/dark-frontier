@@ -4,6 +4,7 @@ using UnityEngine;
 public abstract class EquipmentSO : ItemSO {
     public float Durability;
     public GameObject ButtonPrefab;
+    public GameObject PanelPrefab;
 
     public abstract void OnAwake (EquipmentSlot slot);
     public abstract void OnEquip (EquipmentSlot slot);
