@@ -13,20 +13,19 @@ public class CappedSingleInventory : IInventory, ISaveTo<CappedSingleInventorySa
     public int MaxQuantity { get => maxQuantity; }
     [SerializeField] private int maxQuantity;
 
-    public float Volume { get => volume.AppliedValue; }
-    [SerializeField] private Stat volume;
+    public float Volume { get => volume; set => volume = value; }
+    [SerializeField] private float volume;
 
     public float StoredVolume { get => storedVolume; }
     [SerializeField] private float storedVolume;
-    public bool Overburdened { get => storedVolume > volume.AppliedValue; }
+    public bool Overburdened { get => storedVolume > volume; }
 
-    public int Precision { get => precision; }
+    public int Precision { get => precision; set { precision = value; RecalculateStoredVolume (); } }
     [SerializeField] private int precision;
 
     public CappedSingleInventory (int maxQuantity, float volume) : this (maxQuantity, volume, 1) { }
-    public CappedSingleInventory (int maxQuantity, float volume, int precision) : this (maxQuantity, new Stat (StatNames.InventoryVolume, volume), precision) { }
-    public CappedSingleInventory (int maxQuantity, Stat volume, int precision) : this (null, 0, maxQuantity, volume, precision) { }
-    public CappedSingleInventory (ItemSO item, int quantity, int maxQuantity, Stat volume, int precision) {
+    public CappedSingleInventory (int maxQuantity, float volume, int precision) : this (null, 0, maxQuantity, volume, precision) { }
+    public CappedSingleInventory (ItemSO item, int quantity, int maxQuantity, float volume, int precision) {
         this.item = item;
         this.quantity = quantity;
         this.maxQuantity = maxQuantity;
@@ -38,7 +37,7 @@ public class CappedSingleInventory : IInventory, ISaveTo<CappedSingleInventorySa
         item = ItemManager.Instance.GetItem (saveData.ItemId);
         quantity = saveData.Quantity;
         maxQuantity = saveData.MaxQuantity;
-        volume = saveData.Volume.Load ();
+        volume = saveData.Volume;
         precision = saveData.Precision;
     }
 
@@ -49,7 +48,7 @@ public class CappedSingleInventory : IInventory, ISaveTo<CappedSingleInventorySa
         if (Overburdened) return 0;
         Optimize ();
         if (this.item != null && this.item != item) return 0;
-        float remainingVolume = RoundToPrecision (volume.AppliedValue - storedVolume);
+        float remainingVolume = RoundToPrecision (volume - storedVolume);
         int canFit = (int) (remainingVolume / item.Volume);
         int remainingQuantity = maxQuantity - this.quantity;
         int added = Math.Min (canFit, Math.Min (remainingQuantity, quantity));
@@ -83,7 +82,7 @@ public class CappedSingleInventory : IInventory, ISaveTo<CappedSingleInventorySa
             ItemId = item.Id,
             Quantity = quantity,
             MaxQuantity = maxQuantity,
-            Volume = volume.Save (),
+            Volume = volume,
             Precision = precision,
         };
     }
@@ -94,7 +93,7 @@ public class CappedSingleInventorySaveData : ILoadTo<CappedSingleInventory> {
     public string ItemId;
     public int Quantity;
     public int MaxQuantity;
-    public StatSaveData Volume;
+    public float Volume;
     public int Precision;
 
     public CappedSingleInventory Load () => new CappedSingleInventory (this);

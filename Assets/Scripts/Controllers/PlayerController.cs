@@ -9,34 +9,28 @@ public class PlayerController : SingletonBase<PlayerController> {
     [SerializeField] private Structure _player;
     public Structure Player { get => _player; set => _player = value; }
 
-    public EventHandler SelectedChanged;
-    public EventHandler LocksChanged;
-    public EventHandler LockSelected;
+    public EventHandler OnSelectedChanged;
+    public EventHandler OnLockSelected;
+    public EventHandler OnLocksChanged;
 
     private GraphicRaycaster _graphicRaycaster;
     private EventSystem _eventSystem;
 
     private ReverseButton _reverseButtonUI;
 
-    private void Awake () {
+    private void Start () {
         _graphicRaycaster = FindObjectOfType<GraphicRaycaster> ();
         _eventSystem = EventSystem.current;
 
         _reverseButtonUI = ReverseButton.Instance;
-
-        FireAllButton.Instance.FireAll += FireAll;
-
-        LockSelected += (sender, args) => { if (Player != null) Player.Lock (Player.Selected); };
     }
 
     private void Update () {
         if (Player == null) return;
 
         if (Input.GetMouseButtonDown (0) && !ClickingUI ()) {
-            RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-
-            if (Physics.Raycast (ray, out hit)) {
+            if (Physics.Raycast (ray, out RaycastHit hit)) {
                 if (hit.collider.transform.parent != null) {
                     GameObject obj = hit.collider.transform.parent.gameObject;
                     Structure str = obj.GetComponent<Structure> ();
@@ -48,8 +42,14 @@ public class PlayerController : SingletonBase<PlayerController> {
         if (_reverseButtonUI.Reversing) SetFwd (-1);
     }
 
-    private void OnDestroy () {
-        if (FireAllButton.Instance != null) FireAllButton.Instance.FireAll -= FireAll;
+    private void OnEnable () {
+        FireAllButton.Instance.OnClicked += FireAll;
+        OnLockSelected += LockSelected;
+    }
+
+    private void OnDisable () {
+        if (FireAllButton.Instance != null) FireAllButton.Instance.OnClicked -= FireAll;
+        OnLockSelected -= LockSelected;
     }
 
     public void SetFwd (float setting) {
@@ -83,6 +83,10 @@ public class PlayerController : SingletonBase<PlayerController> {
             data.Equipment.OnClicked (data.Slot);
             data.Activated = true;
         });
+    }
+
+    private void LockSelected (object sender, EventArgs args) {
+        if (Player != null) Player.Lock (Player.Selected);
     }
 
     private bool ClickingUI () {

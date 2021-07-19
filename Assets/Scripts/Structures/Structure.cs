@@ -4,19 +4,13 @@ using System.Linq;
 using UnityEngine;
 
 public class Structure : MonoBehaviour {
-    public StructureSO Profile {
-        get => _profile;
-    }
+    public StructureSO Profile { get => _profile; }
     [SerializeField] private StructureSO _profile;
 
-    public string Id {
-        get => _id;
-    }
+    public string Id { get => _id; }
     [SerializeField] private string _id;
 
-    public StatList Stats {
-        get => stats;
-    }
+    public StatList Stats { get => stats; }
     [SerializeField] private StatList stats = new StatList ();
 
     public float Hull {
@@ -38,14 +32,10 @@ public class Structure : MonoBehaviour {
     }
     [SerializeReference, Expandable] private Faction _faction;
 
-    public List<EquipmentSlot> Equipment {
-        get => _equipmentSlots;
-    }
+    public List<EquipmentSlot> Equipment { get => _equipmentSlots; }
     [SerializeField] private List<EquipmentSlot> _equipmentSlots = new List<EquipmentSlot> ();
 
-    public Inventory Inventory {
-        get => _inventory;
-    }
+    public Inventory Inventory { get => _inventory; }
     [SerializeReference] private Inventory _inventory;
 
     public AI AI {
@@ -59,7 +49,7 @@ public class Structure : MonoBehaviour {
         get => _selected;
         set {
             _selected = value;
-            if (PlayerController.Instance.Player == this) PlayerController.Instance.SelectedChanged?.Invoke (this, EventArgs.Empty);
+            if (PlayerController.Instance.Player == this) PlayerController.Instance.OnSelectedChanged?.Invoke (this, EventArgs.Empty);
         }
     }
     [SerializeField] private Structure _selected;
@@ -76,9 +66,7 @@ public class Structure : MonoBehaviour {
     }
     [SerializeField] private Sector _sector;
 
-    public HashSet<Structure> Detected {
-        get => detected ?? (detected = StructureManager.Instance.GetDetected (this));
-    }
+    public HashSet<Structure> Detected { get => detected ?? (detected = StructureManager.Instance.GetDetected (this)); }
     [SerializeField] private HashSet<Structure> detected;
 
     [SerializeField] private List<Structure> _docked;
@@ -117,11 +105,21 @@ public class Structure : MonoBehaviour {
         }
 
         if (_inventory == null) _inventory = new Inventory (stats.GetAppliedValue (StatNames.InventoryVolume, 0), 1);
-        _inventory.Synchronize (this);
+        SynchronizeInventoryVolume (this, EventArgs.Empty);
 
         StructureInventoryAdder adder = GetComponent<StructureInventoryAdder> ();
         if (adder != null) adder.Run (this);
     }
+
+    private void OnEnable () {
+        stats.GetStat (StatNames.InventoryVolume, 0).OnValueChanged += SynchronizeInventoryVolume;
+    }
+
+    private void OnDisable () {
+        stats.GetStat (StatNames.InventoryVolume, 0).OnValueChanged -= SynchronizeInventoryVolume;
+    }
+
+    private void SynchronizeInventoryVolume (object sender, EventArgs args) => _inventory.Volume = stats.GetAppliedValue (StatNames.InventoryVolume, 0);
 
     public float GetProfileValue (string name, float baseValue) {
         if (_profile == null || _profile.Stats == null) return baseValue;
@@ -262,7 +260,7 @@ public class Structure : MonoBehaviour {
         }
         if (lockChanged) {
             PlayerController pc = PlayerController.Instance;
-            if (pc.Player == this) pc.LocksChanged.Invoke (this, EventArgs.Empty);
+            if (pc.Player == this) pc.OnLocksChanged.Invoke (this, EventArgs.Empty);
         }
     }
 
@@ -273,7 +271,7 @@ public class Structure : MonoBehaviour {
         if (Locks.Keys.Count >= stats.GetAppliedValue (StatNames.MaxTargetLocks, 0)) return false;
         Locks[target] = 0;
         PlayerController pc = PlayerController.Instance;
-        if (pc.Player == this) pc.LocksChanged.Invoke (this, EventArgs.Empty);
+        if (pc.Player == this) pc.OnLocksChanged.Invoke (this, EventArgs.Empty);
         return true;
     }
 
@@ -282,7 +280,7 @@ public class Structure : MonoBehaviour {
         if (!Locks.ContainsKey (target)) return false;
         Locks.Remove (target);
         PlayerController pc = PlayerController.Instance;
-        if (pc.Player == this) pc.LocksChanged.Invoke (this, EventArgs.Empty);
+        if (pc.Player == this) pc.OnLocksChanged.Invoke (this, EventArgs.Empty);
         return true;
     }
 
@@ -300,6 +298,8 @@ public class Structure : MonoBehaviour {
         foreach (EquipmentSlot slot in _equipmentSlots) slot.Tick ();
 
         stats.Tick ();
+
+        _inventory.Volume = stats.GetAppliedValue (StatNames.InventoryVolume, 0);
     }
 
     public void FixedTick () {

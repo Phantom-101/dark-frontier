@@ -7,20 +7,19 @@ using UnityEngine;
 public class Inventory : IInventory, ISaveTo<InventorySaveData> {
     [SerializeField] private ItemSOToIntDictionary quantities;
 
-    public float Volume { get => volume.AppliedValue; }
-    [SerializeField] private Stat volume;
+    public float Volume { get => volume; set => volume = value; }
+    [SerializeField] private float volume;
 
     public float StoredVolume { get => storedVolume; }
     [SerializeField] private float storedVolume;
-    public bool Overburdened { get => storedVolume > volume.AppliedValue; }
+    public bool Overburdened { get => storedVolume > volume; }
 
-    public int Precision { get => precision; }
+    public int Precision { get => precision; set { precision = value; RecalculateStoredVolume (); } }
     [SerializeField] private int precision;
 
     public Inventory (float volume) : this (volume, 1) { }
-    public Inventory (float volume, int precision) : this (new Stat (StatNames.InventoryVolume, volume), precision) { }
-    public Inventory (Stat volume, int precision) : this (new ItemSOToIntDictionary (), volume, precision) { }
-    public Inventory (ItemSOToIntDictionary quantities, Stat volume, int precision) {
+    public Inventory (float volume, int precision) : this (new ItemSOToIntDictionary (), volume, precision) { }
+    public Inventory (ItemSOToIntDictionary quantities, float volume, int precision) {
         this.quantities = quantities;
         this.volume = volume;
         this.precision = precision;
@@ -28,7 +27,7 @@ public class Inventory : IInventory, ISaveTo<InventorySaveData> {
     }
     public Inventory (InventorySaveData saveData) {
         quantities = saveData.Quantities.ToDictionary (p => ItemManager.Instance.GetItem (p.Key), p => p.Value).ToSerializable<ItemSO, int, ItemSOToIntDictionary> ();
-        volume = saveData.Volume.Load ();
+        volume = saveData.Volume;
         precision = saveData.Precision;
     }
 
@@ -37,7 +36,7 @@ public class Inventory : IInventory, ISaveTo<InventorySaveData> {
 
     public int AddQuantity (ItemSO item, int quantity) {
         if (Overburdened) return 0;
-        float remainingVolume = RoundToPrecision (volume.AppliedValue - storedVolume);
+        float remainingVolume = RoundToPrecision (volume - storedVolume);
         int canFit = (int) (remainingVolume / item.Volume);
         int added = Math.Min (canFit, quantity);
         quantities[item] = GetQuantity (item) + added;
@@ -55,8 +54,6 @@ public class Inventory : IInventory, ISaveTo<InventorySaveData> {
 
     public List<ItemSO> GetStoredItems () => quantities.Keys.ToList ();
 
-    public void Synchronize (Structure structure) => volume = structure.Stats.GetStat (StatNames.InventoryVolume, 0);
-
     private void Optimize () => quantities.Where (pair => pair.Value == 0).ToList ().ForEach (pair => quantities.Remove (pair.Key));
     private float RoundToPrecision (float value) => (float) Math.Round (value, precision);
     private float GetVolume (ItemSO item, int amount) => RoundToPrecision (RoundToPrecision (item.Volume) * amount);
@@ -72,7 +69,7 @@ public class Inventory : IInventory, ISaveTo<InventorySaveData> {
     public InventorySaveData Save () {
         return new InventorySaveData {
             Quantities = quantities.ToDictionary (p => p.Key.Id, p => p.Value),
-            Volume = volume.Save (),
+            Volume = volume,
             Precision = precision,
         };
     }
@@ -81,7 +78,7 @@ public class Inventory : IInventory, ISaveTo<InventorySaveData> {
 [Serializable]
 public class InventorySaveData : ILoadTo<Inventory> {
     public Dictionary<string, int> Quantities;
-    public StatSaveData Volume;
+    public float Volume;
     public int Precision;
 
     public Inventory Load () => new Inventory (this);

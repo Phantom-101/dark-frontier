@@ -18,7 +18,7 @@ public class SelectedInfoUI : MonoBehaviour {
     [SerializeField] private float _targetAlpha;
 
     private void Start () {
-        _lock.onClick.AddListener (() => PlayerController.Instance.LockSelected?.Invoke (this, EventArgs.Empty));
+        _lock.onClick.AddListener (() => PlayerController.Instance.OnLockSelected?.Invoke (this, EventArgs.Empty));
         _targetAlpha = _group.alpha;
     }
 

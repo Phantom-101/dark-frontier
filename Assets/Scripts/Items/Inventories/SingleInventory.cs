@@ -10,20 +10,19 @@ public class SingleInventory : IInventory, ISaveTo<SingleInventorySaveData> {
     public int Quantity { get => quantity; }
     [SerializeField] private int quantity;
 
-    public float Volume { get => volume.AppliedValue; }
-    [SerializeField] private Stat volume;
+    public float Volume { get => volume; set => volume = value; }
+    [SerializeField] private float volume;
 
     public float StoredVolume { get => storedVolume; }
     [SerializeField] private float storedVolume;
-    public bool Overburdened { get => storedVolume > volume.AppliedValue; }
+    public bool Overburdened { get => storedVolume > volume; }
 
-    public int Precision { get => precision; }
+    public int Precision { get => precision; set { precision = value; RecalculateStoredVolume (); } }
     [SerializeField] private int precision;
 
     public SingleInventory (float volume) : this (volume, 1) { }
-    public SingleInventory (float volume, int precision) : this (new Stat (StatNames.InventoryVolume, volume), precision) { }
-    public SingleInventory (Stat volume, int precision) : this (null, 0, volume, precision) { }
-    public SingleInventory (ItemSO item, int quantity, Stat volume, int precision) {
+    public SingleInventory (float volume, int precision) : this (null, 0, volume, precision) { }
+    public SingleInventory (ItemSO item, int quantity, float volume, int precision) {
         this.item = item;
         this.quantity = quantity;
         this.volume = volume;
@@ -33,7 +32,7 @@ public class SingleInventory : IInventory, ISaveTo<SingleInventorySaveData> {
     public SingleInventory (SingleInventorySaveData saveData) {
         item = ItemManager.Instance.GetItem (saveData.ItemId);
         quantity = saveData.Quantity;
-        volume = saveData.Volume.Load ();
+        volume = saveData.Volume;
         precision = saveData.Precision;
     }
 
@@ -44,7 +43,7 @@ public class SingleInventory : IInventory, ISaveTo<SingleInventorySaveData> {
         if (Overburdened) return 0;
         Optimize ();
         if (this.item != null && this.item != item) return 0;
-        float remainingVolume = RoundToPrecision (volume.AppliedValue - storedVolume);
+        float remainingVolume = RoundToPrecision (volume - storedVolume);
         int canFit = (int) (remainingVolume / item.Volume);
         int added = Math.Min (canFit, quantity);
         this.quantity += added;
@@ -75,7 +74,7 @@ public class SingleInventory : IInventory, ISaveTo<SingleInventorySaveData> {
         return new SingleInventorySaveData {
             ItemId = item.Id,
             Quantity = quantity,
-            Volume = volume.Save (),
+            Volume = volume,
             Precision = precision,
         };
     }
@@ -85,7 +84,7 @@ public class SingleInventory : IInventory, ISaveTo<SingleInventorySaveData> {
 public class SingleInventorySaveData : ILoadTo<SingleInventory> {
     public string ItemId;
     public int Quantity;
-    public StatSaveData Volume;
+    public float Volume;
     public int Precision;
 
     public SingleInventory Load () => new SingleInventory (this);

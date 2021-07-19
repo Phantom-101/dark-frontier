@@ -6,9 +6,7 @@ using UnityEngine;
 [Serializable]
 public class Stat : ISaveTo<StatSaveData> {
     // The name of this stat
-    public string Name {
-        get => name;
-    }
+    public string Name { get => name; }
     [SerializeField] private string name;
 
     // The value upon which modifiers make their modifications
@@ -17,25 +15,23 @@ public class Stat : ISaveTo<StatSaveData> {
         set {
             baseValue = value;
             appliedValue = null;
+            OnValueChanged?.Invoke (this, EventArgs.Empty);
         }
     }
     [SerializeField] private float baseValue;
 
     // The effective value of this stat after all modifiers have been taken into account
-    public float AppliedValue {
-        get => appliedValue ?? (appliedValue = GetAppliedValue ()).Value;
-    }
+    public float AppliedValue { get => appliedValue ?? (appliedValue = GetAppliedValue ()).Value; }
     [SerializeField] private float? appliedValue;
 
     // Collection of modifiers which modify the base value
-    public List<StatModifier> Modifiers {
-        get => modifiers;
-    }
+    public List<StatModifier> Modifiers { get => modifiers; }
     [SerializeField] private List<StatModifier> modifiers = new List<StatModifier> ();
-    public Dictionary<string, StatModifier> ModifiersDictionary {
-        get => modifiersDictionary ?? (modifiersDictionary = modifiers.ToDictionary (m => m.Id, m => m));
-    }
+    public Dictionary<string, StatModifier> ModifiersDictionary { get => modifiersDictionary ?? (modifiersDictionary = modifiers.ToDictionary (m => m.Id, m => m)); }
     private Dictionary<string, StatModifier> modifiersDictionary;
+
+    // Event handler for on changed functionality
+    public EventHandler OnValueChanged;
 
     public Stat (string name) : this (name, 0) { }
     public Stat (string name, float baseValue) : this (name, baseValue, new List<StatModifier> ()) { }
@@ -55,6 +51,7 @@ public class Stat : ISaveTo<StatSaveData> {
             modifiers.Add (modifier);
             appliedValue = null;
             modifiersDictionary = null;
+            OnValueChanged?.Invoke (this, EventArgs.Empty);
         }
     }
 
@@ -63,6 +60,7 @@ public class Stat : ISaveTo<StatSaveData> {
         if (modifiers.RemoveAll (m => m.Id == modifier.Id) > 0) {
             appliedValue = null;
             modifiersDictionary = null;
+            OnValueChanged?.Invoke (this, EventArgs.Empty);
         }
     }
 
@@ -70,6 +68,7 @@ public class Stat : ISaveTo<StatSaveData> {
         if (modifiers.RemoveAll (m => m.Id == id) > 0) {
             appliedValue = null;
             modifiersDictionary = null;
+            OnValueChanged?.Invoke (this, EventArgs.Empty);
         }
     }
 
