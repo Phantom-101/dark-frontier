@@ -1,7 +1,9 @@
-﻿using System;
+﻿using DarkFrontier.Structures;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 [CreateAssetMenu (menuName = "Items/Equipment/Weapons/Hangar Bay")]
 public class HangarBaySO : EquipmentSO {
@@ -33,7 +35,7 @@ public class HangarBaySO : EquipmentSO {
         };
     }
 
-    public override void Tick (EquipmentSlot slot) {
+    public override void Tick (EquipmentSlot slot, float dt) {
         EnsureDataType (slot);
 
         HangarBaySlotData data = slot.Data as HangarBaySlotData;
@@ -67,10 +69,10 @@ public class HangarBaySO : EquipmentSO {
             }
         }
 
-        data.LaunchSlots.ForEach (s => s.Tick (slot));
+        data.LaunchSlots.ForEach (s => s.Tick (slot, dt));
     }
 
-    public override void FixedTick (EquipmentSlot slot) { }
+    public override void FixedTick (EquipmentSlot slot, float dt) { }
 
     public override bool CanClick (EquipmentSlot slot) {
         HangarBaySlotData data = slot.Data as HangarBaySlotData;
@@ -148,12 +150,19 @@ public class HangarBaySlotSaveData : EquipmentSlotSaveData {
     public string TargetId;
     public List<HangarBayLaunchSlotSaveData> LaunchSlots;
 
+    private StructureManager structureManager;
+
+    [Inject]
+    public void Construct (StructureManager structureManager) {
+        this.structureManager = structureManager;
+    }
+
     public override EquipmentSlotData Load () {
         return new HangarBaySlotData {
             Equipment = ItemManager.Instance.GetItem (EquipmentId) as EquipmentSO,
             Durability = Durability,
             Activated = Activated,
-            Target = StructureManager.Instance.GetStructure (TargetId),
+            Target = structureManager.GetStructure (TargetId),
             LaunchSlots = LaunchSlots.ConvertAll (s => s.Load ()),
         };
     }
@@ -180,6 +189,13 @@ public class HangarBayLaunchSlot : ISaveTo<HangarBayLaunchSlotSaveData> {
     public Structure Structure { get => structure; }
     [SerializeField] private Structure structure;
 
+    private StructureManager structureManager;
+
+    [Inject]
+    public void Construct (StructureManager structureManager) {
+        this.structureManager = structureManager;
+    }
+
     public HangarBayLaunchSlot () { }
     public HangarBayLaunchSlot (HangarBayLaunchSlotSaveData saveData) {
         state = saveData.State;
@@ -187,7 +203,7 @@ public class HangarBayLaunchSlot : ISaveTo<HangarBayLaunchSlotSaveData> {
         loadingProgress = saveData.LoadingProgress;
         fuelingProgress = saveData.FuelingProgress;
         launchingProgress = saveData.LaunchingProgress;
-        structure = StructureManager.Instance.GetStructure (saveData.StructureId);
+        structure = structureManager.GetStructure (saveData.StructureId);
     }
 
     public bool Load (HangarLaunchableSO launchable) {
@@ -197,7 +213,7 @@ public class HangarBayLaunchSlot : ISaveTo<HangarBayLaunchSlotSaveData> {
         return true;
     }
 
-    public void Tick (EquipmentSlot slot) {
+    public void Tick (EquipmentSlot slot, float dt) {
         HangarBaySO hangarBay = slot.Data.Equipment as HangarBaySO;
         HangarBaySlotData data = slot.Data as HangarBaySlotData;
 
@@ -208,13 +224,13 @@ public class HangarBayLaunchSlot : ISaveTo<HangarBayLaunchSlotSaveData> {
             fuelingProgress = 0;
             launchingProgress = 0;
             // If for some reason structure is non-null, destroy it
-            if (structure != null) StructureManager.Instance.DisposeStructure (structure);
+            if (structure != null) structureManager.DisposeStructure (structure);
         } else if (state == HangarBayLaunchSlotState.Unloading) {
             if (launchable == null) {
                 state = HangarBayLaunchSlotState.Unloaded;
                 return;
             }
-            loadingProgress = Mathf.Max (loadingProgress - hangarBay.LoadingSpeed * Time.deltaTime, 0);
+            loadingProgress = Mathf.Max (loadingProgress - hangarBay.LoadingSpeed * dt, 0);
             // If unloaded
             if (loadingProgress == 0) {
                 // If equipper has enough inventory space to hold the craft
@@ -228,7 +244,7 @@ public class HangarBayLaunchSlot : ISaveTo<HangarBayLaunchSlotSaveData> {
                 state = HangarBayLaunchSlotState.Unloaded;
                 return;
             }
-            loadingProgress = Mathf.Min (loadingProgress + hangarBay.LoadingSpeed * Time.deltaTime, launchable.LoadingPreparation);
+            loadingProgress = Mathf.Min (loadingProgress + hangarBay.LoadingSpeed * dt, launchable.LoadingPreparation);
             // If loaded
             if (loadingProgress == launchable.LoadingPreparation) {
                 // Set state to loaded
@@ -243,17 +259,17 @@ public class HangarBayLaunchSlot : ISaveTo<HangarBayLaunchSlotSaveData> {
             loadingProgress = launchable.LoadingPreparation;
             launchingProgress = 0;
             // Add fuel
-            fuelingProgress = Mathf.Min (fuelingProgress + hangarBay.FuelingSpeed * Time.deltaTime, launchable.FuelCapacity);
+            fuelingProgress = Mathf.Min (fuelingProgress + hangarBay.FuelingSpeed * dt, launchable.FuelCapacity);
         } else if (state == HangarBayLaunchSlotState.Launching) {
             if (launchable == null) {
                 state = HangarBayLaunchSlotState.Unloaded;
                 return;
             }
-            launchingProgress = Mathf.Min (launchingProgress + hangarBay.LoadingSpeed * Time.deltaTime, launchable.LaunchingPreparation);
+            launchingProgress = Mathf.Min (launchingProgress + hangarBay.LoadingSpeed * dt, launchable.LaunchingPreparation);
             // If launched
             if (launchingProgress == launchable.LaunchingPreparation) {
                 // Spawn structure
-                structure = StructureManager.Instance.SpawnStructure (launchable, slot.Equipper.Faction, slot.Equipper.Sector, new Location (slot.LocalPosition));
+                structure = structureManager.SpawnStructure (launchable, slot.Equipper.Faction, slot.Equipper.Sector, new Location (slot.LocalPosition));
                 HangarManagedCraftAI ai = ScriptableObject.CreateInstance<HangarManagedCraftAI> ();
                 ai.Launchable = launchable;
                 ai.HangarBay = data;
@@ -312,7 +328,7 @@ public class HangarBayLaunchSlot : ISaveTo<HangarBayLaunchSlotSaveData> {
             // If landed
             if (launchingProgress == 0) {
                 // Destroy structure
-                StructureManager.Instance.DisposeStructure (structure);
+                structureManager.DisposeStructure (structure);
                 // Set state to loaded
                 state = HangarBayLaunchSlotState.Loaded;
             }

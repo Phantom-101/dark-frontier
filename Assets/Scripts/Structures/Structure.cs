@@ -1,9 +1,11 @@
-﻿using System;
+﻿using DarkFrontier.Structures;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
-public class Structure : MonoBehaviour {
+public class Structure : BehaviorBase {
     public StructureSO Profile { get => _profile; }
     [SerializeField] private StructureSO _profile;
 
@@ -20,7 +22,7 @@ public class Structure : MonoBehaviour {
             if (hull <= 0) {
                 if (Faction != null) Faction.RemoveProperty (this);
                 if (Sector != null) Sector.Exited (this);
-                StructureManager.Instance.DestroyStructure (this);
+                structureManager.DestroyStructure (this);
             }
         }
     }
@@ -66,7 +68,7 @@ public class Structure : MonoBehaviour {
     }
     [SerializeField] private Sector _sector;
 
-    public HashSet<Structure> Detected { get => detected ?? (detected = StructureManager.Instance.GetDetected (this)); }
+    public HashSet<Structure> Detected { get => detected ?? (detected = structureManager.GetDetected (this)); }
     [SerializeField] private HashSet<Structure> detected;
 
     public DockingBayList DockingBays { get => dockingBays; }
@@ -76,62 +78,115 @@ public class Structure : MonoBehaviour {
     [SerializeField] private Structure dockee;
     public bool IsDocked { get => dockee != null; }
 
-    [SerializeField] private bool _initialized;
+    private new Rigidbody rigidbody;
 
-    private Rigidbody _rb;
+    private StructureRegistry registry;
+    private StructureManager structureManager;
 
-    private void Start () {
-        Initialize ();
+    [Inject]
+    public void Construct (StructureRegistry registry, StructureManager structureManager) {
+        this.registry = registry;
+        this.structureManager = structureManager;
     }
 
-    public void Initialize () {
-        if (_initialized) return;
+    protected override void SingleInitialize () {
+        rigidbody = GetComponent<Rigidbody> ();
 
-        _initialized = true;
+        registry.Add (this);
+        structureManager.TryManage (this);
 
         if (transform.parent != null) {
             _sector = GetComponentInParent<Sector> ();
             if (_sector != null) _sector.Entered (this);
         }
-        _rb = GetComponent<Rigidbody> ();
-
-        StructureManager.Instance.AddStructure (this);
-
-        if (string.IsNullOrEmpty (_id)) _id = Guid.NewGuid ().ToString ();
-
-        EnsureStats ();
-
-        if (_ai == null) _ai = ScriptableObject.CreateInstance<AI> ();
-        else _ai = _ai.Copy ();
 
         if (_faction != null) {
             FactionManager.Instance.AddFaction (_faction);
             _faction.AddProperty (this);
         }
 
-        if (_inventory == null) _inventory = new Inventory (stats.GetAppliedValue (StatNames.InventoryVolume, 0), 1);
-        SynchronizeInventoryVolume (this, EventArgs.Empty);
+        EnsureStats ();
 
-        if (dockingBays == null) dockingBays = _profile.DockingBays.Copy (this);
+        if (_inventory == null) _inventory = new Inventory (stats.GetAppliedValue (StatNames.InventoryVolume, 0), 1);
+
+        if (_ai == null) _ai = ScriptableObject.CreateInstance<AI> ();
+        else _ai = _ai.Copy ();
 
         StructureInventoryAdder adder = GetComponent<StructureInventoryAdder> ();
         if (adder != null) adder.Run (this);
     }
 
-    private void OnEnable () {
+    protected override void MultiInitialize () {
+        SynchronizeInventoryVolume (this, EventArgs.Empty);
+        // Stop slots from ticking themselves
+        foreach (EquipmentSlot slot in _equipmentSlots) slot.Manager = manager;
+    }
+
+    protected override void InternalTick (float dt) {
+        ManageSelectedAndLocks ();
+        TickLocks ();
+
+        foreach (EquipmentSlot slot in _equipmentSlots) slot.Tick (dt);
+
+        stats.Tick (dt);
+    }
+
+    protected override void InternalExpensiveTick (float dt) {
+        detected = null;
+
+        if (_aiEnabled) _ai.Tick (this, dt);
+    }
+
+    protected override void InternalFixedTick (float dt) {
+        foreach (EquipmentSlot slot in _equipmentSlots) slot.FixedTick (dt);
+
+        if (_profile.SnapToPlane) {
+            // Set position and rotation
+            transform.LeanSetLocalPosY (0);
+            transform.localEulerAngles = new Vector3 (0, transform.eulerAngles.y, rigidbody.angularVelocity.y * -25);
+        }
+    }
+
+    public override bool Validate () {
+        // Should have dependencies
+        if (registry == null) return false;
+        if (structureManager == null) return false;
+        // Should have profile
+        if (_profile == null) return false;
+        // Should have parent
+        if (transform.parent == null) return false;
+        // Should have valid id
+        if (string.IsNullOrEmpty (_id)) _id = Guid.NewGuid ().ToString ();
+        // Should have sector in parent tree
+        if (_sector == null) {
+            _sector = GetComponentInParent<Sector> ();
+            if (_sector == null) return false;
+            _sector.Entered (this);
+        }
+        // Should have a manager
+        if (manager == null) {
+            structureManager.TryManage (this);
+        }
+        // Should have stats
+        EnsureStats ();
+        // Should have inventory
+        if (_inventory == null) _inventory = new Inventory (stats.GetAppliedValue (StatNames.InventoryVolume, 0), 1);
+        // Should have AI
+        if (_ai == null) _ai = ScriptableObject.CreateInstance<AI> ();
+        // Should have docking bays
+        if (dockingBays == null) dockingBays = _profile.DockingBays.Copy (this);
+        return true;
+    }
+
+    protected override void SubscribeEventListeners () {
         stats.GetStat (StatNames.InventoryVolume, 0).OnValueChanged += SynchronizeInventoryVolume;
     }
 
-    private void OnDisable () {
+    protected override void UnsubscribeEventListeners () {
         stats.GetStat (StatNames.InventoryVolume, 0).OnValueChanged -= SynchronizeInventoryVolume;
     }
 
     private void SynchronizeInventoryVolume (object sender, EventArgs args) => _inventory.Volume = stats.GetAppliedValue (StatNames.InventoryVolume, 0);
-
-    public float GetProfileValue (string name, float baseValue) {
-        if (_profile == null || _profile.Stats == null) return baseValue;
-        return _profile.Stats.GetBaseValue (name, baseValue);
-    }
 
     public List<T> GetEquipmentData<T> () where T : EquipmentSlotData {
         List<T> data = new List<T> ();
@@ -215,7 +270,7 @@ public class Structure : MonoBehaviour {
         return Vector3.SignedAngle (transform.forward, heading, -transform.right);
     }
 
-    public void ManageSelectedAndLocks () {
+    private void ManageSelectedAndLocks () {
         if (Selected != null && !Detected.Contains (Selected)) Selected = null;
         bool lockChanged = false;
         foreach (Structure target in Locks.Keys.ToArray ()) {
@@ -250,38 +305,11 @@ public class Structure : MonoBehaviour {
         return true;
     }
 
-    public void TickLocks () {
+    private void TickLocks () {
         foreach (Structure target in Locks.Keys.ToArray ()) {
             float progress = stats.GetAppliedValue (StatNames.ScannerStrength, 0) * target.Stats.GetAppliedValue (StatNames.SignatureSize, 0) * Time.deltaTime;
             Locks[target] = Mathf.Min (Locks[target] + progress, 100);
         }
-    }
-
-    public void Tick () {
-        ManageSelectedAndLocks ();
-        TickLocks ();
-
-        foreach (EquipmentSlot slot in _equipmentSlots) slot.Tick ();
-
-        stats.Tick ();
-
-        _inventory.Volume = stats.GetAppliedValue (StatNames.InventoryVolume, 0);
-    }
-
-    public void FixedTick () {
-        foreach (EquipmentSlot slot in _equipmentSlots) slot.FixedTick ();
-
-        if (_profile.SnapToPlane) {
-            // Set position and rotation
-            transform.LeanSetLocalPosY (0);
-            transform.localEulerAngles = new Vector3 (0, transform.eulerAngles.y, _rb.angularVelocity.y * -25);
-        }
-    }
-
-    public void ExpensiveTick () {
-        detected = null;
-
-        if (_aiEnabled) _ai.Tick (this);
     }
 
     private void EnsureStats () {

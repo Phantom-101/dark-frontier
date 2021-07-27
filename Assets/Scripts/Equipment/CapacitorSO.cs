@@ -30,16 +30,16 @@ public class CapacitorSO : EquipmentSO {
         };
     }
 
-    public override void Tick (EquipmentSlot slot) {
+    public override void Tick (EquipmentSlot slot, float dt) {
         EnsureDataType (slot);
 
         CapacitorSlotData data = slot.Data as CapacitorSlotData;
 
-        data.ChargeLeft = MaxChargeRate * Time.deltaTime;
-        data.DischargeLeft = MaxDischargeRate * Time.deltaTime;
+        data.ChargeLeft = MaxChargeRate * dt;
+        data.DischargeLeft = MaxDischargeRate * dt;
     }
 
-    public override void FixedTick (EquipmentSlot slot) { }
+    public override void FixedTick (EquipmentSlot slot, float dt) { }
 
     public override bool CanClick (EquipmentSlot slot) { return false; }
 

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using DarkFrontier.Structures;
+using System;
 using System.IO;
 using UnityEngine;
+using Zenject;
 
 public class SaveManager : MonoBehaviour {
     [SerializeField] private string _universe;
@@ -9,6 +11,13 @@ public class SaveManager : MonoBehaviour {
     [SerializeField] private VoidEventChannelSO _saveGameChannel;
 
     private static SaveManager _instance;
+
+    private StructureManager structureManager;
+
+    [Inject]
+    public void Construct (StructureManager structureManager) {
+        this.structureManager = structureManager;
+    }
 
     private void Awake () {
         _instance = this;
@@ -19,7 +28,7 @@ public class SaveManager : MonoBehaviour {
         if (_job != null) {
             SectorManager.Instance.LoadGame (_job.Directory);
             FactionManager.Instance.LoadGame (_job.Directory);
-            StructureManager.Instance.LoadGame (_job.Directory);
+            structureManager.LoadGame (_job.Directory);
             _universe = _job.Directory.Parent.Name;
             _job = null;
         }
@@ -36,7 +45,7 @@ public class SaveManager : MonoBehaviour {
         string timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds ().ToString ();
         DirectoryInfo info = PathManager.GetSaveDirectory (_universe, timestamp);
         if (!info.Exists) info.Create ();
-        StructureManager.Instance.SaveGame (info);
+        structureManager.SaveGame (info);
         SectorManager.Instance.SaveGame (info);
         FactionManager.Instance.SaveGame (info);
     }

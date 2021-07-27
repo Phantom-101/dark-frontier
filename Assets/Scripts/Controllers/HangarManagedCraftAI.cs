@@ -4,7 +4,7 @@ public class HangarManagedCraftAI : AI {
     public HangarLaunchableSO Launchable;
     public HangarBaySlotData HangarBay;
 
-    public override void Tick (Structure structure) {
+    public override void Tick (Structure structure, float dt) {
         if (Launchable == null || HangarBay.Slot == null) {
             structure.Hull = 0;
             return;

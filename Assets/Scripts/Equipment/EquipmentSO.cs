@@ -9,8 +9,8 @@ public abstract class EquipmentSO : ItemSO {
     public abstract void OnAwake (EquipmentSlot slot);
     public abstract void OnEquip (EquipmentSlot slot);
     public abstract void OnUnequip (EquipmentSlot slot);
-    public abstract void Tick (EquipmentSlot slot);
-    public abstract void FixedTick (EquipmentSlot slot);
+    public abstract void Tick (EquipmentSlot slot, float dt);
+    public abstract void FixedTick (EquipmentSlot slot, float dt);
     public abstract bool CanClick (EquipmentSlot slot);
     public abstract void OnClicked (EquipmentSlot slot);
     public abstract void EnsureDataType (EquipmentSlot slot);

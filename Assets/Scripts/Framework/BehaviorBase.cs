@@ -60,7 +60,10 @@ public class BehaviorBase : MonoBehaviour {
     /// <param name="dt">Time since last non-expensive tick.</param>
     /// <param name="edt">Time since last expensive tick. If null, expensive operations will not be run.</param>
     public void Tick (float dt, float? edt = null) {
-        if (!Validate ()) return;
+        if (!Validate ()) {
+            ValidateFailed ();
+            return;
+        }
         InternalTick (dt);
         if (edt != null) InternalExpensiveTick (edt.Value);
     }
@@ -75,7 +78,10 @@ public class BehaviorBase : MonoBehaviour {
     /// <param name="dt">Time since last non-expensive tick.</param>
     /// <param name="edt">Time since last expensive tick. If null, expensive operations will not be run.</param>
     public void LateTick (float dt, float? edt = null) {
-        if (!Validate ()) return;
+        if (!Validate ()) {
+            ValidateFailed ();
+            return;
+        }
         InternalLateTick (dt);
         if (edt != null) InternalExpensiveLateTick (edt.Value);
     }
@@ -90,7 +96,10 @@ public class BehaviorBase : MonoBehaviour {
     /// <param name="dt">Time since last non-expensive tick.</param>
     /// <param name="edt">Time since last expensive tick. If null, expensive operations will not be run.</param>
     public void FixedTick (float dt, float? edt = null) {
-        if (!Validate ()) return;
+        if (!Validate ()) {
+            ValidateFailed ();
+            return;
+        }
         InternalFixedTick (dt);
         if (edt != null) InternalExpensiveFixedTick (edt.Value);
     }
@@ -103,6 +112,7 @@ public class BehaviorBase : MonoBehaviour {
     /// </summary>
     /// <returns>Whether or not potential issues were successfully resolved.</returns>
     public virtual bool Validate () => true;
+    protected virtual void ValidateFailed () { }
 
     protected virtual void SubscribeEventListeners () { }
     protected virtual void UnsubscribeEventListeners () { }

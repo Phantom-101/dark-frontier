@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DarkFrontier.Structures;
+using System;
 using UnityEngine;
+using Zenject;
 
 [CreateAssetMenu (menuName = "Items/Equipment/Weapons/Miner")]
 public class MinerSO : EquipmentSO {
@@ -42,14 +44,14 @@ public class MinerSO : EquipmentSO {
         };
     }
 
-    public override void Tick (EquipmentSlot slot) {
+    public override void Tick (EquipmentSlot slot, float dt) {
         EnsureDataType (slot);
 
         MinerSlotData data = slot.Data as MinerSlotData;
 
         if (data.Activated && (data.Target == null || !slot.Equipper.Locks.ContainsKey (data.Target) || (data.Target.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range)) data.Activated = false;
 
-        data.Heat = Mathf.Clamp (data.Heat - CoolingRate * Time.deltaTime + (data.Activated ? HeatGeneration * Time.deltaTime : 0), 0, MaxHeat);
+        data.Heat = Mathf.Clamp (data.Heat - CoolingRate * dt + (data.Activated ? HeatGeneration * dt : 0), 0, MaxHeat);
 
         if (data.Activated) {
             if (data.Beam == null) data.Beam = Instantiate (BeamPrefab, slot.transform);
@@ -60,7 +62,7 @@ public class MinerSO : EquipmentSO {
                 BeamWidth / data.Beam.transform.lossyScale.y,
                 Vector3.Distance (slot.transform.position, data.Target.transform.position) / data.Beam.transform.lossyScale.z
             );
-            float consumption = EnergyConsumption * Time.deltaTime;
+            float consumption = EnergyConsumption * dt;
             float given = 0;
             slot.Equipper.GetEquipmentData<CapacitorSlotData> ().ForEach (capacitor => {
                 float chargeLeft = capacitor.Charge;
@@ -70,7 +72,7 @@ public class MinerSO : EquipmentSO {
                 capacitor.Charge -= allocated;
                 capacitor.DischargeLeft -= allocated;
             });
-            data.AccumulatedDamageMultiplier += given / consumption * Time.deltaTime;
+            data.AccumulatedDamageMultiplier += given / consumption * dt;
             /* Use raycast?
             if (Physics.Raycast (slot.Equipper.transform.position, data.Target.transform.position - slot.Equipper.transform.position, out RaycastHit hit, Range)) {
                 Structure structure = hit.transform.gameObject.GetComponentInParent<Structure> ();
@@ -87,12 +89,12 @@ public class MinerSO : EquipmentSO {
         }
 
         if (data.Heat == MaxHeat) {
-            data.Durability = Mathf.Max (data.Durability - OverheatDamage * Time.deltaTime, 0);
+            data.Durability = Mathf.Max (data.Durability - OverheatDamage * dt, 0);
             if (data.Durability == 0) OnUnequip (slot);
         }
     }
 
-    public override void FixedTick (EquipmentSlot slot) { }
+    public override void FixedTick (EquipmentSlot slot, float dt) { }
 
     public override bool CanClick (EquipmentSlot slot) {
         MinerSlotData data = slot.Data as MinerSlotData;
@@ -177,6 +179,13 @@ public class MinerSlotSaveData : EquipmentSlotSaveData {
     public bool Activated;
     public string TargetId;
 
+    private StructureManager structureManager;
+
+    [Inject]
+    public void Construct (StructureManager structureManager) {
+        this.structureManager = structureManager;
+    }
+
     public override EquipmentSlotData Load () {
         return new MinerSlotData {
             Equipment = ItemManager.Instance.GetItem (EquipmentId) as EquipmentSO,
@@ -184,7 +193,7 @@ public class MinerSlotSaveData : EquipmentSlotSaveData {
             AccumulatedDamageMultiplier = AccumulatedDamageMultiplier,
             Heat = Heat,
             Activated = Activated,
-            Target = StructureManager.Instance.GetStructure (TargetId),
+            Target = structureManager.GetStructure (TargetId),
         };
     }
 }

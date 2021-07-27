@@ -41,10 +41,10 @@ public class EngineSO : EquipmentSO {
         };
     }
 
-    public override void Tick (EquipmentSlot slot) {
+    public override void Tick (EquipmentSlot slot, float dt) {
         EnsureDataType (slot);
 
-        float consumption = GetConsumption (slot) * Time.deltaTime;
+        float consumption = GetConsumption (slot) * dt;
         float given = 0;
         slot.Equipper.GetEquipmentData<CapacitorSlotData> ().ForEach (capacitor => {
             float chargeLeft = capacitor.Charge;
@@ -58,7 +58,7 @@ public class EngineSO : EquipmentSO {
         (slot.Data as EngineSlotData).EnergySatisfaction = Mathf.Clamp01 (given / (consumption == 0 ? 1 : consumption));
     }
 
-    public override void FixedTick (EquipmentSlot slot) {
+    public override void FixedTick (EquipmentSlot slot, float dt) {
         EnsureDataType (slot);
         // Get data and references
         EngineSlotData data = slot.Data as EngineSlotData;
