@@ -61,7 +61,7 @@ public class StructureManager : SingletonBase<StructureManager> {
 
     public void DestroyStructure (Structure structure) {
         // Destroy docked structures
-        structure.GetDocked ().ForEach (e => DestroyStructure (e));
+        structure.DockingBays.Dockers.ForEach (e => DestroyStructure (e));
         // Remove structure from list
         structures.Remove (structure);
         // Spawn destruction effect
@@ -77,7 +77,7 @@ public class StructureManager : SingletonBase<StructureManager> {
 
     public void DisposeStructure (Structure structure) {
         // Destroy docked structures
-        structure.GetDocked ().ForEach (e => DisposeStructure (e));
+        structure.DockingBays.Dockers.ForEach (e => DisposeStructure (e));
         // Remove structure from list
         structures.Remove (structure);
         // Destroy structure game object

@@ -5,13 +5,9 @@ using UnityEngine;
 
 [Serializable]
 public class StatList : ISaveTo<StatListSaveData> {
-    public List<Stat> Stats {
-        get => stats;
-    }
+    public List<Stat> Stats { get => stats; }
     [SerializeField] private List<Stat> stats = new List<Stat> ();
-    public Dictionary<string, Stat> StatsDictionary {
-        get => statsDictionary ?? (statsDictionary = stats.ToDictionary (s => s.Name, s => s));
-    }
+    public Dictionary<string, Stat> StatsDictionary { get => statsDictionary ?? (statsDictionary = stats.ToDictionary (s => s.Name, s => s)); }
     private Dictionary<string, Stat> statsDictionary;
 
     public StatList () { }

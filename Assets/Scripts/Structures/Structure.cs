@@ -69,7 +69,12 @@ public class Structure : MonoBehaviour {
     public HashSet<Structure> Detected { get => detected ?? (detected = StructureManager.Instance.GetDetected (this)); }
     [SerializeField] private HashSet<Structure> detected;
 
-    [SerializeField] private List<Structure> _docked;
+    public DockingBayList DockingBays { get => dockingBays; }
+    [SerializeReference] private DockingBayList dockingBays;
+
+    public Structure Dockee { get => dockee; }
+    [SerializeField] private Structure dockee;
+    public bool IsDocked { get => dockee != null; }
 
     [SerializeField] private bool _initialized;
 
@@ -107,6 +112,8 @@ public class Structure : MonoBehaviour {
         if (_inventory == null) _inventory = new Inventory (stats.GetAppliedValue (StatNames.InventoryVolume, 0), 1);
         SynchronizeInventoryVolume (this, EventArgs.Empty);
 
+        if (dockingBays == null) dockingBays = _profile.DockingBays.Copy (this);
+
         StructureInventoryAdder adder = GetComponent<StructureInventoryAdder> ();
         if (adder != null) adder.Run (this);
     }
@@ -133,92 +140,51 @@ public class Structure : MonoBehaviour {
         });
         return data;
     }
-    public List<Structure> GetDocked () { return _docked; }
 
-    public bool AddDocker (Structure docker) {
-        if (!CanAddDocker (docker)) return false;
-
+    public void OnDocked (Structure dockee) {
+        // Cache dockee
+        this.dockee = dockee;
         // Add as child
-        _docked.Add (docker);
-        docker.transform.parent = transform;
-
+        transform.parent = dockee.transform;
         // Disable renderers
-        Renderer[] renderers = docker.GetComponentsInChildren<Renderer> ();
-        foreach (Renderer r in renderers) r.enabled = false;
-
-        // Disable all equipment
+        Renderer[] renderers = GetComponentsInChildren<Renderer> ();
+        foreach (Renderer renderer in renderers) renderer.enabled = false;
+        // Disable colliders
+        Collider[] colliders = GetComponentsInChildren<Collider> ();
+        foreach (Collider collider in colliders) collider.enabled = false;
+        // TODO Disable all equipment
         //foreach (NewEquipmentSlot slot in docker.Equipment) slot.TargetState = false;
-
-        if (docker == PlayerController.Instance.Player) {
+        if (this == PlayerController.Instance.Player) {
             // Send notification
-            NotificationUI.GetInstance ().AddNotification ("Docked at " + gameObject.name);
-
-            // Update UI
+            NotificationUI.GetInstance ().AddNotification ("Docked at " + dockee.name);
+            // TODO Update UI
             //UIStateManager.Instance.AddState (UIState.Docked);
-
             // Update camera anchor
-            CameraController.GetInstance ().SetAnchor (new Location (transform));
-        }
-
-        return true;
-    }
-
-    public void RemoveDocker (Structure docker) {
-        if (_docked.Remove (docker)) {
-            // Remove as child
-            docker.transform.parent = transform.parent;
-
-            // Enable renderers
-            Renderer[] renderers = docker.GetComponentsInChildren<Renderer> (true);
-            foreach (Renderer r in renderers) r.enabled = true;
-
-            if (docker == PlayerController.Instance.Player) {
-                // Send notification
-                NotificationUI.GetInstance ().AddNotification ("Undocked from " + gameObject.name);
-
-                // Update UI
-                UIStateManager.Instance.RemoveState ();
-
-                // Update camera anchor
-                CameraController.GetInstance ().RemoveAnchor ();
-            }
+            CameraController.GetInstance ().SetAnchor (new Location (dockee.transform));
         }
     }
 
-    public bool CanAddDocker (Structure docker) {
-        // In the same sector or already docked?
-        if (docker.transform.parent != transform.parent) return false;
-        // Good relations?
-        if (_faction == null || _faction.IsEnemy (docker.Faction)) return false;
-        // Within range?
-        if (NavigationManager.Instance.GetLocalDistance (this, docker) > 50) return false;
-        // Already children?
-        if (_docked.Contains (docker)) return false;
-        // Enough space?
-        float size = 0;
-        foreach (Structure c in _docked) size += c.Profile.ApparentSize;
-        if (docker.Profile.ApparentSize > stats.GetAppliedValue (StatNames.DockingBayVolume, 0) - size) return false;
-
-        return true;
-    }
-
-    public bool IsDocked () { return GetDockedAt () != null; }
-
-    public Structure GetDockedAt () { return transform.parent.GetComponent<Structure> (); }
-
-    public bool CanDockTarget () { return _selected != null && _selected.CanAddDocker (this); }
-
-    public bool CanUndock () { return IsDocked (); }
-
-    public void DockTarget () { _selected.AddDocker (this); }
-
-    public bool Undock () {
-
-        if (!CanUndock ()) return false;
-
-        GetDockedAt ().RemoveDocker (this);
-        return true;
-
+    public void OnUndocked (Structure dockee) {
+        // Remove dockee
+        this.dockee = null;
+        // Remove as child
+        transform.parent = dockee.transform.parent;
+        // Enable renderers
+        Renderer[] renderers = GetComponentsInChildren<Renderer> (true);
+        foreach (Renderer renderer in renderers) renderer.enabled = true;
+        // Enable colliders
+        Collider[] colliders = GetComponentsInChildren<Collider> ();
+        foreach (Collider collider in colliders) collider.enabled = true;
+        if (this == PlayerController.Instance.Player) {
+            // Send notification
+            NotificationUI.GetInstance ().AddNotification ("Undocked from " + dockee.name);
+            // TODO Update UI
+            //UIStateManager.Instance.RemoveState ();
+            // Update camera anchor
+            CameraController.GetInstance ().RemoveAnchor ();
+        }
+        // Set position
+        transform.localPosition = dockee.transform.localPosition + dockee.transform.localRotation * Vector3.forward * 100;
     }
 
     public void TakeDamage (Damage damage, Vector3 from) {
