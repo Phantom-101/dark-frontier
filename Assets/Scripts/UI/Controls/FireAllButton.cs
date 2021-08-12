@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class FireAllButton : SingletonBase<FireAllButton> {
-    public EventHandler OnClicked;
+    public event EventHandler OnClicked;
     [SerializeField]
     private Button _fireAllButton;
 

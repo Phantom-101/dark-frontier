@@ -13,7 +13,7 @@ public class EngineSO : EquipmentSO {
     public Vector3 LinearConsumptionNeg;
     public Vector3 AngularConsumptionPos;
     public Vector3 AngularConsumptionNeg;
-    public float CorrectionSlack;
+    public float CorrectionStrictness;
     public float LinearSleepThreshold;
     public float AngularSleepThreshold;
     public float BankAmount;
@@ -106,7 +106,7 @@ public class EngineSO : EquipmentSO {
                 float cur = slot.Equipper.transform.InverseTransformDirection (rb.velocity)[d] / GetLinearMaxSpeed (slot);
                 float dif = data.LinearSetting[d] - cur;
                 if (Mathf.Abs (dif) > LinearSleepThreshold) {
-                    float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
+                    float mul = Mathf.Clamp (dif * CorrectionStrictness, -1, 1);
                     res[0][d] = GetLinearAcceleration (slot, d, mul);
                 }
             } else res[0][d] = GetLinearAcceleration (slot, d, data.LinearSetting[d]);
@@ -117,7 +117,7 @@ public class EngineSO : EquipmentSO {
                 float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity * Mathf.Rad2Deg)[d] / GetAngularMaxSpeed (slot);
                 float dif = data.AngularSetting[d] - cur;
                 if (Mathf.Abs (dif) > AngularSleepThreshold) {
-                    float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
+                    float mul = Mathf.Clamp (dif * CorrectionStrictness, -1, 1);
                     res[1][d] = GetAngularAcceleration (slot, d, mul);
                 }
             } else res[1][d] = GetAngularAcceleration (slot, d, data.AngularSetting[d]);
@@ -134,14 +134,14 @@ public class EngineSO : EquipmentSO {
         for (int d = 0; d < 3; d++) {
             float cur = slot.Equipper.transform.InverseTransformDirection (rb.velocity)[d] / MaxLinearSpeed;
             float dif = data.LinearSetting[d] - cur;
-            float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
+            float mul = Mathf.Clamp (dif * CorrectionStrictness, -1, 1);
             res += Lerp (mul, LinearConsumptionPos[d], LinearConsumptionNeg[d]);
         }
         // Angular
         for (int d = 0; d < 3; d++) {
             float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity * Mathf.Rad2Deg)[d] / MaxAngularSpeed;
             float dif = data.AngularSetting[d] - cur;
-            float mul = Mathf.Clamp01 (Mathf.Pow (Mathf.Abs (dif), CorrectionSlack)) * Mathf.Sign (dif);
+            float mul = Mathf.Clamp (dif * CorrectionStrictness, -1, 1);
             res += Lerp (mul, AngularConsumptionPos[d], AngularConsumptionNeg[d]);
         }
         return res;

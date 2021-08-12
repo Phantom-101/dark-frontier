@@ -6,7 +6,7 @@ using UnityEngine;
 public class UIStateManager : SingletonBase<UIStateManager> {
     [SerializeField] private List<UIState> _states = new List<UIState> ();
     private readonly Dictionary<UIState, UIStateInfo> _infos = new Dictionary<UIState, UIStateInfo> ();
-    public EventHandler StatesChanged;
+    public event EventHandler StatesChanged;
 
     public bool IsShown (CanvasGroup group) {
         // Iterate through states

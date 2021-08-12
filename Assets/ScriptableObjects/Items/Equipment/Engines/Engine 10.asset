@@ -25,6 +25,7 @@ MonoBehaviour:
   Usable: 0
   Durability: 10
   ButtonPrefab: {fileID: 0}
+  PanelPrefab: {fileID: 0}
   MaxLinearSpeed: 100
   MaxAngularSpeed: 50
   LinearForcePos: {x: 10, y: 10, z: 10}
@@ -35,7 +36,7 @@ MonoBehaviour:
   LinearConsumptionNeg: {x: 1, y: 1, z: 1}
   AngularConsumptionPos: {x: 1, y: 1, z: 1}
   AngularConsumptionNeg: {x: 1, y: 1, z: 1}
-  CorrectionSlack: 0.3
+  CorrectionStrictness: 5
   LinearSleepThreshold: 0.001
   AngularSleepThreshold: 0.002
   BankAmount: 25

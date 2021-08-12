@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DarkFrontier.Foundation.Behaviors;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EquipmentSlot : BehaviorBase {

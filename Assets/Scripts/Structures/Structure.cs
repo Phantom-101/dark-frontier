@@ -1,4 +1,6 @@
-﻿using DarkFrontier.Structures;
+﻿using DarkFrontier.Foundation;
+using DarkFrontier.Foundation.Behaviors;
+using DarkFrontier.Structures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,19 +22,16 @@ public class Structure : BehaviorBase {
         set {
             hull = Mathf.Min (value, stats.GetBaseValue (StatNames.MaxHull, 1));
             if (hull <= 0) {
-                if (Faction != null) Faction.RemoveProperty (this);
-                if (Sector != null) Sector.Exited (this);
+                if (Faction.Value (FactionManager.Instance.GetFaction) != null) Faction.Cached.RemoveProperty (this);
+                if (Sector != null) Sector.Value (SectorManager.Instance.GetSector).Exited (this);
                 structureManager.DestroyStructure (this);
             }
         }
     }
     [SerializeField] private float hull;
 
-    public Faction Faction {
-        get => _faction;
-        set => _faction = value;
-    }
-    [SerializeReference, Expandable] private Faction _faction;
+    public FactionRetriever Faction { get => faction; }
+    [SerializeField] private FactionRetriever faction = new FactionRetriever ();
 
     public List<EquipmentSlot> Equipment { get => _equipmentSlots; }
     [SerializeField] private List<EquipmentSlot> _equipmentSlots = new List<EquipmentSlot> ();
@@ -62,11 +61,8 @@ public class Structure : BehaviorBase {
     }
     [SerializeField] private Dictionary<Structure, float> _locks = new Dictionary<Structure, float> ();
 
-    public Sector Sector {
-        get => _sector;
-        set => _sector = value;
-    }
-    [SerializeField] private Sector _sector;
+    public SectorRetriever Sector { get => sector; }
+    [SerializeField] private SectorRetriever sector = new SectorRetriever ();
 
     public HashSet<Structure> Detected { get => detected ?? (detected = structureManager.GetDetected (this)); }
     [SerializeField] private HashSet<Structure> detected;
@@ -96,13 +92,13 @@ public class Structure : BehaviorBase {
         structureManager.TryManage (this);
 
         if (transform.parent != null) {
-            _sector = GetComponentInParent<Sector> ();
-            if (_sector != null) _sector.Entered (this);
+            Sector.Id.Value = GetComponentInParent<Sector> ().Id;
+            if (Sector.Value (SectorManager.Instance.GetSector) != null) Sector.Cached.Entered (this);
         }
 
-        if (_faction != null) {
-            FactionManager.Instance.AddFaction (_faction);
-            _faction.AddProperty (this);
+        if (Faction.Value (FactionManager.Instance.GetFaction) != null) {
+            FactionManager.Instance.AddFaction (Faction.Cached);
+            Faction.Cached.AddProperty (this);
         }
 
         EnsureStats ();
@@ -158,10 +154,11 @@ public class Structure : BehaviorBase {
         // Should have valid id
         if (string.IsNullOrEmpty (_id)) _id = Guid.NewGuid ().ToString ();
         // Should have sector in parent tree
-        if (_sector == null) {
-            _sector = GetComponentInParent<Sector> ();
-            if (_sector == null) return false;
-            _sector.Entered (this);
+        Sector.Value (SectorManager.Instance.GetSector);
+        if (Sector.Cached == null) {
+            Sector.Id.Value = GetComponentInParent<Sector> ().Id;
+            if (Sector.Value (SectorManager.Instance.GetSector) == null) return false;
+            Sector.Cached.Entered (this);
         }
         // Should have a manager
         if (manager == null) {
@@ -315,7 +312,9 @@ public class Structure : BehaviorBase {
     private void EnsureStats () {
         if (_profile != null && _profile.Stats != null) {
             foreach (Stat stat in _profile.Stats.Stats) {
-                stats.AddStat (stat.Copy ());
+                if (!stats.HasStat (stat)) {
+                    stats.AddStat (stat.Copy ());
+                }
             }
         }
     }
@@ -330,9 +329,9 @@ public class Structure : BehaviorBase {
             Stats = stats.Save (),
         };
         if (_profile != null) data.ProfileId = _profile.Id;
-        if (_faction != null) data.FactionId = _faction.Id;
+        data.FactionId = Faction.Id.Value;
         _equipmentSlots.ForEach (slot => { data.Equipment.Add (slot.Data.Save ()); });
-        if (_sector != null) data.SectorId = _sector.GetId ();
+        if (Sector.Value (SectorManager.Instance.GetSector) != null) data.SectorId = Sector.Cached.Id;
         data.AIEnabled = _aiEnabled;
         if (PlayerController.Instance.Player == this) data.IsPlayer = true;
         return data;
@@ -343,7 +342,7 @@ public class Structure : BehaviorBase {
         transform.localPosition = new Vector3 (saveData.Position[0], saveData.Position[1], saveData.Position[2]);
         transform.localRotation = new Quaternion (saveData.Rotation[0], saveData.Rotation[1], saveData.Rotation[2], saveData.Rotation[3]);
         hull = saveData.Hull;
-        _faction = FactionManager.Instance.GetFaction (saveData.FactionId);
+        Faction.Id.Value = saveData.FactionId;
         for (int i = 0; i < _equipmentSlots.Count; i++) {
             _equipmentSlots[i].Data = saveData.Equipment[i].Load ();
             _equipmentSlots[i].Data.Slot = _equipmentSlots[i];
@@ -352,8 +351,8 @@ public class Structure : BehaviorBase {
         stats = saveData.Stats.Load ();
         if (stats == null) stats = new StatList ();
         EnsureStats ();
-        _sector = SectorManager.Instance.GetSector (saveData.SectorId);
-        _sector.Entered (this);
+        Sector.Id.Value = saveData.SectorId;
+        Sector.Value (SectorManager.Instance.GetSector).Entered (this);
         _aiEnabled = saveData.AIEnabled;
     }
 }

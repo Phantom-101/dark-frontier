@@ -12,9 +12,8 @@ public class FactionsUI : LogTabUI {
         foreach (FactionInfoUI info in _instantiated) Destroy (info.gameObject);
         _instantiated = new List<FactionInfoUI> ();
 
-        HashSet<Faction> factions = FactionManager.Instance.Factions;
         int index = 0;
-        foreach (Faction f in factions) {
+        foreach (Faction f in FactionManager.Instance.Factions) {
 
             GameObject go = Instantiate (_prefab, _content);
             go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, -150 * index);

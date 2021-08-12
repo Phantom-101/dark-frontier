@@ -7,7 +7,6 @@ public class WealthUI : MonoBehaviour {
     private void Update () {
         Structure player = PlayerController.Instance.Player;
         if (player == null) return;
-        if (player.Faction == null) _text.text = "0 Cr";
-        else _text.text = $"{PlayerController.Instance.Player.Faction.Wealth} Cr";
+        _text.text = $"{PlayerController.Instance.Player.Faction.Value (FactionManager.Instance.GetFaction)?.Wealth ?? 0} Cr";
     }
 }

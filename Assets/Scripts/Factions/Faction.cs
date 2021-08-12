@@ -1,28 +1,37 @@
-﻿using System;
+﻿using DarkFrontier.Foundation.Extensions;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu (menuName = "Initialization/Faction")]
-public class Faction : ScriptableObject {
+[Serializable]
+public class Faction : ISaveTo<FactionSaveData> {
     public string Name;
     public string Id;
     public long Wealth;
     public StringToFloatDictionary Relations = new StringToFloatDictionary ();
-    public HashSet<Structure> Property = new HashSet<Structure> ();
+    public List<Structure> Property = new List<Structure> ();
+
+    public Faction () { }
+    public Faction (FactionSaveData saveData) {
+        Name = saveData.Name;
+        Id = saveData.Id;
+        Wealth = saveData.Wealth;
+        Relations = saveData.Relations;
+    }
 
     public void ChangeWealth (long delta) { Wealth += delta; }
     public bool HasWealth (long condition) { return Wealth >= condition; }
-    public HashSet<Structure> GetProperty () { return Property; }
-    public void AddProperty (Structure structure) { Property.Add (structure); }
-    public void RemoveProperty (Structure structure) { Property.Remove (structure); }
+    public List<Structure> GetProperty () { return Property; }
+    public void AddProperty (Structure structure) { Property.AddUnique (structure); }
+    public void RemoveProperty (Structure structure) { Property.RemoveAll (structure); }
     public void SetRelations (StringToFloatDictionary map) { Relations = map; }
-    public float GetRelation (Faction other) { return other == null ? 0 : Relations.TryGet (other.Id, 0); }
-    public void SetRelation (Faction other, float target) { if (other != null) { Relations[other.Id] = Mathf.Clamp (target, -1, 1); other.SetRelationBack (this, target); } }
-    private void SetRelationBack (Faction back, float target) { if (back != null) { Relations[back.Id] = Mathf.Clamp (target, -1, 1); } }
-    public void ChangeRelation (Faction other, float delta) { SetRelation (other, GetRelation (other) + delta); }
-    public bool IsAlly (Faction other) { return GetRelation (other) > 0.75f; }
-    public bool IsEnemy (Faction other) { return GetRelation (other) < -0.75f; }
-    public bool IsNeutral (Faction other) { return !IsAlly (other) && !IsEnemy (other); }
+    public float GetRelation (string other) { return other == null ? 0 : Relations.TryGet (other, 0); }
+    public void SetRelation (string other, float target) { if (other != null) { Relations[other] = Mathf.Clamp (target, -1, 1); FactionManager.Instance.GetFaction (other).SetRelationBack (Id, target); } }
+    private void SetRelationBack (string back, float target) { if (back != null) { Relations[back] = Mathf.Clamp (target, -1, 1); } }
+    public void ChangeRelation (string other, float delta) { SetRelation (other, GetRelation (other) + delta); }
+    public bool IsAlly (string other) { return GetRelation (other) > 0.75f; }
+    public bool IsEnemy (string other) { return GetRelation (other) < -0.75f; }
+    public bool IsNeutral (string other) { return !IsAlly (other) && !IsEnemy (other); }
 
     public FactionSaveData GetSaveData () {
         FactionSaveData data = new FactionSaveData {
@@ -34,18 +43,24 @@ public class Faction : ScriptableObject {
         return data;
     }
 
-    public void LoadSaveData (FactionSaveData saveData) {
-        Name = saveData.Name;
-        Id = saveData.Id;
-        Wealth = saveData.Wealth;
-        Relations = saveData.Relations;
+    public FactionSaveData Save () {
+        return new FactionSaveData {
+            Name = Name,
+            Id = Id,
+            Wealth = Wealth,
+            Relations = Relations,
+        };
     }
 }
 
 [Serializable]
-public class FactionSaveData {
+public class FactionSaveData : ILoadTo<Faction> {
     public string Name;
     public string Id;
     public long Wealth;
     public StringToFloatDictionary Relations;
+
+    public Faction Load () {
+        return new Faction (this);
+    }
 }

@@ -29,7 +29,7 @@ public class HangarBayPanel : EquipmentPanel {
             return;
         }
 
-        List<HangarLaunchableSO> inventoryLaunchables = Slot.Equipper.Inventory.GetStoredItems ().FindAll (i => i is HangarLaunchableSO).ConvertAll (i => i as HangarLaunchableSO);
+        List<HangarLaunchableSO> inventoryLaunchables = Slot.Equipper.Inventory.GetStoredItems ().FindAll (i => cache.Launchables.Contains (i)).ConvertAll (i => i as HangarLaunchableSO);
         launchables.Keys.ToList ().FindAll (k => !inventoryLaunchables.Contains (k)).ForEach (k => launchables.Remove (k));
         inventoryLaunchables.FindAll (l => !launchables.ContainsKey (l)).ForEach (l => {
             GameObject instantiated = Instantiate (launchablePrefab, launchableRoot);

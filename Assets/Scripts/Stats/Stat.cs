@@ -31,7 +31,7 @@ public class Stat : ISaveTo<StatSaveData> {
     private Dictionary<string, StatModifier> modifiersDictionary;
 
     // Event handler for on changed functionality
-    public EventHandler OnValueChanged;
+    public event EventHandler OnValueChanged;
 
     public Stat (string name) : this (name, 0) { }
     public Stat (string name, float baseValue) : this (name, baseValue, new List<StatModifier> ()) { }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DarkFrontier.Foundation.Extensions;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,23 +7,23 @@ using UnityEngine;
 
 public class SectorManager : SingletonBase<SectorManager> {
 
-    private HashSet<Sector> _sectors = new HashSet<Sector> ();
+    [SerializeField] private List<Sector> sectors = new List<Sector> ();
 
-    public void AddSector (Sector sector) { _sectors.Add (sector); }
+    public void AddSector (Sector sector) { sectors.AddUnique (sector); }
 
-    public void RemoveSector (Sector sector) { _sectors.Remove (sector); }
+    public void RemoveSector (Sector sector) { sectors.RemoveAll (sector); }
 
     public Sector GetSector (string id) {
         Sector found = null;
-        _sectors.ToList ().ForEach (sector => {
-            if (sector.GetId () == id) found = sector;
+        sectors.ToList ().ForEach (sector => {
+            if (sector.Id == id) found = sector;
         });
         return found;
     }
 
     public void SaveGame (DirectoryInfo directory) {
         List<SectorSaveData> saveData = new List<SectorSaveData> ();
-        _sectors.ToList ().ForEach (sector => { saveData.Add (sector.GetSaveData ()); });
+        sectors.ToList ().ForEach (sector => { saveData.Add (sector.GetSaveData ()); });
         FileInfo file = PathManager.GetSectorFile (directory);
         if (!file.Exists) file.Create ().Close ();
         File.WriteAllText (
@@ -46,13 +47,13 @@ public class SectorManager : SingletonBase<SectorManager> {
                 TypeNameHandling = TypeNameHandling.All,
             }
         ) as List<SectorSaveData>;
-        _sectors.ToList ().ForEach (sector => { Destroy (sector.gameObject); });
-        _sectors = new HashSet<Sector> ();
+        this.sectors.ToList ().ForEach (sector => { Destroy (sector.gameObject); });
+        this.sectors = new List<Sector> ();
         sectors.ForEach (data => {
             GameObject sector = new GameObject ();
             Sector comp = sector.AddComponent<Sector> ();
             comp.SetSaveData (data);
-            _sectors.Add (comp);
+            this.sectors.Add (comp);
         });
     }
 

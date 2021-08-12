@@ -269,7 +269,7 @@ public class HangarBayLaunchSlot : ISaveTo<HangarBayLaunchSlotSaveData> {
             // If launched
             if (launchingProgress == launchable.LaunchingPreparation) {
                 // Spawn structure
-                structure = structureManager.SpawnStructure (launchable, slot.Equipper.Faction, slot.Equipper.Sector, new Location (slot.LocalPosition));
+                structure = structureManager.SpawnStructure (launchable, slot.Equipper.Faction.Value (FactionManager.Instance.GetFaction), slot.Equipper.Sector.Value (SectorManager.Instance.GetSector), new Location (slot.LocalPosition));
                 HangarManagedCraftAI ai = ScriptableObject.CreateInstance<HangarManagedCraftAI> ();
                 ai.Launchable = launchable;
                 ai.HangarBay = data;

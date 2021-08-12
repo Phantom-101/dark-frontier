@@ -3569,9 +3569,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: VoidEventChannelSO, Assembly-CSharp
-          m_MethodName: RaiseEvent
+        - m_Target: {fileID: 2587107807396637162}
+          m_TargetAssemblyTypeName: PlayerTurnJoystick, Assembly-CSharp
+          m_MethodName: PointerDown
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -3585,9 +3585,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: VoidEventChannelSO, Assembly-CSharp
-          m_MethodName: RaiseEvent
+        - m_Target: {fileID: 2587107807396637162}
+          m_TargetAssemblyTypeName: PlayerTurnJoystick, Assembly-CSharp
+          m_MethodName: PointerUp
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -3645,7 +3645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc140bdfd46e6634b80503308a5fcdef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 6629543964061360110, guid: 9449d88cae63d894c958b040cdec085f, type: 3}
+  prefab: {fileID: 6629543964061360110, guid: 9449d88cae63d894c958b040cdec085f, type: 3}
 --- !u!1 &2587107805975459806
 GameObject:
   m_ObjectHideFlags: 0
@@ -7709,7 +7709,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _group: {fileID: 2587107806756126495}
-  _faction: {fileID: 0}
+  _faction:
+    Name: 
+    Id: 
+    Wealth: 0
+    Relations:
+      reorderableList:
+        canAdd: 0
+        canRemove: 0
+        draggable: 0
+        expandable: 0
+        multipleSelection: 0
+        isExpanded: 0
+        label:
+          m_Text: 
+          m_Image: {fileID: 0}
+          m_Tooltip: 
+        headerHeight: 0
+        footerHeight: 0
+        slideEasing: 0
+        verticalSpacing: 0
+        showDefaultBackground: 0
+        elementDisplayType: 0
+        elementNameProperty: 
+        elementNameOverride: 
+        elementIcon: {fileID: 0}
+      reqReferences: {fileID: 0}
+      isExpanded: 0
+      _keyValues: []
+      _keys: []
+      _values: []
+    Property: []
   _content: {fileID: 2587107806967508999}
   _prefab: {fileID: 3149651680489356435, guid: d8f44b836fae1a24384f1145d651f71a, type: 3}
   _instantiated: []

@@ -11,14 +11,14 @@ public class PropertyUI : LogTabUI {
         foreach (PropertyInfoUI info in _instantiated) Destroy (info.gameObject);
         _instantiated = new List<PropertyInfoUI> ();
 
-        _faction = PlayerController.Instance.Player.Faction;
+        _faction = PlayerController.Instance.Player.Faction.Value (FactionManager.Instance.GetFaction);
 
         if (_faction == null) {
             base.SwitchIn ();
             return;
         }
 
-        HashSet<Structure> property = _faction.GetProperty ();
+        List<Structure> property = _faction.GetProperty ();
         int index = 0;
         foreach (Structure s in property) {
             GameObject go = Instantiate (_prefab, _content);

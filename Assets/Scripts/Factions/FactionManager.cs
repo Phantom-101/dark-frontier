@@ -1,15 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using DarkFrontier.Foundation.Extensions;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
 
 public class FactionManager : SingletonBase<FactionManager> {
-    private HashSet<Faction> _factions = new HashSet<Faction> ();
-    public HashSet<Faction> Factions { get => _factions; private set => _factions = value; }
+    [SerializeField] private List<Faction> _factions = new List<Faction> ();
+    public List<Faction> Factions { get => _factions; private set => _factions = value; }
 
-    public void AddFaction (Faction faction) { Factions.Add (faction); }
-    public void RemoveFaction (Faction faction) { Factions.Remove (faction); }
+    public void AddFaction (Faction faction) { Factions.AddUnique (faction); }
+    public void RemoveFaction (Faction faction) { Factions.RemoveAll (faction); }
     public Faction GetFaction (string id) { return Factions.Where (e => e.Id == id).FirstOrDefault (); }
 
     public void SaveGame (DirectoryInfo directory) {
@@ -38,11 +39,7 @@ public class FactionManager : SingletonBase<FactionManager> {
                 TypeNameHandling = TypeNameHandling.All,
             }
         ) as List<FactionSaveData>;
-        Factions = new HashSet<Faction> ();
-        factions.ForEach (data => {
-            Faction faction = ScriptableObject.CreateInstance<Faction> ();
-            faction.LoadSaveData (data);
-            Factions.Add (faction);
-        });
+        Factions = new List<Faction> ();
+        factions.ForEach (data => Factions.Add (data.Load ()));
     }
 }

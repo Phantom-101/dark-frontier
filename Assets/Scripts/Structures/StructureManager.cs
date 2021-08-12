@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DarkFrontier.Foundation.Behaviors;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace DarkFrontier.Structures {
         }
 
         public HashSet<Structure> GetDetected (Structure structure) {
-            List<Structure> inSector = structure.Sector.InSector;
+            List<Structure> inSector = structure.Sector.Value (SectorManager.Instance.GetSector).Population;
             HashSet<Structure> ret = new HashSet<Structure> ();
             foreach (Structure candidate in inSector)
                 if (candidate != structure && Detects (structure, candidate))
@@ -38,8 +39,8 @@ namespace DarkFrontier.Structures {
             go.name = profile.Name;
             go.transform.localPosition = location.GetPosition ();
             Structure structure = go.GetComponent<Structure> ();
-            structure.Faction = owner;
-            structure.Sector = sector;
+            structure.Faction.Id.Value = owner.Id;
+            structure.Sector.Id.Value = sector.Id;
             return structure;
         }
 

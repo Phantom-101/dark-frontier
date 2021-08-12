@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DarkFrontier.Foundation.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -23,6 +24,9 @@ public class StatList : ISaveTo<StatListSaveData> {
     public float GetBaseValue (string name, float baseValue) => GetStat (name, baseValue).BaseValue;
     public float GetAppliedValue (string name, float baseValue) => GetStat (name, baseValue).AppliedValue;
     public List<StatModifier> GetModifiers (string name) => GetStat (name, 0).Modifiers;
+
+    public bool HasStat (string name) => StatsDictionary.ContainsKey (name);
+    public bool HasStat (Stat stat) => StatsDictionary.ContainsKey (stat.Name);
 
     public bool AddStat (Stat stat) {
         if (!StatsDictionary.ContainsKey (stat.Name)) {
