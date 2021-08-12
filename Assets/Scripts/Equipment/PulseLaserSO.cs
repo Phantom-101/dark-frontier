@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DarkFrontier.Structures;
+using System;
 using UnityEngine;
+using Zenject;
 
 [CreateAssetMenu (menuName = "Items/Equipment/Weapons/Pulse Laser")]
 public class PulseLaserSO : EquipmentSO {
@@ -35,12 +37,12 @@ public class PulseLaserSO : EquipmentSO {
         };
     }
 
-    public override void Tick (EquipmentSlot slot) {
+    public override void Tick (EquipmentSlot slot, float dt) {
         EnsureDataType (slot);
 
         PulseLaserSlotData data = slot.Data as PulseLaserSlotData;
 
-        float consumption = RechargeRate * Time.deltaTime;
+        float consumption = RechargeRate * dt;
         float lack = EnergyRequired - data.Charge;
         float request = Mathf.Min (consumption, lack);
         float given = 0;
@@ -78,7 +80,7 @@ public class PulseLaserSO : EquipmentSO {
         }
     }
 
-    public override void FixedTick (EquipmentSlot slot) { }
+    public override void FixedTick (EquipmentSlot slot, float dt) { }
 
     public override bool CanClick (EquipmentSlot slot) {
         PulseLaserSlotData data = slot.Data as PulseLaserSlotData;
@@ -164,13 +166,20 @@ public class PulseLaserSlotSaveData : EquipmentSlotSaveData {
     public bool Activated;
     public string TargetId;
 
+    private StructureManager structureManager;
+
+    [Inject]
+    public void Construct (StructureManager structureManager) {
+        this.structureManager = structureManager;
+    }
+
     public override EquipmentSlotData Load () {
         return new PulseLaserSlotData {
             Equipment = ItemManager.Instance.GetItem (EquipmentId) as EquipmentSO,
             Durability = Durability,
             Charge = Charge,
             Activated = Activated,
-            Target = StructureManager.Instance.GetStructure (TargetId),
+            Target = structureManager.GetStructure (TargetId),
         };
     }
 }

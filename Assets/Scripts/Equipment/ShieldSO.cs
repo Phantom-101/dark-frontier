@@ -28,12 +28,12 @@ public class ShieldSO : EquipmentSO {
         };
     }
 
-    public override void Tick (EquipmentSlot slot) {
+    public override void Tick (EquipmentSlot slot, float dt) {
         EnsureDataType (slot);
 
         ShieldSlotData data = slot.Data as ShieldSlotData;
 
-        float consumption = RechargeConsumption * Time.deltaTime;
+        float consumption = RechargeConsumption * dt;
         float lack = (MaxStrength - data.Strength) / RechargeEfficiency;
         float request = Mathf.Min (consumption, lack);
         float given = 0;
@@ -49,7 +49,7 @@ public class ShieldSO : EquipmentSO {
         data.Strength += given * RechargeEfficiency;
     }
 
-    public override void FixedTick (EquipmentSlot slot) { }
+    public override void FixedTick (EquipmentSlot slot, float dt) { }
 
     public override bool CanClick (EquipmentSlot slot) { return false; }
 

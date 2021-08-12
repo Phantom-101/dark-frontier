@@ -12,4 +12,5 @@ public class StructureSO : ItemSO {
 
     [Header ("Stats")]
     public StatList Stats;
+    public DockingBayList DockingBays;
 }

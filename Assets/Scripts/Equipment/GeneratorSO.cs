@@ -25,10 +25,10 @@ public class GeneratorSO : EquipmentSO {
         };
     }
 
-    public override void Tick (EquipmentSlot slot) {
+    public override void Tick (EquipmentSlot slot, float dt) {
         EnsureDataType (slot);
 
-        float pool = Generation * Time.deltaTime;
+        float pool = Generation * dt;
         slot.Equipper.GetEquipmentData<CapacitorSlotData> ().ForEach (capacitor => {
             float lack = (capacitor.Equipment as CapacitorSO).Capacitance - capacitor.Charge;
             float allocated = Mathf.Min (pool, lack, capacitor.ChargeLeft);
@@ -38,7 +38,7 @@ public class GeneratorSO : EquipmentSO {
         });
     }
 
-    public override void FixedTick (EquipmentSlot slot) { }
+    public override void FixedTick (EquipmentSlot slot, float dt) { }
 
     public override bool CanClick (EquipmentSlot slot) { return false; }
 

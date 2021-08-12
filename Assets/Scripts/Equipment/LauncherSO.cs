@@ -1,6 +1,8 @@
-﻿using System;
+﻿using DarkFrontier.Structures;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 [CreateAssetMenu (menuName = "Items/Equipment/Weapons/Launcher")]
 public class LauncherSO : EquipmentSO {
@@ -30,12 +32,12 @@ public class LauncherSO : EquipmentSO {
         };
     }
 
-    public override void Tick (EquipmentSlot slot) {
+    public override void Tick (EquipmentSlot slot, float dt) {
         EnsureDataType (slot);
 
         LauncherSlotData data = slot.Data as LauncherSlotData;
 
-        float consumption = RechargeRate * Time.deltaTime;
+        float consumption = RechargeRate * dt;
         float lack = EnergyRequired - data.Charge;
         float request = Mathf.Min (consumption, lack);
         float given = 0;
@@ -56,7 +58,7 @@ public class LauncherSO : EquipmentSO {
             GameObject vfx = Instantiate (data.Missile.MissileStructure.Prefab, slot.transform);
             vfx.transform.parent = slot.Equipper.transform.parent;
             Structure s = vfx.GetComponent<Structure> ();
-            s.Initialize ();
+            s.TryInitialize ();
             MissileAI ai = CreateInstance<MissileAI> ();
             s.AI = ai;
             ai.Target = data.Target;
@@ -67,7 +69,7 @@ public class LauncherSO : EquipmentSO {
         }
     }
 
-    public override void FixedTick (EquipmentSlot slot) { }
+    public override void FixedTick (EquipmentSlot slot, float dt) { }
 
     public override bool CanClick (EquipmentSlot slot) {
         LauncherSlotData data = slot.Data as LauncherSlotData;
@@ -154,13 +156,20 @@ public class LauncherSlotSaveData : EquipmentSlotSaveData {
     public string TargetId;
     public string MissileId;
 
+    private StructureManager structureManager;
+
+    [Inject]
+    public void Construct (StructureManager structureManager) {
+        this.structureManager = structureManager;
+    }
+
     public override EquipmentSlotData Load () {
         return new LauncherSlotData {
             Equipment = ItemManager.Instance.GetItem (EquipmentId) as EquipmentSO,
             Durability = Durability,
             Charge = Charge,
             Activated = Activated,
-            Target = StructureManager.Instance.GetStructure (TargetId),
+            Target = structureManager.GetStructure (TargetId),
             Missile = ItemManager.Instance.GetItem (MissileId) as MissileSO,
         };
     }

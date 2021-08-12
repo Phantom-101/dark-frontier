@@ -6,7 +6,7 @@ public class MissileAI : AI {
     public MissileSO Missile;
     public float DamageMultiplier;
 
-    public override void Tick (Structure structure) {
+    public override void Tick (Structure structure, float dt) {
         if (Target == null || Missile == null) {
             structure.Hull = 0;
             return;

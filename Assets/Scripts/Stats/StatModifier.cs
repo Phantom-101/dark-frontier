@@ -9,8 +9,8 @@ public class StatModifier {
     public StatModifierType Type;
     public float Duration;
     public bool Expired { get => Duration <= 0; }
-    
-    public void Tick () { Duration -= Time.deltaTime; }
+
+    public void Tick (float dt) { Duration -= dt; }
 
     public StatModifier Copy () {
         return new StatModifier {
