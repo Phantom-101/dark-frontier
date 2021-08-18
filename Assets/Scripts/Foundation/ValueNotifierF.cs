@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DarkFrontier.Foundation {
     [Serializable]
-    public class ValueNotifierF<T> : INotifier<T> {
+    public class ValueNotifierF<T> : IValueNotifier<T> {
         public event EventHandler Notifier;
 
         public T Value {

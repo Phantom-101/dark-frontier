@@ -1,13 +1,14 @@
-﻿using UnityEditor;
+﻿using DarkFrontier.Structures;
+using UnityEditor;
 using UnityEngine;
 
 [CustomEditor (typeof (Structure))]
 [CanEditMultipleObjects]
 public class StructureEditor : Editor {
-    SerializedProperty _equipmentSlots;
+    SerializedProperty equipmentSlots;
 
     private void OnEnable () {
-        _equipmentSlots = serializedObject.FindProperty ("_equipmentSlots");
+        equipmentSlots = serializedObject.FindProperty ("equipmentSlots");
     }
 
     public override void OnInspectorGUI () {
@@ -17,11 +18,11 @@ public class StructureEditor : Editor {
 
         if (GUILayout.Button ("Find Equipment Slots")) {
             EquipmentSlot[] slots = (target as Structure).gameObject.GetComponentsInChildren<EquipmentSlot> ();
-            _equipmentSlots.ClearArray ();
+            equipmentSlots.ClearArray ();
             foreach (EquipmentSlot slot in slots) {
                 slot.Equipper = target as Structure;
-                _equipmentSlots.InsertArrayElementAtIndex (_equipmentSlots.arraySize);
-                _equipmentSlots.GetArrayElementAtIndex (_equipmentSlots.arraySize - 1).objectReferenceValue = slot;
+                equipmentSlots.InsertArrayElementAtIndex (equipmentSlots.arraySize);
+                equipmentSlots.GetArrayElementAtIndex (equipmentSlots.arraySize - 1).objectReferenceValue = slot;
             }
         }
 

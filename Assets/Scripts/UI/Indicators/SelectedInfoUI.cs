@@ -1,6 +1,9 @@
-﻿using System;
+﻿using DarkFrontier.Factions;
+using DarkFrontier.Structures;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class SelectedInfoUI : MonoBehaviour {
     [SerializeField] private Transform _hpIndicators;
@@ -16,6 +19,13 @@ public class SelectedInfoUI : MonoBehaviour {
     [SerializeField] private Button _lock;
     [SerializeField] private CanvasGroup _group;
     [SerializeField] private float _targetAlpha;
+
+    private FactionManager factionManager;
+
+    [Inject]
+    public void Construct (FactionManager factionManager) {
+        this.factionManager = factionManager;
+    }
 
     private void Start () {
         _lock.onClick.AddListener (() => PlayerController.Instance.OnLockSelected?.Invoke (this, EventArgs.Empty));
@@ -45,7 +55,7 @@ public class SelectedInfoUI : MonoBehaviour {
 
         _name.text = selected.gameObject.name;
 
-        _faction.text = selected.Faction.Value (FactionManager.Instance.GetFaction)?.Name ?? "None";
+        _faction.text = selected.Faction.Value (factionManager.GetFaction)?.Name ?? "None";
 
         _distance.text = Vector3.Distance (PlayerController.Instance.Player.transform.position, selected.transform.position).ToString ("F2") + " m";
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Structures;
+using UnityEngine;
 
 public class NavigationManager : SingletonBase<NavigationManager> {
     public float GetWorldRealDistance (Structure a, Structure b) {

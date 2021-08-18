@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Structures;
+using UnityEngine;
 
 [CreateAssetMenu (menuName = "AI/Missile")]
 public class MissileAI : AI {

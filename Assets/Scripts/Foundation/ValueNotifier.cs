@@ -2,7 +2,7 @@
 
 namespace DarkFrontier.Foundation {
     [Serializable]
-    public class ValueNotifier<T> : INotifier<T> {
+    public class ValueNotifier<T> : IValueNotifier<T> {
         public event EventHandler Notifier;
 
         public T Value {

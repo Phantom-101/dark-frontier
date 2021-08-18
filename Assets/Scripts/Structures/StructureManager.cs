@@ -1,18 +1,44 @@
 ﻿using DarkFrontier.Foundation.Behaviors;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using Zenject;
 
 namespace DarkFrontier.Structures {
-    public class StructureManager : BehaviorManager {
-        private StructureRegistry registry;
+    public class StructureManager : ComponentBehavior {
+        [SerializeReference] private StructureRegistry registry;
+
+        private readonly BehaviorTicker ticker = new BehaviorTicker ();
+        private readonly BehaviorTicker lateTicker = new BehaviorTicker ();
+        private readonly BehaviorTicker fixedTicker = new BehaviorTicker ();
 
         [Inject]
         public void Construct (StructureRegistry registry) {
             this.registry = registry;
         }
+
+        protected override void PropagateTick (float dt, float? edt = null) => ticker.Tick (dt, edt);
+        protected override void PropagateLateTick (float dt, float? edt = null) => lateTicker.Tick (dt, edt);
+        protected override void PropagateFixedTick (float dt, float? edt = null) => fixedTicker.Tick (dt, edt);
+
+        protected override void SubscribeEventListeners () {
+            ticker.Notifier += TickStructures;
+            lateTicker.Notifier += LateTickStructures;
+            fixedTicker.Notifier += FixedTickStructures;
+        }
+
+        protected override void UnsubscribeEventListeners () {
+            ticker.Notifier -= TickStructures;
+            lateTicker.Notifier -= LateTickStructures;
+            fixedTicker.Notifier -= FixedTickStructures;
+        }
+
+        private void TickStructures (object sender, EventArgs args) => registry.Structures.ForEach (e => e.Tick (GetTickArgs (args).dt, GetTickArgs (args).edt));
+        private void LateTickStructures (object sender, EventArgs args) => registry.Structures.ForEach (e => e.LateTick (GetTickArgs (args).dt, GetTickArgs (args).edt));
+        private void FixedTickStructures (object sender, EventArgs args) => registry.Structures.ForEach (e => e.FixedTick (GetTickArgs (args).dt, GetTickArgs (args).edt));
+        private BehaviorTicker.BehaviorTickArgs GetTickArgs (EventArgs args) => args as BehaviorTicker.BehaviorTickArgs;
 
         public Structure GetStructure (string id) => registry.Structures.Find (e => e.Id == id);
 
@@ -47,8 +73,6 @@ namespace DarkFrontier.Structures {
         public void DestroyStructure (Structure structure) {
             // Destroy docked structures
             structure.DockingBays.Dockers.ForEach (e => DestroyStructure (e));
-            // Remove structure from list
-            RemoveManage (structure);
             // Spawn destruction effect
             if (structure.Profile.DestructionEffect != null) {
                 GameObject effect = Instantiate (structure.Profile.DestructionEffect, structure.transform.parent);
@@ -63,8 +87,6 @@ namespace DarkFrontier.Structures {
         public void DisposeStructure (Structure structure) {
             // Destroy docked structures
             structure.DockingBays.Dockers.ForEach (e => DisposeStructure (e));
-            // Remove structure from list
-            RemoveManage (structure);
             // Destroy structure game object
             Destroy (structure.gameObject);
         }
@@ -95,17 +117,12 @@ namespace DarkFrontier.Structures {
                     TypeNameHandling = TypeNameHandling.All,
                 }
             ) as List<StructureSaveData>;
-            registry.Structures.ForEach (e => {
-                RemoveManage (e);
-                Destroy (e.gameObject);
-            });
             structures.ForEach (data => {
                 StructureSO profile = ItemManager.Instance.GetItem (data.ProfileId) as StructureSO;
                 GameObject structure = Instantiate (profile.Prefab, SectorManager.Instance.GetSector (data.SectorId).transform);
                 structure.name = profile.Name;
                 Structure comp = structure.GetComponent<Structure> ();
                 comp.SetSaveData (data);
-                TryManage (comp);
                 if (data.IsPlayer) PlayerController.Instance.Player = comp;
             });
         }

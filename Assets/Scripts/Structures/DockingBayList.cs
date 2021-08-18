@@ -1,7 +1,10 @@
-﻿using System;
+﻿using DarkFrontier.Factions;
+using DarkFrontier.Structures;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 [Serializable]
 public class DockingBayList {
@@ -16,15 +19,22 @@ public class DockingBayList {
     public Structure Structure { get => structure; }
     [SerializeField] private Structure structure;
 
+    private FactionManager factionManager;
+
     public DockingBayList (Structure structure) {
         this.structure = structure;
+    }
+
+    [Inject]
+    public void Construct (FactionManager factionManager) {
+        this.factionManager = factionManager;
     }
 
     public bool CanAccept (Structure docker) {
         // In the same sector or already docked?
         if (docker.transform.parent != structure.transform.parent) return false;
         // Good relations?
-        if (structure.Faction == null || structure.Faction.Value (FactionManager.Instance.GetFaction).IsEnemy (docker.Faction.Id.Value)) return false;
+        if (structure.Faction == null || structure.Faction.Value (factionManager.GetFaction).IsEnemy (docker.Faction.Id.Value)) return false;
         // Within range?
         if (NavigationManager.Instance.GetLocalDistance (structure, docker) > 50) return false;
         // Already children?

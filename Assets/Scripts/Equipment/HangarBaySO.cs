@@ -1,4 +1,5 @@
-﻿using DarkFrontier.Structures;
+﻿using DarkFrontier.Factions;
+using DarkFrontier.Structures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -189,10 +190,12 @@ public class HangarBayLaunchSlot : ISaveTo<HangarBayLaunchSlotSaveData> {
     public Structure Structure { get => structure; }
     [SerializeField] private Structure structure;
 
+    private FactionManager factionManager;
     private StructureManager structureManager;
 
     [Inject]
-    public void Construct (StructureManager structureManager) {
+    public void Construct (FactionManager factionManager, StructureManager structureManager) {
+        this.factionManager = factionManager;
         this.structureManager = structureManager;
     }
 
@@ -269,7 +272,7 @@ public class HangarBayLaunchSlot : ISaveTo<HangarBayLaunchSlotSaveData> {
             // If launched
             if (launchingProgress == launchable.LaunchingPreparation) {
                 // Spawn structure
-                structure = structureManager.SpawnStructure (launchable, slot.Equipper.Faction.Value (FactionManager.Instance.GetFaction), slot.Equipper.Sector.Value (SectorManager.Instance.GetSector), new Location (slot.LocalPosition));
+                structure = structureManager.SpawnStructure (launchable, slot.Equipper.Faction.Value (factionManager.GetFaction), slot.Equipper.Sector.Value (SectorManager.Instance.GetSector), new Location (slot.LocalPosition));
                 HangarManagedCraftAI ai = ScriptableObject.CreateInstance<HangarManagedCraftAI> ();
                 ai.Launchable = launchable;
                 ai.HangarBay = data;

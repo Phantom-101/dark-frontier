@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Structures;
+using UnityEngine;
 
 public class HangarManagedCraftAI : AI {
     public HangarLaunchableSO Launchable;

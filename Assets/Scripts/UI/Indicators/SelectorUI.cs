@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Structures;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class SelectorUI : MonoBehaviour {

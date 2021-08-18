@@ -1,11 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using DarkFrontier.Factions;
+using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class FactionsUI : LogTabUI {
-
     [SerializeField] private Transform _content;
     [SerializeField] private GameObject _prefab;
     [SerializeField] private List<FactionInfoUI> _instantiated = new List<FactionInfoUI> ();
+
+    private FactionRegistry factionRegistry;
+
+    [Inject]
+    public void Construct (FactionRegistry factionRegistry) {
+        this.factionRegistry = factionRegistry;
+    }
 
     public override void SwitchIn () {
 
@@ -13,7 +21,7 @@ public class FactionsUI : LogTabUI {
         _instantiated = new List<FactionInfoUI> ();
 
         int index = 0;
-        foreach (Faction f in FactionManager.Instance.Factions) {
+        foreach (Faction f in factionRegistry.Factions) {
 
             GameObject go = Instantiate (_prefab, _content);
             go.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, -150 * index);
@@ -29,5 +37,4 @@ public class FactionsUI : LogTabUI {
         base.SwitchIn ();
 
     }
-
 }

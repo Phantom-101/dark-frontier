@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DarkFrontier.Structures;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu (menuName = "Items/Item")]

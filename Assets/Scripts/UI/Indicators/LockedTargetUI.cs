@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using DarkFrontier.Factions;
+using DarkFrontier.Structures;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class LockedTargetUI : MonoBehaviour {
 
@@ -20,6 +23,13 @@ public class LockedTargetUI : MonoBehaviour {
     private PlayerController _pc;
 
     public Structure Structure { get => _structure; set => _structure = value; }
+
+    private FactionManager factionManager;
+
+    [Inject]
+    public void Construct (FactionManager factionManager) {
+        this.factionManager = factionManager;
+    }
 
     private void Start () {
 
@@ -57,7 +67,7 @@ public class LockedTargetUI : MonoBehaviour {
         _leftProgress.fillAmount = fa;
         _rightProgress.fillAmount = fa;
         _name.text = _structure.gameObject.name;
-        _faction.text = _structure.Faction.Value (FactionManager.Instance.GetFaction)?.Name ?? "None";
+        _faction.text = _structure.Faction.Value (factionManager.GetFaction)?.Name ?? "None";
         _distance.text = Vector3.Distance (PlayerController.Instance.Player.transform.position, _structure.transform.position).ToString ("F0") + " m";
         Rigidbody rb = _structure.GetComponent<Rigidbody> ();
         if (rb == null) _velocity.text = "0 m/s";

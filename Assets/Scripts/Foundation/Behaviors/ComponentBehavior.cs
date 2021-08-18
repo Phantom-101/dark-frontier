@@ -1,21 +1,21 @@
 ﻿using UnityEngine;
 
 namespace DarkFrontier.Foundation.Behaviors {
-    public class BehaviorBase : MonoBehaviour {
+    public class ComponentBehavior : MonoBehaviour, IBehavior {
         [SerializeField] protected bool initialized;
-        public BehaviorManager Manager { get => manager; set => manager = value; }
-        [SerializeField] protected BehaviorManager manager;
+        public bool CanTickSelf { get => canTickSelf; set => canTickSelf = value; }
+        [SerializeField] protected bool canTickSelf = true;
 
         private void Update () {
-            if (manager == null) Tick (Time.deltaTime, Time.deltaTime);
+            if (canTickSelf) Tick (Time.deltaTime, Time.deltaTime);
         }
 
         private void LateUpdate () {
-            if (manager == null) LateTick (Time.deltaTime, Time.deltaTime);
+            if (canTickSelf) LateTick (Time.deltaTime, Time.deltaTime);
         }
 
         private void FixedUpdate () {
-            if (manager == null) FixedTick (Time.fixedDeltaTime, Time.fixedDeltaTime);
+            if (canTickSelf) FixedTick (Time.fixedDeltaTime, Time.fixedDeltaTime);
         }
 
         private void OnEnable () {
@@ -64,10 +64,12 @@ namespace DarkFrontier.Foundation.Behaviors {
             }
             InternalTick (dt);
             if (edt != null) InternalExpensiveTick (edt.Value);
+            PropagateTick (dt, edt);
         }
 
         protected virtual void InternalTick (float dt) { }
         protected virtual void InternalExpensiveTick (float dt) { }
+        protected virtual void PropagateTick (float dt, float? edt = null) { }
 
         /// <summary>
         /// Ticks the behavior after the game loop has elapsed. Equivalent to the LateUpdate event function.
@@ -82,10 +84,12 @@ namespace DarkFrontier.Foundation.Behaviors {
             }
             InternalLateTick (dt);
             if (edt != null) InternalExpensiveLateTick (edt.Value);
+            PropagateLateTick (dt, edt);
         }
 
         protected virtual void InternalLateTick (float dt) { }
         protected virtual void InternalExpensiveLateTick (float dt) { }
+        protected virtual void PropagateLateTick (float dt, float? edt = null) { }
 
         /// <summary>
         /// Ticks the behavior according to the physics loop. Equivalent to the FixedUpdate event function.
@@ -100,10 +104,12 @@ namespace DarkFrontier.Foundation.Behaviors {
             }
             InternalFixedTick (dt);
             if (edt != null) InternalExpensiveFixedTick (edt.Value);
+            PropagateFixedTick (dt, edt);
         }
 
         protected virtual void InternalFixedTick (float dt) { }
         protected virtual void InternalExpensiveFixedTick (float dt) { }
+        protected virtual void PropagateFixedTick (float dt, float? edt = null) { }
 
         /// <summary>
         /// Attempts to validate all of the variables of this behavior.

@@ -1,8 +1,9 @@
 ﻿using DarkFrontier.Foundation.Behaviors;
+using DarkFrontier.Structures;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentSlot : BehaviorBase {
+public class EquipmentSlot : ComponentBehavior {
     public Structure Equipper;
     public List<ItemConditionSO> Filters = new List<ItemConditionSO> ();
     [SerializeReference] public EquipmentSlotData Data = new EquipmentSlotData ();

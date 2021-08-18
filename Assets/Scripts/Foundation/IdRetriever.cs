@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DarkFrontier.Structures;
+using System;
 using UnityEngine;
 
 namespace DarkFrontier.Foundation {

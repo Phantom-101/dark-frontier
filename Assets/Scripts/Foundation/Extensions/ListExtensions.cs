@@ -8,6 +8,10 @@ namespace DarkFrontier.Foundation.Extensions {
             return true;
         }
 
+        public static int RemoveAll<T> (this List<T> list) {
+            return list.RemoveAll (e => true);
+        }
+
         public static int RemoveAll<T> (this List<T> list, T item) {
             return list.RemoveAll (e => ReferenceEquals (e, item));
         }

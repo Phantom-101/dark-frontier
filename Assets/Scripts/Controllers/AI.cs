@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Structures;
+using UnityEngine;
 
 [CreateAssetMenu (menuName = "AI/Base")]
 public class AI : ScriptableObject {

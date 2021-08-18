@@ -1,5 +1,5 @@
 ﻿namespace DarkFrontier.Foundation {
-    public interface INotifier<T> : INotifier {
+    public interface IValueNotifier<T> : INotifier {
         T Value { get; set; }
     }
 }

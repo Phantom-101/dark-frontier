@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using DarkFrontier.Structures;
+using System.Linq;
 using UnityEngine;
 
 public class StructureInventoryAdder : MonoBehaviour {

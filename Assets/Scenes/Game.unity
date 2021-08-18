@@ -2234,8 +2234,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32913985a894def46abf9e5ca890333d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: test
-  _inSector: []
+  id: sectors.korthane
+  population: []
 --- !u!4 &792651150
 Transform:
   m_ObjectHideFlags: 0

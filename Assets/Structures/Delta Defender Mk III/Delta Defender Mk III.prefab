@@ -158,6 +158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Data:
@@ -258,6 +260,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Data:
@@ -5397,6 +5401,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Data:
@@ -5455,58 +5461,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 649fe7b2604da9e4986d8cd7f0fdcfae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  canTickSelf: 1
   _profile: {fileID: 11400000, guid: fcdbd2a9249b25e40ac467b856edd045, type: 2}
   _id: 
   stats:
     stats: []
   hull: 4500
-  _faction: {fileID: 0}
-  _equipmentSlots:
+  faction:
+    id:
+      value: 
+    value:
+      id: 0
+  equipmentSlots:
   - {fileID: 6600085404695014259}
   - {fileID: 2576285590069773046}
   - {fileID: 9161962482777851408}
   - {fileID: 3938042005856736322}
   - {fileID: 5818075544933059250}
   - {fileID: 7115233860060840377}
+  - {fileID: 3615694585514351432}
+  - {fileID: 4961098995217466760}
   _inventory:
-    quantities:
-      reorderableList:
-        canAdd: 0
-        canRemove: 0
-        draggable: 0
-        expandable: 0
-        multipleSelection: 0
-        isExpanded: 0
-        label:
-          m_Text: 
-          m_Image: {fileID: 0}
-          m_Tooltip: 
-        headerHeight: 0
-        footerHeight: 0
-        slideEasing: 0
-        verticalSpacing: 0
-        showDefaultBackground: 0
-        elementDisplayType: 0
-        elementNameProperty: 
-        elementNameOverride: 
-        elementIcon: {fileID: 0}
-      reqReferences: {fileID: 11400000, guid: 3d6785e46e940b843aa5fbe4ca729d60, type: 2}
-      isExpanded: 0
-      _keyValues: []
-      _keys: []
-      _values: 
-    volume:
-      name: 
-      baseValue: 0
-      modifiers: []
-    storedVolume: 0
-    precision: 0
+    id: 0
   _ai: {fileID: 0}
   _aiEnabled: 1
   _selected: {fileID: 0}
-  _sector: {fileID: 0}
-  _docked: []
-  _initialized: 0
+  sector:
+    id:
+      value: 
+    value: {fileID: 0}
+  dockingBays:
+    id: 0
+  dockee: {fileID: 0}
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }
 --- !u!54 &2869013932428447134
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5578,6 +5569,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Data:
@@ -5633,6 +5626,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Data:
@@ -5688,6 +5683,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Data:
@@ -5746,6 +5743,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Data:
@@ -20356,6 +20355,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Data:

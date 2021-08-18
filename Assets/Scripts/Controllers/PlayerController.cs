@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DarkFrontier.Structures;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;

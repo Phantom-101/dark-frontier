@@ -1,4 +1,5 @@
-﻿using DarkFrontier.Structures;
+﻿using DarkFrontier.Factions;
+using DarkFrontier.Structures;
 using System;
 using System.IO;
 using UnityEngine;
@@ -12,10 +13,12 @@ public class SaveManager : MonoBehaviour {
 
     private static SaveManager _instance;
 
+    private FactionManager factionManager;
     private StructureManager structureManager;
 
     [Inject]
-    public void Construct (StructureManager structureManager) {
+    public void Construct (FactionManager factionManager, StructureManager structureManager) {
+        this.factionManager = factionManager;
         this.structureManager = structureManager;
     }
 
@@ -27,7 +30,7 @@ public class SaveManager : MonoBehaviour {
     private void Update () {
         if (_job != null) {
             SectorManager.Instance.LoadGame (_job.Directory);
-            FactionManager.Instance.LoadGame (_job.Directory);
+            factionManager.LoadGame (_job.Directory);
             structureManager.LoadGame (_job.Directory);
             _universe = _job.Directory.Parent.Name;
             _job = null;
@@ -47,7 +50,7 @@ public class SaveManager : MonoBehaviour {
         if (!info.Exists) info.Create ();
         structureManager.SaveGame (info);
         SectorManager.Instance.SaveGame (info);
-        FactionManager.Instance.SaveGame (info);
+        factionManager.SaveGame (info);
     }
 
     public void Load (string universeName) {
