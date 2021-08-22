@@ -1,4 +1,5 @@
 ﻿using DarkFrontier.Foundation.Behaviors;
+using DarkFrontier.Locations;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,28 +9,32 @@ using Zenject;
 
 namespace DarkFrontier.Structures {
     public class StructureManager : ComponentBehavior {
+        public StructureRegistry Registry { get => registry; }
         [SerializeReference] private StructureRegistry registry;
 
         private readonly BehaviorTicker ticker = new BehaviorTicker ();
         private readonly BehaviorTicker lateTicker = new BehaviorTicker ();
         private readonly BehaviorTicker fixedTicker = new BehaviorTicker ();
 
+        private SectorManager sectorManager;
+
         [Inject]
-        public void Construct (StructureRegistry registry) {
+        public void Construct (StructureRegistry registry, SectorManager sectorManager) {
             this.registry = registry;
+            this.sectorManager = sectorManager;
         }
 
         protected override void PropagateTick (float dt, float? edt = null) => ticker.Tick (dt, edt);
         protected override void PropagateLateTick (float dt, float? edt = null) => lateTicker.Tick (dt, edt);
         protected override void PropagateFixedTick (float dt, float? edt = null) => fixedTicker.Tick (dt, edt);
 
-        protected override void SubscribeEventListeners () {
+        protected override void InternalSubscribeEventListeners () {
             ticker.Notifier += TickStructures;
             lateTicker.Notifier += LateTickStructures;
             fixedTicker.Notifier += FixedTickStructures;
         }
 
-        protected override void UnsubscribeEventListeners () {
+        protected override void InternalUnsubscribeEventListeners () {
             ticker.Notifier -= TickStructures;
             lateTicker.Notifier -= LateTickStructures;
             fixedTicker.Notifier -= FixedTickStructures;
@@ -52,7 +57,7 @@ namespace DarkFrontier.Structures {
         }
 
         public HashSet<Structure> GetDetected (Structure structure) {
-            List<Structure> inSector = structure.Sector.Value (SectorManager.Instance.GetSector).Population;
+            List<Structure> inSector = structure.Sector.Value (sectorManager.Registry.Find).Population;
             HashSet<Structure> ret = new HashSet<Structure> ();
             foreach (Structure candidate in inSector)
                 if (candidate != structure && Detects (structure, candidate))
@@ -119,7 +124,7 @@ namespace DarkFrontier.Structures {
             ) as List<StructureSaveData>;
             structures.ForEach (data => {
                 StructureSO profile = ItemManager.Instance.GetItem (data.ProfileId) as StructureSO;
-                GameObject structure = Instantiate (profile.Prefab, SectorManager.Instance.GetSector (data.SectorId).transform);
+                GameObject structure = Instantiate (profile.Prefab, sectorManager.Registry.Find (data.SectorId).transform);
                 structure.name = profile.Name;
                 Structure comp = structure.GetComponent<Structure> ();
                 comp.SetSaveData (data);

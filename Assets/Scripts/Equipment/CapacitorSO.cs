@@ -32,7 +32,6 @@ public class CapacitorSO : EquipmentSO {
 
     public override void Tick (EquipmentSlot slot, float dt) {
         EnsureDataType (slot);
-
         CapacitorSlotData data = slot.Data as CapacitorSlotData;
 
         data.ChargeLeft = MaxChargeRate * dt;

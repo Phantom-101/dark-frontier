@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Foundation.Behaviors;
 
-public class EquipmentButton : MonoBehaviour {
-    public EquipmentSlot Slot;
-
-    public virtual void Initialize () { }
+namespace DarkFrontier.Equipment {
+    public class EquipmentButton : ComponentBehavior {
+        public EquipmentSlot Slot;
+    }
 }

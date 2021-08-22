@@ -1,4 +1,5 @@
 ﻿using DarkFrontier.Factions;
+using DarkFrontier.Locations;
 using DarkFrontier.Structures;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,6 @@ public class HangarBaySO : EquipmentSO {
 
     public override void Tick (EquipmentSlot slot, float dt) {
         EnsureDataType (slot);
-
         HangarBaySlotData data = slot.Data as HangarBaySlotData;
 
         if (data.Activated) {
@@ -76,7 +76,9 @@ public class HangarBaySO : EquipmentSO {
     public override void FixedTick (EquipmentSlot slot, float dt) { }
 
     public override bool CanClick (EquipmentSlot slot) {
+        EnsureDataType (slot);
         HangarBaySlotData data = slot.Data as HangarBaySlotData;
+
         if (data.Activated) {
             // If equipment is activated and selected is null or target
             // Assume user wants to deactivate equipment
@@ -100,7 +102,10 @@ public class HangarBaySO : EquipmentSO {
 
     public override void OnClicked (EquipmentSlot slot) {
         if (!CanClick (slot)) return;
+
+        EnsureDataType (slot);
         HangarBaySlotData data = slot.Data as HangarBaySlotData;
+
         if (data.Activated) {
             // If equipment is activated and selected is null or target
             // Assume user wants to deactivate equipment
@@ -190,11 +195,13 @@ public class HangarBayLaunchSlot : ISaveTo<HangarBayLaunchSlotSaveData> {
     public Structure Structure { get => structure; }
     [SerializeField] private Structure structure;
 
+    private SectorManager sectorManager;
     private FactionManager factionManager;
     private StructureManager structureManager;
 
     [Inject]
-    public void Construct (FactionManager factionManager, StructureManager structureManager) {
+    public void Construct (SectorManager sectorManager, FactionManager factionManager, StructureManager structureManager) {
+        this.sectorManager = sectorManager;
         this.factionManager = factionManager;
         this.structureManager = structureManager;
     }
@@ -272,7 +279,7 @@ public class HangarBayLaunchSlot : ISaveTo<HangarBayLaunchSlotSaveData> {
             // If launched
             if (launchingProgress == launchable.LaunchingPreparation) {
                 // Spawn structure
-                structure = structureManager.SpawnStructure (launchable, slot.Equipper.Faction.Value (factionManager.GetFaction), slot.Equipper.Sector.Value (SectorManager.Instance.GetSector), new Location (slot.LocalPosition));
+                structure = structureManager.SpawnStructure (launchable, slot.Equipper.Faction.Value (factionManager.Registry.Find), slot.Equipper.Sector.Value (sectorManager.Registry.Find), new Location (slot.LocalPosition));
                 HangarManagedCraftAI ai = ScriptableObject.CreateInstance<HangarManagedCraftAI> ();
                 ai.Launchable = launchable;
                 ai.HangarBay = data;

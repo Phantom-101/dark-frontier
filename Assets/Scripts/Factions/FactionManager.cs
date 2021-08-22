@@ -9,6 +9,7 @@ using Zenject;
 
 namespace DarkFrontier.Factions {
     public class FactionManager : ComponentBehavior {
+        public FactionRegistry Registry { get => registry; }
         [SerializeReference] private FactionRegistry registry;
 
         [Inject]
@@ -16,11 +17,9 @@ namespace DarkFrontier.Factions {
             this.registry = registry;
         }
 
-        public Faction GetFaction (string id) { return registry.Factions.Where (e => e.Id == id).FirstOrDefault (); }
-
         public void SaveGame (DirectoryInfo directory) {
             List<FactionSaveData> saveData = new List<FactionSaveData> ();
-            registry.Factions.ToList ().ForEach (faction => { saveData.Add (faction.GetSaveData ()); });
+            registry.Factions.ToList ().ForEach (faction => { saveData.Add (faction.Save ()); });
             FileInfo file = PathManager.GetFactionFile (directory);
             if (!file.Exists) file.Create ().Close ();
             File.WriteAllText (

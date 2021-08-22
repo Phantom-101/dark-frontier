@@ -1,4 +1,5 @@
-﻿using DarkFrontier.Structures;
+﻿using DarkFrontier.Locations;
+using DarkFrontier.Structures;
 using System;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ namespace DarkFrontier.Foundation {
         }
 
         public T Value (Func<string, T> getter) {
-            if (dirty) {
+            if (dirty || value == null) {
                 value = getter (Id.Value);
                 dirty = false;
             }

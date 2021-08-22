@@ -34,7 +34,9 @@ public class BeamLaserSO : EquipmentSO {
     }
 
     public override void OnUnequip (EquipmentSlot slot) {
+        EnsureDataType (slot);
         BeamLaserSlotData data = slot.Data as BeamLaserSlotData;
+
         if (data.Beam != null) Destroy (data.Beam);
         slot.Data = new EquipmentSlotData {
             Slot = slot,
@@ -45,7 +47,6 @@ public class BeamLaserSO : EquipmentSO {
 
     public override void Tick (EquipmentSlot slot, float dt) {
         EnsureDataType (slot);
-
         BeamLaserSlotData data = slot.Data as BeamLaserSlotData;
 
         if (data.Activated && (data.Target == null || !slot.Equipper.Locks.ContainsKey (data.Target) || (data.Target.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range)) data.Activated = false;
@@ -96,7 +97,9 @@ public class BeamLaserSO : EquipmentSO {
     public override void FixedTick (EquipmentSlot slot, float dt) { }
 
     public override bool CanClick (EquipmentSlot slot) {
+        EnsureDataType (slot);
         BeamLaserSlotData data = slot.Data as BeamLaserSlotData;
+
         if (data.Activated) {
             // If equipment is activated and selected is null or target
             // Assume user wants to deactivate equipment
@@ -120,7 +123,10 @@ public class BeamLaserSO : EquipmentSO {
 
     public override void OnClicked (EquipmentSlot slot) {
         if (!CanClick (slot)) return;
+
+        EnsureDataType (slot);
         BeamLaserSlotData data = slot.Data as BeamLaserSlotData;
+
         if (data.Activated) {
             // If equipment is activated and selected is null or target
             // Assume user wants to deactivate equipment

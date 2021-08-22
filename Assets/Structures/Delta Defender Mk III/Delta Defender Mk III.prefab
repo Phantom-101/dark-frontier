@@ -159,6 +159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialized: 0
+  subscribed: 0
   canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
@@ -171,7 +172,7 @@ MonoBehaviour:
       data:
         Slot: {fileID: 2576285590069773046}
         Equipment: {fileID: 11400000, guid: 44bd9c98f51eb3e4fb6d22dacd37c314, type: 2}
-        Durability: 0
+        Durability: 99999
 --- !u!1 &1701054646738178629
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,6 +262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialized: 0
+  subscribed: 0
   canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
@@ -273,7 +275,7 @@ MonoBehaviour:
       data:
         Slot: {fileID: 3615694585514351432}
         Equipment: {fileID: 11400000, guid: b4bcc1310fd094d4d90dc6125e68b4c1, type: 2}
-        Durability: 0
+        Durability: 99999
 --- !u!1 &1861241844326513373
 GameObject:
   m_ObjectHideFlags: 0
@@ -5402,6 +5404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialized: 0
+  subscribed: 0
   canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
@@ -5414,7 +5417,7 @@ MonoBehaviour:
       data:
         Slot: {fileID: 4961098995217466760}
         Equipment: {fileID: 11400000, guid: b4bcc1310fd094d4d90dc6125e68b4c1, type: 2}
-        Durability: 0
+        Durability: 99999
 --- !u!1 &2869013932428447122
 GameObject:
   m_ObjectHideFlags: 0
@@ -5462,9 +5465,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialized: 0
+  subscribed: 0
   canTickSelf: 1
   _profile: {fileID: 11400000, guid: fcdbd2a9249b25e40ac467b856edd045, type: 2}
-  _id: 
+  id:
+    value: 
   stats:
     stats: []
   hull: 4500
@@ -5570,6 +5575,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialized: 0
+  subscribed: 0
   canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
@@ -5582,7 +5588,7 @@ MonoBehaviour:
       data:
         Slot: {fileID: 9161962482777851408}
         Equipment: {fileID: 11400000, guid: 6736820e02c121647963c6d6b1361bbc, type: 2}
-        Durability: 0
+        Durability: 99999
 --- !u!1 &2869013932910226440
 GameObject:
   m_ObjectHideFlags: 0
@@ -5627,6 +5633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialized: 0
+  subscribed: 0
   canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
@@ -5639,7 +5646,7 @@ MonoBehaviour:
       data:
         Slot: {fileID: 5818075544933059250}
         Equipment: {fileID: 11400000, guid: 4c16d1310a5b62f49bc0f04eb70f19fc, type: 2}
-        Durability: 0
+        Durability: 99999
 --- !u!1 &2869013934095021293
 GameObject:
   m_ObjectHideFlags: 0
@@ -5684,6 +5691,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialized: 0
+  subscribed: 0
   canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
@@ -5696,7 +5704,7 @@ MonoBehaviour:
       data:
         Slot: {fileID: 3938042005856736322}
         Equipment: {fileID: 11400000, guid: 3f6e308b812c2134698ea542b747320e, type: 2}
-        Durability: 0
+        Durability: 99999
 --- !u!1 &2869013934242875146
 GameObject:
   m_ObjectHideFlags: 0
@@ -5744,6 +5752,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialized: 0
+  subscribed: 0
   canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
@@ -5756,7 +5765,7 @@ MonoBehaviour:
       data:
         Slot: {fileID: 7115233860060840377}
         Equipment: {fileID: 11400000, guid: d5ce1a3bc11a30a4e9e6233bd163f7d2, type: 2}
-        Durability: 0
+        Durability: 99999
 --- !u!1 &3377422656699159163
 GameObject:
   m_ObjectHideFlags: 0
@@ -20356,6 +20365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialized: 0
+  subscribed: 0
   canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
@@ -20368,7 +20378,7 @@ MonoBehaviour:
       data:
         Slot: {fileID: 6600085404695014259}
         Equipment: {fileID: 11400000, guid: 44bd9c98f51eb3e4fb6d22dacd37c314, type: 2}
-        Durability: 0
+        Durability: 99999
 --- !u!1 &4649590968597685381
 GameObject:
   m_ObjectHideFlags: 0

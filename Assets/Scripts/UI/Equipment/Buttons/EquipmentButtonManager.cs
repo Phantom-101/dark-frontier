@@ -1,4 +1,5 @@
-﻿using DarkFrontier.Structures;
+﻿using DarkFrontier.Equipment;
+using DarkFrontier.Structures;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -29,7 +30,7 @@ public class EquipmentButtonManager : MonoBehaviour {
                     GameObject indicator = Instantiate (key.Data.Equipment.ButtonPrefab, parent);
                     EquipmentButton comp = indicator.GetComponent<EquipmentButton> ();
                     comp.Slot = key;
-                    comp.Initialize ();
+                    comp.TryInitialize ();
                     buttons[key] = comp;
                 }
             }

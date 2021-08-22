@@ -34,7 +34,7 @@ public class DockingBayList {
         // In the same sector or already docked?
         if (docker.transform.parent != structure.transform.parent) return false;
         // Good relations?
-        if (structure.Faction == null || structure.Faction.Value (factionManager.GetFaction).IsEnemy (docker.Faction.Id.Value)) return false;
+        if (structure.Faction == null || structure.Faction.Value (factionManager.Registry.Find).IsEnemy (docker.Faction.Id.Value)) return false;
         // Within range?
         if (NavigationManager.Instance.GetLocalDistance (structure, docker) > 50) return false;
         // Already children?

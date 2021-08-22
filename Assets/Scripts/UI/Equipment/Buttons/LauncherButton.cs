@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DarkFrontier.Equipment;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +15,8 @@ public class LauncherButton : EquipmentButton {
 
     private LauncherSO cache;
 
-    public override void Initialize () {
+    protected override void MultiInitialize () {
+        if (Slot == null) return;
         cache = Slot.Data.Equipment as LauncherSO;
         Tooltip.text = Slot.Data.Equipment.name;
         TooltipGroup.alpha = 0;
@@ -27,13 +29,15 @@ public class LauncherButton : EquipmentButton {
         });
     }
 
-    private void Update () {
+    protected override void InternalTick (float dt) {
         if (Slot.Data.Equipment != cache) {
             Destroy (gameObject);
             return;
         }
 
+        cache.EnsureDataType (Slot);
         LauncherSlotData data = Slot.Data as LauncherSlotData;
+
         Button.interactable = cache.CanClick (Slot);
         if (data.Missile == null) Icon.sprite = cache.Icon;
         else Icon.sprite = data.Missile.Icon;

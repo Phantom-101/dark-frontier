@@ -55,7 +55,7 @@ public class SelectedInfoUI : MonoBehaviour {
 
         _name.text = selected.gameObject.name;
 
-        _faction.text = selected.Faction.Value (factionManager.GetFaction)?.Name ?? "None";
+        _faction.text = selected.Faction.Value (factionManager.Registry.Find)?.Name ?? "None";
 
         _distance.text = Vector3.Distance (PlayerController.Instance.Player.transform.position, selected.transform.position).ToString ("F2") + " m";
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Equipment;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PulseLaserButton : EquipmentButton {
@@ -13,7 +14,8 @@ public class PulseLaserButton : EquipmentButton {
 
     private PulseLaserSO cache;
 
-    public override void Initialize () {
+    protected override void MultiInitialize () {
+        if (Slot == null) return;
         cache = Slot.Data.Equipment as PulseLaserSO;
         Icon.sprite = cache.Icon;
         Tooltip.text = Slot.Data.Equipment.name;
@@ -22,13 +24,15 @@ public class PulseLaserButton : EquipmentButton {
         DumpButton.onClick.AddListener (() => (Slot.Data as PulseLaserSlotData).Charge = 0);
     }
 
-    private void Update () {
+    protected override void InternalTick (float dt) {
         if (Slot.Data.Equipment != cache) {
             Destroy (gameObject);
             return;
         }
 
+        cache.EnsureDataType (Slot);
         PulseLaserSlotData data = Slot.Data as PulseLaserSlotData;
+
         Button.interactable = cache.CanClick (Slot);
         Center.fillAmount = data.Charge / cache.EnergyRequired;
         Side.fillAmount = cache.GetRangeMultiplier (Slot) / cache.PreemptiveRangeMultiplier.Evaluate (0);

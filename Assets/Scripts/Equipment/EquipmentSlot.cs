@@ -33,6 +33,10 @@ public class EquipmentSlot : ComponentBehavior {
         if (Data == null) Data = new EquipmentSlotData ();
         // Data's slot should be this
         Data.Slot = this;
+        // Data's data type should be correct
+        if (Data.Equipment != null) Data.Equipment.EnsureDataType (this);
+        // Durability should be clamped
+        if (Data.Equipment != null) Data.Durability = Mathf.Clamp (Data.Durability, 0, Data.Equipment.Durability);
         return true;
     }
 

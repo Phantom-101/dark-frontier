@@ -5,7 +5,7 @@ using UnityEngine;
 using Zenject;
 
 public class PropertyUI : LogTabUI {
-    [SerializeField] private Faction _faction;
+    [SerializeField] private Faction faction;
     [SerializeField] private Transform _content;
     [SerializeField] private GameObject _prefab;
     [SerializeField] private List<PropertyInfoUI> _instantiated = new List<PropertyInfoUI> ();
@@ -21,14 +21,14 @@ public class PropertyUI : LogTabUI {
         foreach (PropertyInfoUI info in _instantiated) Destroy (info.gameObject);
         _instantiated = new List<PropertyInfoUI> ();
 
-        _faction = PlayerController.Instance.Player.Faction.Value (factionManager.GetFaction);
+        faction = PlayerController.Instance.Player.Faction.Value (factionManager.Registry.Find);
 
-        if (_faction == null) {
+        if (faction == null) {
             base.SwitchIn ();
             return;
         }
 
-        List<Structure> property = _faction.GetProperty ();
+        List<Structure> property = faction.Property.Structures;
         int index = 0;
         foreach (Structure s in property) {
             GameObject go = Instantiate (_prefab, _content);

@@ -7,5 +7,8 @@
         void FixedTick (float dt, float? edt);
 
         bool Validate ();
+
+        void SubscribeEventListeners ();
+        void UnsubscribeEventListeners ();
     }
 }

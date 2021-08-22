@@ -96,6 +96,7 @@ public class EngineSO : EquipmentSO {
     }
 
     private Vector3[] GetAccelerations (EquipmentSlot slot) {
+        EnsureDataType (slot);
         Rigidbody rb = slot.Equipper.GetComponent<Rigidbody> ();
         EngineSlotData data = slot.Data as EngineSlotData;
 
@@ -126,6 +127,7 @@ public class EngineSO : EquipmentSO {
     }
 
     private float GetConsumption (EquipmentSlot slot) {
+        EnsureDataType (slot);
         Rigidbody rb = slot.Equipper.GetComponent<Rigidbody> ();
         EngineSlotData data = slot.Data as EngineSlotData;
 

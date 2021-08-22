@@ -3,6 +3,7 @@
 namespace DarkFrontier.Foundation.Behaviors {
     public class ComponentBehavior : MonoBehaviour, IBehavior {
         [SerializeField] protected bool initialized;
+        [SerializeField] protected bool subscribed;
         public bool CanTickSelf { get => canTickSelf; set => canTickSelf = value; }
         [SerializeField] protected bool canTickSelf = true;
 
@@ -118,7 +119,22 @@ namespace DarkFrontier.Foundation.Behaviors {
         public virtual bool Validate () => true;
         protected virtual void ValidateFailed () { }
 
-        protected virtual void SubscribeEventListeners () { }
-        protected virtual void UnsubscribeEventListeners () { }
+        public void SubscribeEventListeners () {
+            if (!subscribed) {
+                InternalSubscribeEventListeners ();
+                subscribed = true;
+            }
+        }
+
+        protected virtual void InternalSubscribeEventListeners () { }
+
+        public void UnsubscribeEventListeners () {
+            if (subscribed) {
+                InternalUnsubscribeEventListeners ();
+                subscribed = false;
+            }
+        }
+
+        protected virtual void InternalUnsubscribeEventListeners () { }
     }
 }

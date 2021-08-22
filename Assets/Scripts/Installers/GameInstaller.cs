@@ -1,10 +1,14 @@
 ﻿using DarkFrontier.Factions;
+using DarkFrontier.Locations;
 using DarkFrontier.Structures;
 using Zenject;
 
 namespace DarkFrontier.Installers {
     public class GameInstaller : MonoInstaller {
         public override void InstallBindings () {
+            Container.Bind<SectorRegistry> ().AsSingle ();
+            Container.Bind<SectorManager> ().FromNewComponentOnNewGameObject ().AsSingle ();
+
             Container.Bind<FactionRegistry> ().AsSingle ();
             Container.Bind<FactionManager> ().FromNewComponentOnNewGameObject ().AsSingle ();
 

@@ -2,6 +2,7 @@
 using DarkFrontier.Foundation;
 using DarkFrontier.Foundation.Behaviors;
 using DarkFrontier.Foundation.Extensions;
+using DarkFrontier.Locations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,8 @@ namespace DarkFrontier.Structures {
         public StructureSO Profile { get => _profile; }
         [SerializeField] private StructureSO _profile;
 
-        public string Id { get => _id; }
-        [SerializeField] private string _id;
+        public Id Id { get => id; }
+        [SerializeField] private Id id = new Id ();
 
         public StatList Stats { get => stats; }
         [SerializeField] private StatList stats = new StatList ();
@@ -24,8 +25,8 @@ namespace DarkFrontier.Structures {
             set {
                 hull = Mathf.Min (value, stats.GetBaseValue (StatNames.MaxHull, 1));
                 if (hull <= 0) {
-                    if (Faction.Value (factionManager.GetFaction) != null) Faction.Cached.RemoveProperty (this);
-                    if (Sector != null) Sector.Value (SectorManager.Instance.GetSector).Exited (this);
+                    if (Faction.Value (factionManager.Registry.Find) != null) Faction.Cached.Property.Remove (this);
+                    if (Sector != null) Sector.Value (sectorManager.Registry.Find).Exited (this);
                     structureManager.DestroyStructure (this);
                 }
             }
@@ -78,16 +79,14 @@ namespace DarkFrontier.Structures {
 
         private new Rigidbody rigidbody;
 
-        private FactionRegistry factionRegistry;
+        private SectorManager sectorManager;
         private FactionManager factionManager;
-        private StructureRegistry structureRegistry;
         private StructureManager structureManager;
 
         [Inject]
-        public void Construct (FactionRegistry factionRegistry, FactionManager factionManager, StructureRegistry structureRegistry, StructureManager structureManager) {
-            this.factionRegistry = factionRegistry;
+        public void Construct (SectorManager sectorManager, FactionManager factionManager, StructureManager structureManager) {
+            this.sectorManager = sectorManager;
             this.factionManager = factionManager;
-            this.structureRegistry = structureRegistry;
             this.structureManager = structureManager;
         }
 
@@ -96,7 +95,7 @@ namespace DarkFrontier.Structures {
 
             if (transform.parent != null) {
                 Sector.Id.Value = GetComponentInParent<Sector> ().Id;
-                if (Sector.Value (SectorManager.Instance.GetSector) != null) Sector.Cached.Entered (this);
+                if (Sector.Value (sectorManager.Registry.Find) != null) Sector.Cached.Entered (this);
             }
 
             EnsureStats ();
@@ -112,10 +111,10 @@ namespace DarkFrontier.Structures {
 
         protected override void MultiInitialize () {
             // Add to registries
-            structureRegistry.Structures.AddUnique (this);
-            if (Faction.Value (factionManager.GetFaction) != null) {
-                factionRegistry.Factions.AddUnique (Faction.Cached);
-                Faction.Cached.AddProperty (this);
+            structureManager.Registry.Add (this);
+            if (Faction.Value (factionManager.Registry.Find) != null) {
+                factionManager.Registry.Add (Faction.Cached);
+                Faction.Cached.Property.Add (this);
             }
             // Do not tick self
             canTickSelf = false;
@@ -154,19 +153,18 @@ namespace DarkFrontier.Structures {
 
         public override bool Validate () {
             // Should have dependencies
-            if (structureRegistry == null) return false;
+            if (sectorManager == null) return false;
+            if (factionManager == null) return false;
             if (structureManager == null) return false;
             // Should have profile
             if (_profile == null) return false;
             // Should have parent
             if (transform.parent == null) return false;
-            // Should have valid id
-            if (string.IsNullOrEmpty (_id)) _id = Guid.NewGuid ().ToString ();
             // Should have sector in parent tree
-            Sector.Value (SectorManager.Instance.GetSector);
+            Sector.Value (sectorManager.Registry.Find);
             if (Sector.Cached == null) {
                 Sector.Id.Value = GetComponentInParent<Sector> ().Id;
-                if (Sector.Value (SectorManager.Instance.GetSector) == null) return false;
+                if (Sector.Value (sectorManager.Registry.Find) == null) return false;
                 Sector.Cached.Entered (this);
             }
             // Should have stats
@@ -180,11 +178,11 @@ namespace DarkFrontier.Structures {
             return true;
         }
 
-        protected override void SubscribeEventListeners () {
+        protected override void InternalSubscribeEventListeners () {
             stats.GetStat (StatNames.InventoryVolume, 0).OnValueChanged += SynchronizeInventoryVolume;
         }
 
-        protected override void UnsubscribeEventListeners () {
+        protected override void InternalUnsubscribeEventListeners () {
             stats.GetStat (StatNames.InventoryVolume, 0).OnValueChanged -= SynchronizeInventoryVolume;
         }
 
@@ -336,7 +334,7 @@ namespace DarkFrontier.Structures {
             if (_profile != null) data.ProfileId = _profile.Id;
             data.FactionId = Faction.Id.Value;
             equipmentSlots.ForEach (slot => { data.Equipment.Add (slot.Data.Save ()); });
-            if (Sector.Value (SectorManager.Instance.GetSector) != null) data.SectorId = Sector.Cached.Id;
+            if (Sector.Value (sectorManager.Registry.Find) != null) data.SectorId = Sector.Cached.Id;
             data.AIEnabled = _aiEnabled;
             if (PlayerController.Instance.Player == this) data.IsPlayer = true;
             return data;
@@ -357,7 +355,7 @@ namespace DarkFrontier.Structures {
             if (stats == null) stats = new StatList ();
             EnsureStats ();
             Sector.Id.Value = saveData.SectorId;
-            Sector.Value (SectorManager.Instance.GetSector).Entered (this);
+            Sector.Value (sectorManager.Registry.Find).Entered (this);
             _aiEnabled = saveData.AIEnabled;
         }
     }

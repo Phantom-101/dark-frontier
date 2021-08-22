@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace DarkFrontier.Foundation.Behaviors {
-    public class Behavior : IBehavior {
+    public class Behavior : IBehavior, IDisposable {
         [SerializeField] protected bool initialized;
+        [SerializeField] protected bool subscribed;
 
         /// <summary>
         /// Tries to initialize the behavior.
@@ -95,7 +97,24 @@ namespace DarkFrontier.Foundation.Behaviors {
         public virtual bool Validate () => true;
         protected virtual void ValidateFailed () { }
 
-        protected virtual void SubscribeEventListeners () { }
-        protected virtual void UnsubscribeEventListeners () { }
+        public void SubscribeEventListeners () {
+            if (!subscribed) {
+                InternalSubscribeEventListeners ();
+                subscribed = true;
+            }
+        }
+
+        protected virtual void InternalSubscribeEventListeners () { }
+
+        public void UnsubscribeEventListeners () {
+            if (subscribed) {
+                InternalUnsubscribeEventListeners ();
+                subscribed = false;
+            }
+        }
+
+        protected virtual void InternalUnsubscribeEventListeners () { }
+
+        public virtual void Dispose () { }
     }
 }
