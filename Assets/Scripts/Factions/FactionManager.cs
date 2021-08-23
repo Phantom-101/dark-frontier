@@ -43,7 +43,7 @@ namespace DarkFrontier.Factions {
                     TypeNameHandling = TypeNameHandling.All,
                 }
             ) as List<FactionSaveData>;
-            registry.Factions.RemoveAll ();
+            registry.Clear ();
             factions.ForEach (data => registry.Factions.Add (data.Load ()));
         }
     }

@@ -11,10 +11,12 @@ namespace DarkFrontier.Structures {
         [SerializeField] private StructureIdMap structures = new StructureIdMap ();
         public List<Structure> Structures { get => structures.Values.ToList (); }
 
-        public void Add (Structure structure) => structures[structure.Id] = structure;
+        public void Add (Structure structure) => structures.Add (structure.Id, structure);
         public bool TryAdd (Structure structure) => structures.TryAdd (structure.Id, structure);
-        public bool Remove (string structureId) => structures.Remove (structureId);
+        public void Set (Structure structure) => structures[structure.Id] = structure;
         public bool Remove (Structure structure) => Remove (structure.Id);
+        public bool Remove (string structureId) => structures.Remove (structureId);
+        public void Clear () => structures.Clear ();
 
         public bool Has (string structureId) => structures.ContainsKey (structureId);
         public Structure Find (string structureId) => structures.TryGet (structureId, null);

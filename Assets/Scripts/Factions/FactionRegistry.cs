@@ -11,10 +11,12 @@ namespace DarkFrontier.Factions {
         [SerializeField] private FactionIdMap factions = new FactionIdMap ();
         public List<Faction> Factions { get => factions.Values.ToList (); }
 
-        public void Add (Faction faction) => factions[faction.Id] = faction;
+        public void Add (Faction faction) => factions.Add (faction.Id, faction);
         public bool TryAdd (Faction faction) => factions.TryAdd (faction.Id, faction);
-        public bool Remove (string factionId) => factions.Remove (factionId);
+        public void Set (Faction faction) => factions[faction.Id] = faction;
         public bool Remove (Faction faction) => Remove (faction.Id);
+        public bool Remove (string factionId) => factions.Remove (factionId);
+        public void Clear () => factions.Clear ();
 
         public bool Has (string factionId) => factions.ContainsKey (factionId);
         public Faction Find (string factionId) => factions.TryGet (factionId, null);

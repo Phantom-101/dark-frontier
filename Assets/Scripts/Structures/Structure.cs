@@ -111,10 +111,10 @@ namespace DarkFrontier.Structures {
 
         protected override void MultiInitialize () {
             // Add to registries
-            structureManager.Registry.Add (this);
+            structureManager.Registry.Set (this);
             if (Faction.Value (factionManager.Registry.Find) != null) {
-                factionManager.Registry.Add (Faction.Cached);
-                Faction.Cached.Property.Add (this);
+                factionManager.Registry.Set (Faction.Cached);
+                Faction.Cached.Property.Set (this);
             }
             // Do not tick self
             canTickSelf = false;

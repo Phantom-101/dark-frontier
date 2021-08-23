@@ -21,7 +21,7 @@ namespace DarkFrontier.Locations {
         }
 
         protected override void MultiInitialize () {
-            sectorManager.Registry.Add (this);
+            sectorManager.Registry.Set (this);
         }
 
         public void Entered (Structure structure) {

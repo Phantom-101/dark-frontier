@@ -122,6 +122,8 @@ namespace DarkFrontier.Structures {
                     TypeNameHandling = TypeNameHandling.All,
                 }
             ) as List<StructureSaveData>;
+            registry.Structures.ForEach (structure => DisposeStructure (structure));
+            registry.Clear ();
             structures.ForEach (data => {
                 StructureSO profile = ItemManager.Instance.GetItem (data.ProfileId) as StructureSO;
                 GameObject structure = Instantiate (profile.Prefab, sectorManager.Registry.Find (data.SectorId).transform);

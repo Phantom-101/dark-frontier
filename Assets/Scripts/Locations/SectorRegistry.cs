@@ -11,10 +11,12 @@ namespace DarkFrontier.Locations {
         [SerializeField] private SectorIdMap sectors = new SectorIdMap ();
         public List<Sector> Sectors { get => sectors.Values.ToList (); }
 
-        public void Add (Sector sector) => sectors[sector.Id] = sector;
+        public void Add (Sector sector) => sectors.Add (sector.Id, sector);
         public bool TryAdd (Sector sector) => sectors.TryAdd (sector.Id, sector);
-        public bool Remove (string sectorId) => sectors.Remove (sectorId);
+        public void Set (Sector sector) => sectors[sector.Id] = sector;
         public bool Remove (Sector sector) => Remove (sector.Id);
+        public bool Remove (string sectorId) => sectors.Remove (sectorId);
+        public void Clear () => sectors.Clear ();
 
         public bool Has (string sectorId) => sectors.ContainsKey (sectorId);
         public Sector Find (string sectorId) => sectors.TryGet (sectorId, null);

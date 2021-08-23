@@ -1,5 +1,4 @@
-﻿using DarkFrontier.Foundation.Extensions;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,13 +41,13 @@ namespace DarkFrontier.Locations {
                     TypeNameHandling = TypeNameHandling.All,
                 }
             ) as List<SectorSaveData>;
-            registry.Sectors.ToList ().ForEach (sector => { Destroy (sector.gameObject); });
-            registry.Sectors.RemoveAll ();
+            registry.Sectors.ForEach (sector => { Destroy (sector.gameObject); });
+            registry.Clear ();
             sectors.ForEach (data => {
                 GameObject sector = new GameObject ();
                 Sector comp = sector.AddComponent<Sector> ();
                 comp.SetSaveData (data);
-                registry.Add (comp);
+                registry.Set (comp);
             });
         }
 
