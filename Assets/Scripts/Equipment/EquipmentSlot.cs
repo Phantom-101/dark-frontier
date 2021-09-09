@@ -1,50 +1,89 @@
 ﻿using DarkFrontier.Foundation.Behaviors;
+using DarkFrontier.Foundation.Serialization;
+using DarkFrontier.Foundation.Services;
 using DarkFrontier.Structures;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentSlot : ComponentBehavior {
-    public Structure Equipper;
-    public List<ItemConditionSO> Filters = new List<ItemConditionSO> ();
-    [SerializeReference] public EquipmentSlotData Data = new EquipmentSlotData ();
-    public Vector3 LocalPosition { get => transform.position - Equipper.transform.position + Equipper.transform.localPosition; }
+namespace DarkFrontier.Equipment {
 
-    protected override void SingleInitialize () {
-        Equipper = GetComponentInParent<Structure> ();
-    }
+#nullable enable
+    public class EquipmentSlot : ComponentBehavior, ISavableState<EquipmentSlot.Serializable> {
+        public Structure? Equipper;
+        public List<ItemConditionSO> Filters = new List<ItemConditionSO> ();
 
-    protected override void InternalTick (float dt) {
-        if (Data.Equipment != null) Data.Equipment.Tick (this, dt);
-    }
+        public EquipmentPrototype? Equipment;
 
-    protected override void InternalFixedTick (float dt) {
-        if (Data.Equipment != null) Data.Equipment.FixedTick (this, dt);
-    }
+        public EquipmentPrototype.State State {
+            get {
+                // State might be of a left-over incompatible type
+                if (Equipment == null) UnsafeState = new EquipmentPrototype.State (this);
+                else Equipment.EnsureStateType (this);
 
-    public override bool Validate () {
-        // Equipper should be non-null
-        if (Equipper == null) {
-            // Try get equipper
-            Equipper = GetComponentInParent<Structure> ();
-            // If null, there is no equipper in parent tree
-            if (Equipper == null) return false;
+                // State might be null if EnsureStateType is implemented incorrectly
+                if (UnsafeState == null) UnsafeState = new EquipmentPrototype.State (this);
+
+                return UnsafeState;
+            }
         }
-        // Data should be non-null
-        if (Data == null) Data = new EquipmentSlotData ();
-        // Data's slot should be this
-        Data.Slot = this;
-        // Data's data type should be correct
-        if (Data.Equipment != null) Data.Equipment.EnsureDataType (this);
-        // Durability should be clamped
-        if (Data.Equipment != null) Data.Durability = Mathf.Clamp (Data.Durability, 0, Data.Equipment.Durability);
-        return true;
-    }
+        [SerializeReference] public EquipmentPrototype.State? UnsafeState;
 
-    public bool ChangeEquipment (EquipmentSO target) {
-        foreach (ItemConditionSO filter in Filters)
-            if (!filter.MeetsCondition (target))
-                return false;
-        target.OnEquip (this);
-        return true;
+        protected override void SingleInitialize () {
+            Equipper = GetComponentInParent<Structure> ();
+        }
+
+        protected override void InternalTick (float dt) {
+            if (Equipment != null) Equipment.Tick (this, dt);
+        }
+
+        protected override void InternalFixedTick (float dt) {
+            if (Equipment != null) Equipment.FixedTick (this, dt);
+        }
+
+        public override bool Validate () {
+            if (Equipper == null) {
+                Equipper = GetComponentInParent<Structure> ();
+
+                // If null, there is no equipper in parent tree
+                if (Equipper == null) return false;
+            }
+
+            if (Equipment != null) State.Durability = Mathf.Clamp (State.Durability, 0, Equipment.Durability);
+
+            return true;
+        }
+
+        public bool ChangeEquipment (EquipmentPrototype target) {
+            foreach (ItemConditionSO filter in Filters)
+                if (!filter.MeetsCondition (target))
+                    return false;
+
+            Equipment = target;
+            Equipment.OnEquip (this);
+            return true;
+        }
+
+        public virtual Serializable ToSerializable () {
+            return new Serializable {
+                EquipmentId = Equipment == null ? "" : Equipment.Id,
+                State = State.ToSerializable (),
+            };
+        }
+
+        public virtual void FromSerializable (Serializable serializable) {
+            Equipment = Singletons.Get<ItemManager> ().GetItem (serializable.EquipmentId) as EquipmentPrototype;
+            if (Equipment != null) {
+                UnsafeState = Equipment.GetNewState (this);
+                State.FromSerializable (serializable.State);
+            }
+        }
+
+        [Serializable]
+        public class Serializable {
+            public string EquipmentId = "";
+            public EquipmentPrototype.State.Serializable State = new EquipmentPrototype.State.Serializable ();
+        }
     }
 }
+#nullable restore

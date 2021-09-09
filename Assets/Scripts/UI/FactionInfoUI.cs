@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Factions;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class FactionInfoUI : MonoBehaviour {

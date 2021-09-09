@@ -17,12 +17,12 @@ MonoBehaviour:
     capabilities, these craft are extremely difficult to accurately hit and have
     a suprisingly high survival rate, though they would not fare so well if they
     were rammed.
-  Id: items.structures.seine
+  Id: items.structures.seine-craft
   Icon: {fileID: 21300000, guid: 9d33dc9820692f34789377f7a13532d2, type: 3}
   Volume: 100
   Tags: []
   Usable: 0
-  Prefab: {fileID: 2512073521162136224, guid: 9051b6e2ef2402542b096eb2538e4c2d, type: 3}
+  Prefab: {fileID: 2512073521162136224, guid: dde1a62d85098a843ababc29644c27ed, type: 3}
   ApparentSize: 15
   HullWireframe: {fileID: 21300000, guid: b336c6dd358ff4c42981e325d81d3201, type: 3}
   ShowBlip: 1
@@ -38,7 +38,7 @@ MonoBehaviour:
       baseValue: 10
       modifiers: []
     - name: Detectability
-      baseValue: 5
+      baseValue: 10
       modifiers: []
     - name: Scanner Strength
       baseValue: 5
@@ -52,6 +52,10 @@ MonoBehaviour:
     - name: Cargo Drop Percentage
       baseValue: 0.5
       modifiers: []
+  DockingBays:
+    dockingBays: []
+    dockersList: []
+    structure: {fileID: 0}
   LoadingPreparation: 100
   LaunchingPreparation: 100
   FuelCapacity: 100

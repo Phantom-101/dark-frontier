@@ -9,36 +9,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fc5b670d720665499849fe99c6519f2, type: 3}
+  m_Script: {fileID: 11500000, guid: 89fdf53eab828cf4a9490670930c4047, type: 3}
   m_Name: Medium Beam Laser
   m_EditorClassIdentifier: 
   Name: Medium Beam Laser
   Description: 
   Id: items.equipment.weapons.medium-beam-laser
-  Icon: {fileID: 21300000, guid: 470213ad1cffcfb4ebc0c5c9a34ec9a4, type: 3}
-  Volume: 0
-  Tags:
-  - {fileID: 11400000, guid: 6d63f9e2ddfb3cc428a6659d95414e48, type: 2}
-  - {fileID: 11400000, guid: ef0c32043d868ff479d361d54db26d09, type: 2}
-  - {fileID: 11400000, guid: 8fcb2422ca1404b4abe3543b16ca1e4c, type: 2}
-  - {fileID: 11400000, guid: f894c2965e6369341a4ac7c73389c61b, type: 2}
-  - {fileID: 11400000, guid: 864ac46dbd147684badf2e57a60f32c0, type: 2}
+  Icon: {fileID: 21300000, guid: 3c3eca7ca34457044b6973e02240c76b, type: 3}
+  Volume: 0.1
+  Tags: []
   Usable: 0
-  Durability: 10
+  Durability: 600
   ButtonPrefab: {fileID: 4864166113814497008, guid: 2e5718df81c0c6544bf84f7f294a69bd,
     type: 3}
+  PanelPrefab: {fileID: 0}
   Range: 1350
   DamagePerSecond:
-    ShieldDamage: 32
-    HullDamage: 32
-    EquipmentDamage: 8
+    ShieldDamage: 16
+    HullDamage: 16
+    EquipmentDamage: 4
     ShieldPenetration: 0
   DamageInterval: 0.5
   EnergyConsumption: 120
   MaxHeat: 100
-  HeatGeneration: 55
-  CoolingRate: 50
-  OverheatDamage: 0.5
+  HeatGeneration: 15
+  CoolingRate: 10
+  OverheatDamage: 0
   HeatDamageMultiplier:
     serializedVersion: 2
     m_Curve:
@@ -46,33 +42,15 @@ MonoBehaviour:
       time: 0
       value: 1
       inSlope: 4
-      outSlope: 2
+      outSlope: 1
       tangentMode: 69
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.5
-      value: 2
-      inSlope: 2
-      outSlope: 0
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.75
-      value: 2
-      inSlope: -0
-      outSlope: -8
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: -8
+      value: 2
+      inSlope: 1
       outSlope: -8
       tangentMode: 69
       weightedMode: 0
@@ -83,4 +61,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   BeamPrefab: {fileID: 930999058288108214, guid: 1a53d00be0c0d0f49a05fab213c2b948,
     type: 3}
-  BeamWidth: 15
+  BeamWidth: 3

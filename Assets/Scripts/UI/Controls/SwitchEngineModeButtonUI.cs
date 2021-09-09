@@ -1,4 +1,5 @@
-﻿using DarkFrontier.Structures;
+﻿using DarkFrontier.Equipment;
+using DarkFrontier.Structures;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +16,7 @@ public class SwitchEngineModeButtonUI : MonoBehaviour {
         // Get player
         Structure player = PlayerController.Instance.Player;
         // Get engines
-        List<EngineSlotData> engines = player.GetEquipmentData<EngineSlotData> ();
+        List<EnginePrototype.State> engines = player.GetEquipmentStates<EnginePrototype.State> ();
         // Calculate target state
         bool curState = engines.Count > 0 && engines[0].ManagedPropulsion;
         bool targetState = !curState;

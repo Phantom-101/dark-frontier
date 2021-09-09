@@ -1,10 +1,10 @@
 ﻿using DarkFrontier.Factions;
+using DarkFrontier.Foundation.Services;
 using DarkFrontier.Locations;
 using DarkFrontier.Structures;
 using System;
 using System.IO;
 using UnityEngine;
-using Zenject;
 
 public class SaveManager : MonoBehaviour {
     [SerializeField] private string _universe;
@@ -18,16 +18,13 @@ public class SaveManager : MonoBehaviour {
     private FactionManager factionManager;
     private StructureManager structureManager;
 
-    [Inject]
-    public void Construct (SectorManager sectorManager, FactionManager factionManager, StructureManager structureManager) {
-        this.sectorManager = sectorManager;
-        this.factionManager = factionManager;
-        this.structureManager = structureManager;
-    }
-
     private void Awake () {
         _instance = this;
         _saveGameChannel.OnEventRaised += Save;
+
+        sectorManager = Singletons.Get<SectorManager> ();
+        factionManager = Singletons.Get<FactionManager> ();
+        structureManager = Singletons.Get<StructureManager> ();
     }
 
     private void Update () {

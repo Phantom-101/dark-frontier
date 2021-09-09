@@ -2,7 +2,6 @@
 using DarkFrontier.Structures;
 using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 public class PropertyUI : LogTabUI {
     [SerializeField] private Faction faction;
@@ -10,18 +9,11 @@ public class PropertyUI : LogTabUI {
     [SerializeField] private GameObject _prefab;
     [SerializeField] private List<PropertyInfoUI> _instantiated = new List<PropertyInfoUI> ();
 
-    private FactionManager factionManager;
-
-    [Inject]
-    public void Construct (FactionManager factionManager) {
-        this.factionManager = factionManager;
-    }
-
     public override void SwitchIn () {
         foreach (PropertyInfoUI info in _instantiated) Destroy (info.gameObject);
         _instantiated = new List<PropertyInfoUI> ();
 
-        faction = PlayerController.Instance.Player.Faction.Value (factionManager.Registry.Find);
+        faction = PlayerController.Instance.Player.Faction.Value;
 
         if (faction == null) {
             base.SwitchIn ();

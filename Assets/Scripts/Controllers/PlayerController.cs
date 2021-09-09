@@ -1,4 +1,5 @@
-﻿using DarkFrontier.Structures;
+﻿using DarkFrontier.Equipment;
+using DarkFrontier.Structures;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -55,34 +56,34 @@ public class PlayerController : SingletonBase<PlayerController> {
 
     public void SetFwd (float setting) {
         if (Player == null) return;
-        if (!_reverseButtonUI.Reversing || setting == -1) Player.GetEquipmentData<EngineSlotData> ().ForEach (engine => engine.LinearSetting = new Vector3 (engine.LinearSetting.x, engine.LinearSetting.y, setting));
+        if (!_reverseButtonUI.Reversing || setting == -1) Player.GetEquipmentStates<EnginePrototype.State> ().ForEach (state => state.LinearSetting = new Vector3 (state.LinearSetting.x, state.LinearSetting.y, setting));
     }
 
     public void SetYaw (float setting) {
         if (Player == null) return;
-        Player.GetEquipmentData<EngineSlotData> ().ForEach (engine => engine.AngularSetting = new Vector3 (engine.AngularSetting.x, setting, engine.AngularSetting.z));
+        Player.GetEquipmentStates<EnginePrototype.State> ().ForEach (state => state.AngularSetting = new Vector3 (state.AngularSetting.x, setting, state.AngularSetting.z));
     }
 
     public void SetPitch (float setting) {
         if (Player == null) return;
-        Player.GetEquipmentData<EngineSlotData> ().ForEach (engine => engine.AngularSetting = new Vector3 (setting, engine.AngularSetting.y, engine.AngularSetting.z));
+        Player.GetEquipmentStates<EnginePrototype.State> ().ForEach (state => state.AngularSetting = new Vector3 (setting, state.AngularSetting.y, state.AngularSetting.z));
     }
 
     private void FireAll (object sender, EventArgs args) {
-        Player.GetEquipmentData<BeamLaserSlotData> ().ForEach (data => {
-            data.Activated = false;
-            data.Equipment.OnClicked (data.Slot);
-            data.Activated = true;
+        Player.GetEquipmentStates<BeamLaserPrototype.State> ().ForEach (state => {
+            state.Activated = false;
+            state.Slot.Equipment.OnClicked (state.Slot);
+            state.Activated = true;
         });
-        Player.GetEquipmentData<PulseLaserSlotData> ().ForEach (data => {
-            data.Activated = false;
-            data.Equipment.OnClicked (data.Slot);
-            data.Activated = true;
+        Player.GetEquipmentStates<PulseLaserPrototype.State> ().ForEach (state => {
+            state.Activated = false;
+            state.Slot.Equipment.OnClicked (state.Slot);
+            state.Activated = true;
         });
-        Player.GetEquipmentData<LauncherSlotData> ().ForEach (data => {
-            data.Activated = false;
-            data.Equipment.OnClicked (data.Slot);
-            data.Activated = true;
+        Player.GetEquipmentStates<LauncherPrototype.State> ().ForEach (state => {
+            state.Activated = false;
+            state.Slot.Equipment.OnClicked (state.Slot);
+            state.Activated = true;
         });
     }
 

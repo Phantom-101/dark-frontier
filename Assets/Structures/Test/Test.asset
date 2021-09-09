@@ -20,7 +20,7 @@ MonoBehaviour:
   Tags: []
   Usable: 0
   Prefab: {fileID: 570406170697649159, guid: 5d77e42a310acd34a8faa8b4ce2a5ff6, type: 3}
-  ApparentSize: 2
+  ApparentSize: 2.5
   HullWireframe: {fileID: 21300000, guid: 21db48d8619e7a946a2bff74625762c1, type: 3}
   ShowBlip: 1
   DestructionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,

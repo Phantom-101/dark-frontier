@@ -7,7 +7,7 @@ public class TagCondition : ItemCondition {
         this.Tags = Tags;
     }
 
-    public override bool MeetsCondition (ItemSO input) {
+    public override bool MeetsCondition (ItemPrototype input) {
         foreach (ItemTag tag in Tags)
             if (!input.Tags.Contains (tag))
                 return false;

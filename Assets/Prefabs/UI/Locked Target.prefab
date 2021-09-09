@@ -509,6 +509,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -550,17 +551,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61359961a3fbbc54b95f1a28ea3c76fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _button: {fileID: 6092668408962847287}
-  _hull: {fileID: 6092668408720090130}
-  _shield: {fileID: 6092668408644990059}
-  _leftProgress: {fileID: 6092668408368209185}
-  _rightProgress: {fileID: 6092668409820185787}
-  _name: {fileID: 6092668408982930042}
-  _faction: {fileID: 6092668408492383132}
-  _distance: {fileID: 6092668409115171972}
-  _velocity: {fileID: 6092668409127056640}
-  _direction: {fileID: 6092668408679496157}
-  _structure: {fileID: 0}
+  initialized: 0
+  subscribed: 0
+  canTickSelf: 1
+  button: {fileID: 6092668408962847287}
+  hull: {fileID: 6092668408720090130}
+  shield: {fileID: 6092668408644990059}
+  leftLock: {fileID: 6092668408368209185}
+  rightLock: {fileID: 6092668409820185787}
+  nameText: {fileID: 6092668408982930042}
+  factionText: {fileID: 6092668408492383132}
+  distanceText: {fileID: 6092668409115171972}
+  velocityText: {fileID: 6092668409127056640}
+  direction: {fileID: 6092668408679496157}
+  structure: {fileID: 0}
 --- !u!1 &6092668408982930040
 GameObject:
   m_ObjectHideFlags: 0

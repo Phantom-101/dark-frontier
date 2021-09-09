@@ -1,4 +1,4 @@
-﻿using DarkFrontier.Foundation;
+﻿using DarkFrontier.Foundation.Identification;
 using System;
 
 namespace DarkFrontier.Structures {

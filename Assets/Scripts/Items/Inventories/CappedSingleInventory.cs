@@ -4,8 +4,8 @@ using UnityEngine;
 
 [Serializable]
 public class CappedSingleInventory : IInventory, ISaveTo<CappedSingleInventorySaveData> {
-    public ItemSO Item { get => item; }
-    [SerializeField] private ItemSO item;
+    public ItemPrototype Item { get => item; }
+    [SerializeField] private ItemPrototype item;
 
     public int Quantity { get => quantity; }
     [SerializeField] private int quantity;
@@ -25,7 +25,7 @@ public class CappedSingleInventory : IInventory, ISaveTo<CappedSingleInventorySa
 
     public CappedSingleInventory (int maxQuantity, float volume) : this (maxQuantity, volume, 1) { }
     public CappedSingleInventory (int maxQuantity, float volume, int precision) : this (null, 0, maxQuantity, volume, precision) { }
-    public CappedSingleInventory (ItemSO item, int quantity, int maxQuantity, float volume, int precision) {
+    public CappedSingleInventory (ItemPrototype item, int quantity, int maxQuantity, float volume, int precision) {
         this.item = item;
         this.quantity = quantity;
         this.maxQuantity = maxQuantity;
@@ -41,10 +41,10 @@ public class CappedSingleInventory : IInventory, ISaveTo<CappedSingleInventorySa
         precision = saveData.Precision;
     }
 
-    public int GetQuantity (ItemSO item) => item == this.item ? quantity : 0;
-    public bool HasQuantity (ItemSO item, int quantity) => GetQuantity (item) >= quantity;
+    public int GetQuantity (ItemPrototype item) => item == this.item ? quantity : 0;
+    public bool HasQuantity (ItemPrototype item, int quantity) => GetQuantity (item) >= quantity;
 
-    public int AddQuantity (ItemSO item, int quantity) {
+    public int AddQuantity (ItemPrototype item, int quantity) {
         if (Overburdened) return 0;
         Optimize ();
         if (this.item != null && this.item != item) return 0;
@@ -58,7 +58,7 @@ public class CappedSingleInventory : IInventory, ISaveTo<CappedSingleInventorySa
         return added;
     }
 
-    public int RemoveQuantity (ItemSO item, int quantity) {
+    public int RemoveQuantity (ItemPrototype item, int quantity) {
         Optimize ();
         if (this.item != null && this.item != item) return 0;
         int removed = Math.Min (this.quantity, quantity);
@@ -67,7 +67,7 @@ public class CappedSingleInventory : IInventory, ISaveTo<CappedSingleInventorySa
         return removed;
     }
 
-    public List<ItemSO> GetStoredItems () => item == null ? new List<ItemSO> () : new List<ItemSO> { item };
+    public List<ItemPrototype> GetStoredItems () => item == null ? new List<ItemPrototype> () : new List<ItemPrototype> { item };
 
     private void Optimize () => item = quantity == 0 ? null : item;
     private float RoundToPrecision (float value) => (float) Math.Round (value, precision);

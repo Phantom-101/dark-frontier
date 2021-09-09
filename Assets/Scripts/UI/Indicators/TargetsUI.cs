@@ -1,25 +1,26 @@
-﻿using DarkFrontier.Structures;
+﻿using DarkFrontier.Foundation.Behaviors;
+using DarkFrontier.Structures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class TargetsUI : MonoBehaviour {
-    [SerializeField] private Transform _transform;
-    [SerializeField] private GameObject _infoPanelPrefab;
+public class TargetsUI : ComponentBehavior {
+    [SerializeField] private Transform root;
+    [SerializeField] private GameObject prefab;
 
     private readonly List<LockedTargetUI> comps = new List<LockedTargetUI> ();
     private PlayerController playerController;
 
-    private void Awake () {
+    protected override void SingleInitialize () {
         playerController = PlayerController.Instance;
     }
 
-    private void OnEnable () {
-        playerController.OnLocksChanged += Rebuild;
+    protected override void InternalSubscribeEventListeners () {
+        if (playerController != null) playerController.OnLocksChanged += Rebuild;
     }
 
-    private void OnDisable () {
+    protected override void InternalUnsubscribeEventListeners () {
         if (playerController != null) playerController.OnLocksChanged -= Rebuild;
     }
 
@@ -31,14 +32,10 @@ public class TargetsUI : MonoBehaviour {
 
         Structure player = playerController.Player;
         if (player == null) return;
-        int i = 0;
         foreach (Structure target in player.Locks.Keys.ToArray ()) {
-            GameObject instantiated = Instantiate (_infoPanelPrefab, _transform);
-            instantiated.transform.localPosition = new Vector3 (-i * 150, 0, 0);
-            LockedTargetUI comp = instantiated.GetComponent<LockedTargetUI> ();
-            comp.Structure = target;
-            comps.Add (comp);
-            i++;
+            LockedTargetUI instantiated = Instantiate (prefab, root).GetComponent<LockedTargetUI> ();
+            instantiated.Structure = target;
+            comps.Add (instantiated);
         }
     }
 }

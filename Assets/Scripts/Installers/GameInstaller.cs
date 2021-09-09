@@ -1,19 +1,27 @@
-﻿using DarkFrontier.Factions;
+using DarkFrontier.Factions;
+using DarkFrontier.Foundation.Services;
 using DarkFrontier.Locations;
 using DarkFrontier.Structures;
-using Zenject;
+using UnityEngine;
 
-namespace DarkFrontier.Installers {
-    public class GameInstaller : MonoInstaller {
-        public override void InstallBindings () {
-            Container.Bind<SectorRegistry> ().AsSingle ();
-            Container.Bind<SectorManager> ().FromNewComponentOnNewGameObject ().AsSingle ();
+public class GameInstaller : Installer {
+    public override void InstallBindings () {
+        if (!Singletons.Exists<SectorManager> ()) {
+            GameObject obj = new GameObject ("[Service] Sector Manager");
+            Singletons.Bind<SectorManager> (obj.AddComponent<SectorManager> ());
+            DontDestroyOnLoad (obj);
+        }
 
-            Container.Bind<FactionRegistry> ().AsSingle ();
-            Container.Bind<FactionManager> ().FromNewComponentOnNewGameObject ().AsSingle ();
+        if (!Singletons.Exists<FactionManager> ()) {
+            GameObject obj = new GameObject ("[Service] Faction Manager");
+            Singletons.Bind<FactionManager> (obj.AddComponent<FactionManager> ());
+            DontDestroyOnLoad (obj);
+        }
 
-            Container.Bind<StructureRegistry> ().AsSingle ();
-            Container.Bind<StructureManager> ().FromNewComponentOnNewGameObject ().AsSingle ();
+        if (!Singletons.Exists<StructureManager> ()) {
+            GameObject obj = new GameObject ("[Service] Structure Manager");
+            Singletons.Bind<StructureManager> (obj.AddComponent<StructureManager> ());
+            DontDestroyOnLoad (obj);
         }
     }
 }

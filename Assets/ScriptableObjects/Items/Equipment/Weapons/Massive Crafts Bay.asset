@@ -29,9 +29,9 @@ MonoBehaviour:
     type: 3}
   PanelPrefab: {fileID: 499707909723292594, guid: adebbc6dd0d363b41a0ada07ed8e3baf,
     type: 3}
-  LoadingSpeed: 20
-  FuelingSpeed: 10
-  LaunchingSpeed: 20
+  LoadingSpeed: 1000
+  FuelingSpeed: 1000
+  LaunchingSpeed: 1000
   MaxSquadronSize: 100
   Launchables:
   - {fileID: 11400000, guid: 8be95cdc9bbb7764ea30a118020641f8, type: 2}

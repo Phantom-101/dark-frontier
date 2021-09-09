@@ -1,13 +1,14 @@
-﻿using DarkFrontier.Factions;
-using DarkFrontier.Foundation;
+﻿using DarkFrontier.AI;
+using DarkFrontier.Equipment;
+using DarkFrontier.Factions;
 using DarkFrontier.Foundation.Behaviors;
-using DarkFrontier.Foundation.Extensions;
+using DarkFrontier.Foundation.Identification;
+using DarkFrontier.Foundation.Services;
 using DarkFrontier.Locations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Zenject;
 
 namespace DarkFrontier.Structures {
     public class Structure : ComponentBehavior {
@@ -25,16 +26,16 @@ namespace DarkFrontier.Structures {
             set {
                 hull = Mathf.Min (value, stats.GetBaseValue (StatNames.MaxHull, 1));
                 if (hull <= 0) {
-                    if (Faction.Value (factionManager.Registry.Find) != null) Faction.Cached.Property.Remove (this);
-                    if (Sector != null) Sector.Value (sectorManager.Registry.Find).Exited (this);
+                    Faction.Value?.Property.Remove (this);
+                    if (Sector.Value != null) Sector.Value.Population.Remove (this);
                     structureManager.DestroyStructure (this);
                 }
             }
         }
         [SerializeField] private float hull;
 
-        public FactionRetriever Faction { get => faction; }
-        [SerializeField] private FactionRetriever faction = new FactionRetriever ();
+        public FactionGetter Faction { get => faction; }
+        [SerializeField] private FactionGetter faction = new FactionGetter ();
 
         public List<EquipmentSlot> Equipment { get => equipmentSlots; }
         [SerializeField] private List<EquipmentSlot> equipmentSlots = new List<EquipmentSlot> ();
@@ -42,11 +43,11 @@ namespace DarkFrontier.Structures {
         public Inventory Inventory { get => _inventory; }
         [SerializeReference] private Inventory _inventory;
 
-        public AI AI {
+        public AIBase AI {
             get => _ai;
             set => _ai = value;
         }
-        [SerializeReference, Expandable] private AI _ai;
+        [SerializeReference, Expandable] private AIBase _ai;
         [SerializeField] private bool _aiEnabled;
 
         public Structure Selected {
@@ -64,8 +65,8 @@ namespace DarkFrontier.Structures {
         }
         [SerializeField] private Dictionary<Structure, float> _locks = new Dictionary<Structure, float> ();
 
-        public SectorRetriever Sector { get => sector; }
-        [SerializeField] private SectorRetriever sector = new SectorRetriever ();
+        public SectorGetter Sector { get => sector; }
+        [SerializeField] private SectorGetter sector = new SectorGetter ();
 
         public HashSet<Structure> Detected { get => detected ?? (detected = structureManager.GetDetected (this)); }
         [SerializeField] private HashSet<Structure> detected;
@@ -83,26 +84,20 @@ namespace DarkFrontier.Structures {
         private FactionManager factionManager;
         private StructureManager structureManager;
 
-        [Inject]
-        public void Construct (SectorManager sectorManager, FactionManager factionManager, StructureManager structureManager) {
-            this.sectorManager = sectorManager;
-            this.factionManager = factionManager;
-            this.structureManager = structureManager;
-        }
-
         protected override void SingleInitialize () {
             rigidbody = GetComponent<Rigidbody> ();
 
-            if (transform.parent != null) {
-                Sector.Id.Value = GetComponentInParent<Sector> ().Id;
-                if (Sector.Value (sectorManager.Registry.Find) != null) Sector.Cached.Entered (this);
+            Sector sector = GetComponentInParent<Sector> ();
+            if (sector != null) {
+                Sector.Id.Value = sector.Id;
+                if (Sector.Value != null) Sector.Value.Population.Set (this);
             }
 
             EnsureStats ();
 
             if (_inventory == null) _inventory = new Inventory (stats.GetAppliedValue (StatNames.InventoryVolume, 0), 1);
 
-            if (_ai == null) _ai = ScriptableObject.CreateInstance<AI> ();
+            if (_ai == null) _ai = ScriptableObject.CreateInstance<AIBase> ();
             else _ai = _ai.Copy ();
 
             StructureInventoryAdder adder = GetComponent<StructureInventoryAdder> ();
@@ -110,33 +105,36 @@ namespace DarkFrontier.Structures {
         }
 
         protected override void MultiInitialize () {
-            // Add to registries
             structureManager.Registry.Set (this);
-            if (Faction.Value (factionManager.Registry.Find) != null) {
-                factionManager.Registry.Set (Faction.Cached);
-                Faction.Cached.Property.Set (this);
+            if (Faction.Value != null) {
+                factionManager.Registry.Set (Faction.Value);
+                Faction.Value.Property.Set (this);
             }
-            // Do not tick self
+
             canTickSelf = false;
-            // Sync inventory volume according to stats
-            SynchronizeInventoryVolume (this, EventArgs.Empty);
-            // Stop slots from ticking themselves
             equipmentSlots.ForEach (e => e.CanTickSelf = false);
+
+            SynchronizeInventoryVolume (this, EventArgs.Empty);
+        }
+
+        public override void GetServices () {
+            sectorManager = Singletons.Get<SectorManager> ();
+            factionManager = Singletons.Get<FactionManager> ();
+            structureManager = Singletons.Get<StructureManager> ();
         }
 
         protected override void InternalTick (float dt) {
+            // Expensive
+            detected = null;
+            if (_aiEnabled) _ai.Tick (this, dt);
+
             ManageSelectedAndLocks ();
             TickLocks ();
             stats.Tick (dt);
         }
 
-        protected override void InternalExpensiveTick (float dt) {
-            detected = null;
-            if (_aiEnabled) _ai.Tick (this, dt);
-        }
-
-        protected override void PropagateTick (float dt, float? edt = null) {
-            equipmentSlots.ForEach (e => e.Tick (dt, edt));
+        protected override void PropagateTick (float dt) {
+            equipmentSlots.ForEach (e => e.Tick (dt));
         }
 
         protected override void InternalFixedTick (float dt) {
@@ -147,8 +145,8 @@ namespace DarkFrontier.Structures {
             }
         }
 
-        protected override void PropagateFixedTick (float dt, float? edt = null) {
-            equipmentSlots.ForEach (e => e.FixedTick (dt, edt));
+        protected override void PropagateFixedTick (float dt) {
+            equipmentSlots.ForEach (e => e.FixedTick (dt));
         }
 
         public override bool Validate () {
@@ -161,20 +159,20 @@ namespace DarkFrontier.Structures {
             // Should have parent
             if (transform.parent == null) return false;
             // Should have sector in parent tree
-            Sector.Value (sectorManager.Registry.Find);
-            if (Sector.Cached == null) {
+            if (Sector.Value == null) {
                 Sector.Id.Value = GetComponentInParent<Sector> ().Id;
-                if (Sector.Value (sectorManager.Registry.Find) == null) return false;
-                Sector.Cached.Entered (this);
+                if (Sector.Value == null) return false;
             }
+            // Sector should have structure in population
+            Sector.Value.Population.Set (this);
             // Should have stats
             EnsureStats ();
             // Should have inventory
             if (_inventory == null) _inventory = new Inventory (stats.GetAppliedValue (StatNames.InventoryVolume, 0), 1);
             // Should have AI
-            if (_ai == null) _ai = ScriptableObject.CreateInstance<AI> ();
+            if (_ai == null) _ai = ScriptableObject.CreateInstance<AIBase> ();
             // Should have docking bays
-            if (dockingBays == null) dockingBays = _profile.DockingBays.Copy (this);
+            if (dockingBays == null) dockingBays = new DockingBayList (_profile.DockingBays, this);
             return true;
         }
 
@@ -188,12 +186,20 @@ namespace DarkFrontier.Structures {
 
         private void SynchronizeInventoryVolume (object sender, EventArgs args) => _inventory.Volume = stats.GetAppliedValue (StatNames.InventoryVolume, 0);
 
-        public List<T> GetEquipmentData<T> () where T : EquipmentSlotData {
-            List<T> data = new List<T> ();
+        public List<EquipmentSlot> GetEquipmentSlots<T> () where T : EquipmentPrototype.State {
+            List<EquipmentSlot> slots = new List<EquipmentSlot> ();
             equipmentSlots.ForEach (slot => {
-                if (slot.Data is T) data.Add (slot.Data as T);
+                if (slot.State is T) slots.Add (slot);
             });
-            return data;
+            return slots;
+        }
+
+        public List<T> GetEquipmentStates<T> () where T : EquipmentPrototype.State {
+            List<T> states = new List<T> ();
+            equipmentSlots.ForEach (slot => {
+                if (slot.State is T) states.Add (slot.State as T);
+            });
+            return states;
         }
 
         public void OnDocked (Structure dockee) {
@@ -243,13 +249,13 @@ namespace DarkFrontier.Structures {
         }
 
         public void TakeDamage (Damage damage, Vector3 from) {
-            ShieldSlotData closest = null;
-            GetEquipmentData<ShieldSlotData> ().ForEach (shield => {
-                if (closest == null) closest = shield;
+            ShieldPrototype.State closest = null;
+            GetEquipmentStates<ShieldPrototype.State> ().ForEach (state => {
+                if (closest == null) closest = state;
                 else {
                     float disA = (from - closest.Slot.transform.position).sqrMagnitude;
-                    float disB = (shield.Slot.transform.position - closest.Slot.transform.position).sqrMagnitude;
-                    if (disB < disA) closest = shield;
+                    float disB = (state.Slot.transform.position - closest.Slot.transform.position).sqrMagnitude;
+                    if (disB < disA) closest = state;
                 }
             });
             float ps = 0;
@@ -333,8 +339,8 @@ namespace DarkFrontier.Structures {
             };
             if (_profile != null) data.ProfileId = _profile.Id;
             data.FactionId = Faction.Id.Value;
-            equipmentSlots.ForEach (slot => { data.Equipment.Add (slot.Data.Save ()); });
-            if (Sector.Value (sectorManager.Registry.Find) != null) data.SectorId = Sector.Cached.Id;
+            equipmentSlots.ForEach (slot => { data.Equipment.Add (slot.ToSerializable ()); });
+            if (Sector.Value != null) data.SectorId = Sector.Value.Id;
             data.AIEnabled = _aiEnabled;
             if (PlayerController.Instance.Player == this) data.IsPlayer = true;
             return data;
@@ -347,15 +353,14 @@ namespace DarkFrontier.Structures {
             hull = saveData.Hull;
             Faction.Id.Value = saveData.FactionId;
             for (int i = 0; i < equipmentSlots.Count; i++) {
-                equipmentSlots[i].Data = saveData.Equipment[i].Load ();
-                equipmentSlots[i].Data.Slot = equipmentSlots[i];
+                equipmentSlots[i].FromSerializable (saveData.Equipment[i]);
             }
             _inventory = saveData.Inventory.Load ();
             stats = saveData.Stats.Load ();
             if (stats == null) stats = new StatList ();
             EnsureStats ();
             Sector.Id.Value = saveData.SectorId;
-            Sector.Value (sectorManager.Registry.Find).Entered (this);
+            Sector.Value.Population.Set (this);
             _aiEnabled = saveData.AIEnabled;
         }
     }
@@ -369,7 +374,7 @@ namespace DarkFrontier.Structures {
         public string Id;
         public float Hull;
         public string FactionId;
-        public List<EquipmentSlotSaveData> Equipment;
+        public List<EquipmentSlot.Serializable> Equipment;
         public InventorySaveData Inventory;
         public StatListSaveData Stats;
         public string SectorId;

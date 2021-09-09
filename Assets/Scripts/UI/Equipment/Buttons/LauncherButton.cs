@@ -1,48 +1,49 @@
-﻿using DarkFrontier.Equipment;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LauncherButton : EquipmentButton {
-    public Button Button;
-    public Image Icon;
-    public Image Center;
-    public Image Side;
-    public Image Bottom;
-    public Button SwitchButton;
-    public CanvasGroup TooltipGroup;
-    public Text Tooltip;
+namespace DarkFrontier.Equipment {
+    public class LauncherButton : EquipmentButton {
+        public Button Button;
+        public Image Icon;
+        public Image Center;
+        public Image Side;
+        public Image Bottom;
+        public Button SwitchButton;
+        public CanvasGroup TooltipGroup;
+        public Text Tooltip;
 
-    private LauncherSO cache;
+        private LauncherPrototype cache;
 
-    protected override void MultiInitialize () {
-        if (Slot == null) return;
-        cache = Slot.Data.Equipment as LauncherSO;
-        Tooltip.text = Slot.Data.Equipment.name;
-        TooltipGroup.alpha = 0;
-        Button.onClick.AddListener (() => cache.OnClicked (Slot));
-        SwitchButton.onClick.AddListener (() => {
-            List<MissileSO> candidates = cache.CompatibleMissiles.FindAll (e => Slot.Equipper.Inventory.HasQuantity (e, 1));
-            LauncherSlotData data = Slot.Data as LauncherSlotData;
-            if (candidates.Count == 0) data.Missile = null;
-            else data.Missile = candidates[(candidates.IndexOf (data.Missile) + 1) % candidates.Count];
-        });
-    }
-
-    protected override void InternalTick (float dt) {
-        if (Slot.Data.Equipment != cache) {
-            Destroy (gameObject);
-            return;
+        protected override void MultiInitialize () {
+            if (Slot == null) return;
+            cache = Slot.Equipment as LauncherPrototype;
+            Tooltip.text = Slot.Equipment.name;
+            TooltipGroup.alpha = 0;
+            Button.onClick.AddListener (() => cache.OnClicked (Slot));
+            SwitchButton.onClick.AddListener (() => {
+                List<MissileSO> candidates = cache.CompatibleMissiles.FindAll (e => Slot.Equipper.Inventory.HasQuantity (e, 1));
+                LauncherPrototype.State state = Slot.State as LauncherPrototype.State;
+                if (candidates.Count == 0) state.Missile = null;
+                else state.Missile = candidates[(candidates.IndexOf (state.Missile) + 1) % candidates.Count];
+            });
         }
 
-        cache.EnsureDataType (Slot);
-        LauncherSlotData data = Slot.Data as LauncherSlotData;
+        protected override void InternalTick (float dt) {
+            if (Slot.Equipment != cache) {
+                Destroy (gameObject);
+                return;
+            }
 
-        Button.interactable = cache.CanClick (Slot);
-        if (data.Missile == null) Icon.sprite = cache.Icon;
-        else Icon.sprite = data.Missile.Icon;
-        Center.fillAmount = data.Charge / cache.EnergyRequired;
-        Side.fillAmount = cache.CompatibleMissiles.Contains (data.Missile) ? 1 : 0;
-        Bottom.fillAmount = data.Durability / cache.Durability;
+            cache.EnsureStateType (Slot);
+            LauncherPrototype.State state = Slot.State as LauncherPrototype.State;
+
+            Button.interactable = cache.CanClick (Slot);
+            if (state.Missile == null) Icon.sprite = cache.Icon;
+            else Icon.sprite = state.Missile.Icon;
+            Center.fillAmount = state.Charge / cache.EnergyRequired;
+            Side.fillAmount = cache.CompatibleMissiles.Contains (state.Missile) ? 1 : 0;
+            Bottom.fillAmount = state.Durability / cache.Durability;
+        }
     }
 }

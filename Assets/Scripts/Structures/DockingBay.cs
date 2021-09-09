@@ -60,11 +60,10 @@ public class DockingBay {
     }
 
     public DockingBay Copy () {
-        DockingBay ret = new DockingBay {
+        return new DockingBay {
             maxCount = maxCount,
             maxVolume = maxVolume,
             precision = precision
         };
-        return ret;
     }
 }

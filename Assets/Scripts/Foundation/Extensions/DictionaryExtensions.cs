@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 
+#nullable enable
 namespace DarkFrontier.Foundation.Extensions {
     public static class DictionaryExtensions {
         public static bool TryAdd<K, V> (this IDictionary<K, V> dict, K key, V value) {
@@ -20,9 +21,10 @@ namespace DarkFrontier.Foundation.Extensions {
         }
 
         public static D ToSerializable<K, V, D> (this IDictionary<K, V> dict) where D : SerializableDictionaryBase<K, V> {
-            D ret = Activator.CreateInstance (typeof (D)) as D;
+            D ret = (Activator.CreateInstance (typeof (D)) as D)!;
             foreach (KeyValuePair<K, V> pair in dict) ret[pair.Key] = pair.Value;
             return ret;
         }
     }
 }
+#nullable restore

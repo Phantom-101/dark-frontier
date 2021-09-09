@@ -1,4 +1,5 @@
-﻿using DarkFrontier.Structures;
+﻿using DarkFrontier.Equipment;
+using DarkFrontier.Structures;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,9 +26,9 @@ public class PlayerInfoUI : MonoBehaviour {
 
         // Shield bubble indicator
         float curStrength = 0, totalStrength = 0;
-        player.GetEquipmentData<ShieldSlotData> ().ForEach (shield => {
+        player.GetEquipmentStates<ShieldPrototype.State> ().ForEach (shield => {
             curStrength += shield.Strength;
-            totalStrength += (shield.Equipment as ShieldSO).MaxStrength;
+            totalStrength += (shield.Slot.Equipment as ShieldPrototype).MaxStrength;
         });
         _shield.color = _shieldGradient.Evaluate (curStrength / (totalStrength == 0 ? 1 : totalStrength));
 
@@ -38,9 +39,9 @@ public class PlayerInfoUI : MonoBehaviour {
 
         // Capacitor bar indicator
         float storedCap = 0, totalCap = 0;
-        player.GetEquipmentData<CapacitorSlotData> ().ForEach (capacitor => {
+        player.GetEquipmentStates<CapacitorPrototype.State> ().ForEach (capacitor => {
             storedCap += capacitor.Charge;
-            totalCap += (capacitor.Equipment as CapacitorSO).Capacitance;
+            totalCap += (capacitor.Slot.Equipment as CapacitorPrototype).Capacitance;
         });
         _capFill.sizeDelta = new Vector2 (_capOutline.sizeDelta.x * storedCap / (totalCap == 0 ? 1 : totalCap), _capFill.sizeDelta.y);
         _capImg.color = _capGradient.Evaluate (storedCap / (totalCap == 0 ? 1 : totalCap));

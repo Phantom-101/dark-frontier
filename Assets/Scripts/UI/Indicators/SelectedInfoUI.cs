@@ -1,9 +1,8 @@
-﻿using DarkFrontier.Factions;
+﻿using DarkFrontier.Equipment;
 using DarkFrontier.Structures;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 public class SelectedInfoUI : MonoBehaviour {
     [SerializeField] private Transform _hpIndicators;
@@ -19,13 +18,6 @@ public class SelectedInfoUI : MonoBehaviour {
     [SerializeField] private Button _lock;
     [SerializeField] private CanvasGroup _group;
     [SerializeField] private float _targetAlpha;
-
-    private FactionManager factionManager;
-
-    [Inject]
-    public void Construct (FactionManager factionManager) {
-        this.factionManager = factionManager;
-    }
 
     private void Start () {
         _lock.onClick.AddListener (() => PlayerController.Instance.OnLockSelected?.Invoke (this, EventArgs.Empty));
@@ -47,15 +39,15 @@ public class SelectedInfoUI : MonoBehaviour {
         _hull.color = _hullGradient.Evaluate (selected.Hull / selected.Stats.GetBaseValue (StatNames.MaxHull, 1));
 
         float curStrength = 0, totalStrength = 0;
-        selected.GetEquipmentData<ShieldSlotData> ().ForEach (shield => {
+        selected.GetEquipmentStates<ShieldPrototype.State> ().ForEach (shield => {
             curStrength += shield.Strength;
-            totalStrength += (shield.Equipment as ShieldSO).MaxStrength;
+            totalStrength += (shield.Slot.Equipment as ShieldPrototype).MaxStrength;
         });
         _shield.color = _shieldGradient.Evaluate (curStrength / (totalStrength == 0 ? 1 : totalStrength));
 
         _name.text = selected.gameObject.name;
 
-        _faction.text = selected.Faction.Value (factionManager.Registry.Find)?.Name ?? "None";
+        _faction.text = selected.Faction.Value?.Name ?? "None";
 
         _distance.text = Vector3.Distance (PlayerController.Instance.Player.transform.position, selected.transform.position).ToString ("F2") + " m";
 

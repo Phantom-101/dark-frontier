@@ -413,18 +413,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  subscribed: 0
+  canTickSelf: 1
   Equipper: {fileID: 2512073521162136229}
   Filters: []
-  Data:
+  Equipment: {fileID: 11400000, guid: 8b0e6e2e3a5273f4098c7fac860a30a1, type: 2}
+  UnsafeState:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
-      data:
-        Slot: {fileID: 2512073520045475459}
-        Equipment: {fileID: 11400000, guid: 8b0e6e2e3a5273f4098c7fac860a30a1, type: 2}
-        Durability: 0
+      type: {class: , ns: , asm: }
 --- !u!1 &2512073520153449420
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,18 +512,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  subscribed: 0
+  canTickSelf: 1
   Equipper: {fileID: 2512073521162136229}
   Filters: []
-  Data:
+  Equipment: {fileID: 11400000, guid: eb9e093613904164ba9aac6729b68e28, type: 2}
+  UnsafeState:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
-      data:
-        Slot: {fileID: 2512073520200942238}
-        Equipment: {fileID: 11400000, guid: ee246d3d2ee5ffe4391d63a0373ae58a, type: 2}
-        Durability: 0
+      type: {class: , ns: , asm: }
 --- !u!1 &2512073520578445730
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,18 +705,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  subscribed: 0
+  canTickSelf: 1
   Equipper: {fileID: 2512073521162136229}
   Filters: []
-  Data:
+  Equipment: {fileID: 11400000, guid: abf43ae6957ce86429e39f40f4ba2e29, type: 2}
+  UnsafeState:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
-      data:
-        Slot: {fileID: 2512073521080273974}
-        Equipment: {fileID: 11400000, guid: abf43ae6957ce86429e39f40f4ba2e29, type: 2}
-        Durability: 0
+      type: {class: , ns: , asm: }
 --- !u!1 &2512073521162136224
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,60 +763,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 649fe7b2604da9e4986d8cd7f0fdcfae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  subscribed: 0
+  canTickSelf: 1
   _profile: {fileID: 11400000, guid: 8be95cdc9bbb7764ea30a118020641f8, type: 2}
-  _id: 
+  id:
+    value: 
   stats:
     stats: []
   hull: 300
-  _faction: {fileID: 0}
-  _equipmentSlots:
+  faction:
+    id:
+      value: 
+    value:
+      id: 0
+  equipmentSlots:
   - {fileID: 2512073520200942238}
   - {fileID: 2512073521306533196}
   - {fileID: 2512073520045475459}
   - {fileID: 2512073521701794201}
   - {fileID: 2512073521080273974}
   _inventory:
-    quantities:
-      reorderableList:
-        canAdd: 1
-        canRemove: 1
-        draggable: 1
-        expandable: 1
-        multipleSelection: 1
-        isExpanded: 0
-        label:
-          m_Text: Keys
-          m_Image: {fileID: 0}
-          m_Tooltip: 
-        headerHeight: 18
-        footerHeight: 13
-        slideEasing: 0.15
-        verticalSpacing: 2
-        showDefaultBackground: 1
-        elementDisplayType: 0
-        elementNameProperty: 
-        elementNameOverride: 
-        elementIcon: {fileID: 0}
-      reqReferences: {fileID: 0}
-      isExpanded: 0
-      _keyValues: []
-      _keys: []
-      _values: 
-    volume:
-      name: 
-      baseValue: 0
-      appliedValue: 0
-      modifiers: []
-      isDirty: 0
-    storedVolume: 0
-    precision: 0
+    id: 0
   _ai: {fileID: 0}
   _aiEnabled: 1
   _selected: {fileID: 0}
-  _sector: {fileID: 0}
-  _detected: []
-  _docked: []
-  _initialized: 0
+  sector:
+    id:
+      value: 
+    value: {fileID: 0}
+  dockingBays:
+    id: 0
+  dockee: {fileID: 0}
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }
 --- !u!54 &2512073521162136226
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -888,18 +870,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  subscribed: 0
+  canTickSelf: 1
   Equipper: {fileID: 2512073521162136229}
   Filters: []
-  Data:
+  Equipment: {fileID: 11400000, guid: d64c000537eea544e9277434bf56b6c4, type: 2}
+  UnsafeState:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
-      data:
-        Slot: {fileID: 2512073521306533196}
-        Equipment: {fileID: 11400000, guid: d64c000537eea544e9277434bf56b6c4, type: 2}
-        Durability: 0
+      type: {class: , ns: , asm: }
 --- !u!1 &2512073521550497981
 GameObject:
   m_ObjectHideFlags: 0
@@ -978,18 +960,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialized: 0
+  subscribed: 0
+  canTickSelf: 1
   Equipper: {fileID: 2512073521162136229}
   Filters: []
-  Data:
+  Equipment: {fileID: 11400000, guid: f6217af79e274224dab86bb00a5d2c9a, type: 2}
+  UnsafeState:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
-      data:
-        Slot: {fileID: 2512073521701794201}
-        Equipment: {fileID: 11400000, guid: f6217af79e274224dab86bb00a5d2c9a, type: 2}
-        Durability: 0
+      type: {class: , ns: , asm: }
 --- !u!1 &3740608927149820982
 GameObject:
   m_ObjectHideFlags: 0

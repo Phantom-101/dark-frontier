@@ -5,7 +5,7 @@ using UnityEngine;
 public class TagConditionSO : ItemConditionSO {
     public List<ItemTag> Tags;
 
-    public override bool MeetsCondition (ItemSO input) {
+    public override bool MeetsCondition (ItemPrototype input) {
         return new TagCondition (Tags).MeetsCondition (input);
     }
 }

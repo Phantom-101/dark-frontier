@@ -3,9 +3,9 @@ using UnityEngine;
 
 [CreateAssetMenu (menuName = "Items/Conditions/Constrain")]
 public class ConstrainConditionSO : ItemConditionSO {
-    public List<ItemSO> Constraint;
+    public List<ItemPrototype> Constraint;
 
-    public override bool MeetsCondition (ItemSO input) {
+    public override bool MeetsCondition (ItemPrototype input) {
         return new ConstrainCondition (Constraint).MeetsCondition (input);
     }
 }

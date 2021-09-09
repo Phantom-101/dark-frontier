@@ -1,4 +1,6 @@
-﻿public class EquipmentPanel : UIStateView {
+﻿using DarkFrontier.Equipment;
+
+public class EquipmentPanel : UIStateView {
     public EquipmentSlot Slot;
 
     public virtual void Initialize () { }

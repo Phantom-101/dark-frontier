@@ -9,22 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: daaff997eaafac94e80f549b0e29deee, type: 3}
+  m_Script: {fileID: 11500000, guid: 38140a6edc52dbf478a8bea3e0f27fea, type: 3}
   m_Name: Shield 2500
   m_EditorClassIdentifier: 
   Name: Shield 2500
   Description: 
   Id: items.equipment.shields.shield-2500
-  Icon: {fileID: 21300000, guid: b673ec6c543a9564f806864ac12a3476, type: 3}
-  Volume: 0
+  Icon: {fileID: 0}
+  Volume: 0.1
   Tags:
-  - {fileID: 11400000, guid: 864ac46dbd147684badf2e57a60f32c0, type: 2}
   - {fileID: 11400000, guid: 6d63f9e2ddfb3cc428a6659d95414e48, type: 2}
   - {fileID: 11400000, guid: 7b0c3fb7c811d174bac2c23fcfd69162, type: 2}
-  - {fileID: 11400000, guid: f894c2965e6369341a4ac7c73389c61b, type: 2}
+  - {fileID: 11400000, guid: 864ac46dbd147684badf2e57a60f32c0, type: 2}
   Usable: 0
   Durability: 10
   ButtonPrefab: {fileID: 0}
+  PanelPrefab: {fileID: 0}
   MaxStrength: 2500
-  RechargeConsumption: 2.5
+  RechargeConsumption: 25
   RechargeEfficiency: 1

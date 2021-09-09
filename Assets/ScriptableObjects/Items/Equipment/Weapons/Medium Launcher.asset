@@ -9,32 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22549a55720466d4d93b08082781b757, type: 3}
+  m_Script: {fileID: 11500000, guid: 7bdf2485980d3ee429cec89ef1b71ddd, type: 3}
   m_Name: Medium Launcher
   m_EditorClassIdentifier: 
   Name: Medium Launcher
   Description: 
   Id: items.equipment.weapons.medium-launcher
-  Icon: {fileID: 21300000, guid: 470213ad1cffcfb4ebc0c5c9a34ec9a4, type: 3}
+  Icon: {fileID: 21300000, guid: 21db48d8619e7a946a2bff74625762c1, type: 3}
   Volume: 0
-  Tags:
-  - {fileID: 11400000, guid: 6d63f9e2ddfb3cc428a6659d95414e48, type: 2}
-  - {fileID: 11400000, guid: ef0c32043d868ff479d361d54db26d09, type: 2}
-  - {fileID: 11400000, guid: 82814ebca5b066543a8dd39ff8955baf, type: 2}
-  - {fileID: 11400000, guid: f894c2965e6369341a4ac7c73389c61b, type: 2}
-  - {fileID: 11400000, guid: 864ac46dbd147684badf2e57a60f32c0, type: 2}
+  Tags: []
   Usable: 0
-  Durability: 10
+  Durability: 600
   ButtonPrefab: {fileID: 4864166113814497008, guid: ccad771e29092254d888b324fe6eaf17,
     type: 3}
-  EnergyRequired: 320
-  RechargeRate: 80
+  PanelPrefab: {fileID: 0}
+  EnergyRequired: 1
+  RechargeRate: 1
   AutoCycle: 0
   CompatibleMissiles:
   - {fileID: 11400000, guid: 0809d17cefb6d2f46a9b248df6598e09, type: 2}
-  DamageMultiplier:
-    ShieldDamage: 1
-    HullDamage: 1
-    EquipmentDamage: 1
-    ShieldPenetration: 1
-  RangeMultiplier: 1

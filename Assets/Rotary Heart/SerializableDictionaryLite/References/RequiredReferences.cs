@@ -15,7 +15,7 @@ namespace RotaryHeart.Lib.SerializableDictionary {
         [SerializeField]
         private AudioClip _audioClip;
         [SerializeField]
-        private ItemSO _itemSO;
+        private ItemPrototype _itemSO;
         [SerializeField]
         private StructureSO _structureSO;
     }

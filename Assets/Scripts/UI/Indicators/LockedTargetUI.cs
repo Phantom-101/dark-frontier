@@ -1,79 +1,62 @@
-﻿using DarkFrontier.Factions;
+﻿using DarkFrontier.Equipment;
+using DarkFrontier.Foundation.Behaviors;
 using DarkFrontier.Structures;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
-public class LockedTargetUI : MonoBehaviour {
+public class LockedTargetUI : ComponentBehavior {
+    public Structure Structure;
 
-    [SerializeField] private Button _button;
-    [SerializeField] private Image _hull;
-    [SerializeField] private Image _shield;
-    [SerializeField] private Image _leftProgress;
-    [SerializeField] private Image _rightProgress;
-    [SerializeField] private Text _name;
-    [SerializeField] private Text _faction;
-    [SerializeField] private Text _distance;
-    [SerializeField] private Text _velocity;
-    [SerializeField] private Transform _direction;
+    [SerializeField] protected Button button;
+    [SerializeField] protected Image hull;
+    [SerializeField] protected Image shield;
+    [SerializeField] protected Image leftLock;
+    [SerializeField] protected Image rightLock;
+    [SerializeField] protected Text nameText;
+    [SerializeField] protected Text factionText;
+    [SerializeField] protected Text distanceText;
+    [SerializeField] protected Text velocityText;
+    [SerializeField] protected Transform direction;
 
-    [SerializeField] protected Structure _structure;
+    private PlayerController playerController;
 
-    private PlayerController _pc;
-
-    public Structure Structure { get => _structure; set => _structure = value; }
-
-    private FactionManager factionManager;
-
-    [Inject]
-    public void Construct (FactionManager factionManager) {
-        this.factionManager = factionManager;
+    protected override void SingleInitialize () {
+        playerController = PlayerController.Instance;
     }
 
-    private void Start () {
-
-        _pc = PlayerController.Instance;
-        _button.onClick.AddListener (() => { _pc.Player.Selected = _structure; });
-
+    protected override void InternalSubscribeEventListeners () {
+        button.onClick.AddListener (() => { playerController.Player.Selected = Structure; });
     }
 
-    private void Update () {
-
-        if (_structure == null) {
-
+    protected override void InternalTick (float dt) {
+        if (Structure == null) {
             Destroy (gameObject);
             return;
-
         }
 
-        Structure player = _pc.Player;
+        Structure player = playerController.Player;
 
-        if (!player.Locks.ContainsKey (_structure)) {
-
+        if (!player.Locks.ContainsKey (Structure)) {
             Destroy (gameObject);
             return;
-
         }
 
-        _hull.fillAmount = _structure.Hull / _structure.Stats.GetBaseValue (StatNames.MaxHull, 1) / 2;
+        hull.fillAmount = Structure.Hull / Structure.Stats.GetBaseValue (StatNames.MaxHull, 1) / 2;
         float strength = 0, maxStrength = 0;
-        _structure.GetEquipmentData<ShieldSlotData> ().ForEach (shield => {
+        Structure.GetEquipmentStates<ShieldPrototype.State> ().ForEach (shield => {
             strength += shield.Strength;
-            maxStrength += (shield.Equipment as ShieldSO).MaxStrength;
+            maxStrength += (shield.Slot.Equipment as ShieldPrototype).MaxStrength;
         });
-        _shield.fillAmount = strength / (maxStrength == 0 ? 1 : maxStrength) / 2;
-        float fa = player.Locks[_structure] / 400;
-        _leftProgress.fillAmount = fa;
-        _rightProgress.fillAmount = fa;
-        _name.text = _structure.gameObject.name;
-        _faction.text = _structure.Faction.Value (factionManager.Registry.Find)?.Name ?? "None";
-        _distance.text = Vector3.Distance (PlayerController.Instance.Player.transform.position, _structure.transform.position).ToString ("F0") + " m";
-        Rigidbody rb = _structure.GetComponent<Rigidbody> ();
-        if (rb == null) _velocity.text = "0 m/s";
-        else _velocity.text = rb.velocity.magnitude.ToString ("F0") + " m/s";
-        _direction.rotation = Quaternion.Euler (0, 0, -_structure.GetAngleTo (PlayerController.Instance.Player.transform.position));
-
+        shield.fillAmount = strength / (maxStrength == 0 ? 1 : maxStrength) / 2;
+        float fa = player.Locks[Structure] / 400;
+        leftLock.fillAmount = fa;
+        rightLock.fillAmount = fa;
+        nameText.text = Structure.gameObject.name;
+        factionText.text = Structure.Faction.Value?.Name ?? "None";
+        distanceText.text = Vector3.Distance (PlayerController.Instance.Player.transform.position, Structure.transform.position).ToString ("F0") + " m";
+        Rigidbody rb = Structure.GetComponent<Rigidbody> ();
+        if (rb == null) velocityText.text = "0 m/s";
+        else velocityText.text = rb.velocity.magnitude.ToString ("F0") + " m/s";
+        direction.rotation = Quaternion.Euler (0, 0, -Structure.GetAngleTo (PlayerController.Instance.Player.transform.position));
     }
-
 }

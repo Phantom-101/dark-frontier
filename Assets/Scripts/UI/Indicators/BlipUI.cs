@@ -1,8 +1,6 @@
-﻿using DarkFrontier.Factions;
-using DarkFrontier.Structures;
+﻿using DarkFrontier.Structures;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 public class BlipUI : MonoBehaviour {
     [SerializeField] private Structure target;
@@ -13,13 +11,6 @@ public class BlipUI : MonoBehaviour {
     [SerializeField] private Gradient _relations;
 
     public Structure Target { get => target; set => target = value; }
-
-    private FactionManager factionManager;
-
-    [Inject]
-    public void Construct (FactionManager factionManager) {
-        this.factionManager = factionManager;
-    }
 
     private void Update () {
         if (target == null) {
@@ -44,7 +35,7 @@ public class BlipUI : MonoBehaviour {
 
         if (target.Faction.Id.Value == pf) _img.color = _own;
         else {
-            float r = player.Faction.Value (factionManager.Registry.Find)?.GetRelation (target.Faction.Id.Value) ?? 0;
+            float r = player.Faction.Value?.GetRelation (target.Faction.Id.Value) ?? 0;
             _img.color = _relations.Evaluate ((r + 1) / 2);
         }
 

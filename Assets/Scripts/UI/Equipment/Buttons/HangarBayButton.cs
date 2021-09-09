@@ -13,13 +13,13 @@ namespace DarkFrontier.Equipment {
         public CanvasGroup TooltipGroup;
         public Text Tooltip;
 
-        private HangarBaySO cache;
+        private HangarBayPrototype cache;
 
         protected override void MultiInitialize () {
             if (Slot == null) return;
-            cache = Slot.Data.Equipment as HangarBaySO;
+            cache = Slot.Equipment as HangarBayPrototype;
             Icon.sprite = cache.Icon;
-            Tooltip.text = Slot.Data.Equipment.name;
+            Tooltip.text = Slot.Equipment.name;
             TooltipGroup.alpha = 0;
             EventTrigger.Entry clickEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerClick };
             clickEntry.callback.AddListener ((data) => cache.OnClicked (Slot));
@@ -35,17 +35,17 @@ namespace DarkFrontier.Equipment {
         }
 
         protected override void InternalTick (float dt) {
-            if (Slot.Data.Equipment != cache) {
+            if (Slot.Equipment != cache) {
                 Destroy (gameObject);
                 return;
             }
 
-            cache.EnsureDataType (Slot);
-            HangarBaySlotData data = Slot.Data as HangarBaySlotData;
+            cache.EnsureStateType (Slot);
+            HangarBayPrototype.State data = Slot.State as HangarBayPrototype.State;
 
             Button.interactable = cache.CanClick (Slot);
-            Center.fillAmount = (float) data.LaunchSlots.FindAll (s => s.State == HangarBayLaunchSlotState.Launched).Count / cache.MaxSquadronSize;
-            Side.fillAmount = (float) data.LaunchSlots.FindAll (s => s.State == HangarBayLaunchSlotState.Loaded).Count / cache.MaxSquadronSize;
+            Center.fillAmount = (float) data.LaunchSlots.FindAll (s => s.Status == HangarBayPrototype.State.SlotState.SlotStatus.Launched).Count / cache.MaxSquadronSize;
+            Side.fillAmount = (float) data.LaunchSlots.FindAll (s => s.Status == HangarBayPrototype.State.SlotState.SlotStatus.Loaded).Count / cache.MaxSquadronSize;
             Bottom.fillAmount = data.Durability / cache.Durability;
         }
     }

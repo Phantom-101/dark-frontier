@@ -3,21 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using Zenject;
 
 namespace DarkFrontier.Locations {
     public class SectorManager : MonoBehaviour {
         public SectorRegistry Registry { get => registry; }
-        [SerializeReference] private SectorRegistry registry;
-
-        [Inject]
-        public void Construct (SectorRegistry registry) {
-            this.registry = registry;
-        }
+        [SerializeReference] private SectorRegistry registry = new SectorRegistry ();
 
         public void SaveGame (DirectoryInfo directory) {
-            List<SectorSaveData> saveData = new List<SectorSaveData> ();
-            registry.Sectors.ToList ().ForEach (sector => { saveData.Add (sector.GetSaveData ()); });
+            List<Sector.Serializable> saveData = new List<Sector.Serializable> ();
+            registry.Sectors.ToList ().ForEach (sector => saveData.Add (sector.ToSerializable ()));
             FileInfo file = PathManager.GetSectorFile (directory);
             if (!file.Exists) file.Create ().Close ();
             File.WriteAllText (
@@ -35,18 +29,18 @@ namespace DarkFrontier.Locations {
         public void LoadGame (DirectoryInfo directory) {
             FileInfo file = PathManager.GetSectorFile (directory);
             if (!file.Exists) return;
-            List<SectorSaveData> sectors = JsonConvert.DeserializeObject (
+            List<Sector.Serializable> sectors = JsonConvert.DeserializeObject<List<Sector.Serializable>> (
                 File.ReadAllText (file.FullName),
                 new JsonSerializerSettings {
                     TypeNameHandling = TypeNameHandling.All,
                 }
-            ) as List<SectorSaveData>;
+            );
             registry.Sectors.ForEach (sector => { Destroy (sector.gameObject); });
             registry.Clear ();
             sectors.ForEach (data => {
                 GameObject sector = new GameObject ();
                 Sector comp = sector.AddComponent<Sector> ();
-                comp.SetSaveData (data);
+                comp.FromSerializable (data);
                 registry.Set (comp);
             });
         }

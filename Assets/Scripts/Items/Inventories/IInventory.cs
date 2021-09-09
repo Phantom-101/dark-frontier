@@ -6,9 +6,9 @@ public interface IInventory {
     bool Overburdened { get; }
     int Precision { get; set; }
 
-    int GetQuantity (ItemSO item);
-    bool HasQuantity (ItemSO item, int quantity);
-    int AddQuantity (ItemSO item, int quantity);
-    int RemoveQuantity (ItemSO item, int quantity);
-    List<ItemSO> GetStoredItems ();
+    int GetQuantity (ItemPrototype item);
+    bool HasQuantity (ItemPrototype item, int quantity);
+    int AddQuantity (ItemPrototype item, int quantity);
+    int RemoveQuantity (ItemPrototype item, int quantity);
+    List<ItemPrototype> GetStoredItems ();
 }

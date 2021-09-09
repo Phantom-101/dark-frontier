@@ -5,10 +5,11 @@ namespace DarkFrontier.Foundation.Behaviors {
         public Behavior Behavior;
 
         public void TryInitialize () => Behavior?.TryInitialize ();
+        public void GetServices () => Behavior?.GetServices ();
 
-        public void Tick (float dt, float? edt = null) => Behavior?.Tick (dt, edt);
-        public void LateTick (float dt, float? edt = null) => Behavior?.LateTick (dt, edt);
-        public void FixedTick (float dt, float? edt = null) => Behavior?.FixedTick (dt, edt);
+        public void Tick (float dt) => Behavior?.Tick (dt);
+        public void LateTick (float dt) => Behavior?.LateTick (dt);
+        public void FixedTick (float dt) => Behavior?.FixedTick (dt);
 
         public bool Validate () => Behavior?.Validate () ?? false;
 

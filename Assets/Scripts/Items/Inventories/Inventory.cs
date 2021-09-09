@@ -27,15 +27,15 @@ public class Inventory : IInventory, ISaveTo<InventorySaveData> {
         RecalculateStoredVolume ();
     }
     public Inventory (InventorySaveData saveData) {
-        quantities = saveData.Quantities.ToDictionary (p => ItemManager.Instance.GetItem (p.Key), p => p.Value).ToSerializable<ItemSO, int, ItemSOToIntDictionary> ();
+        quantities = saveData.Quantities.ToDictionary (p => ItemManager.Instance.GetItem (p.Key), p => p.Value).ToSerializable<ItemPrototype, int, ItemSOToIntDictionary> ();
         volume = saveData.Volume;
         precision = saveData.Precision;
     }
 
-    public int GetQuantity (ItemSO item) => quantities.TryGet (item, 0);
-    public bool HasQuantity (ItemSO item, int quantity) => GetQuantity (item) >= quantity;
+    public int GetQuantity (ItemPrototype item) => quantities.TryGet (item, 0);
+    public bool HasQuantity (ItemPrototype item, int quantity) => GetQuantity (item) >= quantity;
 
-    public int AddQuantity (ItemSO item, int quantity) {
+    public int AddQuantity (ItemPrototype item, int quantity) {
         if (Overburdened) return 0;
         float remainingVolume = RoundToPrecision (volume - storedVolume);
         int canFit = (int) (remainingVolume / item.Volume);
@@ -45,7 +45,7 @@ public class Inventory : IInventory, ISaveTo<InventorySaveData> {
         return added;
     }
 
-    public int RemoveQuantity (ItemSO item, int quantity) {
+    public int RemoveQuantity (ItemPrototype item, int quantity) {
         int has = GetQuantity (item);
         int removed = Math.Min (has, quantity);
         quantities[item] = has - removed;
@@ -53,16 +53,16 @@ public class Inventory : IInventory, ISaveTo<InventorySaveData> {
         return removed;
     }
 
-    public List<ItemSO> GetStoredItems () => quantities.Keys.ToList ();
+    public List<ItemPrototype> GetStoredItems () => quantities.Keys.ToList ();
 
     private void Optimize () => quantities.Where (pair => pair.Value == 0).ToList ().ForEach (pair => quantities.Remove (pair.Key));
     private float RoundToPrecision (float value) => (float) Math.Round (value, precision);
-    private float GetVolume (ItemSO item, int amount) => RoundToPrecision (RoundToPrecision (item.Volume) * amount);
+    private float GetVolume (ItemPrototype item, int amount) => RoundToPrecision (RoundToPrecision (item.Volume) * amount);
 
     private void RecalculateStoredVolume () {
         storedVolume = 0;
         Optimize ();
-        foreach (KeyValuePair<ItemSO, int> pair in quantities) {
+        foreach (KeyValuePair<ItemPrototype, int> pair in quantities) {
             storedVolume = RoundToPrecision (storedVolume + GetVolume (pair.Key, pair.Value));
         }
     }

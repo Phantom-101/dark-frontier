@@ -1,10 +1,8 @@
-﻿using DarkFrontier.Factions;
-using DarkFrontier.Structures;
+﻿using DarkFrontier.Structures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Zenject;
 
 [Serializable]
 public class DockingBayList {
@@ -13,28 +11,22 @@ public class DockingBayList {
 
     public int DockedCount { get => dockers.Count; }
     private readonly HashSet<Structure> dockers = new HashSet<Structure> ();
-    public List<Structure> Dockers { get => dockersList ?? (dockersList = dockers.ToList ()); }
+    public List<Structure> Dockers { get => dockersList ??= dockers.ToList (); }
     [SerializeField] private List<Structure> dockersList;
 
     public Structure Structure { get => structure; }
     [SerializeField] private Structure structure;
 
-    private FactionManager factionManager;
-
-    public DockingBayList (Structure structure) {
+    public DockingBayList (DockingBayList other, Structure structure) {
+        other.dockingBays?.ForEach ((bay) => dockingBays.Add (bay?.Copy () ?? new DockingBay ()));
         this.structure = structure;
-    }
-
-    [Inject]
-    public void Construct (FactionManager factionManager) {
-        this.factionManager = factionManager;
     }
 
     public bool CanAccept (Structure docker) {
         // In the same sector or already docked?
         if (docker.transform.parent != structure.transform.parent) return false;
         // Good relations?
-        if (structure.Faction == null || structure.Faction.Value (factionManager.Registry.Find).IsEnemy (docker.Faction.Id.Value)) return false;
+        if (structure.Faction.Value?.IsEnemy (docker.Faction.Id.Value) ?? false) return false;
         // Within range?
         if (NavigationManager.Instance.GetLocalDistance (structure, docker) > 50) return false;
         // Already children?
@@ -72,11 +64,5 @@ public class DockingBayList {
             }
         }
         return false;
-    }
-
-    public DockingBayList Copy (Structure target) {
-        DockingBayList ret = new DockingBayList (target);
-        dockingBays.ForEach ((bay) => ret.DockingBays.Add (bay.Copy ()));
-        return ret;
     }
 }

@@ -5,17 +5,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using Zenject;
 
 namespace DarkFrontier.Factions {
     public class FactionManager : ComponentBehavior {
         public FactionRegistry Registry { get => registry; }
-        [SerializeReference] private FactionRegistry registry;
-
-        [Inject]
-        public void Construct (FactionRegistry registry) {
-            this.registry = registry;
-        }
+        [SerializeReference] private FactionRegistry registry = new FactionRegistry ();
 
         public void SaveGame (DirectoryInfo directory) {
             List<FactionSaveData> saveData = new List<FactionSaveData> ();

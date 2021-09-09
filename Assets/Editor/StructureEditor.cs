@@ -1,4 +1,5 @@
-﻿using DarkFrontier.Structures;
+﻿using DarkFrontier.Equipment;
+using DarkFrontier.Structures;
 using UnityEditor;
 using UnityEngine;
 

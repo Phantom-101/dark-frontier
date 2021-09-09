@@ -9,7 +9,14 @@ namespace DarkFrontier.Structures {
     public class StructureRegistry {
         public StructureIdMap StructureDictionary { get => structures; }
         [SerializeField] private StructureIdMap structures = new StructureIdMap ();
-        public List<Structure> Structures { get => structures.Values.ToList (); }
+        public List<Structure> Structures {
+            get {
+                Trim ();
+                return structures.Values.ToList ();
+            }
+        }
+
+        public void Trim () => structures.Where (e => e.Value == null).ToList ().ForEach (e => structures.Remove (e.Key));
 
         public void Add (Structure structure) => structures.Add (structure.Id, structure);
         public bool TryAdd (Structure structure) => structures.TryAdd (structure.Id, structure);

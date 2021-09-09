@@ -28,10 +28,10 @@ MonoBehaviour:
   PanelPrefab: {fileID: 0}
   MaxLinearSpeed: 400
   MaxAngularSpeed: 100
-  LinearForcePos: {x: 200, y: 200, z: 200}
-  LinearForceNeg: {x: -200, y: -200, z: -200}
-  AngularForcePos: {x: 25, y: 25, z: 25}
-  AngularForceNeg: {x: -25, y: -25, z: -25}
+  LinearForcePos: {x: 25, y: 25, z: 25}
+  LinearForceNeg: {x: -25, y: -25, z: -25}
+  AngularForcePos: {x: 50, y: 50, z: 50}
+  AngularForceNeg: {x: -50, y: -50, z: -50}
   LinearConsumptionPos: {x: 1, y: 1, z: 1}
   LinearConsumptionNeg: {x: 1, y: 1, z: 1}
   AngularConsumptionPos: {x: 1, y: 1, z: 1}
