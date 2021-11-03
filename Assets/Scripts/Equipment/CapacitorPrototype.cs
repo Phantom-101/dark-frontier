@@ -14,14 +14,14 @@ namespace DarkFrontier.Equipment {
         public override void OnEquip (EquipmentSlot slot) => slot.UnsafeState = GetNewState (slot);
         public override void OnUnequip (EquipmentSlot slot) { }
 
-        public override void Tick (EquipmentSlot slot, float dt) {
-            State state = (slot.State as State)!;
+        public override void Tick (EquipmentSlot aSlot, float aDt) {
+            State state = (aSlot.UState as State)!;
 
-            state.ChargeLeft = MaxChargeRate * dt;
-            state.DischargeLeft = MaxDischargeRate * dt;
+            state.ChargeLeft = MaxChargeRate * aDt;
+            state.DischargeLeft = MaxDischargeRate * aDt;
         }
 
-        public override void FixedTick (EquipmentSlot slot, float dt) { }
+        public override void FixedTick (EquipmentSlot slot, float aDt) { }
         public override bool CanClick (EquipmentSlot slot) { return false; }
         public override void OnClicked (EquipmentSlot slot) { }
 

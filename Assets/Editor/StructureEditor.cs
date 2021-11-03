@@ -1,4 +1,5 @@
-﻿using DarkFrontier.Equipment;
+﻿/*
+using DarkFrontier.Equipment;
 using DarkFrontier.Structures;
 using UnityEditor;
 using UnityEngine;
@@ -30,3 +31,4 @@ public class StructureEditor : Editor {
         serializedObject.ApplyModifiedProperties ();
     }
 }
+*/

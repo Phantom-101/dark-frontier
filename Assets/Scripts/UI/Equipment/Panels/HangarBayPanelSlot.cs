@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Equipment;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace DarkFrontier.Equipment {
+namespace DarkFrontier.UI.Equipment.Panels {
     public class HangarBayPanelSlot : MonoBehaviour {
         public HangarBayPrototype.State.SlotState State;
         [SerializeField] private Button button;
@@ -53,7 +54,7 @@ namespace DarkFrontier.Equipment {
                 icon.sprite = State.Launchable.Icon;
                 status.text = "Launching";
             } else if (state == HangarBayPrototype.State.SlotState.SlotStatus.Launched) {
-                fill.fillAmount = State.Structure.Hull / State.Launchable.Stats.GetBaseValue (StatNames.MaxHull, 1);
+                fill.fillAmount = State.FuelingProgress / State.Launchable.FuelCapacity;
                 indicator.color = Color.blue;
                 icon.sprite = State.Launchable.Icon;
                 status.text = "In Space";

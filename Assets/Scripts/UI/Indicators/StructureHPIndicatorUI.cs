@@ -1,30 +1,31 @@
-﻿using DarkFrontier.Structures;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using DarkFrontier.Structures;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StructureHPIndicatorUI : MonoBehaviour {
+namespace DarkFrontier.UI.Indicators {
+    public class StructureHPIndicatorUI : MonoBehaviour {
 
-    [SerializeField] private Image _hull;
-    [SerializeField] private Gradient _hullGradient;
-    [SerializeField] private GameObject _shieldPrefab;
-    [SerializeField] private List<Image> _shields = new List<Image> ();
-    [SerializeField] private Gradient _shieldGradient;
-    [SerializeField] private Transform _direction;
-    [SerializeField] private Structure _structure;
-    [SerializeField] private Structure _other;
+        [SerializeField] private Image _hull;
+        [SerializeField] private Gradient _hullGradient;
+        [SerializeField] private GameObject _shieldPrefab;
+        [SerializeField] private List<Image> _shields = new List<Image> ();
+        [SerializeField] private Gradient _shieldGradient;
+        [SerializeField] private Transform _direction;
+        [SerializeField] private Structure _structure;
+        [SerializeField] private Structure _other;
 
-    private void Start () {
+        private void Start () {
 
-        Initialize ();
+            Initialize ();
 
-    }
+        }
 
-    public void Initialize () {
+        public void Initialize () {
 
-        foreach (Image img in _shields) Destroy (img.gameObject);
-        _shields = new List<Image> ();
-        /*
+            foreach (Image img in _shields) Destroy (img.gameObject);
+            _shields = new List<Image> ();
+            /*
         ShieldSlot slot = _structure.GetEquipment<ShieldSlot> ()[0];
         int sectors = slot.GetStrengths ().GetSectorCount ();
         float degrees = slot.GetStrengths ().GetSectorAngle ();
@@ -38,21 +39,21 @@ public class StructureHPIndicatorUI : MonoBehaviour {
         }
         */
 
-    }
+        }
 
-    public Structure GetStructure () { return _structure; }
+        public Structure GetStructure () { return _structure; }
 
-    public void SetStructure (Structure structure) { _structure = structure; }
+        public void SetStructure (Structure structure) { _structure = structure; }
 
-    public Structure GetOther () { return _other; }
+        public Structure GetOther () { return _other; }
 
-    public void SetOther (Structure other) { _other = other; }
+        public void SetOther (Structure other) { _other = other; }
 
-    private void Update () {
+        private void Update () {
 
-        _hull.sprite = _structure.Profile.HullWireframe;
-        _hull.color = _hullGradient.Evaluate (_structure.Hull / _structure.Stats.GetBaseValue (StatNames.MaxHull, 1));
-        /*
+            _hull.sprite = _structure.UPrototype.HullWireframe;
+            _hull.color = _hullGradient.Evaluate (_structure.UHull / _structure.UStats.UValues.MaxHull);
+            /*
         ShieldStrengths strengths = _structure.GetEquipment<ShieldSlot> ()[0].GetStrengths ();
         if (strengths.GetSectorCount () != _shields.Count) Initialize ();
         for (int i = 0; i < _shields.Count; i++) {
@@ -75,6 +76,7 @@ public class StructureHPIndicatorUI : MonoBehaviour {
         }
         */
 
-    }
+        }
 
+    }
 }

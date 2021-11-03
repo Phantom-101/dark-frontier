@@ -42,15 +42,15 @@ MonoBehaviour:
       time: 0
       value: 1
       inSlope: 4
-      outSlope: 1
+      outSlope: 0.5
       tangentMode: 69
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 2
-      inSlope: 1
+      value: 1.5
+      inSlope: 0.5
       outSlope: -8
       tangentMode: 69
       weightedMode: 0
@@ -61,4 +61,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   BeamPrefab: {fileID: 930999058288108214, guid: 1a53d00be0c0d0f49a05fab213c2b948,
     type: 3}
-  BeamWidth: 3
+  BeamWidth: 0.3

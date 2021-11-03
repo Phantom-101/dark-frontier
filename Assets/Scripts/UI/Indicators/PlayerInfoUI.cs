@@ -1,56 +1,63 @@
-﻿using DarkFrontier.Equipment;
-using DarkFrontier.Structures;
+﻿using System;
+using DarkFrontier.Controllers;
+using DarkFrontier.Equipment;
+using DarkFrontier.Foundation.Services;
+using DarkFrontier.Locations;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerInfoUI : MonoBehaviour {
-    [SerializeField] private Transform _hpIndicators;
-    [SerializeField] private Image _hull;
-    [SerializeField] private Gradient _hullGradient;
-    [SerializeField] private Image _shield;
-    [SerializeField] private Gradient _shieldGradient;
-    [SerializeField] private Transform _direction;
-    [SerializeField] private RectTransform _capFill;
-    [SerializeField] private Image _capImg;
-    [SerializeField] private RectTransform _capOutline;
-    [SerializeField] private Gradient _capGradient;
+namespace DarkFrontier.UI.Indicators {
+    public class PlayerInfoUI : MonoBehaviour {
+        [SerializeField] private Transform _hpIndicators;
+        [SerializeField] private Image _hull;
+        [SerializeField] private Gradient _hullGradient;
+        [SerializeField] private Image _shield;
+        [SerializeField] private Gradient _shieldGradient;
+        [SerializeField] private Transform _direction;
+        [SerializeField] private RectTransform _capFill;
+        [SerializeField] private Image _capImg;
+        [SerializeField] private RectTransform _capOutline;
+        [SerializeField] private Gradient _capGradient;
 
-    private void Update () {
-        Structure player = PlayerController.Instance.Player;
+        private readonly Lazy<PlayerController> iPlayerController = new Lazy<PlayerController>(() => Singletons.Get<PlayerController> ());
+    
+        private void Update () {
+            var lPlayer = iPlayerController.Value.UPlayer;
 
-        if (player == null) return;
+            if (lPlayer == null) return;
 
-        // Hull wireframe indicator
-        _hull.sprite = player.Profile.HullWireframe;
-        _hull.color = _hullGradient.Evaluate (player.Hull / player.Stats.GetBaseValue (StatNames.MaxHull, 1));
+            // Hull wireframe indicator
+            _hull.sprite = lPlayer.UPrototype.HullWireframe;
+            _hull.color = _hullGradient.Evaluate (lPlayer.UHull / lPlayer.UStats.UValues.MaxHull);
 
-        // Shield bubble indicator
-        float curStrength = 0, totalStrength = 0;
-        player.GetEquipmentStates<ShieldPrototype.State> ().ForEach (shield => {
-            curStrength += shield.Strength;
-            totalStrength += (shield.Slot.Equipment as ShieldPrototype).MaxStrength;
-        });
-        _shield.color = _shieldGradient.Evaluate (curStrength / (totalStrength == 0 ? 1 : totalStrength));
+            // Shield bubble indicator
+            float lCurStrength = 0, lTotalStrength = 0;
+            foreach (var lShield in lPlayer.GetEquipmentStates<ShieldPrototype.State>()) {
+                lCurStrength += lShield.Strength;
+                lTotalStrength += ((ShieldPrototype) lShield.Slot.Equipment).MaxStrength;
+            }
+            _shield.color = _shieldGradient.Evaluate (lCurStrength / (lTotalStrength == 0 ? 1 : lTotalStrength));
 
-        // Velocity indicator
-        //Rigidbody rb = _structure.GetComponent<Rigidbody> ();
-        //if (rb == null) _velocity.text = "0 m/s";
-        //else _velocity.text = rb.velocity.magnitude.ToString ("F2") + " m/s";
+            // Velocity indicator
+            //Rigidbody rb = _structure.GetComponent<Rigidbody> ();
+            //if (rb == null) _velocity.text = "0 m/s";
+            //else _velocity.text = rb.velocity.magnitude.ToString ("F2") + " m/s";
 
-        // Capacitor bar indicator
-        float storedCap = 0, totalCap = 0;
-        player.GetEquipmentStates<CapacitorPrototype.State> ().ForEach (capacitor => {
-            storedCap += capacitor.Charge;
-            totalCap += (capacitor.Slot.Equipment as CapacitorPrototype).Capacitance;
-        });
-        _capFill.sizeDelta = new Vector2 (_capOutline.sizeDelta.x * storedCap / (totalCap == 0 ? 1 : totalCap), _capFill.sizeDelta.y);
-        _capImg.color = _capGradient.Evaluate (storedCap / (totalCap == 0 ? 1 : totalCap));
+            // Capacitor bar indicator
+            float lStoredCap = 0, lTotalCap = 0;
+            foreach (var lCapacitor in lPlayer.GetEquipmentStates<CapacitorPrototype.State>()) {
+                lStoredCap += lCapacitor.Charge;
+                lTotalCap += ((CapacitorPrototype) lCapacitor.Slot.Equipment).Capacitance;
+            }
+            _capFill.sizeDelta = new Vector2 (_capOutline.sizeDelta.x * lStoredCap / (lTotalCap == 0 ? 1 : lTotalCap), _capFill.sizeDelta.y);
+            _capImg.color = _capGradient.Evaluate (lStoredCap / (lTotalCap == 0 ? 1 : lTotalCap));
 
-        // Selected direction indicator
-        if (player.Selected == null) _direction.gameObject.SetActive (false);
-        else {
-            _direction.gameObject.SetActive (true);
-            _direction.rotation = Quaternion.Euler (0, 0, -player.GetAngleTo (player.Selected.transform.position));
+            // Selected direction indicator
+            if (lPlayer.USelected.UValue == null) _direction.gameObject.SetActive (false);
+            else {
+                _direction.gameObject.SetActive (true);
+                _direction.rotation = Quaternion.Euler (0, 0, -lPlayer.GetAngleTo (new Location (lPlayer.USelected.UValue.transform)));
+            }
         }
     }
 }

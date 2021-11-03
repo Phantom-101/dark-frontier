@@ -1,6 +1,8 @@
 ﻿using DarkFrontier.Foundation.Services;
+using DarkFrontier.Locations;
 using DarkFrontier.Structures;
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace DarkFrontier.Equipment {
@@ -24,84 +26,88 @@ namespace DarkFrontier.Equipment {
         public override void OnEquip (EquipmentSlot slot) => slot.UnsafeState = GetNewState (slot);
 
         public override void OnUnequip (EquipmentSlot slot) {
-            State state = (slot.State as State)!;
+            State state = (slot.UState as State)!;
             if (state.Beam != null) Destroy (state.Beam);
         }
 
-        public override void Tick (EquipmentSlot slot, float dt) {
-            if (slot.Equipper == null) return;
+        public override void Tick (EquipmentSlot aSlot, float aDt) {
+            if (aSlot.Equipper == null) return;
 
-            State state = (slot.State as State)!;
+            State lState = (aSlot.UState as State)!;
 
-            if (state.Activated && (state.Target == null || !slot.Equipper.Locks.ContainsKey (state.Target) || (state.Target.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range)) state.Activated = false;
+            if (lState.Activated && (lState.Target == null || aSlot.Equipper.ULocks.Keys.All(aGetter => aGetter.UId.Value != lState.Target.UId) || (lState.Target.transform.position - aSlot.Equipper.transform.position).sqrMagnitude > Range * Range)) lState.Activated = false;
 
-            state.Heat = Mathf.Clamp (state.Heat - CoolingRate * dt + (state.Activated ? HeatGeneration * dt : 0), 0, MaxHeat);
+            lState.Heat = Mathf.Clamp (lState.Heat - CoolingRate * aDt + (lState.Activated ? HeatGeneration * aDt : 0), 0, MaxHeat);
 
-            if (state.Activated) {
-                if (state.Beam == null) state.Beam = Instantiate (BeamPrefab, slot.transform);
-                state.Beam!.transform.LookAt (state.Target!.transform);
-                state.Beam.transform.localScale = Vector3.one;
-                state.Beam.transform.localScale = new Vector3 (
-                    BeamWidth / state.Beam.transform.lossyScale.x,
-                    BeamWidth / state.Beam.transform.lossyScale.y,
-                    Vector3.Distance (slot.transform.position, state.Target.transform.position) / state.Beam.transform.lossyScale.z
+            if (lState.Activated) {
+                if (lState.Beam == null) lState.Beam = Instantiate (BeamPrefab, aSlot.transform);
+                lState.Beam!.transform.LookAt (lState.Target!.transform);
+                lState.Beam.transform.localScale = Vector3.one;
+                var lBeamScale = lState.Beam.transform.lossyScale;
+                lState.Beam.transform.localScale = new Vector3 (
+                    BeamWidth / lBeamScale.x,
+                    BeamWidth / lBeamScale.y,
+                    Vector3.Distance (aSlot.transform.position, lState.Target.transform.position) / lBeamScale.z
                 );
-                float consumption = EnergyConsumption * dt;
-                float given = 0;
-                slot.Equipper.GetEquipmentStates<CapacitorPrototype.State> ().ForEach (capacitor => {
-                    float chargeLeft = capacitor.Charge;
-                    float dischargeLeft = capacitor.DischargeLeft;
-                    float allocated = Mathf.Min (chargeLeft, dischargeLeft, consumption - given);
-                    given += allocated;
-                    capacitor.Charge -= allocated;
-                    capacitor.DischargeLeft -= allocated;
-                });
-                state.AccumulatedDamageMultiplier += given / consumption * dt;
+                var lConsumption = EnergyConsumption * aDt;
+                float lGiven = 0;
+                var lCapacitors = aSlot.Equipper.GetEquipmentStates<CapacitorPrototype.State>();
+                foreach (var lCapacitor in lCapacitors) {
+                    var lChargeLeft = lCapacitor.Charge;
+                    var lDischargeLeft = lCapacitor.DischargeLeft;
+                    var lAllocated = Mathf.Min (lChargeLeft, lDischargeLeft, lConsumption - lGiven);
+                    lGiven += lAllocated;
+                    lCapacitor.Charge -= lAllocated;
+                    lCapacitor.DischargeLeft -= lAllocated;
+                }
+                lState.AccumulatedDamageMultiplier += lGiven / lConsumption * aDt;
                 /* Use raycast?
                 if (Physics.Raycast (slot.Equipper.transform.position, data.Target.transform.position - slot.Equipper.transform.position, out RaycastHit hit, Range)) {
                     Structure structure = hit.transform.gameObject.GetComponentInParent<Structure> ();
                     if (structure != null) structure.TakeDamage (Damage * HeatDamageMultiplier.Evaluate (data.Heat / MaxHeat), hit.point);
                 }
                 */
-                if (state.AccumulatedDamageMultiplier >= DamageInterval) {
-                    state.Target.TakeDamage (DamagePerSecond * state.AccumulatedDamageMultiplier * HeatDamageMultiplier.Evaluate (state.Heat / MaxHeat), slot.Equipper.transform.position);
-                    state.AccumulatedDamageMultiplier = 0;
+                if (lState.AccumulatedDamageMultiplier >= DamageInterval) {
+                    lState.Target.TakeDamage (DamagePerSecond * lState.AccumulatedDamageMultiplier * HeatDamageMultiplier.Evaluate (lState.Heat / MaxHeat), new Location (aSlot.Equipper.transform));
+                    lState.AccumulatedDamageMultiplier = 0;
                 }
             } else {
-                state.AccumulatedDamageMultiplier = 0;
-                if (state.Beam != null) Destroy (state.Beam);
+                lState.AccumulatedDamageMultiplier = 0;
+                if (lState.Beam != null) Destroy (lState.Beam);
             }
 
-            if (state.Heat == MaxHeat) {
-                state.Durability = Mathf.Max (state.Durability - OverheatDamage * dt, 0);
-                if (state.Durability == 0) OnUnequip (slot);
+            if (lState.Heat == MaxHeat) {
+                lState.Durability = Mathf.Max (lState.Durability - OverheatDamage * aDt, 0);
+                if (lState.Durability == 0) {
+                    aSlot.ChangeEquipment(null);
+                }
             }
         }
 
-        public override void FixedTick (EquipmentSlot slot, float dt) { }
+        public override void FixedTick (EquipmentSlot slot, float aDt) { }
 
         public override bool CanClick (EquipmentSlot slot) {
             if (slot.Equipper == null) return false;
 
-            State state = (slot.State as State)!;
+            State state = (slot.UState as State)!;
 
             if (state.Activated) {
                 // If equipment is activated and selected is null or target
                 // Assume user wants to deactivate equipment
-                if (slot.Equipper.Selected == null || slot.Equipper.Selected == state.Target) return true;
+                if (slot.Equipper.USelected.UValue == null || slot.Equipper.USelected.UValue == state.Target) return true;
                 // If equipment is activated and selected is not null
                 // Assume user wants to change target
                 else {
-                    if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
-                    if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range) return false;
+                    if (!slot.Equipper.ULocks.Keys.Any (lGetter => lGetter.UValue == slot.Equipper.USelected.UValue)) return false;
+                    if ((slot.Equipper.USelected.UValue.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range) return false;
                     return true;
                 }
             } else {
                 // If equipment is not activated
                 // Assume user wants to activate equipment
-                if (slot.Equipper.Selected == null) return false;
-                if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
-                if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range) return false;
+                if (slot.Equipper.USelected.UValue == null) return false;
+                if (!slot.Equipper.ULocks.Keys.Any (lGetter => lGetter.UValue == slot.Equipper.USelected.UValue)) return false;
+                if ((slot.Equipper.USelected.UValue.transform.position - slot.Equipper.transform.position).sqrMagnitude > Range * Range) return false;
                 return true;
             }
         }
@@ -111,20 +117,20 @@ namespace DarkFrontier.Equipment {
 
             if (slot.Equipper == null) return;
 
-            State state = (slot.State as State)!;
+            State state = (slot.UState as State)!;
 
             if (state.Activated) {
                 // If equipment is activated and selected is null or target
                 // Assume user wants to deactivate equipment
-                if (slot.Equipper.Selected == null || slot.Equipper.Selected == state.Target) state.Activated = false;
+                if (slot.Equipper.USelected.UValue == null || slot.Equipper.USelected.UValue == state.Target) state.Activated = false;
                 // If equipment is activated and selected is not null
                 // Assume user wants to change target
-                else state.Target = slot.Equipper.Selected;
+                else state.Target = slot.Equipper.USelected.UValue;
             } else {
                 // If equipment is not activated
                 // Assume user wants to activate equipment
                 state.Activated = true;
-                state.Target = slot.Equipper.Selected;
+                state.Target = slot.Equipper.USelected.UValue;
             }
         }
 
@@ -150,7 +156,7 @@ namespace DarkFrontier.Equipment {
                     AccumulatedDamageMultiplier = AccumulatedDamageMultiplier,
                     Heat = Heat,
                     Activated = Activated,
-                    TargetId = Target == null ? "" : Target.Id,
+                    TargetId = Target == null ? "" : Target.UId,
                 };
             }
 
@@ -160,7 +166,7 @@ namespace DarkFrontier.Equipment {
                 AccumulatedDamageMultiplier = converted.AccumulatedDamageMultiplier;
                 Heat = converted.Heat;
                 Activated = converted.Activated;
-                Target = Singletons.Get<StructureManager> ().GetStructure (converted.TargetId);
+                Target = Singletons.Get<Structures.StructureManager> ().GetStructure (converted.TargetId);
             }
 
             [Serializable]

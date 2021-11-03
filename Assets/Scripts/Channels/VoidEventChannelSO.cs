@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-[CreateAssetMenu (menuName = "Events/Void Event Channel")]
-public class VoidEventChannelSO : ScriptableObject {
+namespace DarkFrontier.Channels {
+    [CreateAssetMenu (menuName = "Events/Void Event Channel")]
+    public class VoidEventChannelSO : ScriptableObject {
 
-    public UnityAction OnEventRaised;
+        public UnityAction OnEventRaised;
 
-    public void RaiseEvent () {
+        public void RaiseEvent () {
 
-        if (OnEventRaised != null) OnEventRaised.Invoke ();
+            if (OnEventRaised != null) OnEventRaised.Invoke ();
+
+        }
 
     }
-
 }

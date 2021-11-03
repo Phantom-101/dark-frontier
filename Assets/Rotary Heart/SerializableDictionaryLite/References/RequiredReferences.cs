@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Items.Prototypes;
+using UnityEngine;
 
 namespace RotaryHeart.Lib.SerializableDictionary {
     /// <summary>
@@ -15,8 +16,8 @@ namespace RotaryHeart.Lib.SerializableDictionary {
         [SerializeField]
         private AudioClip _audioClip;
         [SerializeField]
-        private ItemPrototype _itemSO;
+        private ItemPrototype _itemPrototype;
         [SerializeField]
-        private StructureSO _structureSO;
+        private StructurePrototype _structurePrototype;
     }
 }

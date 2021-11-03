@@ -1,15 +1,18 @@
 ﻿using DarkFrontier.Equipment;
+using DarkFrontier.Foundation.Services;
+using DarkFrontier.Items.Prototypes;
+using DarkFrontier.Locations;
 using DarkFrontier.Structures;
 using UnityEngine;
 
-namespace DarkFrontier.AI {
+namespace DarkFrontier.Controllers {
     public class HangarManagedCraftAI : AIBase {
         public HangarLaunchableSO Launchable;
         public HangarBayPrototype.State State;
 
-        public override void Tick (Structure structure, float dt) {
+        public override void Tick (Structure structure, float aDt) {
             if (Launchable == null || State.Slot == null) {
-                structure.Hull = 0;
+                structure.UHull = 0;
                 return;
             }
 
@@ -18,8 +21,8 @@ namespace DarkFrontier.AI {
                 return;
             }
 
-            float disToHangar = NavigationManager.Instance.GetLocalDistance (structure, State.Slot.Equipper);
-            float disFromHangarToTarget = NavigationManager.Instance.GetLocalDistance (State.Target, State.Slot.Equipper);
+            float disToHangar = Singletons.Get<NavigationManager> ().Distance (new Location (structure.transform), new Location (State.Slot.Equipper.transform), DistanceType.Chebyshev);
+            float disFromHangarToTarget = Singletons.Get<NavigationManager> ().Distance (new Location (State.Target.transform), new Location (State.Slot.Equipper.transform), DistanceType.Chebyshev);
 
             if (disToHangar > Launchable.SignalConnectionRange) {
                 return;
@@ -32,42 +35,42 @@ namespace DarkFrontier.AI {
 
             MoveTo (structure, State.Target);
 
-            structure.Selected = State.Target;
-            structure.Lock (structure.Selected);
-            structure.GetEquipmentStates<BeamLaserPrototype.State> ().ForEach (state => {
-                state.Activated = false;
-                state.Slot.Equipment.OnClicked (state.Slot);
-                state.Activated = true;
-            });
-            structure.GetEquipmentStates<PulseLaserPrototype.State> ().ForEach (state => {
-                state.Activated = false;
-                state.Slot.Equipment.OnClicked (state.Slot);
-                state.Activated = true;
-            });
-            structure.GetEquipmentStates<LauncherPrototype.State> ().ForEach (state => {
-                state.Activated = false;
-                state.Slot.Equipment.OnClicked (state.Slot);
-                state.Activated = true;
-            });
+            structure.USelected.UId.Value = State.Target.UId;
+            structure.Lock (structure.USelected.UValue);
+            foreach (var lState in structure.GetEquipmentStates<BeamLaserPrototype.State> ()) {
+                lState.Activated = false;
+                lState.Slot.Equipment.OnClicked (lState.Slot);
+                lState.Activated = true;
+            }
+            foreach (var lState in structure.GetEquipmentStates<PulseLaserPrototype.State> ()) {
+                lState.Activated = false;
+                lState.Slot.Equipment.OnClicked (lState.Slot);
+                lState.Activated = true;
+            }
+            foreach (var lState in structure.GetEquipmentStates<LauncherPrototype.State> ()) {
+                lState.Activated = false;
+                lState.Slot.Equipment.OnClicked (lState.Slot);
+                lState.Activated = true;
+            }
         }
 
-        private void MoveTo (Structure structure, Structure target) {
-            Vector3[] targetSettings = new Vector3[2];
-            targetSettings[0].z = 1;
+        private void MoveTo (Structure aStructure, Structure aTarget) {
+            Vector3[] lTarget = new Vector3[2];
+            lTarget[0].z = 1;
 
-            float angle = structure.GetAngleTo (target.transform.localPosition);
-            if (angle > Launchable.HeadingAllowance) targetSettings[1].y = 1;
-            else if (angle < -Launchable.HeadingAllowance) targetSettings[1].y = -1;
+            float lAngle = aStructure.GetAngleTo (new Location (aTarget.transform));
+            if (lAngle > Launchable.HeadingAllowance) lTarget[1].y = 1;
+            else if (lAngle < -Launchable.HeadingAllowance) lTarget[1].y = -1;
 
-            float elevation = structure.GetElevationTo (target.transform.localPosition);
-            if (elevation > Launchable.HeadingAllowance) targetSettings[1].x = -1;
-            else if (elevation < -Launchable.HeadingAllowance) targetSettings[1].x = 1;
+            float lElevation = aStructure.GetElevationTo (new Location (aTarget.transform));
+            if (lElevation > Launchable.HeadingAllowance) lTarget[1].x = -1;
+            else if (lElevation < -Launchable.HeadingAllowance) lTarget[1].x = 1;
 
-            structure.GetEquipmentStates<EnginePrototype.State> ().ForEach (state => {
-                state.ManagedPropulsion = true;
-                state.LinearSetting = targetSettings[0];
-                state.AngularSetting = targetSettings[1];
-            });
+            foreach (var lEngine in aStructure.GetEquipmentStates<EnginePrototype.State>()) {
+                lEngine.ManagedPropulsion = true;
+                lEngine.LinearSetting = lTarget[0];
+                lEngine.AngularSetting = lTarget[1];
+            }
         }
 
         public override AIBase Copy () {

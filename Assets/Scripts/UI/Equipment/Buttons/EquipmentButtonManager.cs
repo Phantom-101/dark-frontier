@@ -1,26 +1,33 @@
-﻿using DarkFrontier.Structures;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DarkFrontier.Controllers;
+using DarkFrontier.Equipment;
+using DarkFrontier.Foundation.Behaviors;
+using DarkFrontier.Foundation.Services;
+using DarkFrontier.Structures;
 using UnityEngine;
 
-namespace DarkFrontier.Equipment {
+namespace DarkFrontier.UI.Equipment.Buttons {
     public class EquipmentButtonManager : MonoBehaviour {
         [SerializeField] private Transform parent;
 
         private readonly Dictionary<EquipmentSlot, EquipmentButton> buttons = new Dictionary<EquipmentSlot, EquipmentButton> ();
 
+        private readonly Lazy<PlayerController> iPlayerController = new Lazy<PlayerController>(() => Singletons.Get<PlayerController>(), false);
+        
         private void Update () {
-            Structure player = PlayerController.Instance.Player;
+            Structure player = iPlayerController.Value.UPlayer;
             if (player == null) return;
 
             foreach (EquipmentSlot key in buttons.Keys.ToArray ()) {
-                if (!player.Equipment.Contains (key)) {
+                if (!player.UEquipmentSlots.Contains (key)) {
                     buttons.Remove (key);
                     Destroy (key.gameObject);
                 }
             }
 
-            foreach (EquipmentSlot slot in player.Equipment)
+            foreach (EquipmentSlot slot in player.UEquipmentSlots)
                 if (slot.Equipment != null && slot.Equipment.ButtonPrefab != null && !buttons.ContainsKey (slot))
                     buttons[slot] = null;
 
@@ -30,7 +37,8 @@ namespace DarkFrontier.Equipment {
                         GameObject indicator = Instantiate (key.Equipment.ButtonPrefab, parent);
                         EquipmentButton comp = indicator.GetComponent<EquipmentButton> ();
                         comp.Slot = key;
-                        comp.TryInitialize ();
+                        Singletons.Get<BehaviorManager> ().InitializeImmediately (comp);
+                        Singletons.Get<BehaviorManager> ().EnableImmediately (comp);
                         buttons[key] = comp;
                     }
                 }

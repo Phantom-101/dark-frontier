@@ -1,41 +1,42 @@
-﻿using DarkFrontier.Foundation.Behaviors;
-using DarkFrontier.Structures;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DarkFrontier.Controllers;
+using DarkFrontier.Foundation.Behaviors;
+using DarkFrontier.Foundation.Services;
+using DarkFrontier.Structures;
 using UnityEngine;
 
-public class TargetsUI : ComponentBehavior {
-    [SerializeField] private Transform root;
-    [SerializeField] private GameObject prefab;
+namespace DarkFrontier.UI.Indicators {
+    public class TargetsUI : ComponentBehavior {
+        [SerializeField] private Transform root;
+        [SerializeField] private GameObject prefab;
 
-    private readonly List<LockedTargetUI> comps = new List<LockedTargetUI> ();
-    private PlayerController playerController;
+        private readonly List<LockedTargetUI> comps = new List<LockedTargetUI> ();
 
-    protected override void SingleInitialize () {
-        playerController = PlayerController.Instance;
-    }
+        private readonly Lazy<PlayerController> iPlayerController = new Lazy<PlayerController>(() => Singletons.Get<PlayerController>(), false);
 
-    protected override void InternalSubscribeEventListeners () {
-        if (playerController != null) playerController.OnLocksChanged += Rebuild;
-    }
-
-    protected override void InternalUnsubscribeEventListeners () {
-        if (playerController != null) playerController.OnLocksChanged -= Rebuild;
-    }
-
-    private void Rebuild (object sender, EventArgs args) {
-        while (comps.Count > 0) {
-            if (comps[0] != null) Destroy (comps[0].gameObject);
-            comps.RemoveAt (0);
+        public override void Enable () {
+            iPlayerController.Value.OnLocksChanged += Rebuild;
         }
 
-        Structure player = playerController.Player;
-        if (player == null) return;
-        foreach (Structure target in player.Locks.Keys.ToArray ()) {
-            LockedTargetUI instantiated = Instantiate (prefab, root).GetComponent<LockedTargetUI> ();
-            instantiated.Structure = target;
-            comps.Add (instantiated);
+        public override void Disable () {
+            iPlayerController.Value.OnLocksChanged -= Rebuild;
+        }
+
+        private void Rebuild (object sender, EventArgs args) {
+            while (comps.Count > 0) {
+                if (comps[0] != null) Destroy (comps[0].gameObject);
+                comps.RemoveAt (0);
+            }
+
+            Structure player = iPlayerController.Value.UPlayer;
+            if (player == null) return;
+            foreach (StructureGetter lGetter in player.ULocks.Keys.ToArray ()) {
+                LockedTargetUI instantiated = Instantiate (prefab, root).GetComponent<LockedTargetUI> ();
+                instantiated.Structure = lGetter.UValue;
+                comps.Add (instantiated);
+            }
         }
     }
 }

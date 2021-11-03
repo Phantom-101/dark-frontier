@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Structures;
+using UnityEngine;
 
-[CreateAssetMenu (menuName = "Items/Charges/Missile")]
-public class MissileSO : ItemPrototype {
-    public StructureSO MissileStructure;
-    public float HeadingAllowance;
-    public float DetonationRange;
-    public Damage Damage;
-    public float Range;
+namespace DarkFrontier.Items.Prototypes {
+    [CreateAssetMenu (menuName = "Items/Charges/Missile")]
+    public class MissileSO : ItemPrototype {
+        public StructurePrototype MissileStructure;
+        public float HeadingAllowance;
+        public float DetonationRange;
+        public Damage Damage;
+        public float Range;
+    }
 }

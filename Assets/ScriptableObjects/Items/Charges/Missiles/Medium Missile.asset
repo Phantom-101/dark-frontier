@@ -24,8 +24,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8f662fdbac4b6bc43afee78abbe926c7, type: 2}
   Usable: 0
   MissileStructure: {fileID: 11400000, guid: 309930371c538784e99a1ce8bc180a91, type: 2}
-  HeadingAllowance: 3
-  DetonationRange: 1.5
+  HeadingAllowance: 1
+  DetonationRange: 1
   Damage:
     ShieldDamage: 260
     HullDamage: 260

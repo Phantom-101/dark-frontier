@@ -1,29 +1,32 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Channels;
+using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class PostProcessingEnabledSetter : MonoBehaviour {
+namespace DarkFrontier.Camera {
+    public class PostProcessingEnabledSetter : MonoBehaviour {
 
-    [SerializeField] private VoidEventChannelSO _postProcessingEnabledToggled;
-    [SerializeField] private UniversalAdditionalCameraData _cameraData;
+        [SerializeField] private VoidEventChannelSO _postProcessingEnabledToggled;
+        [SerializeField] private UniversalAdditionalCameraData _cameraData;
 
-    private void Awake () {
+        private void Awake () {
 
-        //SetPostProcessingEnabled ();
+            //SetPostProcessingEnabled ();
 
-        //_postProcessingEnabledToggled.OnEventRaised += SetPostProcessingEnabled;
+            //_postProcessingEnabledToggled.OnEventRaised += SetPostProcessingEnabled;
+
+        }
+
+        private void Update () {
+
+            SetPostProcessingEnabled ();
+
+        }
+
+        private void SetPostProcessingEnabled () {
+
+            _cameraData.renderPostProcessing = PlayerPrefs.GetInt ("PostProcessingEnabled") == 1;
+
+        }
 
     }
-
-    private void Update () {
-
-        SetPostProcessingEnabled ();
-
-    }
-
-    private void SetPostProcessingEnabled () {
-
-        _cameraData.renderPostProcessing = PlayerPrefs.GetInt ("PostProcessingEnabled") == 1;
-
-    }
-
 }

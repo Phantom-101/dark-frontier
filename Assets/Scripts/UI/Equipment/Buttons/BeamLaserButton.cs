@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Equipment;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace DarkFrontier.Equipment {
+namespace DarkFrontier.UI.Equipment.Buttons {
     public class BeamLaserButton : EquipmentButton {
         public Button Button;
         public Image Icon;
@@ -13,7 +14,9 @@ namespace DarkFrontier.Equipment {
 
         private BeamLaserPrototype cache;
 
-        protected override void MultiInitialize () {
+        public override void Enable () {
+            base.Enable ();
+
             if (Slot == null) return;
             cache = Slot.Equipment as BeamLaserPrototype;
             Icon.sprite = cache.Icon;
@@ -22,14 +25,14 @@ namespace DarkFrontier.Equipment {
             Button.onClick.AddListener (() => cache.OnClicked (Slot));
         }
 
-        protected override void InternalTick (float dt) {
+        public override void Tick (object aTicker, float aDt) {
             if (Slot.Equipment != cache) {
                 Destroy (gameObject);
                 return;
             }
 
             cache.EnsureStateType (Slot);
-            BeamLaserPrototype.State state = Slot.State as BeamLaserPrototype.State;
+            BeamLaserPrototype.State state = Slot.UState as BeamLaserPrototype.State;
 
             Button.interactable = cache.CanClick (Slot);
             Center.fillAmount = state.AccumulatedDamageMultiplier / cache.DamageInterval;

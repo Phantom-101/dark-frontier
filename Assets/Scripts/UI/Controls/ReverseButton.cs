@@ -1,11 +1,15 @@
-﻿public class ReverseButton : SingletonBase<ReverseButton> {
-    public bool Reversing { get; private set; }
+﻿using DarkFrontier.Foundation;
 
-    public void PointerDown () {
-        Reversing = true;
-    }
+namespace DarkFrontier.UI.Controls {
+    public class ReverseButton : SingletonBase<ReverseButton> {
+        public bool Reversing { get; private set; }
 
-    public void PointerUp () {
-        Reversing = false;
+        public void PointerDown () {
+            Reversing = true;
+        }
+
+        public void PointerUp () {
+            Reversing = false;
+        }
     }
 }

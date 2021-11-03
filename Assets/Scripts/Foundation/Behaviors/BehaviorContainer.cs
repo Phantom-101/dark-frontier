@@ -1,19 +1,41 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Foundation.Services;
+using UnityEngine;
 
 namespace DarkFrontier.Foundation.Behaviors {
     public class BehaviorContainer : MonoBehaviour, IBehavior {
-        public Behavior Behavior;
+        public Behavior uBehavior;
 
-        public void TryInitialize () => Behavior?.TryInitialize ();
-        public void GetServices () => Behavior?.GetServices ();
+        private BehaviorManager iBehaviorManager;
 
-        public void Tick (float dt) => Behavior?.Tick (dt);
-        public void LateTick (float dt) => Behavior?.LateTick (dt);
-        public void FixedTick (float dt) => Behavior?.FixedTick (dt);
+        protected virtual void Awake () {
+            iBehaviorManager = Singletons.Get<BehaviorManager> ();
+        }
 
-        public bool Validate () => Behavior?.Validate () ?? false;
+        protected virtual void OnEnable () {
+            if (uBehavior != null) {
+                iBehaviorManager.QueueEnable (uBehavior);
+            }
+        }
 
-        public void SubscribeEventListeners () => Behavior?.SubscribeEventListeners ();
-        public void UnsubscribeEventListeners () => Behavior?.UnsubscribeEventListeners ();
+        protected virtual void OnDisable () {
+            if (uBehavior != null) {
+                iBehaviorManager.QueueDisable (uBehavior);
+            }
+        }
+
+        protected virtual void OnDestroy () {
+            if (uBehavior != null) {
+                iBehaviorManager.DisableImmediately (uBehavior);
+            }
+        }
+
+        public void Initialize () => uBehavior?.Initialize ();
+
+        public void Enable () => uBehavior?.Enable ();
+        public void Disable () => uBehavior?.Disable ();
+
+        public void Tick (object aTicker, float aDt) => uBehavior?.Tick (aTicker, aDt);
+        public void FixedTick (object aTicker, float aDt) => uBehavior?.FixedTick (aTicker, aDt);
+        public void LateTick (object aTicker, float aDt) => uBehavior?.LateTick (aTicker, aDt);
     }
 }

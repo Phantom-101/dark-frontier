@@ -1,102 +1,120 @@
-﻿using DarkFrontier.Equipment;
-using DarkFrontier.Structures;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using DarkFrontier.Equipment;
+using DarkFrontier.Foundation.Behaviors;
+using DarkFrontier.Foundation.Services;
+using DarkFrontier.Structures;
+using DarkFrontier.UI.Controls;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[Serializable]
-public class PlayerController : SingletonBase<PlayerController> {
-    [SerializeField] private Structure _player;
-    public Structure Player { get => _player; set => _player = value; }
+namespace DarkFrontier.Controllers {
+    [Serializable]
+    public class PlayerController : ComponentBehavior {
+        public Structure UPlayer { get => iPlayer; set => iPlayer = value; }
+        [SerializeField] private Structure iPlayer;
 
-    public EventHandler OnSelectedChanged;
-    public EventHandler OnLockSelected;
-    public EventHandler OnLocksChanged;
+        public EventHandler OnSelectedChanged;
+        public EventHandler OnLockSelected;
+        public EventHandler OnLocksChanged;
 
-    private GraphicRaycaster _graphicRaycaster;
-    private EventSystem _eventSystem;
+        private GraphicRaycaster iGraphicRaycaster;
+        private EventSystem iEventSystem;
 
-    private ReverseButton _reverseButtonUI;
+        private ReverseButton iReverseButtonUI;
 
-    private void Start () {
-        _graphicRaycaster = FindObjectOfType<GraphicRaycaster> ();
-        _eventSystem = EventSystem.current;
+        private readonly Lazy<BehaviorTimekeeper> iTimekeeper = new Lazy<BehaviorTimekeeper>(() => Singletons.Get<BehaviorTimekeeper> ());
+    
+        public override void Initialize() {
+            iGraphicRaycaster = FindObjectOfType<GraphicRaycaster> ();
+            iEventSystem = EventSystem.current;
 
-        _reverseButtonUI = ReverseButton.Instance;
-    }
+            iReverseButtonUI = ReverseButton.Instance;
+        }
 
-    private void Update () {
-        if (Player == null) return;
+        public override void Enable () {
+            FireAllButton.Instance.OnClicked += FireAll;
+            OnLockSelected += LockSelected;
+        
+            iTimekeeper.Value.Subscribe (this);
+        }
 
-        if (Input.GetMouseButtonDown (0) && !ClickingUI ()) {
-            Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-            if (Physics.Raycast (ray, out RaycastHit hit)) {
-                if (hit.collider.transform.parent != null) {
-                    GameObject obj = hit.collider.transform.parent.gameObject;
-                    Structure str = obj.GetComponent<Structure> ();
-                    if (str != Player && Player.Detected.Contains (str)) Player.Selected = str;
+        public override void Disable() {
+            if (FireAllButton.Instance != null) FireAllButton.Instance.OnClicked -= FireAll;
+            OnLockSelected -= LockSelected;
+        
+            iTimekeeper.Value.Unsubscribe (this);
+        }
+
+        public override void Tick (object aTicker, float aDt) {
+            if (UPlayer == null) return;
+
+            if (UnityEngine.Input.GetMouseButtonDown (0) && !ClickingUI ()) {
+                var lRay = UnityEngine.Camera.main.ScreenPointToRay (UnityEngine.Input.mousePosition);
+                if (Physics.Raycast (lRay, out var lHit)) {
+                    if (lHit.collider.transform.parent != null) {
+                        var lGameObject = lHit.collider.transform.parent.gameObject;
+                        var lStructure = lGameObject.GetComponent<Structure> ();
+                        if (lStructure != UPlayer && UPlayer.CanDetect (lStructure)) UPlayer.USelected.UId.Value = lStructure.UId;
+                    }
                 }
+            }
+
+            if (iReverseButtonUI.Reversing) SetFwd (-1);
+        }
+
+        public void SetFwd (float aSetting) {
+            if (UPlayer == null) return;
+            if (iReverseButtonUI.Reversing && aSetting != -1) return;
+            foreach (var lEngine in UPlayer.GetEquipmentStates<EnginePrototype.State> ()) {
+                lEngine.LinearSetting = new Vector3(lEngine.LinearSetting.x, lEngine.LinearSetting.y, aSetting);
             }
         }
 
-        if (_reverseButtonUI.Reversing) SetFwd (-1);
-    }
+        public void SetYaw (float setting) {
+            if (UPlayer == null) return;
+            foreach (var lEngine in UPlayer.GetEquipmentStates<EnginePrototype.State> ()) {
+                lEngine.AngularSetting = new Vector3(lEngine.AngularSetting.x, setting, lEngine.AngularSetting.z);
+            }
+        }
 
-    private void OnEnable () {
-        FireAllButton.Instance.OnClicked += FireAll;
-        OnLockSelected += LockSelected;
-    }
+        public void SetPitch (float setting) {
+            if (UPlayer == null) return;
+            foreach (var lEngine in UPlayer.GetEquipmentStates<EnginePrototype.State> ()) {
+                lEngine.AngularSetting = new Vector3(setting, lEngine.AngularSetting.y, lEngine.AngularSetting.z);
+            }
+        }
 
-    private void OnDisable () {
-        if (FireAllButton.Instance != null) FireAllButton.Instance.OnClicked -= FireAll;
-        OnLockSelected -= LockSelected;
-    }
+        private void FireAll (object sender, EventArgs args) {
+            foreach (var lState in UPlayer.GetEquipmentStates<BeamLaserPrototype.State> ()) {
+                lState.Activated = false;
+                lState.Slot.Equipment.OnClicked (lState.Slot);
+                lState.Activated = true;
+            }
+            foreach (var lState in UPlayer.GetEquipmentStates<PulseLaserPrototype.State> ()) {
+                lState.Activated = false;
+                lState.Slot.Equipment.OnClicked (lState.Slot);
+                lState.Activated = true;
+            }
+            foreach (var lState in UPlayer.GetEquipmentStates<LauncherPrototype.State> ()) {
+                lState.Activated = false;
+                lState.Slot.Equipment.OnClicked (lState.Slot);
+                lState.Activated = true;
+            }
+        }
 
-    public void SetFwd (float setting) {
-        if (Player == null) return;
-        if (!_reverseButtonUI.Reversing || setting == -1) Player.GetEquipmentStates<EnginePrototype.State> ().ForEach (state => state.LinearSetting = new Vector3 (state.LinearSetting.x, state.LinearSetting.y, setting));
-    }
+        private void LockSelected (object sender, EventArgs args) {
+            if (UPlayer != null) UPlayer.Lock (UPlayer.USelected.UValue);
+        }
 
-    public void SetYaw (float setting) {
-        if (Player == null) return;
-        Player.GetEquipmentStates<EnginePrototype.State> ().ForEach (state => state.AngularSetting = new Vector3 (state.AngularSetting.x, setting, state.AngularSetting.z));
-    }
-
-    public void SetPitch (float setting) {
-        if (Player == null) return;
-        Player.GetEquipmentStates<EnginePrototype.State> ().ForEach (state => state.AngularSetting = new Vector3 (setting, state.AngularSetting.y, state.AngularSetting.z));
-    }
-
-    private void FireAll (object sender, EventArgs args) {
-        Player.GetEquipmentStates<BeamLaserPrototype.State> ().ForEach (state => {
-            state.Activated = false;
-            state.Slot.Equipment.OnClicked (state.Slot);
-            state.Activated = true;
-        });
-        Player.GetEquipmentStates<PulseLaserPrototype.State> ().ForEach (state => {
-            state.Activated = false;
-            state.Slot.Equipment.OnClicked (state.Slot);
-            state.Activated = true;
-        });
-        Player.GetEquipmentStates<LauncherPrototype.State> ().ForEach (state => {
-            state.Activated = false;
-            state.Slot.Equipment.OnClicked (state.Slot);
-            state.Activated = true;
-        });
-    }
-
-    private void LockSelected (object sender, EventArgs args) {
-        if (Player != null) Player.Lock (Player.Selected);
-    }
-
-    private bool ClickingUI () {
-        PointerEventData ped = new PointerEventData (_eventSystem) {
-            position = Input.mousePosition
-        };
-        List<RaycastResult> res = new List<RaycastResult> ();
-        _graphicRaycaster.Raycast (ped, res);
-        return res.Count > 0;
+        private bool ClickingUI () {
+            PointerEventData ped = new PointerEventData (iEventSystem) {
+                position = UnityEngine.Input.mousePosition
+            };
+            List<RaycastResult> res = new List<RaycastResult> ();
+            iGraphicRaycaster.Raycast (ped, res);
+            return res.Count > 0;
+        }
     }
 }

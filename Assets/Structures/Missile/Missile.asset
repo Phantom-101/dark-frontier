@@ -22,34 +22,20 @@ MonoBehaviour:
   Prefab: {fileID: 7653010515942224295, guid: d6eec4139dc9f204ea55211eba122262, type: 3}
   ApparentSize: 1
   HullWireframe: {fileID: 21300000, guid: 21db48d8619e7a946a2bff74625762c1, type: 3}
-  WorldToUIScale: 0
   ShowBlip: 0
   DestructionEffect: {fileID: 1121192042590650, guid: 133623ce9df31c94f83a6a8948b1fd57,
     type: 3}
-  Hull: 1
-  InventorySize: 0
-  SensorStrength: 0
-  ScannerStrength: 0
-  MaxLocks: 0
-  Detectability: 5
-  SignatureSize: 5
-  DockingBaySize: 0
-  DropPercentage: 0
   SnapToPlane: 0
   Stats:
-    stats:
-    - name: Max Hull
-      baseValue: 1
-      appliedValue: 0
-      modifiers: []
-      isDirty: 0
-    - name: Detectability
-      baseValue: 5
-      appliedValue: 0
-      modifiers: []
-      isDirty: 0
-    - name: Signature Size
-      baseValue: 5
-      appliedValue: 0
-      modifiers: []
-      isDirty: 0
+    MaxHull: 1
+    LinearMaxSpeedMultiplier: 1
+    AngularMaxSpeedMultiplier: 1
+    LinearAccelerationMultiplier: 1
+    AngularAccelerationMultiplier: 1
+    SensorStrength: 400
+    ScannerStrength: 0.3
+    Detectability: 5000
+    SignatureSize: 1
+    MaxTargetLocks: 0
+    CargoDropPercentage: 1
+    InventoryVolume: 0

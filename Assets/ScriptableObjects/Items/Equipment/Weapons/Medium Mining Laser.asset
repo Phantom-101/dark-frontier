@@ -27,10 +27,11 @@ MonoBehaviour:
   Durability: 10
   ButtonPrefab: {fileID: 4864166113814497008, guid: 76451c83d92fabc41bbc7fa943cb762f,
     type: 3}
+  PanelPrefab: {fileID: 0}
   Range: 1000
   DamagePerSecond:
     ShieldDamage: 0
-    HullDamage: 10
+    HullDamage: 4
     EquipmentDamage: 0
     ShieldPenetration: 1
   DamageInterval: 0.5
@@ -38,7 +39,7 @@ MonoBehaviour:
   MaxHeat: 100
   HeatGeneration: 55
   CoolingRate: 50
-  OverheatDamage: 0.5
+  OverheatDamage: 0
   HeatDamageMultiplier:
     serializedVersion: 2
     m_Curve:
@@ -46,33 +47,15 @@ MonoBehaviour:
       time: 0
       value: 1
       inSlope: 4
-      outSlope: 2
+      outSlope: 0.5
       tangentMode: 69
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.5
-      value: 2
-      inSlope: 2
-      outSlope: 0
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.75
-      value: 2
-      inSlope: -0
-      outSlope: -8
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: -8
+      value: 1.5
+      inSlope: 0.5
       outSlope: -8
       tangentMode: 69
       weightedMode: 0
@@ -81,7 +64,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  StructureDamageMultipliers:
+  DamageMultipliers:
     reorderableList:
       canAdd: 1
       canRemove: 1
@@ -104,9 +87,15 @@ MonoBehaviour:
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 11400000, guid: 3d6785e46e940b843aa5fbe4ca729d60, type: 2}
     isExpanded: 1
-    _keyValues: []
-    _keys: []
-    _values: []
+    _keyValues:
+    - {fileID: 11400000, guid: 68927fb996fc2ac469ad200171a71ee7, type: 2}
+    - {fileID: 11400000, guid: ec0fec80076463947a24e0381e74a12e, type: 2}
+    _keys:
+    - {fileID: 11400000, guid: 68927fb996fc2ac469ad200171a71ee7, type: 2}
+    - {fileID: 11400000, guid: ec0fec80076463947a24e0381e74a12e, type: 2}
+    _values:
+    - 100
+    - 100
   BeamPrefab: {fileID: 930999058288108214, guid: 1a53d00be0c0d0f49a05fab213c2b948,
     type: 3}
-  BeamWidth: 15
+  BeamWidth: 0.3

@@ -1,9 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
-namespace DarkFrontier.Equipment {
-
 #nullable enable
+namespace DarkFrontier.Equipment {
     [CreateAssetMenu (menuName = "Items/Equipment/Engine")]
     public class EnginePrototype : EquipmentPrototype {
         public float MaxLinearSpeed;
@@ -21,46 +20,46 @@ namespace DarkFrontier.Equipment {
         public float AngularSleepThreshold;
         public float BankAmount;
 
-        public override void Tick (EquipmentSlot slot, float dt) {
-            if (slot.Equipper == null) return;
+        public override void Tick (EquipmentSlot aSlot, float aDt) {
+            if (aSlot.Equipper == null) return;
 
-            State state = (slot.State as State)!;
+            State lState = (aSlot.UState as State)!;
 
-            float consumption = GetConsumption (slot) * dt;
-            float given = 0;
-            slot.Equipper.GetEquipmentStates<CapacitorPrototype.State> ().ForEach (capacitor => {
-                float chargeLeft = capacitor.Charge;
-                float dischargeLeft = capacitor.DischargeLeft;
-                float allocated = Mathf.Min (chargeLeft, dischargeLeft, consumption - given);
-                given += allocated;
-                capacitor.Charge -= allocated;
-                capacitor.DischargeLeft -= allocated;
-            });
+            float lConsumption = GetConsumption (aSlot) * aDt;
+            float lGiven = 0;
+            foreach (var lCapacitor in aSlot.Equipper.GetEquipmentStates<CapacitorPrototype.State>()) {
+                float lChargeLeft = lCapacitor.Charge;
+                float lDischargeLeft = lCapacitor.DischargeLeft;
+                float lAllocated = Mathf.Min (lChargeLeft, lDischargeLeft, lConsumption - lGiven);
+                lGiven += lAllocated;
+                lCapacitor.Charge -= lAllocated;
+                lCapacitor.DischargeLeft -= lAllocated;
+            }
 
-            state.EnergySatisfaction = Mathf.Clamp01 (given / (consumption == 0 ? 1 : consumption));
+            lState.EnergySatisfaction = Mathf.Clamp01 (lGiven / (lConsumption == 0 ? 1 : lConsumption));
         }
 
-        public override void FixedTick (EquipmentSlot slot, float dt) {
-            if (slot.Equipper == null) return;
+        public override void FixedTick (EquipmentSlot aSlot, float aDt) {
+            if (aSlot.Equipper == null) return;
 
-            State state = (slot.State as State)!;
+            State state = (aSlot.UState as State)!;
 
-            Rigidbody rb = slot.Equipper.GetComponent<Rigidbody> ();
-            ConstantForce cf = slot.Equipper.GetComponent<ConstantForce> ();
+            Rigidbody rb = aSlot.Equipper.GetComponent<Rigidbody> ();
+            ConstantForce cf = aSlot.Equipper.GetComponent<ConstantForce> ();
 
             rb.drag = 0;
             rb.angularDrag = 0;
 
             if (state.EnergySatisfaction > 0) {
-                if (rb.velocity.sqrMagnitude > Sqr (GetLinearMaxSpeed (slot))) rb.velocity = rb.velocity.normalized * GetLinearMaxSpeed (slot);
-                rb.maxAngularVelocity = GetAngularMaxSpeed (slot) * Mathf.Deg2Rad;
+                if (rb.velocity.sqrMagnitude > Sqr (GetLinearMaxSpeed (aSlot))) rb.velocity = rb.velocity.normalized * GetLinearMaxSpeed (aSlot);
+                rb.maxAngularVelocity = GetAngularMaxSpeed (aSlot) * Mathf.Deg2Rad;
             } else rb.maxAngularVelocity = 0;
 
-            Vector3[] accels = GetAccelerations (slot);
+            Vector3[] accels = GetAccelerations (aSlot);
             cf.relativeForce = accels[0] * state.EnergySatisfaction;
             cf.relativeTorque = accels[1] * state.EnergySatisfaction;
 
-            foreach (Transform t in slot.Equipper.transform) t.localEulerAngles = new Vector3 (0, 0, -BankAmount * rb.angularVelocity.y);
+            foreach (Transform t in aSlot.Equipper.transform) t.localEulerAngles = new Vector3 (0, 0, -BankAmount * rb.angularVelocity.y);
         }
 
         public override void EnsureStateType (EquipmentSlot slot) {
@@ -72,7 +71,7 @@ namespace DarkFrontier.Equipment {
         private Vector3[] GetAccelerations (EquipmentSlot slot) {
             if (slot.Equipper == null) return new Vector3[2];
 
-            State state = (slot.State as State)!;
+            State state = (slot.UState as State)!;
 
             Rigidbody rb = slot.Equipper.GetComponent<Rigidbody> ();
 
@@ -105,7 +104,7 @@ namespace DarkFrontier.Equipment {
         private float GetConsumption (EquipmentSlot slot) {
             if (slot.Equipper == null) return 0;
 
-            State state = (slot.State as State)!;
+            State state = (slot.UState as State)!;
 
             Rigidbody rb = slot.Equipper.GetComponent<Rigidbody> ();
 
@@ -127,16 +126,11 @@ namespace DarkFrontier.Equipment {
             return res;
         }
 
-        private float GetLinearMaxSpeed (EquipmentSlot slot) => MaxLinearSpeed * GetLinearMaxSpeedMultiplierStat (slot).AppliedValue;
-        private float GetAngularMaxSpeed (EquipmentSlot slot) => MaxAngularSpeed * GetAngularMaxSpeedMultiplierStat (slot).AppliedValue;
-        private float GetLinearAcceleration (EquipmentSlot slot, int d, float s) => Lerp (s, LinearForcePos[d], LinearForceNeg[d]) * GetLinearAccelerationMultiplierStat (slot).AppliedValue;
-        private float GetAngularAcceleration (EquipmentSlot slot, int d, float s) => Lerp (s, AngularForcePos[d], AngularForceNeg[d]) * GetAngularAccelerationMultiplierStat (slot).AppliedValue;
+        private float GetLinearMaxSpeed (EquipmentSlot slot) => MaxLinearSpeed * slot.Equipper!.UStats.UValues.LinearMaxSpeedMultiplier;
+        private float GetAngularMaxSpeed (EquipmentSlot slot) => MaxAngularSpeed * slot.Equipper!.UStats.UValues.AngularMaxSpeedMultiplier;
+        private float GetLinearAcceleration (EquipmentSlot slot, int d, float s) => Lerp (s, LinearForcePos[d], LinearForceNeg[d]) * slot.Equipper!.UStats.UValues.LinearAccelerationMultiplier;
+        private float GetAngularAcceleration (EquipmentSlot slot, int d, float s) => Lerp (s, AngularForcePos[d], AngularForceNeg[d]) * slot.Equipper!.UStats.UValues.AngularAccelerationMultiplier;
         private float Sqr (float n) => n * n;
-
-        private Stat GetLinearMaxSpeedMultiplierStat (EquipmentSlot slot) => (slot.State as State)!.LinearMaxSpeedMultiplierStat ?? ((slot.State as State)!.LinearMaxSpeedMultiplierStat = slot.Equipper!.Stats.GetStat (StatNames.LinearMaxSpeedMultiplier, 1));
-        private Stat GetAngularMaxSpeedMultiplierStat (EquipmentSlot slot) => (slot.State as State)!.AngularMaxSpeedMultiplierStat ?? ((slot.State as State)!.AngularMaxSpeedMultiplierStat = slot.Equipper!.Stats.GetStat (StatNames.AngularMaxSpeedMultiplier, 1));
-        private Stat GetLinearAccelerationMultiplierStat (EquipmentSlot slot) => (slot.State as State)!.LinearAccelerationMultiplierStat ?? ((slot.State as State)!.LinearAccelerationMultiplierStat = slot.Equipper!.Stats.GetStat (StatNames.LinearAccelerationMultiplier, 1));
-        private Stat GetAngularAccelerationMultiplierStat (EquipmentSlot slot) => (slot.State as State)!.AngularAccelerationMultiplierStat ?? ((slot.State as State)!.AngularAccelerationMultiplierStat = slot.Equipper!.Stats.GetStat (StatNames.AngularAccelerationMultiplier, 1));
 
         private float Lerp (float p, float pos, float neg) {
             if (p >= 0) return p * pos;
@@ -149,10 +143,6 @@ namespace DarkFrontier.Equipment {
             public Vector3 AngularSetting;
             public float EnergySatisfaction;
             public bool ManagedPropulsion;
-            public Stat? LinearMaxSpeedMultiplierStat;
-            public Stat? AngularMaxSpeedMultiplierStat;
-            public Stat? LinearAccelerationMultiplierStat;
-            public Stat? AngularAccelerationMultiplierStat;
 
             public State (EquipmentSlot slot, EnginePrototype equipment) : base (slot, equipment) { }
 

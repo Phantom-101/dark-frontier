@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using DarkFrontier.Items.Prototypes;
 using UnityEngine;
 
-[CreateAssetMenu (menuName = "Items/Conditions/Constrain")]
-public class ConstrainConditionSO : ItemConditionSO {
-    public List<ItemPrototype> Constraint;
+namespace DarkFrontier.Items.Conditions {
+    [CreateAssetMenu (menuName = "Items/Conditions/Constrain")]
+    public class ConstrainConditionSO : ItemConditionSO {
+        public List<ItemPrototype> Constraint;
 
-    public override bool MeetsCondition (ItemPrototype input) {
-        return new ConstrainCondition (Constraint).MeetsCondition (input);
+        public override bool MeetsCondition (ItemPrototype input) {
+            return new ConstrainCondition (Constraint).MeetsCondition (input);
+        }
     }
 }

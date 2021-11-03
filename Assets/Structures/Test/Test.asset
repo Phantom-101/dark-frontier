@@ -27,21 +27,15 @@ MonoBehaviour:
     type: 3}
   SnapToPlane: 0
   Stats:
-    stats:
-    - name: Max Hull
-      baseValue: 1
-      modifiers: []
-    - name: Detectability
-      baseValue: 10
-      modifiers: []
-    - name: Signature Size
-      baseValue: 5
-      modifiers: []
-  DockingBays:
-    dockingBays:
-    - maxCount: -1
-      maxVolume: -1
-      dockersList: []
-      precision: 1
-    dockersList: []
-    structure: {fileID: 0}
+    MaxHull: 1
+    LinearMaxSpeedMultiplier: 1
+    AngularMaxSpeedMultiplier: 1
+    LinearAccelerationMultiplier: 1
+    AngularAccelerationMultiplier: 1
+    SensorStrength: 400
+    ScannerStrength: 0.3
+    Detectability: 5000
+    SignatureSize: 1
+    MaxTargetLocks: 0
+    CargoDropPercentage: 1
+    InventoryVolume: 0

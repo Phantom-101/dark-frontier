@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b631ed5d83fe9f45ac195241758721a, type: 3}
+  m_Name: Tall Icy Asteroid 1 Fragment
+  m_EditorClassIdentifier: 
+  Name: Tall Icy Asteroid Fragment
+  Description: 
+  Id: items.structures.tall-icy-asteroid-1-fragment
+  Icon: {fileID: 21300000, guid: 21db48d8619e7a946a2bff74625762c1, type: 3}
+  Volume: 0
+  Tags: []
+  Usable: 0
+  Prefab: {fileID: 1114906185105546290, guid: f26d92ffe31d6ff49a82ee85cd4f184b, type: 3}
+  ApparentSize: 100
+  HullWireframe: {fileID: 21300000, guid: 21db48d8619e7a946a2bff74625762c1, type: 3}
+  ShowBlip: 0
+  DestructionEffect: {fileID: 0}
+  SnapToPlane: 0
+  Stats:
+    MaxHull: 10000
+    LinearMaxSpeedMultiplier: 0
+    AngularMaxSpeedMultiplier: 0
+    LinearAccelerationMultiplier: 0
+    AngularAccelerationMultiplier: 0
+    SensorStrength: 0
+    ScannerStrength: 0
+    Detectability: 100000
+    SignatureSize: 1.5
+    MaxTargetLocks: 0
+    CargoDropPercentage: 1
+    InventoryVolume: 10000

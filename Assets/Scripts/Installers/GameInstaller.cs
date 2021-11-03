@@ -1,27 +1,51 @@
+using DarkFrontier.Controllers;
 using DarkFrontier.Factions;
+using DarkFrontier.Foundation.Behaviors;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Locations;
 using DarkFrontier.Structures;
 using UnityEngine;
 
-public class GameInstaller : Installer {
-    public override void InstallBindings () {
-        if (!Singletons.Exists<SectorManager> ()) {
-            GameObject obj = new GameObject ("[Service] Sector Manager");
-            Singletons.Bind<SectorManager> (obj.AddComponent<SectorManager> ());
-            DontDestroyOnLoad (obj);
-        }
+namespace DarkFrontier.Installers {
+    public class GameInstaller : Installer {
+        public override void InstallBindings () {
+            if (!Singletons.Exists<BehaviorTimekeeper> ()) {
+                var lGameObject = new GameObject ("[Service] Behavior Timekeeper");
+                Singletons.Bind (lGameObject.AddComponent<BehaviorTimekeeper> ());
+                DontDestroyOnLoad (lGameObject);
+            }
 
-        if (!Singletons.Exists<FactionManager> ()) {
-            GameObject obj = new GameObject ("[Service] Faction Manager");
-            Singletons.Bind<FactionManager> (obj.AddComponent<FactionManager> ());
-            DontDestroyOnLoad (obj);
-        }
+            if (!Singletons.Exists<BehaviorManager> ()) {
+                Singletons.Bind (new BehaviorManager ());
+            }
 
-        if (!Singletons.Exists<StructureManager> ()) {
-            GameObject obj = new GameObject ("[Service] Structure Manager");
-            Singletons.Bind<StructureManager> (obj.AddComponent<StructureManager> ());
-            DontDestroyOnLoad (obj);
+            if (!Singletons.Exists<NavigationManager> ()) {
+                Singletons.Bind (new NavigationManager ());
+            }
+
+            if (!Singletons.Exists<SectorManager> ()) {
+                var lGameObject = new GameObject ("[Service] Sector Manager");
+                Singletons.Bind (lGameObject.AddComponent<SectorManager> ());
+                DontDestroyOnLoad (lGameObject);
+            }
+
+            if (!Singletons.Exists<FactionManager> ()) {
+                var lGameObject = new GameObject ("[Service] Faction Manager");
+                Singletons.Bind (lGameObject.AddComponent<FactionManager> ());
+                DontDestroyOnLoad (lGameObject);
+            }
+
+            if (!Singletons.Exists<StructureManager> ()) {
+                var lGameObject = new GameObject ("[Service] Structure Manager");
+                Singletons.Bind (lGameObject.AddComponent<StructureManager> ());
+                DontDestroyOnLoad (lGameObject);
+            }
+
+            if (!Singletons.Exists<PlayerController>()) {
+                var lGameObject = new GameObject("[Service] Player Controller");
+                Singletons.Bind (lGameObject.AddComponent<PlayerController>());
+                DontDestroyOnLoad (lGameObject);
+            }
         }
     }
 }

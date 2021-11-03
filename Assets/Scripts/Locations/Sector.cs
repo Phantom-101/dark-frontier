@@ -4,39 +4,41 @@ using DarkFrontier.Foundation.Serialization;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Structures;
 using System;
+using DarkFrontier.Foundation.Extensions;
 using UnityEngine;
 
 namespace DarkFrontier.Locations {
     public class Sector : ComponentBehavior, ISavableState<Sector.Serializable> {
-        public Id Id { get => id; }
-        [SerializeField] private Id id = new Id ();
-        public StructureRegistry Population { get => population; }
-        [SerializeField] private StructureRegistry population = new StructureRegistry ();
+        public Id UId => iId;
+        [SerializeField] private Id iId = new Id ();
+        public StructureRegistry UPopulation { get => iPopulation; }
+        [SerializeField] private StructureRegistry iPopulation = new StructureRegistry ();
 
-        private SectorManager sectorManager;
+        private SectorManager iSectorManager;
 
-        protected override void MultiInitialize () {
-            sectorManager.Registry.Set (this);
+        public override void Initialize () {
+            iSectorManager = Singletons.Get<SectorManager> ();
         }
 
-        public override void GetServices () {
-            sectorManager = Singletons.Get<SectorManager> ();
+        public override void Enable () {
+            iSectorManager.Registry.Set (this);
         }
 
         public Serializable ToSerializable () {
             return new Serializable {
                 Name = gameObject.name,
-                Position = new float[] { transform.localPosition.x, transform.localPosition.y, transform.localPosition.z },
-                Rotation = new float[] { transform.localRotation.x, transform.localRotation.y, transform.localRotation.z, transform.localRotation.w },
-                Id = id,
+                Position = transform.localPosition.ToArray (),
+                Rotation = transform.localRotation.ToArray (),
+                Id = iId,
             };
         }
 
-        public void FromSerializable (Serializable serializable) {
-            gameObject.name = serializable.Name;
-            transform.localPosition = new Vector3 (serializable.Position[0], serializable.Position[1], serializable.Position[2]);
-            transform.localRotation = new Quaternion (serializable.Rotation[0], serializable.Rotation[1], serializable.Rotation[2], serializable.Rotation[3]);
-            id = new Id (serializable.Id);
+        public void FromSerializable (Serializable aSerializable) {
+            gameObject.name = aSerializable.Name;
+            var lTransform = transform;
+            lTransform.localPosition = new Vector3 (aSerializable.Position[0], aSerializable.Position[1], aSerializable.Position[2]);
+            lTransform.localRotation = new Quaternion (aSerializable.Rotation[0], aSerializable.Rotation[1], aSerializable.Rotation[2], aSerializable.Rotation[3]);
+            iId = new Id (aSerializable.Id);
         }
 
         [Serializable]

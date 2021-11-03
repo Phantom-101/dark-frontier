@@ -27,6 +27,7 @@ MonoBehaviour:
   Durability: 10
   ButtonPrefab: {fileID: 4864166113814497008, guid: 8df43b052fef2c841a9ba447901e323e,
     type: 3}
+  PanelPrefab: {fileID: 0}
   Range: 675
   Damage:
     ShieldDamage: 240
@@ -85,4 +86,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   BeamPrefab: {fileID: 930999058288108214, guid: 1a53d00be0c0d0f49a05fab213c2b948,
     type: 3}
-  BeamWidth: 15
+  BeamWidth: 0.3

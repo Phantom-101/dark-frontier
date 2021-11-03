@@ -1,9 +1,20 @@
 ﻿using DarkFrontier.Foundation.Behaviors;
+using DarkFrontier.Foundation.Services;
 
-public class PureBehaviorTestUpdater : Behavior {
-    private int number;
+namespace DarkFrontier.Sandbox.UpdateTest {
+    public class PureBehaviorTestUpdater : Behavior {
+        private int iNumber;
 
-    protected override void InternalTick (float dt) {
-        number++;
+        public override void Enable () {
+            Singletons.Get<BehaviorTimekeeper> ().Subscribe (this);
+        }
+
+        public override void Disable () {
+            Singletons.Get<BehaviorTimekeeper> ().Unsubscribe (this);
+        }
+
+        public override void Tick (object aTicker, float aDt) {
+            iNumber++;
+        }
     }
 }

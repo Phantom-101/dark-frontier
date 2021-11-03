@@ -2,81 +2,99 @@
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Locations;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using DarkFrontier.Files;
+using DarkFrontier.Items.Prototypes;
 using UnityEngine;
 
 namespace DarkFrontier.Structures {
     public class StructureManager : ComponentBehavior {
-        public StructureRegistry Registry { get => registry; }
+        public StructureRegistry Registry => registry;
+#pragma warning disable IDE0044 // Add readonly modifier
         [SerializeReference] private StructureRegistry registry = new StructureRegistry ();
+#pragma warning restore IDE0044 // Add readonly modifier
 
-        private readonly BehaviorTicker ticker = new BehaviorTicker ();
-        private readonly BehaviorTicker lateTicker = new BehaviorTicker ();
-        private readonly BehaviorTicker fixedTicker = new BehaviorTicker ();
+        private readonly Ticker ticker = new Ticker ();
+        private readonly Ticker fixedTicker = new Ticker ();
 
-        private readonly SectorManager sectorManager = Singletons.Get<SectorManager> ();
-
-        protected override void PropagateTick (float dt) => ticker.Tick (dt);
-        protected override void PropagateLateTick (float dt) => lateTicker.Tick (dt);
-        protected override void PropagateFixedTick (float dt) => fixedTicker.Tick (dt);
-
-        protected override void InternalSubscribeEventListeners () {
+        public override void Enable () {
+            Singletons.Get<BehaviorTimekeeper> ().Subscribe (this);
             ticker.Notifier += TickStructures;
-            lateTicker.Notifier += LateTickStructures;
             fixedTicker.Notifier += FixedTickStructures;
         }
 
-        protected override void InternalUnsubscribeEventListeners () {
+        public override void Disable () {
+            Singletons.Get<BehaviorTimekeeper> ().Unsubscribe (this);
             ticker.Notifier -= TickStructures;
-            lateTicker.Notifier -= LateTickStructures;
             fixedTicker.Notifier -= FixedTickStructures;
         }
 
-        private void TickStructures (object sender, EventArgs args) => registry.Structures.ForEach (e => e.Tick (GetTickArgs (args).dt));
-        private void LateTickStructures (object sender, EventArgs args) => registry.Structures.ForEach (e => e.LateTick (GetTickArgs (args).dt));
-        private void FixedTickStructures (object sender, EventArgs args) => registry.Structures.ForEach (e => e.FixedTick (GetTickArgs (args).dt));
-        private BehaviorTicker.BehaviorTickArgs GetTickArgs (EventArgs args) => args as BehaviorTicker.BehaviorTickArgs;
-
-        public Structure GetStructure (string id) => registry.Structures.Find (e => e.Id == id);
-
-        public bool Detects (Structure detector, Structure detectee) {
-            if (detector.Sector.Id.Value != detectee.Sector.Id.Value) return false;
-
-            float sqrDis = (detector.transform.localPosition - detectee.transform.localPosition).sqrMagnitude;
-            float range = detector.Stats.GetAppliedValue (StatNames.SensorStrength, 0) * detectee.Stats.GetAppliedValue (StatNames.Detectability, 0);
-            float sqrRange = range * range;
-            return sqrDis <= sqrRange;
+        public override void Tick (object aTicker, float aDt) {
+            ticker.Tick (this, aDt);
         }
 
-        public HashSet<Structure> GetDetected (Structure detector) {
-            List<Structure> inSector = detector.Sector.Value.Population.Structures;
-            HashSet<Structure> ret = new HashSet<Structure> ();
-            foreach (Structure detectee in inSector)
-                if (detectee != detector && Detects (detector, detectee))
-                    ret.Add (detectee);
-            return ret;
+        public override void FixedTick (object aTicker, float aDt) {
+            fixedTicker.Tick (this, aDt);
         }
 
-        public Structure SpawnStructure (StructureSO profile, string faction, string sector, Location location) {
-            Structure spawned = Instantiate (profile.Prefab, location.Position, Quaternion.identity).GetComponent<Structure> ();
-            spawned.Faction.Id.Value = faction;
-            spawned.Sector.Id.Value = sector;
-            if (spawned.Sector.Value != null) {
-                spawned.transform.SetParent (spawned.Sector.Value.transform);
+        private void TickStructures(object aSender, float aArgs) {
+            var lStructures = registry.UStructures;
+            var lLength = lStructures.Count;
+            for (var lIndex = 0; lIndex < lLength; lIndex++) {
+                lStructures[lIndex].Tick(this, aArgs);
+            }
+        }
+
+        private void FixedTickStructures(object aSender, float aArgs) {
+            var lStructures = registry.UStructures;
+            var lLength = lStructures.Count;
+            for (var lIndex = 0; lIndex < lLength; lIndex++) {
+                lStructures[lIndex].FixedTick(this, aArgs);
+            }
+        }
+
+        public Structure GetStructure(string aId) {
+            var lStructures = registry.UStructures;
+            var lLength = lStructures.Count;
+            for (var lIndex = 0; lIndex < lLength; lIndex++) {
+                if (lStructures[lIndex].UId == aId) {
+                    return lStructures[lIndex];
+                }
+            }
+            return null;
+        }
+        
+        public Structure SpawnStructure (StructurePrototype profile, string faction, string sector, Location location) {
+            GameObject gameObject = Instantiate (profile.Prefab, location.Position, Quaternion.identity);
+            Structure spawned = gameObject.GetComponent<Structure> ();
+            if (spawned == null) {
+                spawned = gameObject.AddComponent<Structure> ();
+            }
+            spawned.UFaction.UId.Value = faction;
+            spawned.USector.UId.Value = sector;
+            if (spawned.USector.UValue != null) {
+                spawned.transform.SetParent (spawned.USector.UValue.transform);
             }
             return spawned;
         }
 
         public void DestroyStructure (Structure structure) {
+            if (structure == null) {
+                return;
+            }
+            Singletons.Get<BehaviorManager> ().DisableImmediately (structure);
+            // Remove from registries
+            registry.Remove (structure);
+            structure.UFaction.UValue?.Property.Remove (structure);
+            if (structure.USector.UValue != null) structure.USector.UValue.UPopulation.Remove (structure);
             // Destroy docked structures
-            structure.DockingBays.Dockers.ForEach (e => DestroyStructure (e));
+            structure.UDockingPoints.ForEach (e => DestroyStructure (e.UDocker));
             // Spawn destruction effect
-            if (structure.Profile.DestructionEffect != null) {
-                GameObject effect = Instantiate (structure.Profile.DestructionEffect, structure.transform.parent);
+            if (structure.UPrototype.DestructionEffect != null) {
+                GameObject effect = Instantiate (structure.UPrototype.DestructionEffect, structure.transform.parent);
                 effect.transform.localPosition = structure.transform.localPosition;
-                effect.transform.localScale = Vector3.one * structure.Profile.ApparentSize;
             }
             // TODO Drop stuff according to StructureSO.DropPercentage
             // Destroy structure game object
@@ -84,47 +102,33 @@ namespace DarkFrontier.Structures {
         }
 
         public void DisposeStructure (Structure structure) {
+            if (structure == null) {
+                return;
+            }
+            Singletons.Get<BehaviorManager> ().DisableImmediately (structure);
+            // Remove from registries
+            registry.Remove (structure);
+            structure.UFaction.UValue?.Property.Remove (structure);
+            if (structure.USector.UValue != null) structure.USector.UValue.UPopulation.Remove (structure);
             // Destroy docked structures
-            structure.DockingBays.Dockers.ForEach (e => DisposeStructure (e));
+            structure.UDockingPoints.ForEach (e => DisposeStructure (e.UDocker));
             // Destroy structure game object
             Destroy (structure.gameObject);
         }
 
         public void SaveGame (DirectoryInfo directory) {
-            List<StructureSaveData> saveData = new List<StructureSaveData> ();
-            registry.Structures.ForEach (structure => { saveData.Add (structure.GetSaveData ()); });
             FileInfo file = PathManager.GetStructureFile (directory);
             if (!file.Exists) file.Create ().Close ();
-            File.WriteAllText (
-                file.FullName,
-                JsonConvert.SerializeObject (
-                    saveData,
-                    Formatting.Indented,
-                    new JsonSerializerSettings {
-                        TypeNameHandling = TypeNameHandling.All,
-                    }
-                )
-            );
+            File.WriteAllText (file.FullName, JsonConvert.SerializeObject (registry.UStructures, new Structure.Converter ()));
         }
 
         public void LoadGame (DirectoryInfo directory) {
             FileInfo file = PathManager.GetStructureFile (directory);
             if (!file.Exists) return;
-            List<StructureSaveData> structures = JsonConvert.DeserializeObject (
-                File.ReadAllText (file.FullName),
-                new JsonSerializerSettings {
-                    TypeNameHandling = TypeNameHandling.All,
-                }
-            ) as List<StructureSaveData>;
-            registry.Structures.ForEach (structure => DisposeStructure (structure));
+            registry.UStructures.ForEach (structure => DisposeStructure (structure));
             registry.Clear ();
-            structures.ForEach (data => {
-                StructureSO profile = ItemManager.Instance.GetItem (data.ProfileId) as StructureSO;
-                GameObject structure = Instantiate (profile.Prefab, sectorManager.Registry.Find (data.SectorId).transform);
-                structure.name = profile.Name;
-                Structure comp = structure.GetComponent<Structure> ();
-                comp.SetSaveData (data);
-                if (data.IsPlayer) PlayerController.Instance.Player = comp;
+            JsonConvert.DeserializeObject<List<Structure>> (File.ReadAllText (file.FullName), new Structure.Converter ()).ForEach (lStructure => {
+                registry.Add (lStructure);
             });
         }
     }

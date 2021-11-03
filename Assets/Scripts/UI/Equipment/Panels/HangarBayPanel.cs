@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DarkFrontier.Equipment;
+using DarkFrontier.Items.Prototypes;
 using UnityEngine;
 
-namespace DarkFrontier.Equipment {
+namespace DarkFrontier.UI.Equipment.Panels {
     public class HangarBayPanel : EquipmentPanel {
         [SerializeField] private GameObject slotPrefab;
         [SerializeField] private Transform slotRoot;
@@ -15,7 +17,7 @@ namespace DarkFrontier.Equipment {
         public override void Initialize () {
             cache = Slot.Equipment as HangarBayPrototype;
 
-            HangarBayPrototype.State state = Slot.State as HangarBayPrototype.State;
+            HangarBayPrototype.State state = Slot.UState as HangarBayPrototype.State;
 
             state.LaunchSlots.ForEach (s => {
                 GameObject instantiated = Instantiate (slotPrefab, slotRoot);
@@ -30,12 +32,12 @@ namespace DarkFrontier.Equipment {
                 return;
             }
 
-            List<HangarLaunchableSO> inventoryLaunchables = Slot.Equipper.Inventory.GetStoredItems ().FindAll (i => cache.Launchables.Contains (i)).ConvertAll (i => i as HangarLaunchableSO);
+            List<HangarLaunchableSO> inventoryLaunchables = Slot.Equipper.UInventory.GetStoredItems ().FindAll (i => cache.Launchables.Contains (i)).ConvertAll (i => i as HangarLaunchableSO);
             launchables.Keys.ToList ().FindAll (k => !inventoryLaunchables.Contains (k)).ForEach (k => launchables.Remove (k));
             inventoryLaunchables.FindAll (l => !launchables.ContainsKey (l)).ForEach (l => {
                 GameObject instantiated = Instantiate (launchablePrefab, launchableRoot);
                 HangarBayPanelLaunchable comp = instantiated.GetComponent<HangarBayPanelLaunchable> ();
-                comp.State = Slot.State as HangarBayPrototype.State;
+                comp.State = Slot.UState as HangarBayPrototype.State;
                 comp.Launchable = l;
                 launchables[l] = comp;
             });

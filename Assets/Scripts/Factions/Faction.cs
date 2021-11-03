@@ -2,6 +2,8 @@
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Structures;
 using System;
+using DarkFrontier.DataStructures;
+using DarkFrontier.Serialization;
 using UnityEngine;
 
 namespace DarkFrontier.Factions {

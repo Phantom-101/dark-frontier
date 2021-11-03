@@ -1,5 +1,7 @@
-﻿public interface IPoolable {
+﻿namespace DarkFrontier.Pooling {
+    public interface IPoolable {
 
 
 
+    }
 }

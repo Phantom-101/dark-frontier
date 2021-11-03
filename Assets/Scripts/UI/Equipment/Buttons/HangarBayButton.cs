@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Equipment;
+using DarkFrontier.UI.Equipment.Panels;
+using DarkFrontier.UI.States;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace DarkFrontier.Equipment {
+namespace DarkFrontier.UI.Equipment.Buttons {
     public class HangarBayButton : EquipmentButton {
         public Button Button;
         public EventTrigger EventTrigger;
@@ -15,7 +18,9 @@ namespace DarkFrontier.Equipment {
 
         private HangarBayPrototype cache;
 
-        protected override void MultiInitialize () {
+        public override void Enable () {
+            base.Enable ();
+
             if (Slot == null) return;
             cache = Slot.Equipment as HangarBayPrototype;
             Icon.sprite = cache.Icon;
@@ -34,14 +39,14 @@ namespace DarkFrontier.Equipment {
             EventTrigger.triggers.Add (beginDragEntry);
         }
 
-        protected override void InternalTick (float dt) {
+        public override void Tick (object aTicker, float aDt) {
             if (Slot.Equipment != cache) {
                 Destroy (gameObject);
                 return;
             }
 
             cache.EnsureStateType (Slot);
-            HangarBayPrototype.State data = Slot.State as HangarBayPrototype.State;
+            HangarBayPrototype.State data = Slot.UState as HangarBayPrototype.State;
 
             Button.interactable = cache.CanClick (Slot);
             Center.fillAmount = (float) data.LaunchSlots.FindAll (s => s.Status == HangarBayPrototype.State.SlotState.SlotStatus.Launched).Count / cache.MaxSquadronSize;

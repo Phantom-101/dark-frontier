@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Structures;
+using UnityEngine;
 
-[CreateAssetMenu (menuName = "Items/Charges/Phase Crystal")]
-public class PhaseCrystalSO : ItemPrototype {
-    public Damage DamageMultiplier;
+namespace DarkFrontier.Items.Prototypes {
+    [CreateAssetMenu (menuName = "Items/Charges/Phase Crystal")]
+    public class PhaseCrystalSO : ItemPrototype {
+        public Damage DamageMultiplier;
+    }
 }

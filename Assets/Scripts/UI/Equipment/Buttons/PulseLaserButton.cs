@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Equipment;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace DarkFrontier.Equipment {
+namespace DarkFrontier.UI.Equipment.Buttons {
     public class PulseLaserButton : EquipmentButton {
         public Button Button;
         public Image Icon;
@@ -14,24 +15,26 @@ namespace DarkFrontier.Equipment {
 
         private PulseLaserPrototype cache;
 
-        protected override void MultiInitialize () {
+        public override void Enable () {
+            base.Enable ();
+
             if (Slot == null) return;
             cache = Slot.Equipment as PulseLaserPrototype;
             Icon.sprite = cache.Icon;
             Tooltip.text = Slot.Equipment.name;
             TooltipGroup.alpha = 0;
             Button.onClick.AddListener (() => cache.OnClicked (Slot));
-            DumpButton.onClick.AddListener (() => (Slot.State as PulseLaserPrototype.State).Charge = 0);
+            DumpButton.onClick.AddListener (() => (Slot.UState as PulseLaserPrototype.State).Charge = 0);
         }
 
-        protected override void InternalTick (float dt) {
+        public override void Tick (object aTicker, float aDt) {
             if (Slot.Equipment != cache) {
                 Destroy (gameObject);
                 return;
             }
 
             cache.EnsureStateType (Slot);
-            PulseLaserPrototype.State state = Slot.State as PulseLaserPrototype.State;
+            PulseLaserPrototype.State state = Slot.UState as PulseLaserPrototype.State;
 
             Button.interactable = cache.CanClick (Slot);
             Center.fillAmount = state.Charge / cache.EnergyRequired;

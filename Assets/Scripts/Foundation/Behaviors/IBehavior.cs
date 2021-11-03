@@ -1,15 +1,12 @@
 ﻿namespace DarkFrontier.Foundation.Behaviors {
     public interface IBehavior {
-        void TryInitialize ();
-        void GetServices ();
+        void Initialize ();
 
-        void Tick (float dt);
-        void LateTick (float dt);
-        void FixedTick (float dt);
+        void Enable ();
+        void Disable ();
 
-        bool Validate ();
-
-        void SubscribeEventListeners ();
-        void UnsubscribeEventListeners ();
+        void Tick (object aTicker, float aDt);
+        void FixedTick (object aTicker, float aDt);
+        void LateTick (object aTicker, float aDt);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DarkFrontier.Foundation.Serialization;
 using System;
+using DarkFrontier.Items.Prototypes;
 using UnityEngine;
 
 namespace DarkFrontier.Equipment {
@@ -31,16 +32,16 @@ namespace DarkFrontier.Equipment {
         /// <summary>
         /// Called every game tick
         /// </summary>
-        /// <param name="slot"></param>
-        /// <param name="dt"></param>
-        public virtual void Tick (EquipmentSlot slot, float dt) { }
+        /// <param name="aSlot"></param>
+        /// <param name="aDt"></param>
+        public virtual void Tick (EquipmentSlot aSlot, float aDt) { }
 
         /// <summary>
         /// Called every physics tick
         /// </summary>
         /// <param name="slot"></param>
-        /// <param name="dt"></param>
-        public virtual void FixedTick (EquipmentSlot slot, float dt) { }
+        /// <param name="aDt"></param>
+        public virtual void FixedTick (EquipmentSlot slot, float aDt) { }
 
         /// <summary>
         /// 

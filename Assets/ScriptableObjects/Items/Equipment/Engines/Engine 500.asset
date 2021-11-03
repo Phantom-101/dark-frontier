@@ -27,7 +27,7 @@ MonoBehaviour:
   ButtonPrefab: {fileID: 0}
   PanelPrefab: {fileID: 0}
   MaxLinearSpeed: 100
-  MaxAngularSpeed: 20
+  MaxAngularSpeed: 100
   LinearForcePos: {x: 500, y: 500, z: 500}
   LinearForceNeg: {x: -500, y: -500, z: -500}
   AngularForcePos: {x: 10000, y: 10000, z: 10000}

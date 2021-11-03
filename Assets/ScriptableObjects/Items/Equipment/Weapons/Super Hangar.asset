@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 879797f002614f44cbe3cc1265392747, type: 3}
+  m_Name: Super Hangar
+  m_EditorClassIdentifier: 
+  Name: Super Hangar
+  Description: 
+  Id: items.equipment.weapons.super-hangar
+  Icon: {fileID: 21300000, guid: 21db48d8619e7a946a2bff74625762c1, type: 3}
+  Volume: 0
+  Tags:
+  - {fileID: 11400000, guid: 6d63f9e2ddfb3cc428a6659d95414e48, type: 2}
+  - {fileID: 11400000, guid: ef0c32043d868ff479d361d54db26d09, type: 2}
+  - {fileID: 11400000, guid: 6e205dd484e958b48aa885554da31a9f, type: 2}
+  - {fileID: 11400000, guid: f894c2965e6369341a4ac7c73389c61b, type: 2}
+  - {fileID: 11400000, guid: a4090a18aac83234a817fc8b3aed00a4, type: 2}
+  Usable: 0
+  Durability: 10
+  ButtonPrefab: {fileID: 4864166113814497008, guid: b6a5108c67d7a634c8e294d66d147aa2,
+    type: 3}
+  PanelPrefab: {fileID: 499707909723292594, guid: adebbc6dd0d363b41a0ada07ed8e3baf,
+    type: 3}
+  LoadingSpeed: 100
+  FuelingSpeed: 100
+  LaunchingSpeed: 100
+  MaxSquadronSize: 100
+  Launchables:
+  - {fileID: 11400000, guid: 8be95cdc9bbb7764ea30a118020641f8, type: 2}
+  RetrieveRange: 100

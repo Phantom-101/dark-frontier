@@ -1,13 +1,19 @@
-﻿using DarkFrontier.Structures;
+﻿using System;
+using DarkFrontier.Controllers;
+using DarkFrontier.Foundation.Services;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WealthUI : MonoBehaviour {
-    [SerializeField] private Text _text;
+namespace DarkFrontier.UI.Indicators {
+    public class WealthUI : MonoBehaviour {
+        [SerializeField] private Text _text;
 
-    private void Update () {
-        Structure player = PlayerController.Instance.Player;
-        if (player == null) return;
-        _text.text = $"{PlayerController.Instance.Player.Faction.Value?.Wealth ?? 0} Cr";
+        private readonly Lazy<PlayerController> iPlayerController = new Lazy<PlayerController>(() => Singletons.Get<PlayerController>(), false);
+        
+        private void Update () {
+            var lPlayer = iPlayerController.Value.UPlayer;
+            if (lPlayer == null) return;
+            _text.text = $"{(iPlayerController.Value.UPlayer.UFaction.UValue?.Wealth ?? 0).ToString()} Cr";
+        }
     }
 }

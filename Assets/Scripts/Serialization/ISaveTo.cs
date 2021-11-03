@@ -1,3 +1,5 @@
-﻿public interface ISaveTo<T> {
-    T Save ();
+﻿namespace DarkFrontier.Serialization {
+    public interface ISaveTo<T> {
+        T Save ();
+    }
 }

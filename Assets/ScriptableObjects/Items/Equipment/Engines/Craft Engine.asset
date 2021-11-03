@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 161f4a9a7d2a8104d9c8c9c5d1f9fd9b, type: 3}
+  m_Name: Craft Engine
+  m_EditorClassIdentifier: 
+  Name: Craft Engine
+  Description: 
+  Id: items.equipment.engines.craft-engine
+  Icon: {fileID: 21300000, guid: 34502f7e93de60d40ac817b2a0f12f4a, type: 3}
+  Volume: 0
+  Tags:
+  - {fileID: 11400000, guid: 6d63f9e2ddfb3cc428a6659d95414e48, type: 2}
+  - {fileID: 11400000, guid: 361ae8a1dcad32343a0e7cb7be9ab845, type: 2}
+  - {fileID: 11400000, guid: 13cabe015e4f87f4ea807ff7d00e3ce0, type: 2}
+  - {fileID: 11400000, guid: 864ac46dbd147684badf2e57a60f32c0, type: 2}
+  Usable: 0
+  Durability: 10
+  ButtonPrefab: {fileID: 0}
+  PanelPrefab: {fileID: 0}
+  MaxLinearSpeed: 200
+  MaxAngularSpeed: 100
+  LinearForcePos: {x: 1, y: 1, z: 1}
+  LinearForceNeg: {x: -1, y: -1, z: -1}
+  AngularForcePos: {x: 3, y: 3, z: 3}
+  AngularForceNeg: {x: -3, y: -3, z: -3}
+  LinearConsumptionPos: {x: 1, y: 1, z: 1}
+  LinearConsumptionNeg: {x: 1, y: 1, z: 1}
+  AngularConsumptionPos: {x: 1, y: 1, z: 1}
+  AngularConsumptionNeg: {x: 1, y: 1, z: 1}
+  CorrectionStrictness: 5
+  LinearSleepThreshold: 0.001
+  AngularSleepThreshold: 0.002
+  BankAmount: 25

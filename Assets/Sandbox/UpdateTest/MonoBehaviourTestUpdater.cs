@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 
-public class MonoBehaviourTestUpdater : MonoBehaviour {
-    private int number;
+namespace DarkFrontier.Sandbox.UpdateTest {
+    public class MonoBehaviourTestUpdater : MonoBehaviour {
+        private int number;
 
-    private void Update () {
-        number++;
+        private void Update () {
+            number++;
+        }
     }
 }

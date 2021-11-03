@@ -1,40 +1,43 @@
 ﻿using DarkFrontier.Equipment;
+using DarkFrontier.Foundation.Services;
+using DarkFrontier.Items.Prototypes;
+using DarkFrontier.Locations;
 using DarkFrontier.Structures;
 using UnityEngine;
 
-namespace DarkFrontier.AI {
+namespace DarkFrontier.Controllers {
     [CreateAssetMenu (menuName = "AI/Missile")]
     public class MissileAI : AIBase {
         public Structure Target;
         public MissileSO Missile;
         public float DamageMultiplier;
 
-        public override void Tick (Structure structure, float dt) {
+        public override void Tick (Structure aStructure, float aDt) {
             if (Target == null || Missile == null) {
-                structure.Hull = 0;
+                aStructure.UHull = 0;
                 return;
             }
 
-            Vector3[] target = new Vector3[2];
-            target[0].z = 1;
+            Vector3[] lTarget = new Vector3[2];
+            lTarget[0].z = 1;
 
-            float angle = structure.GetAngleTo (Target.transform.localPosition);
-            if (angle > Missile.HeadingAllowance) target[1].y = 1;
-            else if (angle < -Missile.HeadingAllowance) target[1].y = -1;
+            float lAngle = aStructure.GetAngleTo (new Location (Target.transform));
+            if (lAngle > Missile.HeadingAllowance) lTarget[1].y = 1;
+            else if (lAngle < -Missile.HeadingAllowance) lTarget[1].y = -1;
 
-            float elevation = structure.GetElevationTo (Target.transform.localPosition);
-            if (elevation > Missile.HeadingAllowance) target[1].x = -1;
-            else if (elevation < -Missile.HeadingAllowance) target[1].x = 1;
+            float lElevation = aStructure.GetElevationTo (new Location (Target.transform));
+            if (lElevation > Missile.HeadingAllowance) lTarget[1].x = -1;
+            else if (lElevation < -Missile.HeadingAllowance) lTarget[1].x = 1;
 
-            structure.GetEquipmentStates<EnginePrototype.State> ().ForEach (state => {
-                state.ManagedPropulsion = true;
-                state.LinearSetting = target[0];
-                state.AngularSetting = target[1];
-            });
+            foreach (var lEngine in aStructure.GetEquipmentStates<EnginePrototype.State>()) {
+                lEngine.ManagedPropulsion = true;
+                lEngine.LinearSetting = lTarget[0];
+                lEngine.AngularSetting = lTarget[1];
+            }
 
-            if (NavigationManager.Instance.GetLocalDistance (Target, structure) <= Missile.DetonationRange) {
-                Target.TakeDamage (Missile.Damage * DamageMultiplier, structure.transform.position);
-                structure.Hull = 0;
+            if (Singletons.Get<NavigationManager> ().Distance (new Location (Target.transform), new Location (aStructure.transform), DistanceType.Chebyshev) <= Missile.DetonationRange * Target.UPrototype.ApparentSize) {
+                Target.TakeDamage (Missile.Damage * DamageMultiplier, new Location (aStructure.transform));
+                aStructure.UHull = 0;
             }
         }
 

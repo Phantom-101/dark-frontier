@@ -1,15 +1,17 @@
-﻿using DarkFrontier.AI;
-using DarkFrontier.Foundation.Serialization;
+﻿using DarkFrontier.Foundation.Serialization;
 using DarkFrontier.Foundation.Services;
+using DarkFrontier.Locations;
 using DarkFrontier.Structures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DarkFrontier.Controllers;
+using DarkFrontier.Items;
+using DarkFrontier.Items.Prototypes;
 using UnityEngine;
 
-namespace DarkFrontier.Equipment {
-
 #nullable enable
+namespace DarkFrontier.Equipment {
     [CreateAssetMenu (menuName = "Items/Equipment/Weapons/Hangar Bay")]
     public class HangarBayPrototype : EquipmentPrototype {
         public float LoadingSpeed;
@@ -19,8 +21,12 @@ namespace DarkFrontier.Equipment {
         public List<HangarLaunchableSO> Launchables = new List<HangarLaunchableSO> ();
         public float RetrieveRange;
 
-        public override void Tick (EquipmentSlot slot, float dt) {
-            State state = (slot.State as State)!;
+        public override void Tick (EquipmentSlot aSlot, float aDt) {
+            State state = (aSlot.UState as State)!;
+
+            if (aSlot.Equipper == null) return;
+
+            state.LaunchSlots.ForEach (s => s.Tick (aSlot, aDt));
 
             if (state.Activated) {
                 // Deploy launchables
@@ -42,39 +48,39 @@ namespace DarkFrontier.Equipment {
                         // If launchable is launched
                         if (launchSlot.Status == State.SlotState.SlotStatus.Launched) {
                             // If launchable is within retrieve range
-                            if (NavigationManager.Instance.GetLocalDistance (slot.Equipper, launchSlot.Structure) <= RetrieveRange) {
-                                launchSlot.Status = State.SlotState.SlotStatus.Landing;
-                                break;
+                            if (launchSlot.Structure != null) {
+                                if (Singletons.Get<NavigationManager> ().Distance (new Location (aSlot.Equipper.transform), new Location (launchSlot.Structure.transform), DistanceType.Chebyshev) <= RetrieveRange) {
+                                    launchSlot.Status = State.SlotState.SlotStatus.Landing;
+                                    break;
+                                }
                             }
                         }
                     }
                 }
             }
-
-            state.LaunchSlots.ForEach (s => s.Tick (slot, dt));
         }
 
         public override bool CanClick (EquipmentSlot slot) {
-            State state = (slot.State as State)!;
+            State state = (slot.UState as State)!;
 
             if (slot.Equipper == null) return false;
 
             if (state.Activated) {
                 // If equipment is activated and selected is null or target
                 // Assume user wants to deactivate equipment
-                if (slot.Equipper.Selected == null || slot.Equipper.Selected == state.Target) return true;
+                if (slot.Equipper.USelected.UValue == null || slot.Equipper.USelected.UValue == state.Target) return true;
                 // If equipment is activated and selected is not null
                 // Assume user wants to change target
                 else {
-                    if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
+                    if (!slot.Equipper.ULocks.Keys.Any (lGetter => lGetter.UValue == slot.Equipper.USelected.UValue)) return false;
                     return true;
                 }
             } else {
                 // If equipment is not activated
                 // Assume user wants to activate equipment
-                if (slot.Equipper.Selected == null) return false;
+                if (slot.Equipper.USelected.UValue == null) return false;
                 if (state.LaunchSlots.FindAll (s => s.Status == State.SlotState.SlotStatus.Loaded).Count == 0) return false;
-                if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
+                if (!slot.Equipper.ULocks.Keys.Any (lGetter => lGetter.UValue == slot.Equipper.USelected.UValue)) return false;
                 return true;
             }
         }
@@ -84,20 +90,20 @@ namespace DarkFrontier.Equipment {
 
             if (slot.Equipper == null) return;
 
-            State state = (slot.State as State)!;
+            State state = (slot.UState as State)!;
 
             if (state.Activated) {
                 // If equipment is activated and selected is null or target
                 // Assume user wants to deactivate equipment
-                if (slot.Equipper.Selected == null || slot.Equipper.Selected == state.Target) state.Activated = false;
+                if (slot.Equipper.USelected.UValue == null || slot.Equipper.USelected.UValue == state.Target) state.Activated = false;
                 // If equipment is activated and selected is not null
                 // Assume user wants to change target
-                else state.Target = slot.Equipper.Selected;
+                else state.Target = slot.Equipper.USelected.UValue;
             } else {
                 // If equipment is not activated
                 // Assume user wants to activate equipment
                 state.Activated = true;
-                state.Target = slot.Equipper.Selected;
+                state.Target = slot.Equipper.USelected.UValue;
             }
         }
 
@@ -121,7 +127,7 @@ namespace DarkFrontier.Equipment {
                 return new Serializable {
                     Durability = Durability,
                     Activated = Activated,
-                    TargetId = Target == null ? "" : Target.Id,
+                    TargetId = Target == null ? "" : Target.UId,
                     LaunchSlots = LaunchSlots.ConvertAll (s => s.ToSerializable ()),
                 };
             }
@@ -170,7 +176,7 @@ namespace DarkFrontier.Equipment {
                     if (slot.Equipper == null) return;
 
                     HangarBayPrototype hangarBay = (slot.Equipment as HangarBayPrototype)!;
-                    State state = (slot.State as State)!;
+                    State state = (slot.UState as State)!;
 
                     if (status == SlotStatus.Unloaded) {
                         // Enforce expected state
@@ -185,11 +191,11 @@ namespace DarkFrontier.Equipment {
                             status = SlotStatus.Unloaded;
                             return;
                         }
-                        loadingProgress = Mathf.Max (loadingProgress - hangarBay.LoadingSpeed * dt, 0);
+                        loadingProgress -= hangarBay.LoadingSpeed * dt;
                         // If unloaded
-                        if (loadingProgress == 0) {
+                        if (loadingProgress <= 0) {
                             // If equipper has enough inventory space to hold the craft
-                            if (slot.Equipper.Inventory.AddQuantity (launchable, 1) == 1) {
+                            if (slot.Equipper.UInventory.AddQuantity (launchable, 1) == 1) {
                                 // Set state to unloaded
                                 status = SlotStatus.Unloaded;
                             }
@@ -199,9 +205,9 @@ namespace DarkFrontier.Equipment {
                             status = SlotStatus.Unloaded;
                             return;
                         }
-                        loadingProgress = Mathf.Min (loadingProgress + hangarBay.LoadingSpeed * dt, launchable.LoadingPreparation);
+                        loadingProgress += hangarBay.LoadingSpeed * dt;
                         // If loaded
-                        if (loadingProgress == launchable.LoadingPreparation) {
+                        if (loadingProgress >= launchable.LoadingPreparation) {
                             // Set state to loaded
                             status = SlotStatus.Loaded;
                         }
@@ -220,15 +226,15 @@ namespace DarkFrontier.Equipment {
                             status = SlotStatus.Unloaded;
                             return;
                         }
-                        launchingProgress = Mathf.Min (launchingProgress + hangarBay.LoadingSpeed * dt, launchable.LaunchingPreparation);
+                        launchingProgress += hangarBay.LaunchingSpeed * dt;
                         // If launched
-                        if (launchingProgress == launchable.LaunchingPreparation) {
+                        if (launchingProgress >= launchable.LaunchingPreparation) {
                             // Spawn structure
-                            structure = Singletons.Get<StructureManager> ().SpawnStructure (launchable, slot.Equipper.Faction.Id.Value, slot.Equipper.Sector.Id.Value, new Location (slot.transform));
+                            structure = Singletons.Get<StructureManager> ().SpawnStructure (launchable, slot.Equipper.UFaction.UId.Value, slot.Equipper.USector.UId.Value, new Location (slot.transform));
                             HangarManagedCraftAI ai = CreateInstance<HangarManagedCraftAI> ();
                             ai.Launchable = launchable;
                             ai.State = state;
-                            structure.AI = ai;
+                            structure.UAI = ai;
                             // Set state to launched
                             status = SlotStatus.Launched;
                         }
@@ -246,28 +252,18 @@ namespace DarkFrontier.Equipment {
                         loadingProgress = launchable.LoadingPreparation;
                         launchingProgress = launchable.LaunchingPreparation;
                         // Consume fuel
-                        fuelingProgress = Mathf.Max (fuelingProgress - launchable.FuelConsumption * Time.deltaTime, 0);
+                        fuelingProgress = Mathf.Max (fuelingProgress - launchable.FuelConsumption * UnityEngine.Time.deltaTime, 0);
                         // Check fuel
-                        if (fuelingProgress == 0) {
+                        if (fuelingProgress <= 0) {
                             // If out of fuel add penalties
-                            structure.Stats.GetStat (StatNames.LinearMaxSpeedMultiplier, 1).AddModifier (new StatModifier {
-                                Name = "No Fuel Max Speed Penalty",
-                                Id = "hangar-launched-structure-no-fuel-max-speed-penalty",
-                                Value = launchable.NoFuelMaxSpeedPenalty,
-                                Type = StatModifierType.Multiplicative,
-                                Duration = float.PositiveInfinity,
-                            });
-                            structure.Stats.GetStat (StatNames.LinearAccelerationMultiplier, 1).AddModifier (new StatModifier {
-                                Name = "No Fuel Acceleration Penalty",
-                                Id = "hangar-launched-structure-no-fuel-acceleration-penalty",
-                                Value = launchable.NoFuelAccelerationPenalty,
-                                Type = StatModifierType.Multiplicative,
-                                Duration = float.PositiveInfinity,
-                            });
+                            if (!structure.UStats.UModifiers.Any (lModifier => lModifier is Penalty)) {
+                                structure.UStats.Add (new Penalty (launchable.NoFuelMaxSpeedPenalty, launchable.NoFuelAccelerationPenalty));
+                            }
                         } else {
                             // Remove modifiers if not out of fuel
-                            structure.Stats.GetStat (StatNames.LinearMaxSpeedMultiplier, 1).RemoveModifier ("hangar-launched-structure-no-fuel-max-speed-penalty");
-                            structure.Stats.GetStat (StatNames.LinearAccelerationMultiplier, 1).RemoveModifier ("hangar-launched-structure-no-fuel-acceleration-penalty");
+                            if (structure.UStats.UModifiers.Any (lModifier => lModifier is Penalty)) {
+                                structure.UStats.UModifiers.Remove (structure.UStats.UModifiers.Where (lModifier => lModifier is Penalty).First ());
+                            }
                         }
                     } else if (status == SlotStatus.Landing) {
                         if (launchable == null) {
@@ -279,9 +275,9 @@ namespace DarkFrontier.Equipment {
                             status = SlotStatus.Unloaded;
                             return;
                         }
-                        launchingProgress = Mathf.Max (launchingProgress - hangarBay.LoadingSpeed * Time.deltaTime, 0);
+                        launchingProgress -= hangarBay.LaunchingSpeed * UnityEngine.Time.deltaTime;
                         // If landed
-                        if (launchingProgress == 0) {
+                        if (launchingProgress <= 0) {
                             // Destroy structure
                             Singletons.Get<StructureManager> ().DisposeStructure (structure);
                             // Set state to loaded
@@ -307,7 +303,7 @@ namespace DarkFrontier.Equipment {
                         LoadingProgress = LoadingProgress,
                         FuelingProgress = FuelingProgress,
                         LaunchingProgress = LaunchingProgress,
-                        StructureId = Structure == null ? "" : Structure.Id,
+                        StructureId = Structure == null ? "" : Structure.UId,
                     };
                 }
 
@@ -336,6 +332,25 @@ namespace DarkFrontier.Equipment {
                 public bool Activated;
                 public string TargetId = "";
                 public List<SlotState.Serializable> LaunchSlots = new List<SlotState.Serializable> ();
+            }
+        }
+
+        [Serializable]
+        public class Penalty : Structure.Stats.Modifier {
+            public float MaxSpeedFactor;
+            public float AccelFactor;
+
+            public Penalty (float maxSpeedFactor, float accelFactor) : base (0, float.PositiveInfinity) {
+                MaxSpeedFactor = maxSpeedFactor;
+                AccelFactor = accelFactor;
+            }
+
+            public override Structure.Stats Modify (Structure.Stats stats) {
+                stats.LinearMaxSpeedMultiplier *= MaxSpeedFactor;
+                stats.AngularMaxSpeedMultiplier *= MaxSpeedFactor;
+                stats.LinearAccelerationMultiplier *= AccelFactor;
+                stats.AngularAccelerationMultiplier *= AccelFactor;
+                return stats;
             }
         }
     }

@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Items.Prototypes;
+using UnityEngine;
 
-public abstract class ItemConditionSO : ScriptableObject {
-    public abstract bool MeetsCondition (ItemPrototype input);
+namespace DarkFrontier.Items.Conditions {
+    public abstract class ItemConditionSO : ScriptableObject {
+        public abstract bool MeetsCondition (ItemPrototype input);
+    }
 }

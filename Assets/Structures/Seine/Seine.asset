@@ -30,39 +30,15 @@ MonoBehaviour:
     type: 3}
   SnapToPlane: 0
   Stats:
-    stats:
-    - name: Max Hull
-      baseValue: 300
-      appliedValue: 0
-      modifiers: []
-      isDirty: 0
-    - name: Sensor Strength
-      baseValue: 10
-      appliedValue: 0
-      modifiers: []
-      isDirty: 0
-    - name: Detectability
-      baseValue: 5
-      appliedValue: 0
-      modifiers: []
-      isDirty: 0
-    - name: Scanner Strength
-      baseValue: 5
-      appliedValue: 0
-      modifiers: []
-      isDirty: 0
-    - name: Signature Size
-      baseValue: 5
-      appliedValue: 0
-      modifiers: []
-      isDirty: 0
-    - name: Max Target Locks
-      baseValue: 2
-      appliedValue: 0
-      modifiers: []
-      isDirty: 0
-    - name: Cargo Drop Percentage
-      baseValue: 0.5
-      appliedValue: 0
-      modifiers: []
-      isDirty: 0
+    MaxHull: 300
+    LinearMaxSpeedMultiplier: 1
+    AngularMaxSpeedMultiplier: 1
+    LinearAccelerationMultiplier: 1
+    AngularAccelerationMultiplier: 1
+    SensorStrength: 400
+    ScannerStrength: 0.3
+    Detectability: 5000
+    SignatureSize: 1
+    MaxTargetLocks: 2
+    CargoDropPercentage: 0.5
+    InventoryVolume: 0

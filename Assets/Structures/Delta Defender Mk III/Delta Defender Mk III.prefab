@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6781496956618537328}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8605587269643301425}
   - component: {fileID: 8196761200299651875}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7394152821392010447}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Equipment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   m_Component:
   - component: {fileID: 648438712386321934}
   - component: {fileID: 2576285590069773046}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Right Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,12 +158,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  subscribed: 0
-  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Equipment: {fileID: 11400000, guid: 6dd3333f71377ee4db6e24ae3bcd50c7, type: 2}
+  iSerializationId: 
   UnsafeState:
     id: 0
   references:
@@ -180,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 578397265439973574}
   - component: {fileID: 6065457104808144035}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Left Nacelle Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -225,7 +223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6722749667474336690}
   - component: {fileID: 3615694585514351432}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Left Top turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -258,12 +256,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  subscribed: 0
-  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Equipment: {fileID: 11400000, guid: b4bcc1310fd094d4d90dc6125e68b4c1, type: 2}
+  iSerializationId: 
   UnsafeState:
     id: 0
   references:
@@ -281,7 +277,7 @@ GameObject:
   - component: {fileID: 5328514935464531116}
   - component: {fileID: 2231776705813116486}
   - component: {fileID: 4275456203657450609}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LOD4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -362,7 +358,7 @@ GameObject:
   - component: {fileID: 1280223535976449552}
   - component: {fileID: 5504010630537625597}
   - component: {fileID: 8824990598748597096}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Central Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5207,7 +5203,7 @@ GameObject:
   - component: {fileID: 6669787583247699422}
   - component: {fileID: 2200250485472481630}
   - component: {fileID: 1844666395777140736}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LOD3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5288,7 +5284,7 @@ GameObject:
   - component: {fileID: 4125937533635986898}
   - component: {fileID: 3787157501473543650}
   - component: {fileID: 2681074343192075368}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5368,7 +5364,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4532510876280885935}
   - component: {fileID: 4961098995217466760}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Right Top Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5401,12 +5397,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  subscribed: 0
-  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Equipment: {fileID: 11400000, guid: b4bcc1310fd094d4d90dc6125e68b4c1, type: 2}
+  iSerializationId: 
   UnsafeState:
     id: 0
   references:
@@ -5425,7 +5419,7 @@ GameObject:
   - component: {fileID: 2869013932428447120}
   - component: {fileID: 2869013932428447134}
   - component: {fileID: 2869013932428447135}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Delta Defender Mk III
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5440,7 +5434,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2869013932428447122}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.09}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6781496956618537328}
@@ -5456,44 +5450,78 @@ MonoBehaviour:
   m_GameObject: {fileID: 2869013932428447122}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 649fe7b2604da9e4986d8cd7f0fdcfae, type: 3}
+  m_Script: {fileID: 11500000, guid: f96422bb2a2196446b2deefb6d70844b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  subscribed: 0
-  canTickSelf: 1
-  _profile: {fileID: 11400000, guid: fcdbd2a9249b25e40ac467b856edd045, type: 2}
-  id:
-    value: 
-  stats:
-    stats: []
-  hull: 4500
-  faction:
-    id:
+  iState:
+    uPrototype: {fileID: 11400000, guid: fcdbd2a9249b25e40ac467b856edd045, type: 2}
+    uId:
       value: 
-    value:
-      id: 0
-  equipmentSlots:
-  - {fileID: 6600085404695014259}
-  - {fileID: 2576285590069773046}
-  - {fileID: 9161962482777851408}
-  - {fileID: 3938042005856736322}
-  - {fileID: 5818075544933059250}
-  - {fileID: 7115233860060840377}
-  - {fileID: 3615694585514351432}
-  - {fileID: 4961098995217466760}
-  _inventory:
-    id: 0
-  _ai: {fileID: 0}
-  _aiEnabled: 1
-  _selected: {fileID: 0}
-  sector:
-    id:
-      value: 
-    value: {fileID: 0}
-  dockingBays:
-    id: 0
-  dockee: {fileID: 0}
+    uFaction:
+      iId:
+        value: 
+      value:
+        id: 0
+    uSector:
+      iId:
+        value: 
+      value: {fileID: 0}
+    uHull: 4500
+    uStats:
+      iValues:
+        MaxHull: 1
+        LinearMaxSpeedMultiplier: 1
+        AngularMaxSpeedMultiplier: 1
+        LinearAccelerationMultiplier: 1
+        AngularAccelerationMultiplier: 1
+        SensorStrength: 0
+        ScannerStrength: 0
+        Detectability: 0
+        SignatureSize: 0
+        MaxTargetLocks: 0
+        CargoDropPercentage: 1
+        InventoryVolume: 0
+    uInventory:
+      quantities:
+        reorderableList:
+          canAdd: 0
+          canRemove: 0
+          draggable: 0
+          expandable: 0
+          multipleSelection: 0
+          isExpanded: 0
+          label:
+            m_Text: 
+            m_Image: {fileID: 0}
+            m_Tooltip: 
+          headerHeight: 0
+          footerHeight: 0
+          slideEasing: 0
+          verticalSpacing: 0
+          showDefaultBackground: 0
+          elementDisplayType: 0
+          elementNameProperty: 
+          elementNameOverride: 
+          elementIcon: {fileID: 0}
+        reqReferences: {fileID: 0}
+        isExpanded: 0
+        _keyValues: []
+        _keys: []
+        _values: 
+      volume: 0
+      storedVolume: 0
+      precision: 1
+    uEquipmentSlots: []
+    uDockingPoints: []
+    uDockedAt:
+      iId:
+        value: 
+      value: {fileID: 0}
+    uSelected:
+      iId:
+        value: 
+      value: {fileID: 0}
+    uAI: {fileID: 0}
   references:
     version: 1
     00000000:
@@ -5536,7 +5564,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2869013932810373260}
   - component: {fileID: 9161962482777851408}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5569,12 +5597,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  subscribed: 0
-  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Equipment: {fileID: 11400000, guid: 6736820e02c121647963c6d6b1361bbc, type: 2}
+  iSerializationId: 
   UnsafeState:
     id: 0
   references:
@@ -5591,7 +5617,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2869013932910226455}
   - component: {fileID: 5818075544933059250}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Generator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5624,12 +5650,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  subscribed: 0
-  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Equipment: {fileID: 11400000, guid: 4c16d1310a5b62f49bc0f04eb70f19fc, type: 2}
+  iSerializationId: 
   UnsafeState:
     id: 0
   references:
@@ -5646,7 +5670,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2869013934095021292}
   - component: {fileID: 3938042005856736322}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Capacitor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5679,12 +5703,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  subscribed: 0
-  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Equipment: {fileID: 11400000, guid: 3f6e308b812c2134698ea542b747320e, type: 2}
+  iSerializationId: 
   UnsafeState:
     id: 0
   references:
@@ -5701,7 +5723,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2869013934242875145}
   - component: {fileID: 7115233860060840377}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Engine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5737,12 +5759,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  subscribed: 0
-  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Equipment: {fileID: 11400000, guid: d5ce1a3bc11a30a4e9e6233bd163f7d2, type: 2}
+  iSerializationId: 
   UnsafeState:
     id: 0
   references:
@@ -5760,7 +5780,7 @@ GameObject:
   - component: {fileID: 5047866335390203705}
   - component: {fileID: 2610964585201362818}
   - component: {fileID: 4960553411165957791}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Flare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10575,7 +10595,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3601380580323095746}
   - component: {fileID: 8854288834067810270}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Right Nacelle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10620,7 +10640,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7895542750998089495}
   - component: {fileID: 6600504959038787658}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Right Nacelle Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10666,7 +10686,7 @@ GameObject:
   - component: {fileID: 3888022096842203726}
   - component: {fileID: 5876398002271277916}
   - component: {fileID: 2405737329055405930}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Flare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15482,7 +15502,7 @@ GameObject:
   - component: {fileID: 4453116331493199048}
   - component: {fileID: 286319670097987643}
   - component: {fileID: 5538343491148489104}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Left Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20326,7 +20346,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8958893918886753871}
   - component: {fileID: 6600085404695014259}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Left Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20359,12 +20379,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  subscribed: 0
-  canTickSelf: 1
   Equipper: {fileID: 2869013932428447120}
   Filters: []
   Equipment: {fileID: 11400000, guid: 6dd3333f71377ee4db6e24ae3bcd50c7, type: 2}
+  iSerializationId: 
   UnsafeState:
     id: 0
   references:
@@ -20382,7 +20400,7 @@ GameObject:
   - component: {fileID: 4637734078268016294}
   - component: {fileID: 4341378922703777704}
   - component: {fileID: 2688517981976055055}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Flare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25198,7 +25216,7 @@ GameObject:
   - component: {fileID: 3125027503943125290}
   - component: {fileID: 8889336954705546724}
   - component: {fileID: 640124494144726970}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25278,7 +25296,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4680981516070686669}
   - component: {fileID: 3846944014851659694}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25350,7 +25368,7 @@ GameObject:
   - component: {fileID: 720260824670940502}
   - component: {fileID: 5962181658971117946}
   - component: {fileID: 4889135056185879006}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Right Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30194,7 +30212,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1572878158894813471}
   - component: {fileID: 1371984101903500395}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Left Nacelle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30240,7 +30258,7 @@ GameObject:
   - component: {fileID: 8425837812255033289}
   - component: {fileID: 3730494366546832944}
   - component: {fileID: 164021725921168682}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30319,7 +30337,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3463500807168077787}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30357,7 +30375,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7146392518451489204}
   - component: {fileID: 8208156047474175047}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30401,7 +30419,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4455281087407712185}
   - component: {fileID: 132790969391557984}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Central
   m_TagString: Untagged
   m_Icon: {fileID: 0}

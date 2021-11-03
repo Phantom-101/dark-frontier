@@ -1,21 +1,38 @@
-﻿using DarkFrontier.Structures;
+﻿using System;
 using System.Collections.Generic;
+using DarkFrontier.Controllers;
+using DarkFrontier.Foundation.Behaviors;
+using DarkFrontier.Foundation.Services;
+using DarkFrontier.Structures;
 using UnityEngine;
 
-public class BlipManagerUI : MonoBehaviour {
-    [SerializeField] private GameObject prefab;
-    private readonly Dictionary<Structure, BlipUI> blips = new Dictionary<Structure, BlipUI> ();
+namespace DarkFrontier.UI.Indicators {
+    public class BlipManagerUI : ComponentBehavior {
+        [SerializeField] private GameObject prefab;
+        private readonly Dictionary<Structure, BlipUI> blips = new Dictionary<Structure, BlipUI> ();
 
-    private void Update () {
-        Structure player = PlayerController.Instance.Player;
-        if (player == null) return;
-        foreach (Structure s in player.Sector.Value.Population.Structures) {
-            if (s != player && s.Profile.ShowBlip) {
-                if (!blips.ContainsKey (s) || blips[s] == null) {
-                    GameObject go = Instantiate (prefab, transform);
-                    BlipUI ei = go.GetComponent<BlipUI> ();
-                    ei.Target = s;
-                    blips[s] = ei;
+        private readonly Lazy<PlayerController> iPlayerController = new Lazy<PlayerController>(() => Singletons.Get<PlayerController>(), false);
+        private readonly Lazy<BehaviorTimekeeper> iBehaviorTimekeeper = new Lazy<BehaviorTimekeeper>(() => Singletons.Get<BehaviorTimekeeper>(), false);
+        
+        public override void Enable () {
+            iBehaviorTimekeeper.Value.Subscribe (this);
+        }
+
+        public override void Disable () {
+            iBehaviorTimekeeper.Value.Unsubscribe (this);
+        }
+
+        public override void Tick (object aTicker, float aDt) {
+            Structure player = iPlayerController.Value.UPlayer;
+            if (player == null) return;
+            foreach (Structure s in player.USector.UValue.UPopulation.UStructures) {
+                if (s != player && s.UPrototype.ShowBlip) {
+                    if (!blips.ContainsKey (s) || blips[s] == null) {
+                        GameObject go = Instantiate (prefab, transform);
+                        BlipUI ei = go.GetComponent<BlipUI> ();
+                        ei.Target = s;
+                        blips[s] = ei;
+                    }
                 }
             }
         }

@@ -8,19 +8,17 @@ namespace DarkFrontier.Equipment {
     public class GeneratorPrototype : EquipmentPrototype {
         public float Generation;
 
-        public override void Tick (EquipmentSlot slot, float dt) {
-            if (slot.Equipper == null) return;
+        public override void Tick (EquipmentSlot aSlot, float aDt) {
+            if (aSlot.Equipper == null) return;
 
-            State state = (slot.State as State)!;
-
-            float pool = Generation * dt;
-            slot.Equipper.GetEquipmentStates<CapacitorPrototype.State> ().ForEach (capacitor => {
-                float lack = (capacitor.Slot.Equipment as CapacitorPrototype)!.Capacitance - capacitor.Charge;
-                float allocated = Mathf.Min (pool, lack, capacitor.ChargeLeft);
-                capacitor.Charge += allocated;
-                capacitor.ChargeLeft -= allocated;
-                pool -= allocated;
-            });
+            var lPool = Generation * aDt;
+            foreach (var lCapacitor in aSlot.Equipper.GetEquipmentStates<CapacitorPrototype.State>()) {
+                var lLack = (lCapacitor.Slot.Equipment as CapacitorPrototype)!.Capacitance - lCapacitor.Charge;
+                var lAllocated = Mathf.Min (lPool, lLack, lCapacitor.ChargeLeft);
+                lCapacitor.Charge += lAllocated;
+                lCapacitor.ChargeLeft -= lAllocated;
+                lPool -= lAllocated;
+            }
         }
 
         public override void EnsureStateType (EquipmentSlot slot) {

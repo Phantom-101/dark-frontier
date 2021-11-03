@@ -1,384 +1,782 @@
-﻿using DarkFrontier.AI;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using DarkFrontier.Camera;
+using DarkFrontier.Controllers;
 using DarkFrontier.Equipment;
 using DarkFrontier.Factions;
 using DarkFrontier.Foundation.Behaviors;
 using DarkFrontier.Foundation.Identification;
 using DarkFrontier.Foundation.Services;
+using DarkFrontier.Items;
+using DarkFrontier.Items.Inventories;
+using DarkFrontier.Items.Prototypes;
 using DarkFrontier.Locations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using DarkFrontier.Structures;
+using DarkFrontier.UI.Indicators;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
+#nullable enable
 namespace DarkFrontier.Structures {
-    public class Structure : ComponentBehavior {
-        public StructureSO Profile { get => _profile; }
-        [SerializeField] private StructureSO _profile;
+    public class Structure : ComponentBehavior, ICtorArgs<Structure.State> {
+        [SerializeField] private State iState = new State (null);
 
-        public Id Id { get => id; }
-        [SerializeField] private Id id = new Id ();
+        public StructurePrototype? UPrototype => iState.uPrototype;
+        public string UId => iState.uId.Value;
 
-        public StatList Stats { get => stats; }
-        [SerializeField] private StatList stats = new StatList ();
+        public FactionGetter UFaction => iState.uFaction;
+        public SectorGetter USector => iState.uSector;
 
-        public float Hull {
-            get => hull;
+        public float UHull {
+            get => iState.uHull;
+
             set {
-                hull = Mathf.Min (value, stats.GetBaseValue (StatNames.MaxHull, 1));
-                if (hull <= 0) {
-                    Faction.Value?.Property.Remove (this);
-                    if (Sector.Value != null) Sector.Value.Population.Remove (this);
-                    structureManager.DestroyStructure (this);
+                iState.uHull = Mathf.Min (value, iState.uStats.UValues.MaxHull);
+                if (iState.uHull <= 0) {
+                    iStructureManager.Value.DestroyStructure (this);
                 }
             }
         }
-        [SerializeField] private float hull;
+        public State.Stats UStats => iState.uStats;
 
-        public FactionGetter Faction { get => faction; }
-        [SerializeField] private FactionGetter faction = new FactionGetter ();
+        public Inventory UInventory => iState.uInventory;
+        public List<EquipmentSlot> UEquipmentSlots => iState.uEquipmentSlots;
+        public List<DockingPoint> UDockingPoints => iState.uDockingPoints;
+        public StructureGetter UDockedAt => iState.uDockedAt;
+        public bool UIsDocked => iState.uDockedAt.UValue != null;
 
-        public List<EquipmentSlot> Equipment { get => equipmentSlots; }
-        [SerializeField] private List<EquipmentSlot> equipmentSlots = new List<EquipmentSlot> ();
+        public StructureGetter USelected => iState.uSelected;
+        public Dictionary<StructureGetter, float> ULocks => iState.uLocks;
 
-        public Inventory Inventory { get => _inventory; }
-        [SerializeReference] private Inventory _inventory;
+        public AIBase? UAI { get => iState.uAI; set => iState.uAI = value; }
 
-        public AIBase AI {
-            get => _ai;
-            set => _ai = value;
-        }
-        [SerializeReference, Expandable] private AIBase _ai;
-        [SerializeField] private bool _aiEnabled;
+        private Rigidbody? iRigidbody;
 
-        public Structure Selected {
-            get => _selected;
-            set {
-                _selected = value;
-                if (PlayerController.Instance.Player == this) PlayerController.Instance.OnSelectedChanged?.Invoke (this, EventArgs.Empty);
-            }
-        }
-        [SerializeField] private Structure _selected;
+        private readonly Lazy<FactionManager> iFactionManager = new Lazy<FactionManager>(() => Singletons.Get<FactionManager>(), false);
+        private readonly Lazy<StructureManager> iStructureManager = new Lazy<StructureManager>(() => Singletons.Get<StructureManager>(), false);
+        private readonly Lazy<PlayerController> iPlayerController = new Lazy<PlayerController>(() => Singletons.Get<PlayerController> (), false);
 
-        public Dictionary<Structure, float> Locks {
-            get => _locks;
-            set => _locks = value;
-        }
-        [SerializeField] private Dictionary<Structure, float> _locks = new Dictionary<Structure, float> ();
+        private bool iEnabled;
 
-        public SectorGetter Sector { get => sector; }
-        [SerializeField] private SectorGetter sector = new SectorGetter ();
+        public void Construct (State aState) => iState = aState;
 
-        public HashSet<Structure> Detected { get => detected ?? (detected = structureManager.GetDetected (this)); }
-        [SerializeField] private HashSet<Structure> detected;
-
-        public DockingBayList DockingBays { get => dockingBays; }
-        [SerializeReference] private DockingBayList dockingBays;
-
-        public Structure Dockee { get => dockee; }
-        [SerializeField] private Structure dockee;
-        public bool IsDocked { get => dockee != null; }
-
-        private new Rigidbody rigidbody;
-
-        private SectorManager sectorManager;
-        private FactionManager factionManager;
-        private StructureManager structureManager;
-
-        protected override void SingleInitialize () {
-            rigidbody = GetComponent<Rigidbody> ();
-
-            Sector sector = GetComponentInParent<Sector> ();
-            if (sector != null) {
-                Sector.Id.Value = sector.Id;
-                if (Sector.Value != null) Sector.Value.Population.Set (this);
+        public override void Initialize () {
+            if (iRigidbody == null) {
+                iRigidbody = GetComponent<Rigidbody> ();
             }
 
-            EnsureStats ();
+            iState.uStats.Recalculate (iState.uPrototype);
 
-            if (_inventory == null) _inventory = new Inventory (stats.GetAppliedValue (StatNames.InventoryVolume, 0), 1);
-
-            if (_ai == null) _ai = ScriptableObject.CreateInstance<AIBase> ();
-            else _ai = _ai.Copy ();
-
-            StructureInventoryAdder adder = GetComponent<StructureInventoryAdder> ();
-            if (adder != null) adder.Run (this);
-        }
-
-        protected override void MultiInitialize () {
-            structureManager.Registry.Set (this);
-            if (Faction.Value != null) {
-                factionManager.Registry.Set (Faction.Value);
-                Faction.Value.Property.Set (this);
+            iState.uInventory.Volume = iState.uStats.UValues.InventoryVolume;
+            if (iState.uEquipmentSlots.Count == 0) {
+                iState.uEquipmentSlots.AddRange (GetComponentsInChildren<EquipmentSlot> ());
+            } else {
+                iState.uEquipmentSlots.RemoveAll (aSlot => aSlot == null);
+            }
+            if (iState.uDockingPoints.Count == 0) {
+                iState.uDockingPoints.AddRange (GetComponentsInChildren<DockingPoint> ());
+            } else {
+                iState.uDockingPoints.RemoveAll (aPoint => aPoint == null);
             }
 
-            canTickSelf = false;
-            equipmentSlots.ForEach (e => e.CanTickSelf = false);
-
-            SynchronizeInventoryVolume (this, EventArgs.Empty);
+            StructureInventoryAdder lInventoryAdder = GetComponent<StructureInventoryAdder> ();
+            if (lInventoryAdder != null) {
+                lInventoryAdder.Run (this);
+            }
         }
 
-        public override void GetServices () {
-            sectorManager = Singletons.Get<SectorManager> ();
-            factionManager = Singletons.Get<FactionManager> ();
-            structureManager = Singletons.Get<StructureManager> ();
+        public override void Enable () {
+            iEnabled = true;
+
+            iStructureManager.Value.Registry.Set (this);
+            if (iState.uFaction.UValue != null) {
+                iFactionManager.Value.Registry.Set (iState.uFaction.UValue);
+                iState.uFaction.UValue.Property.Set (this);
+            }
+            if (iState.uSector.UValue == null) {
+                Sector lSector = GetComponentInParent<Sector> ();
+                if (lSector != null) {
+                    iState.uSector.UId.Value = lSector.UId;
+                }
+            }
+            if (iState.uSector.UValue != null) {
+                iState.uSector.UValue.UPopulation.Set (this);
+            }
+
+            iState.Enable ();
         }
 
-        protected override void InternalTick (float dt) {
-            // Expensive
-            detected = null;
-            if (_aiEnabled) _ai.Tick (this, dt);
+        public override void Disable () {
+            iEnabled = false;
+
+            iStructureManager.Value.Registry.Remove (iState.uId.Value);
+            iState.uFaction.UValue?.Property.Remove (iState.uId.Value);
+            if (iState.uSector.UValue != null) {
+                iState.uSector.UValue.UPopulation.Remove (iState.uId.Value);
+            }
+
+            iState.Disable ();
+        }
+
+        public override void Tick (object aTicker, float aDt) {
+            if (!iEnabled) return;
+
+            iState.uStats.Recalculate (iState.uPrototype);
+            iState.uStats.Tick (this, aDt);
+
+            if (iState.uAI != null) {
+                iState.uAI.Tick (this, aDt);
+            }
 
             ManageSelectedAndLocks ();
             TickLocks ();
-            stats.Tick (dt);
-        }
 
-        protected override void PropagateTick (float dt) {
-            equipmentSlots.ForEach (e => e.Tick (dt));
-        }
-
-        protected override void InternalFixedTick (float dt) {
-            if (_profile.SnapToPlane) {
-                // Set position and rotation
-                transform.LeanSetLocalPosY (0);
-                transform.localEulerAngles = new Vector3 (0, transform.eulerAngles.y, rigidbody.angularVelocity.y * -25);
+            var lEquipmentSlotsLength = iState.uEquipmentSlots.Count;
+            for (var lIndex = 0; lIndex < lEquipmentSlotsLength; lIndex++) {
+                iState.uEquipmentSlots[lIndex].Tick(this, aDt);
             }
         }
 
-        protected override void PropagateFixedTick (float dt) {
-            equipmentSlots.ForEach (e => e.FixedTick (dt));
-        }
-
-        public override bool Validate () {
-            // Should have dependencies
-            if (sectorManager == null) return false;
-            if (factionManager == null) return false;
-            if (structureManager == null) return false;
-            // Should have profile
-            if (_profile == null) return false;
-            // Should have parent
-            if (transform.parent == null) return false;
-            // Should have sector in parent tree
-            if (Sector.Value == null) {
-                Sector.Id.Value = GetComponentInParent<Sector> ().Id;
-                if (Sector.Value == null) return false;
+        public override void FixedTick (object aTicker, float aDt) {
+            if (iRigidbody != null) {
+                if (iState.uPrototype?.SnapToPlane ?? false) {
+                    transform.LeanSetLocalPosY (0);
+                    transform.localEulerAngles = new Vector3 (0, transform.eulerAngles.y, iRigidbody.angularVelocity.y * -25);
+                }
             }
-            // Sector should have structure in population
-            Sector.Value.Population.Set (this);
-            // Should have stats
-            EnsureStats ();
-            // Should have inventory
-            if (_inventory == null) _inventory = new Inventory (stats.GetAppliedValue (StatNames.InventoryVolume, 0), 1);
-            // Should have AI
-            if (_ai == null) _ai = ScriptableObject.CreateInstance<AIBase> ();
-            // Should have docking bays
-            if (dockingBays == null) dockingBays = new DockingBayList (_profile.DockingBays, this);
-            return true;
+
+            var lEquipmentSlotsLength = iState.uEquipmentSlots.Count;
+            for (var lIndex = 0; lIndex < lEquipmentSlotsLength; lIndex++) {
+                iState.uEquipmentSlots[lIndex].FixedTick(this, aDt);
+            }
         }
 
-        protected override void InternalSubscribeEventListeners () {
-            stats.GetStat (StatNames.InventoryVolume, 0).OnValueChanged += SynchronizeInventoryVolume;
+        public bool IsLocked(Structure aTarget) {
+            var lQuery = new StructureGetter();
+            lQuery.UId.Value = aTarget.UId;
+            return ULocks.ContainsKey(lQuery);
         }
 
-        protected override void InternalUnsubscribeEventListeners () {
-            stats.GetStat (StatNames.InventoryVolume, 0).OnValueChanged -= SynchronizeInventoryVolume;
+        private EquipmentSlot[] iFoundBuffer = new EquipmentSlot[0];
+        private int iFoundBufferLength;
+        private int iSlotsLength;
+        private int iFoundLength;
+        
+        private readonly Dictionary<Type, EquipmentSlot[]> iEquipmentSlotsCache = new Dictionary<Type, EquipmentSlot[]>();
+        public EquipmentSlot[] GetEquipmentSlots<T> () where T : EquipmentPrototype.State {
+            if (iEquipmentSlotsCache.ContainsKey(typeof(T))) {
+                return iEquipmentSlotsCache[typeof(T)];
+            }
+            
+            iSlotsLength = iState.uEquipmentSlots.Count;
+            if (iFoundBufferLength != iSlotsLength) {
+                iFoundBuffer = new EquipmentSlot[iSlotsLength];
+                iFoundBufferLength = iSlotsLength;
+            }
+            iFoundLength = 0;
+            for (var lIndex = 0; lIndex < iSlotsLength; lIndex++) {
+                if (!(iState.uEquipmentSlots[lIndex].UState is T)) continue;
+                iFoundBuffer[iFoundLength] = iState.uEquipmentSlots[lIndex];
+                iFoundLength++;
+            }
+            EquipmentSlot[] lRet = new EquipmentSlot[iFoundLength];
+            for (var lIndex = 0; lIndex < iFoundLength; lIndex++) {
+                lRet[lIndex] = iFoundBuffer[lIndex];
+            }
+
+            iEquipmentSlotsCache[typeof(T)] = lRet;
+            return lRet;
+        }
+        
+        private readonly Dictionary<Type, object> iEquipmentStatesCache = new Dictionary<Type, object>();
+        public T[] GetEquipmentStates<T> () where T : EquipmentPrototype.State {
+            if (iEquipmentStatesCache.ContainsKey(typeof(T))) {
+                return (iEquipmentStatesCache[typeof(T)] as T[])!;
+            }
+            
+            iSlotsLength = iState.uEquipmentSlots.Count;
+            if (iFoundBufferLength != iSlotsLength) {
+                iFoundBuffer = new EquipmentSlot[iSlotsLength];
+                iFoundBufferLength = iSlotsLength;
+            }
+            iFoundLength = 0;
+            for (var lIndex = 0; lIndex < iSlotsLength; lIndex++) {
+                if (!(iState.uEquipmentSlots[lIndex].UState is T)) continue;
+                iFoundBuffer[iFoundLength] = iState.uEquipmentSlots[lIndex];
+                iFoundLength++;
+            }
+            T[] lRet = new T[iFoundLength];
+            for (var lIndex = 0; lIndex < iFoundLength; lIndex++) {
+                lRet[lIndex] = (iFoundBuffer[lIndex].UState as T)!;
+            }
+
+            iEquipmentStatesCache[typeof(T)] = lRet;
+            return lRet;
         }
 
-        private void SynchronizeInventoryVolume (object sender, EventArgs args) => _inventory.Volume = stats.GetAppliedValue (StatNames.InventoryVolume, 0);
-
-        public List<EquipmentSlot> GetEquipmentSlots<T> () where T : EquipmentPrototype.State {
-            List<EquipmentSlot> slots = new List<EquipmentSlot> ();
-            equipmentSlots.ForEach (slot => {
-                if (slot.State is T) slots.Add (slot);
-            });
-            return slots;
+        public void InvalidateEquipmentQueryCache() {
+            iEquipmentSlotsCache.Clear();
+            iEquipmentStatesCache.Clear();
         }
-
-        public List<T> GetEquipmentStates<T> () where T : EquipmentPrototype.State {
-            List<T> states = new List<T> ();
-            equipmentSlots.ForEach (slot => {
-                if (slot.State is T) states.Add (slot.State as T);
-            });
-            return states;
-        }
-
-        public void OnDocked (Structure dockee) {
+        
+        public void OnDocked (Structure aDockedAt, DockingPoint aDockingPoint) {
             // Cache dockee
-            this.dockee = dockee;
+            iState.uDockedAt.UId.Value = aDockedAt.UId;
             // Add as child
-            transform.parent = dockee.transform;
-            // Disable renderers
-            Renderer[] renderers = GetComponentsInChildren<Renderer> ();
-            foreach (Renderer renderer in renderers) renderer.enabled = false;
-            // Disable colliders
-            Collider[] colliders = GetComponentsInChildren<Collider> ();
-            foreach (Collider collider in colliders) collider.enabled = false;
+            transform.parent = aDockingPoint.transform;
+            // Set kinematic
+            if (iRigidbody != null) {
+                iRigidbody.isKinematic = true;
+            }
+            // Set position
+            transform.localPosition = Vector3.zero;
             // TODO Disable all equipment
             //foreach (NewEquipmentSlot slot in docker.Equipment) slot.TargetState = false;
-            if (this == PlayerController.Instance.Player) {
+            if (this == iPlayerController.Value.UPlayer) {
                 // Send notification
-                NotificationUI.GetInstance ().AddNotification ("Docked at " + dockee.name);
+                NotificationUI.GetInstance ().AddNotification ("Docked at " + aDockedAt.name);
                 // TODO Update UI
                 //UIStateManager.Instance.AddState (UIState.Docked);
                 // Update camera anchor
-                CameraController.GetInstance ().SetAnchor (new Location (dockee.transform));
+                CameraController.GetInstance ().SetAnchor (new Location (aDockedAt.transform));
             }
         }
 
-        public void OnUndocked (Structure dockee) {
+        public void OnUndocked (Structure aDockedAt) {
             // Remove dockee
-            this.dockee = null;
+            iState.uDockedAt.UId.Value = "";
             // Remove as child
-            transform.parent = dockee.transform.parent;
-            // Enable renderers
-            Renderer[] renderers = GetComponentsInChildren<Renderer> (true);
-            foreach (Renderer renderer in renderers) renderer.enabled = true;
-            // Enable colliders
-            Collider[] colliders = GetComponentsInChildren<Collider> ();
-            foreach (Collider collider in colliders) collider.enabled = true;
-            if (this == PlayerController.Instance.Player) {
+            transform.parent = aDockedAt.transform.parent;
+            // Set kinematic
+            if (iRigidbody != null) {
+                iRigidbody.isKinematic = false;
+            }
+            if (this == iPlayerController.Value.UPlayer) {
                 // Send notification
-                NotificationUI.GetInstance ().AddNotification ("Undocked from " + dockee.name);
+                NotificationUI.GetInstance ().AddNotification ("Undocked from " + aDockedAt.name);
                 // TODO Update UI
                 //UIStateManager.Instance.RemoveState ();
                 // Update camera anchor
                 CameraController.GetInstance ().RemoveAnchor ();
             }
-            // Set position
-            transform.localPosition = dockee.transform.localPosition + dockee.transform.localRotation * Vector3.forward * 100;
         }
 
-        public void TakeDamage (Damage damage, Vector3 from) {
-            ShieldPrototype.State closest = null;
-            GetEquipmentStates<ShieldPrototype.State> ().ForEach (state => {
-                if (closest == null) closest = state;
-                else {
-                    float disA = (from - closest.Slot.transform.position).sqrMagnitude;
-                    float disB = (state.Slot.transform.position - closest.Slot.transform.position).sqrMagnitude;
-                    if (disB < disA) closest = state;
+        public bool CanAccept (Structure aDocker) {
+            return iState.uDockingPoints.Any (aPoint => aPoint.CanAccept (aDocker));
+        }
+
+        public bool TryAccept (Structure aDocker) {
+            return iState.uDockingPoints.Any (aPoint => aPoint.TryAccept (aDocker));
+        }
+
+        public bool CanRelease (Structure aDocker) {
+            return iState.uDockingPoints.Any (aPoint => aPoint.CanRelease (aDocker));
+        }
+
+        public bool TryRelease (Structure aDocker) {
+            return iState.uDockingPoints.Any (aPoint => aPoint.TryRelease (aDocker));
+        }
+
+        public void TakeDamage (Damage aDamage, Location aSource) {
+            ShieldPrototype.State? lShield = null;
+            var lClosest = float.PositiveInfinity;
+            foreach (var lState in GetEquipmentStates<ShieldPrototype.State>()) {
+                if (lShield == null) {
+                    lShield = lState;
+                    lClosest = (aSource.Position - lShield.Slot.transform.position).sqrMagnitude;
+                } else {
+                    var lDistance = (aSource.Position - lState.Slot.transform.position).sqrMagnitude;
+                    if (!(lDistance < lClosest)) continue;
+                    lShield = lState;
+                    lClosest = lDistance;
                 }
-            });
-            float ps = 0;
-            if (closest != null) ps = Mathf.Clamp01 (closest.Strength / damage.ShieldDamage) * (1 - damage.ShieldPenetration);
-            float ph = 1 - ps;
-            if (closest != null) closest.Strength -= damage.ShieldDamage * ps;
-            Hull -= damage.HullDamage * ph;
+            }
+            float lPercentShield = 0;
+            if (lShield != null) {
+                lPercentShield = Mathf.Clamp01 (lShield.Strength / aDamage.ShieldDamage) * (1 - aDamage.ShieldPenetration);
+            }
+            var lPercentHull = 1 - lPercentShield;
+            if (lShield != null) {
+                lShield.Strength -= aDamage.ShieldDamage * lPercentShield;
+            }
+            UHull -= aDamage.HullDamage * lPercentHull;
             // TODO equipment damage damage.EquipmentDamage * ph
         }
 
-        public float GetAngleTo (Vector3 to) {
-            Vector3 heading = to - transform.localPosition;
-            return Vector3.SignedAngle (transform.forward, heading, transform.up);
+        public float GetAngleTo (Location aLocation) {
+            var lHeading = aLocation.Position - transform.position;
+            return Vector3.SignedAngle (transform.forward, lHeading, transform.up);
         }
 
-        public float GetElevationTo (Vector3 to) {
-            Vector3 heading = to - transform.localPosition;
-            return Vector3.SignedAngle (transform.forward, heading, -transform.right);
+        public float GetElevationTo (Location aLocation) {
+            var lHeading = aLocation.Position - transform.position;
+            return Vector3.SignedAngle (transform.forward, lHeading, -transform.right);
         }
 
         private void ManageSelectedAndLocks () {
-            if (Selected != null && !Detected.Contains (Selected)) Selected = null;
-            bool lockChanged = false;
-            foreach (Structure target in Locks.Keys.ToArray ()) {
-                if (target == null || !Detected.Contains (target) || Locks.Keys.Count > stats.GetAppliedValue (StatNames.MaxTargetLocks, 0)) {
-                    Locks.Remove (target);
-                    lockChanged = true;
+            if (iState.uSelected.UValue != null && !CanDetect(iState.uSelected.UValue)) {
+                iState.uSelected.UId.Value = "";
+            }
+            bool lLocksChanged = false;
+            foreach (StructureGetter lGetter in iState.uLocks.Keys.ToArray ()) {
+                if (lGetter.UValue == null || !CanDetect (lGetter.UValue) || iState.uLocks.Keys.Count > iState.uStats.UValues.MaxTargetLocks) {
+                    iState.uLocks.Remove (lGetter);
+                    lLocksChanged = true;
                 }
             }
-            if (lockChanged) {
-                PlayerController pc = PlayerController.Instance;
-                if (pc.Player == this) pc.OnLocksChanged.Invoke (this, EventArgs.Empty);
+            if (lLocksChanged) {
+                PlayerController lPlayerController = iPlayerController.Value;
+                if (lPlayerController.UPlayer == this) {
+                    lPlayerController.OnLocksChanged.Invoke (this, EventArgs.Empty);
+                }
             }
         }
 
-        public bool Lock (Structure target) {
-            if (target == null) return false;
-            if (!Detected.Contains (target)) return false;
-            if (Locks.ContainsKey (target)) return false;
-            if (Locks.Keys.Count >= stats.GetAppliedValue (StatNames.MaxTargetLocks, 0)) return false;
-            Locks[target] = 0;
-            PlayerController pc = PlayerController.Instance;
-            if (pc.Player == this) pc.OnLocksChanged.Invoke (this, EventArgs.Empty);
+        public bool CanDetect(Structure aOther) {
+            if (USector.UId.Value != aOther.USector.UId.Value) return false;
+            var lSqrDis = (transform.localPosition - aOther.transform.localPosition).sqrMagnitude;
+            var lSqrRange = UStats.UValues.SensorStrength * aOther.UStats.UValues.Detectability;
+            return lSqrDis <= lSqrRange;
+        }
+
+        public bool Lock (Structure aTarget) {
+            if (aTarget == null) return false;
+            if (iState.uLocks.Keys.Count >= iState.uStats.UValues.MaxTargetLocks) return false;
+            if (IsLocked(aTarget)) return false;
+            if (!CanDetect (aTarget)) return false;
+            StructureGetter lKey = new StructureGetter ();
+            lKey.UId.Value = aTarget.UId;
+            iState.uLocks[lKey] = 0;
+            PlayerController lPlayerController = iPlayerController.Value;
+            if (lPlayerController.UPlayer == this) lPlayerController.OnLocksChanged.Invoke (this, EventArgs.Empty);
             return true;
         }
 
-        public bool Unlock (Structure target) {
-            if (target == null) return false;
-            if (!Locks.ContainsKey (target)) return false;
-            Locks.Remove (target);
-            PlayerController pc = PlayerController.Instance;
-            if (pc.Player == this) pc.OnLocksChanged.Invoke (this, EventArgs.Empty);
+        public bool Unlock (Structure aTarget) {
+            if (aTarget == null) return false;
+            if (!IsLocked(aTarget)) return false;
+            var lTarget = new StructureGetter();
+            lTarget.UId.Value = aTarget.UId;
+            iState.uLocks.Remove(lTarget);
+            PlayerController lPlayerController = iPlayerController.Value;
+            if (lPlayerController.UPlayer == this) lPlayerController.OnLocksChanged.Invoke (this, EventArgs.Empty);
             return true;
         }
 
         private void TickLocks () {
-            foreach (Structure target in Locks.Keys.ToArray ()) {
-                float progress = stats.GetAppliedValue (StatNames.ScannerStrength, 0) * target.Stats.GetAppliedValue (StatNames.SignatureSize, 0) * Time.deltaTime;
-                Locks[target] = Mathf.Min (Locks[target] + progress, 100);
+            foreach (StructureGetter lGetter in iState.uLocks.Keys.ToArray ()) {
+                var lProgress = iState.uStats.UValues.ScannerStrength * (lGetter.UValue?.iState.uStats.UValues.SignatureSize ?? 0) * UnityEngine.Time.deltaTime;
+                iState.uLocks[lGetter] = Mathf.Min (iState.uLocks[lGetter] + lProgress, 1);
             }
         }
 
-        private void EnsureStats () {
-            if (_profile != null && _profile.Stats != null) {
-                foreach (Stat stat in _profile.Stats.Stats) {
-                    if (!stats.HasStat (stat)) {
-                        stats.AddStat (stat.Copy ());
+        [Serializable]
+        public class State : Behavior {
+            public StructurePrototype? uPrototype;
+            public Id uId = new Id ();
+
+            public FactionGetter uFaction = new FactionGetter ();
+            public SectorGetter uSector = new SectorGetter ();
+
+            public float uHull;
+            public Stats uStats = new Stats ();
+
+            public Inventory uInventory = new Inventory (0, 1);
+            public List<EquipmentSlot> uEquipmentSlots = new List<EquipmentSlot> ();
+            public List<DockingPoint> uDockingPoints = new List<DockingPoint> ();
+            public StructureGetter uDockedAt = new StructureGetter ();
+
+            public StructureGetter uSelected = new StructureGetter ();
+            public Dictionary<StructureGetter, float> uLocks = new Dictionary<StructureGetter, float> ();
+
+            public AIBase? uAI;
+
+            public State (StructurePrototype? aPrototype) : base (false) => uPrototype = aPrototype;
+
+            public State (JObject aObj, JsonSerializer aSerializer) : base (false) {
+                uPrototype = ItemManager.Instance.GetItem (aObj.Value<string> ("PrototypeId")) as StructurePrototype;
+                uId = new Id (aObj.Value<string> ("Id"));
+
+                uFaction.UId.Value = aObj.Value<string> ("FactionId");
+                uSector.UId.Value = aObj.Value<string> ("SectorId");
+
+                uHull = aObj.Value<float> ("Hull");
+                uStats = aSerializer.Deserialize<Stats> (new JTokenReader (aObj.Value<JObject> ("Stats"))) ?? new Stats ();
+
+                uInventory = aObj.Value<InventorySaveData> ("Inventory").Load ();
+                uDockedAt.UId.Value = aObj.Value<string> ("DockedAtId");
+
+                uSelected.UId.Value = aObj.Value<string> ("SelectedId");
+                aSerializer.Deserialize<Dictionary<string, float>> (new JTokenReader (aObj.Value<JObject> ("Locks"))).Select (aPair => {
+                    StructureGetter lGetter = new StructureGetter ();
+                    lGetter.UId.Value = aPair.Key;
+                    return new KeyValuePair<StructureGetter, float> (lGetter, aPair.Value);
+                }).ToList ().ForEach (aPair => uLocks[aPair.Key] = aPair.Value);
+            }
+
+            public override void Enable () {
+                uStats.Enable ();
+            }
+
+            public override void Disable () {
+                uStats.Disable ();
+            }
+
+            [Serializable]
+            public class Stats : Behavior {
+                public Structure.Stats UValues => iValues;
+                public List<Structure.Stats.Modifier> UModifiers => iModifiers.ToList ();
+
+                [SerializeField] private Structure.Stats iValues = new Structure.Stats();
+                [SerializeField] private List<Structure.Stats.Modifier> iModifiers = new List<Structure.Stats.Modifier> ();
+
+                private bool iRecalculate = true;
+
+                public Stats () : base (false) { }
+
+                public Stats (Structure.Stats aStats, List<Structure.Stats.Modifier> aModifiers) : base (false) {
+                    iValues = aStats;
+                    iModifiers = aModifiers;
+                }
+
+                public override void Tick (object aTicker, float aDt) {
+                    var lLength = iModifiers.Count;
+                    for (var lIndex = 0; lIndex < lLength; lIndex++) {
+                        var lModifier = iModifiers[lIndex];
+                        lModifier.Tick (this, aDt);
+                        if (lModifier.UExpired) {
+                            iModifiers.RemoveAt(lIndex);
+                            lIndex--;
+                            lLength--;
+                        }
+                    }
+                }
+
+                public bool Add (Structure.Stats.Modifier aModifier) {
+                    var lLength = iModifiers.Count;
+                    int lIndex;
+                    Structure.Stats.Modifier lModifier;
+                    for (lIndex = 0; lIndex < lLength; lIndex++) {
+                        lModifier = iModifiers[lIndex];
+                        if (lModifier == aModifier) {
+                            return false;
+                        }
+
+                        if (lModifier.uOrder > aModifier.uOrder) {
+                            break;
+                        }
+                    }
+                    iModifiers.Insert (lIndex, aModifier);
+                    return iRecalculate = true;
+                }
+
+                public bool Remove (Structure.Stats.Modifier aModifier) {
+                    iRecalculate = iModifiers.Remove (aModifier);
+                    return iRecalculate;
+                }
+
+                public bool Recalculate (StructurePrototype? aPrototype) {
+                    if (!iRecalculate) return false;
+                    iValues = aPrototype == null ? new Structure.Stats() : aPrototype.Stats;
+                    foreach (Structure.Stats.Modifier lModifier in iModifiers) {
+                        iValues = lModifier.Modify (iValues);
+                    }
+                    iRecalculate = false;
+                    return true;
+                }
+
+                public class Converter : JsonConverter<Stats> {
+                    public override Stats ReadJson (JsonReader aReader, Type aType, Stats? aValue, bool aExists, JsonSerializer aSerializer) {
+                        JObject lObj = (JToken.ReadFrom (aReader) as JObject)!;
+
+                        JsonSerializer lSerializer = new JsonSerializer {
+                            Formatting = Formatting.Indented,
+                            TypeNameHandling = TypeNameHandling.All,
+                        };
+                        lSerializer.Converters.Add (new Structure.Stats.Modifier.Converter ());
+
+                        return new Stats (
+                            lSerializer.Deserialize<Structure.Stats> (
+                                new JTokenReader (lObj.Value<JObject> ("Stats")))!,
+                            new List<Structure.Stats.Modifier> (
+                                lObj.Value<JArray> ("Modifiers").ToList ().ConvertAll (
+                                    aModifier => lSerializer.Deserialize<Structure.Stats.Modifier> (new JTokenReader (aModifier)) ?? new Structure.Stats.Modifier (0, 0)
+                                )
+                            )
+                        );
+                    }
+
+                    public override void WriteJson (JsonWriter aWriter, Stats? aValue, JsonSerializer aSerializer) {
+                        if (aValue == null) {
+                            aWriter.WriteNull ();
+                        } else {
+                            JObject lObj = new JObject {
+                                    new JProperty ("Stats", JObject.FromObject (aValue.iValues)),
+                                };
+
+                            JsonSerializer lSerializer = new JsonSerializer {
+                                Formatting = Formatting.Indented,
+                                TypeNameHandling = TypeNameHandling.All,
+                            };
+                            lSerializer.Converters.Add (new Structure.Stats.Modifier.Converter ());
+                            lObj.Add (
+                                new JProperty ("Modifiers", new JArray (aValue.iModifiers.ToList ().ConvertAll (
+                                    aModifier => JObject.FromObject (aModifier, lSerializer)
+                                )))
+                            );
+
+                            lObj.WriteTo (aWriter);
+                        }
+                    }
+                }
+            }
+
+            public class Converter : JsonConverter<State> {
+                public override State ReadJson (JsonReader aReader, Type aType, State? aValue, bool aExists, JsonSerializer aSerializer) {
+                    JObject lObj = (JToken.ReadFrom (aReader) as JObject)!;
+
+                    JsonSerializer lSerializer = new JsonSerializer {
+                        Formatting = Formatting.Indented,
+                        TypeNameHandling = TypeNameHandling.All,
+                    };
+                    lSerializer.Converters.Add (new Stats.Converter ());
+                    lSerializer.Converters.Add (new DockingPoint.State.Converter ());
+
+                    return new State (lObj, lSerializer);
+                }
+
+                public override void WriteJson (JsonWriter aWriter, State? aValue, JsonSerializer aSerializer) {
+                    if (aValue == null) {
+                        aWriter.WriteNull ();
+                    } else {
+                        JsonSerializer lSerializer = new JsonSerializer {
+                            Formatting = Formatting.Indented,
+                            TypeNameHandling = TypeNameHandling.All,
+                        };
+                        lSerializer.Converters.Add (new Stats.Converter ());
+                        lSerializer.Converters.Add (new DockingPoint.Converter ());
+
+                        JObject lObj = new JObject {
+                            new JProperty ("PrototypeId", aValue.uPrototype?.Id ?? ""),
+                            new JProperty ("Id", aValue.uId.Value),
+
+                            new JProperty ("FactionId", aValue.uFaction.UId.Value),
+                            new JProperty ("SectorId", aValue.uSector.UId.Value),
+
+                            new JProperty ("Hull", aValue.uHull),
+                            new JProperty ("Stats", JObject.FromObject (aValue.uStats, lSerializer)),
+
+                            new JProperty ("Inventory", JObject.FromObject (aValue.uInventory.Save (), lSerializer)),
+                            new JProperty ("EquipmentSlots", new JArray (aValue.uEquipmentSlots.ConvertAll (lSlot => lSlot.ToSerializable ()))),
+                            new JProperty ("DockingPoints", new JArray (aValue.uDockingPoints.ConvertAll (lPoint => JObject.FromObject (lPoint, lSerializer)))),
+                            new JProperty ("DockedAtId", aValue.uDockedAt.UId.Value),
+
+                            new JProperty ("SelectedId", aValue.uSelected.UId.Value),
+                            new JProperty ("Locks", JObject.FromObject(aValue.uLocks.Select(lPair => new KeyValuePair<string, float> (lPair.Key.UId.Value, lPair.Value)), lSerializer)),
+                        };
+
+                        lObj.WriteTo (aWriter);
                     }
                 }
             }
         }
 
-        public StructureSaveData GetSaveData () {
-            StructureSaveData data = new StructureSaveData {
-                Name = gameObject.name,
-                Position = new float[] { transform.localPosition.x, transform.localPosition.y, transform.localPosition.z },
-                Rotation = new float[] { transform.localRotation.x, transform.localRotation.y, transform.localRotation.z, transform.localRotation.w },
-                Hull = hull,
-                Inventory = _inventory.Save (),
-                Stats = stats.Save (),
-            };
-            if (_profile != null) data.ProfileId = _profile.Id;
-            data.FactionId = Faction.Id.Value;
-            equipmentSlots.ForEach (slot => { data.Equipment.Add (slot.ToSerializable ()); });
-            if (Sector.Value != null) data.SectorId = Sector.Value.Id;
-            data.AIEnabled = _aiEnabled;
-            if (PlayerController.Instance.Player == this) data.IsPlayer = true;
-            return data;
-        }
+        [Serializable]
+        public class Stats {
+            public float MaxHull = 1;
 
-        public void SetSaveData (StructureSaveData saveData) {
-            gameObject.name = saveData.Name;
-            transform.localPosition = new Vector3 (saveData.Position[0], saveData.Position[1], saveData.Position[2]);
-            transform.localRotation = new Quaternion (saveData.Rotation[0], saveData.Rotation[1], saveData.Rotation[2], saveData.Rotation[3]);
-            hull = saveData.Hull;
-            Faction.Id.Value = saveData.FactionId;
-            for (int i = 0; i < equipmentSlots.Count; i++) {
-                equipmentSlots[i].FromSerializable (saveData.Equipment[i]);
+            public float LinearMaxSpeedMultiplier = 1;
+            public float AngularMaxSpeedMultiplier = 1;
+            public float LinearAccelerationMultiplier = 1;
+            public float AngularAccelerationMultiplier = 1;
+
+            public float SensorStrength;
+            public float ScannerStrength;
+            public float Detectability;
+            public float SignatureSize;
+            public int MaxTargetLocks;
+
+            public float CargoDropPercentage = 1;
+            public float InventoryVolume;
+
+            public Stats Clone() {
+                return new Stats{
+                    MaxHull = MaxHull,
+                    
+                    LinearMaxSpeedMultiplier = LinearMaxSpeedMultiplier,
+                    AngularMaxSpeedMultiplier = AngularMaxSpeedMultiplier,
+                    LinearAccelerationMultiplier = LinearAccelerationMultiplier,
+                    AngularAccelerationMultiplier = AngularAccelerationMultiplier,
+                    
+                    SensorStrength = SensorStrength,
+                    ScannerStrength = ScannerStrength,
+                    Detectability = Detectability,
+                    SignatureSize = SignatureSize,
+                    MaxTargetLocks = MaxTargetLocks,
+                    
+                    CargoDropPercentage = CargoDropPercentage,
+                    InventoryVolume = InventoryVolume,
+                };
             }
-            _inventory = saveData.Inventory.Load ();
-            stats = saveData.Stats.Load ();
-            if (stats == null) stats = new StatList ();
-            EnsureStats ();
-            Sector.Id.Value = saveData.SectorId;
-            Sector.Value.Population.Set (this);
-            _aiEnabled = saveData.AIEnabled;
-        }
-    }
+            
+            public class Modifier : Behavior {
+                public readonly int uOrder;
+                
+                public bool UExpired => iDuration <= 0;
+                private float iDuration;
 
-    [Serializable]
-    public class StructureSaveData {
-        public string Name;
-        public float[] Position;
-        public float[] Rotation;
-        public string ProfileId;
-        public string Id;
-        public float Hull;
-        public string FactionId;
-        public List<EquipmentSlot.Serializable> Equipment;
-        public InventorySaveData Inventory;
-        public StatListSaveData Stats;
-        public string SectorId;
-        public bool AIEnabled;
-        public bool IsPlayer;
+                public Modifier (int aOrder, float aDuration) {
+                    uOrder = aOrder;
+                    iDuration = aDuration;
+                }
+
+                public override void Tick (object aTicker, float aDt) {
+                    iDuration -= aDt;
+                }
+
+                public virtual Stats Modify (Stats aStats) => aStats;
+
+                public class Derived : Modifier {
+                    private readonly byte iDerived;
+
+                    public Derived (int aOrder, float aDuration, byte aDerived) : base (aOrder, aDuration) {
+                        iDerived = aDerived;
+                    }
+
+                    public new class Converter : JsonConverter<Derived> {
+                        public override Derived ReadJson (JsonReader aReader, Type aType, Derived? aValue, bool aExists, JsonSerializer aSerializer) {
+                            JObject lObj = (JToken.ReadFrom (aReader) as JObject)!;
+
+                            return new Derived (lObj.Value<int> ("Order"), lObj.Value<float> ("Duration"), lObj.Value<byte> ("Derived"));
+                        }
+
+                        public override void WriteJson (JsonWriter aWriter, Derived? aValue, JsonSerializer aSerializer) {
+                            if (aValue == null) {
+                                aWriter.WriteNull ();
+                            } else {
+                                JObject lObj = new JObject {
+                                    new JProperty ("Type", "Derived"),
+                                    new JProperty ("Order", aValue.uOrder),
+                                    new JProperty ("Duration", aValue.iDuration),
+                                    new JProperty ("Derived", aValue.iDerived),
+                                };
+
+                                lObj.WriteTo (aWriter);
+                            }
+                        }
+                    }
+                }
+
+                public class OrderComparer : IComparer<Modifier> {
+                    public int Compare (Modifier a, Modifier b) {
+                        return a.uOrder.CompareTo (b.uOrder);
+                    }
+                }
+
+                public class Converter : JsonConverter<Modifier> {
+                    public override Modifier ReadJson (JsonReader aReader, Type aType, Modifier? aValue, bool aExists, JsonSerializer aSerializer) {
+                        JObject lObj = (JToken.ReadFrom (aReader) as JObject)!;
+
+                        if (lObj.Value<string> ("Type") == "Derived") {
+                            JsonSerializer lSerializer = new JsonSerializer {
+                                Formatting = Formatting.Indented,
+                                TypeNameHandling = TypeNameHandling.All,
+                            };
+                            lSerializer.Converters.Add (new Derived.Converter ());
+
+                            return lSerializer.Deserialize<Derived> (new JTokenReader (lObj))!;
+                        }
+
+                        return new Modifier (lObj.Value<int> ("Order"), lObj.Value<float> ("Duration"));
+                    }
+
+                    public override void WriteJson (JsonWriter aWriter, Modifier? aValue, JsonSerializer aSerializer) {
+                        if (aValue == null) {
+                            aWriter.WriteNull ();
+                        } else {
+                            if (aValue is Derived) {
+                                JsonSerializer lSerializer = new JsonSerializer {
+                                    Formatting = Formatting.Indented,
+                                    TypeNameHandling = TypeNameHandling.All,
+                                };
+                                lSerializer.Converters.Add (new Derived.Converter ());
+                                JObject lObj = JObject.FromObject (aValue, lSerializer);
+
+                                lObj.WriteTo (aWriter);
+                            } else {
+                                JObject lObj = new JObject {
+                                    new JProperty ("Order", aValue.uOrder),
+                                    new JProperty ("Duration", aValue.iDuration),
+                                };
+
+                                lObj.WriteTo (aWriter);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public class Converter : JsonConverter<Structure> {
+            public override Structure ReadJson (JsonReader aReader, Type aType, Structure? aValue, bool aExists, JsonSerializer aSerializer) {
+                JObject lObj = (JToken.ReadFrom (aReader) as JObject)!;
+
+                JsonSerializer lSerializer = new JsonSerializer {
+                    Formatting = Formatting.Indented,
+                    TypeNameHandling = TypeNameHandling.All,
+                };
+                lSerializer.Converters.Add (new State.Converter ());
+                lSerializer.Converters.Add (new DockingPoint.State.Converter ());
+
+                State lState = lSerializer.Deserialize<State> (new JTokenReader (lObj)) ?? new State (null);
+
+                StructurePrototype? lPrototype;
+                if ((lPrototype = lState.uPrototype) != null) {
+                    GameObject? lPrefab;
+                    if ((lPrefab = lPrototype.Prefab) != null) {
+                        GameObject lInstantiated = Instantiate (lPrefab);
+                        Structure? lComponent;
+                        if ((lComponent = lInstantiated.GetComponent<Structure> ()) == null) {
+                            lComponent = lInstantiated.AddComponent<Structure> ();
+                        }
+
+                        lComponent.Construct (lState);
+                        BehaviorManager lBehaviorManager = Singletons.Get<BehaviorManager> ();
+                        lBehaviorManager.InitializeImmediately (lComponent);
+
+                        lObj.Value<JArray> ("EquipmentSlots").ToList ().ForEach (lSerializedSlot => {
+                            EquipmentSlot.Serializable lDeserializedSlot = lSerializer.Deserialize<EquipmentSlot.Serializable> (new JTokenReader (lSerializedSlot)) ?? new EquipmentSlot.Serializable ();
+                            lState.uEquipmentSlots.Find (lSlot => lSlot.USerializationId == lSerializedSlot.Value<string> ("SerializationId")).FromSerializable (lDeserializedSlot);
+                        });
+                        lObj.Value<JArray> ("DockingPoints").ToList ().ForEach (lSerializedPoint => {
+                            DockingPoint.State lDeserializedPoint = lSerializer.Deserialize<DockingPoint.State> (new JTokenReader (lSerializedPoint)) ?? new DockingPoint.State ();
+                            lState.uDockingPoints.Find (lPoint => lPoint.USerializationId == lSerializedPoint.Value<string> ("SerializationId")).Construct (lDeserializedPoint);
+                        });
+
+                        return lComponent;
+                    }
+                }
+
+                GameObject lEmpty = new GameObject ();
+                return lEmpty.AddComponent<Structure> ();
+            }
+
+            public override void WriteJson (JsonWriter aWriter, Structure? aValue, JsonSerializer aSerializer) {
+                if (aValue == null) {
+                    aWriter.WriteNull ();
+                } else {
+                    JsonSerializer lSerializer = new JsonSerializer {
+                        Formatting = Formatting.Indented,
+                        TypeNameHandling = TypeNameHandling.All,
+                    };
+                    lSerializer.Converters.Add (new State.Converter ());
+
+                    JObject.FromObject (aValue.iState, lSerializer).WriteTo (aWriter);
+                }
+            }
+        }
     }
 }
+#nullable restore

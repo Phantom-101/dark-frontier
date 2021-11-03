@@ -144,20 +144,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  canTickSelf: 1
   Equipper: {fileID: 570406170697649155}
   Filters: []
-  Data:
+  Equipment: {fileID: 0}
+  iSerializationId: 
+  UnsafeState:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
-      data:
-        Slot: {fileID: 570406170461946250}
-        Equipment: {fileID: 0}
-        Durability: 0
+      type: {class: , ns: , asm: }
 --- !u!1 &570406170697649159
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,40 +197,78 @@ MonoBehaviour:
   m_GameObject: {fileID: 570406170697649159}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 649fe7b2604da9e4986d8cd7f0fdcfae, type: 3}
+  m_Script: {fileID: 11500000, guid: f96422bb2a2196446b2deefb6d70844b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  canTickSelf: 1
-  _profile: {fileID: 11400000, guid: 72aba58902639954090d201c68fa7849, type: 2}
-  _id: 
-  stats:
-    stats: []
-  hull: 1
-  faction:
-    id:
+  iState:
+    uPrototype: {fileID: 11400000, guid: 72aba58902639954090d201c68fa7849, type: 2}
+    uId:
       value: 
-    value:
-      id: 0
-  equipmentSlots:
-  - {fileID: 570406170817893539}
-  - {fileID: 570406170461946250}
-  - {fileID: 570406170929327928}
-  - {fileID: 8832517471513439344}
-  - {fileID: 4243406687337429255}
-  - {fileID: 2291264407883949216}
-  _inventory:
-    id: 0
-  _ai: {fileID: 0}
-  _aiEnabled: 1
-  _selected: {fileID: 0}
-  sector:
-    id:
-      value: 
-    value: {fileID: 0}
-  dockingBays:
-    id: 0
-  dockee: {fileID: 0}
+    uFaction:
+      iId:
+        value: 
+      value:
+        id: 0
+    uSector:
+      iId:
+        value: 
+      value: {fileID: 0}
+    uHull: 1
+    uStats:
+      iValues:
+        MaxHull: 1
+        LinearMaxSpeedMultiplier: 1
+        AngularMaxSpeedMultiplier: 1
+        LinearAccelerationMultiplier: 1
+        AngularAccelerationMultiplier: 1
+        SensorStrength: 0
+        ScannerStrength: 0
+        Detectability: 0
+        SignatureSize: 0
+        MaxTargetLocks: 0
+        CargoDropPercentage: 1
+        InventoryVolume: 0
+    uInventory:
+      quantities:
+        reorderableList:
+          canAdd: 0
+          canRemove: 0
+          draggable: 0
+          expandable: 0
+          multipleSelection: 0
+          isExpanded: 0
+          label:
+            m_Text: 
+            m_Image: {fileID: 0}
+            m_Tooltip: 
+          headerHeight: 0
+          footerHeight: 0
+          slideEasing: 0
+          verticalSpacing: 0
+          showDefaultBackground: 0
+          elementDisplayType: 0
+          elementNameProperty: 
+          elementNameOverride: 
+          elementIcon: {fileID: 0}
+        reqReferences: {fileID: 0}
+        isExpanded: 0
+        _keyValues: []
+        _keys: []
+        _values: 
+      volume: 0
+      storedVolume: 0
+      precision: 1
+    uEquipmentSlots: []
+    uDockingPoints: []
+    uDockedAt:
+      iId:
+        value: 
+      value: {fileID: 0}
+    uSelected:
+      iId:
+        value: 
+      value: {fileID: 0}
+    uAI: {fileID: 0}
   references:
     version: 1
     00000000:
@@ -250,7 +284,7 @@ Rigidbody:
   m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -310,20 +344,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  canTickSelf: 1
   Equipper: {fileID: 570406170697649155}
   Filters: []
-  Data:
+  Equipment: {fileID: 0}
+  iSerializationId: 
+  UnsafeState:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
-      data:
-        Slot: {fileID: 570406170817893539}
-        Equipment: {fileID: 0}
-        Durability: 0
+      type: {class: , ns: , asm: }
 --- !u!1 &570406170929327935
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,20 +398,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  canTickSelf: 1
   Equipper: {fileID: 570406170697649155}
   Filters: []
-  Data:
+  Equipment: {fileID: 0}
+  iSerializationId: 
+  UnsafeState:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
-      data:
-        Slot: {fileID: 570406170929327928}
-        Equipment: {fileID: 11400000, guid: abf43ae6957ce86429e39f40f4ba2e29, type: 2}
-        Durability: 0
+      type: {class: , ns: , asm: }
 --- !u!1 &656550552423297607
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,20 +451,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  canTickSelf: 1
   Equipper: {fileID: 570406170697649155}
   Filters: []
-  Data:
+  Equipment: {fileID: 0}
+  iSerializationId: 
+  UnsafeState:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
-      data:
-        Slot: {fileID: 4243406687337429255}
-        Equipment: {fileID: 11400000, guid: 4c16d1310a5b62f49bc0f04eb70f19fc, type: 2}
-        Durability: 0
+      type: {class: , ns: , asm: }
 --- !u!1 &715498814549850700
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,20 +504,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  canTickSelf: 1
   Equipper: {fileID: 570406170697649155}
   Filters: []
-  Data:
+  Equipment: {fileID: 0}
+  iSerializationId: 
+  UnsafeState:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
-      data:
-        Slot: {fileID: 2291264407883949216}
-        Equipment: {fileID: 0}
-        Durability: 0
+      type: {class: , ns: , asm: }
 --- !u!1 &2881743952618391353
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,20 +557,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45a14f6dc74a594fb8c15d89bb103af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialized: 0
-  canTickSelf: 1
   Equipper: {fileID: 570406170697649155}
   Filters: []
-  Data:
+  Equipment: {fileID: 0}
+  iSerializationId: 
+  UnsafeState:
     id: 0
   references:
     version: 1
     00000000:
-      type: {class: EquipmentSlotData, ns: , asm: Assembly-CSharp}
-      data:
-        Slot: {fileID: 8832517471513439344}
-        Equipment: {fileID: 11400000, guid: 3f6e308b812c2134698ea542b747320e, type: 2}
-        Durability: 0
+      type: {class: , ns: , asm: }
 --- !u!1 &5887624947505686996
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,7 +638,7 @@ ParticleSystem:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8314451955865055747}
-  serializedVersion: 6
+  serializedVersion: 7
   lengthInSec: 5
   simulationSpeed: 1
   stopAction: 0
@@ -4196,19 +4210,20 @@ ParticleSystem:
     range: {x: 0, y: 1}
   CollisionModule:
     enabled: 0
-    serializedVersion: 3
+    serializedVersion: 4
     type: 0
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
     multiplyColliderForceByCollisionAngle: 1
-    plane0: {fileID: 0}
-    plane1: {fileID: 0}
-    plane2: {fileID: 0}
-    plane3: {fileID: 0}
-    plane4: {fileID: 0}
-    plane5: {fileID: 0}
+    m_Planes:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
@@ -4382,17 +4397,20 @@ ParticleSystem:
     interiorCollisions: 0
   TriggerModule:
     enabled: 0
-    collisionShape0: {fileID: 0}
-    collisionShape1: {fileID: 0}
-    collisionShape2: {fileID: 0}
-    collisionShape3: {fileID: 0}
-    collisionShape4: {fileID: 0}
-    collisionShape5: {fileID: 0}
+    serializedVersion: 2
     inside: 1
     outside: 0
     enter: 0
     exit: 0
+    colliderQueryMode: 0
     radiusScale: 1
+    primitives:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   SubModule:
     serializedVersion: 2
     enabled: 0

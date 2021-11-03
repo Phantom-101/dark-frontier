@@ -8,16 +8,13 @@ namespace DarkFrontier.Foundation.Identification {
         public string Value { get => GetValue (); }
         [SerializeField] private string value;
 
-        public Id () {
-            value = "";
-        }
+        public bool IsEmpty { get => string.IsNullOrEmpty (value) || string.IsNullOrWhiteSpace (value); }
 
-        public Id (string value) {
-            this.value = value;
-        }
+        public Id () => value = "";
+        public Id (string value) => this.value = value;
 
         private string GetValue () {
-            if (string.IsNullOrEmpty (value) || string.IsNullOrWhiteSpace (value)) value = Guid.NewGuid ().ToString ();
+            if (IsEmpty) value = Guid.NewGuid ().ToString ();
             return value;
         }
 

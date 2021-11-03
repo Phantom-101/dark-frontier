@@ -1,6 +1,8 @@
 ﻿using DarkFrontier.Foundation.Services;
+using DarkFrontier.Locations;
 using DarkFrontier.Structures;
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace DarkFrontier.Equipment {
@@ -17,36 +19,36 @@ namespace DarkFrontier.Equipment {
         public GameObject? BeamPrefab;
         public float BeamWidth;
 
-        public override void Tick (EquipmentSlot slot, float dt) {
-            if (slot.Equipper == null) return;
+        public override void Tick (EquipmentSlot aSlot, float aDt) {
+            if (aSlot.Equipper == null) return;
 
-            State state = (slot.State as State)!;
+            State lState = (aSlot.UState as State)!;
 
-            float consumption = RechargeRate * dt;
-            float lack = EnergyRequired - state.Charge;
-            float request = Mathf.Min (consumption, lack);
-            float given = 0;
-            slot.Equipper.GetEquipmentStates<CapacitorPrototype.State> ().ForEach (capacitor => {
-                float chargeLeft = capacitor.Charge;
-                float dischargeLeft = capacitor.DischargeLeft;
-                float allocated = Mathf.Min (chargeLeft, dischargeLeft, request - given);
-                given += allocated;
-                capacitor.Charge -= allocated;
-                capacitor.DischargeLeft -= allocated;
-            });
-            state.Charge += given;
+            var lConsumption = RechargeRate * aDt;
+            var lLack = EnergyRequired - lState.Charge;
+            var lRequest = Mathf.Min (lConsumption, lLack);
+            float lGiven = 0;
+            foreach (var lCapacitor in aSlot.Equipper.GetEquipmentStates<CapacitorPrototype.State>()) {
+                var lChargeLeft = lCapacitor.Charge;
+                var lDischargeLeft = lCapacitor.DischargeLeft;
+                var lAllocated = Mathf.Min (lChargeLeft, lDischargeLeft, lRequest - lGiven);
+                lGiven += lAllocated;
+                lCapacitor.Charge -= lAllocated;
+                lCapacitor.DischargeLeft -= lAllocated;
+            }
+            lState.Charge += lGiven;
 
-            if (state.Activated && (state.Target == null || !slot.Equipper.Locks.ContainsKey (state.Target) || (state.Target.transform.position - slot.Equipper.transform.position).sqrMagnitude > GetRange (slot) * GetRange (slot))) state.Activated = false;
+            if (lState.Activated && (lState.Target == null || !aSlot.Equipper.ULocks.Keys.Any (lGetter => lGetter.UId.Value == lState.Target.UId) || (lState.Target.transform.position - aSlot.Equipper.transform.position).sqrMagnitude > GetRange (aSlot) * GetRange (aSlot))) lState.Activated = false;
 
-            if (state.Activated) {
+            if (lState.Activated) {
                 if (BeamPrefab != null) {
-                    GameObject beam = Instantiate (BeamPrefab, slot.transform);
-                    beam.transform.LookAt (state.Target!.transform);
+                    GameObject beam = Instantiate (BeamPrefab, aSlot.transform);
+                    beam.transform.LookAt (lState.Target!.transform);
                     beam.transform.localScale = Vector3.one;
                     beam.transform.localScale = new Vector3 (
                         BeamWidth / beam.transform.lossyScale.x,
                         BeamWidth / beam.transform.lossyScale.y,
-                        Vector3.Distance (slot.transform.position, state.Target.transform.position) / beam.transform.lossyScale.z
+                        Vector3.Distance (aSlot.transform.position, lState.Target.transform.position) / beam.transform.lossyScale.z
                     );
                     Destroy (beam, 0.2f);
                 }
@@ -56,34 +58,34 @@ namespace DarkFrontier.Equipment {
                     if (structure != null) structure.TakeDamage (Damage * HeatDamageMultiplier.Evaluate (data.Heat / MaxHeat), hit.point);
                 }
                 */
-                state.Target!.TakeDamage (Damage * PreemptiveDamageMultiplier.Evaluate (state.Charge / EnergyRequired), slot.Equipper.transform.position);
-                state.Charge = 0;
-                state.Activated = false;
+                lState.Target!.TakeDamage (Damage * PreemptiveDamageMultiplier.Evaluate (lState.Charge / EnergyRequired), new Location (aSlot.Equipper.transform));
+                lState.Charge = 0;
+                lState.Activated = false;
             }
         }
 
         public override bool CanClick (EquipmentSlot slot) {
             if (slot.Equipper == null) return false;
 
-            State state = (slot.State as State)!;
+            State state = (slot.UState as State)!;
 
             if (state.Activated) {
                 // If equipment is activated and selected is null or target
                 // Assume user wants to deactivate equipment
-                if (slot.Equipper.Selected == null || slot.Equipper.Selected == state.Target) return true;
+                if (slot.Equipper.USelected.UValue == null || slot.Equipper.USelected.UValue == state.Target) return true;
                 // If equipment is activated and selected is not null
                 // Assume user wants to change target
                 else {
-                    if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
-                    if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > GetRange (slot) * GetRange (slot)) return false;
+                    if (!slot.Equipper.ULocks.Keys.Any (lGetter => lGetter.UValue == slot.Equipper.USelected.UValue)) return false;
+                    if ((slot.Equipper.USelected.UValue.transform.position - slot.Equipper.transform.position).sqrMagnitude > GetRange (slot) * GetRange (slot)) return false;
                     return true;
                 }
             } else {
                 // If equipment is not activated
                 // Assume user wants to activate equipment
-                if (slot.Equipper.Selected == null) return false;
-                if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
-                if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > GetRange (slot) * GetRange (slot)) return false;
+                if (slot.Equipper.USelected.UValue == null) return false;
+                if (!slot.Equipper.ULocks.Keys.Any (lGetter => lGetter.UValue == slot.Equipper.USelected.UValue)) return false;
+                if ((slot.Equipper.USelected.UValue.transform.position - slot.Equipper.transform.position).sqrMagnitude > GetRange (slot) * GetRange (slot)) return false;
                 return true;
             }
         }
@@ -93,20 +95,20 @@ namespace DarkFrontier.Equipment {
 
             if (slot.Equipper == null) return;
 
-            State state = (slot.State as State)!;
+            State state = (slot.UState as State)!;
 
             if (state.Activated) {
                 // If equipment is activated and selected is null or target
                 // Assume user wants to deactivate equipment
-                if (slot.Equipper.Selected == null || slot.Equipper.Selected == state.Target) state.Activated = false;
+                if (slot.Equipper.USelected.UValue == null || slot.Equipper.USelected.UValue == state.Target) state.Activated = false;
                 // If equipment is activated and selected is not null
                 // Assume user wants to change target
-                else state.Target = slot.Equipper.Selected;
+                else state.Target = slot.Equipper.USelected.UValue;
             } else {
                 // If equipment is not activated
                 // Assume user wants to activate equipment
                 state.Activated = true;
-                state.Target = slot.Equipper.Selected;
+                state.Target = slot.Equipper.USelected.UValue;
             }
         }
 
@@ -121,7 +123,7 @@ namespace DarkFrontier.Equipment {
         }
 
         public float GetRangeMultiplier (EquipmentSlot slot) {
-            return PreemptiveRangeMultiplier.Evaluate ((slot.State as State)!.Charge / EnergyRequired);
+            return PreemptiveRangeMultiplier.Evaluate ((slot.UState as State)!.Charge / EnergyRequired);
         }
 
         [Serializable]
@@ -137,7 +139,7 @@ namespace DarkFrontier.Equipment {
                     Durability = Durability,
                     Charge = Charge,
                     Activated = Activated,
-                    TargetId = Target == null ? "" : Target.Id,
+                    TargetId = Target == null ? "" : Target.UId,
                 };
             }
 
@@ -146,7 +148,7 @@ namespace DarkFrontier.Equipment {
                 Durability = converted.Durability;
                 Charge = converted.Charge;
                 Activated = converted.Activated;
-                Target = Singletons.Get<StructureManager> ().GetStructure (converted.TargetId);
+                Target = Singletons.Get<Structures.StructureManager> ().GetStructure (converted.TargetId);
             }
 
             [Serializable]

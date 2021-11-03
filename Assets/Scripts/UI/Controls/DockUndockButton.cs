@@ -1,44 +1,48 @@
-﻿using DarkFrontier.Structures;
+﻿using System;
+using DarkFrontier.Controllers;
+using DarkFrontier.Foundation.Services;
+using DarkFrontier.Structures;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DockUndockButton : MonoBehaviour {
-    [SerializeField] private Image _dock;
-    [SerializeField] private Image _undock;
-    [SerializeField] private Button _button;
+namespace DarkFrontier.UI.Controls {
+    public class DockUndockButton : MonoBehaviour {
+        [SerializeField] private Image _dock;
+        [SerializeField] private Image _undock;
+        [SerializeField] private Button _button;
 
-    private PlayerController playerController;
+        private readonly Lazy<PlayerController> iPlayerController = new Lazy<PlayerController>(() => Singletons.Get<PlayerController>(), false);
 
-    private void Start () {
-        playerController = PlayerController.Instance;
-        _button.onClick.AddListener (Toggle);
-    }
-
-    private void Update () {
-        Structure player = playerController.Player;
-        if (player == null) return;
-
-        _button.interactable = (player.Selected != null && player.Selected.DockingBays.CanAccept (player)) || (player.IsDocked && player.Dockee.DockingBays.CanRelease (player));
-
-        if (player.Selected != null && player.Selected.DockingBays.CanAccept (player)) {
-            _dock.enabled = true;
-            _undock.enabled = false;
-        } else {
-            _dock.enabled = false;
-            _undock.enabled = true;
+        private void Start () {
+            _button.onClick.AddListener (Toggle);
         }
-    }
 
-    void Toggle () {
-        if (playerController.Player.IsDocked) Undock ();
-        else Dock ();
-    }
+        private void Update () {
+            Structure player = iPlayerController.Value.UPlayer;
+            if (player == null) return;
 
-    void Dock () {
-        playerController.Player.Selected.DockingBays.TryAccept (playerController.Player);
-    }
+            _button.interactable = (player.USelected.UValue != null && player.USelected.UValue.CanAccept (player)) || (player.UIsDocked && player.UDockedAt.UValue.CanRelease (player));
 
-    void Undock () {
-        playerController.Player.Dockee.DockingBays.TryRelease (playerController.Player);
+            if (player.USelected.UValue != null && player.USelected.UValue.CanAccept (player)) {
+                _dock.enabled = true;
+                _undock.enabled = false;
+            } else {
+                _dock.enabled = false;
+                _undock.enabled = true;
+            }
+        }
+
+        void Toggle () {
+            if (iPlayerController.Value.UPlayer.UIsDocked) Undock ();
+            else Dock ();
+        }
+
+        void Dock () {
+            iPlayerController.Value.UPlayer.USelected.UValue.TryAccept (iPlayerController.Value.UPlayer);
+        }
+
+        void Undock () {
+            iPlayerController.Value.UPlayer.UDockedAt.UValue.TryRelease (iPlayerController.Value.UPlayer);
+        }
     }
 }

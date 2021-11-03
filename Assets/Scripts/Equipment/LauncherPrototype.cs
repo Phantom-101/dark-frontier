@@ -1,8 +1,13 @@
-﻿using DarkFrontier.AI;
+﻿using DarkFrontier.Foundation.Behaviors;
 using DarkFrontier.Foundation.Services;
+using DarkFrontier.Locations;
 using DarkFrontier.Structures;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using DarkFrontier.Controllers;
+using DarkFrontier.Items;
+using DarkFrontier.Items.Prototypes;
 using UnityEngine;
 
 namespace DarkFrontier.Equipment {
@@ -15,69 +20,70 @@ namespace DarkFrontier.Equipment {
         public bool AutoCycle;
         public List<MissileSO> CompatibleMissiles = new List<MissileSO> ();
 
-        public override void Tick (EquipmentSlot slot, float dt) {
-            if (slot.Equipper == null) return;
+        public override void Tick (EquipmentSlot aSlot, float aDt) {
+            if (aSlot.Equipper == null) return;
 
-            State state = (slot.State as State)!;
+            State lState = (aSlot.UState as State)!;
 
-            float consumption = RechargeRate * dt;
-            float lack = EnergyRequired - state.Charge;
-            float request = Mathf.Min (consumption, lack);
-            float given = 0;
-            slot.Equipper.GetEquipmentStates<CapacitorPrototype.State> ().ForEach (capacitor => {
-                float chargeLeft = capacitor.Charge;
-                float dischargeLeft = capacitor.DischargeLeft;
-                float allocated = Mathf.Min (chargeLeft, dischargeLeft, request - given);
-                given += allocated;
-                capacitor.Charge -= allocated;
-                capacitor.DischargeLeft -= allocated;
-            });
-            state.Charge += given;
+            var lConsumption = RechargeRate * aDt;
+            var lLack = EnergyRequired - lState.Charge;
+            var lRequest = Mathf.Min (lConsumption, lLack);
+            float lGiven = 0;
+            foreach (var lCapacitor in aSlot.Equipper.GetEquipmentStates<CapacitorPrototype.State>()) {
+                var lChargeLeft = lCapacitor.Charge;
+                var lDischargeLeft = lCapacitor.DischargeLeft;
+                var lAllocated = Mathf.Min (lChargeLeft, lDischargeLeft, lRequest - lGiven);
+                lGiven += lAllocated;
+                lCapacitor.Charge -= lAllocated;
+                lCapacitor.DischargeLeft -= lAllocated;
+            }
+            lState.Charge += lGiven;
 
-            if (state.Activated && (state.Target == null || state.Missile == null || !CompatibleMissiles.Contains (state.Missile) || !slot.Equipper.Locks.ContainsKey (state.Target) || !slot.Equipper.Inventory.HasQuantity (state.Missile, 1) || (state.Target.transform.position - slot.Equipper.transform.position).sqrMagnitude > state.Missile.Range * state.Missile.Range)) state.Activated = false;
+            if (lState.Activated && (lState.Target == null || lState.Missile == null || !CompatibleMissiles.Contains (lState.Missile) || !aSlot.Equipper.ULocks.Keys.Any (lGetter => lGetter.UId.Value == lState.Target.UId) || !aSlot.Equipper.UInventory.HasQuantity (lState.Missile, 1) || (lState.Target.transform.position - aSlot.Equipper.transform.position).sqrMagnitude > lState.Missile.Range * lState.Missile.Range)) lState.Activated = false;
 
-            if (state.Activated && state.Charge >= EnergyRequired) {
-                state.Charge = 0;
-                Structure structure = Singletons.Get<StructureManager> ().SpawnStructure (state.Missile!.MissileStructure, slot.Equipper.Faction.Id.Value, slot.Equipper.Sector.Id.Value, new Location (slot.transform));
-                structure.TryInitialize ();
+            if (lState.Activated && lState.Charge >= EnergyRequired) {
+                lState.Charge = 0;
+                Structure structure = Singletons.Get<Structures.StructureManager> ().SpawnStructure (lState.Missile!.MissileStructure, aSlot.Equipper.UFaction.UId.Value, aSlot.Equipper.USector.UId.Value, new Location (aSlot.transform));
+                Singletons.Get<BehaviorManager> ().InitializeImmediately (structure);
+                Singletons.Get<BehaviorManager> ().EnableImmediately (structure);
                 MissileAI ai = CreateInstance<MissileAI> ();
-                ai.Target = state.Target;
-                ai.Missile = state.Missile;
-                ai.DamageMultiplier = slot.Equipper.Locks[state.Target] / 100;
-                structure.AI = ai;
-                slot.Equipper.Inventory.RemoveQuantity (state.Missile, 1);
-                state.Activated = AutoCycle;
+                ai.Target = lState.Target;
+                ai.Missile = lState.Missile;
+                ai.DamageMultiplier = aSlot.Equipper.ULocks.Where (lPair => lPair.Key.UValue == lState.Target).First ().Value;
+                structure.UAI = ai;
+                aSlot.Equipper.UInventory.RemoveQuantity (lState.Missile, 1);
+                lState.Activated = AutoCycle;
             }
         }
 
         public override bool CanClick (EquipmentSlot slot) {
             if (slot.Equipper == null) return false;
 
-            State state = (slot.State as State)!;
+            State state = (slot.UState as State)!;
 
             if (state.Activated) {
                 // If equipment is activated and selected is null or target
                 // Assume user wants to deactivate equipment
-                if (slot.Equipper.Selected == null || slot.Equipper.Selected == state.Target) return true;
+                if (slot.Equipper.USelected.UValue == null || slot.Equipper.USelected.UValue == state.Target) return true;
                 // If equipment is activated and selected is not null
                 // Assume user wants to change target
                 else {
                     if (state.Missile == null) return false;
                     if (!CompatibleMissiles.Contains (state.Missile)) return false;
-                    if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
-                    if (!slot.Equipper.Inventory.HasQuantity (state.Missile, 1)) return false;
-                    if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > state.Missile.Range * state.Missile.Range) return false;
+                    if (!slot.Equipper.ULocks.Keys.Any (lGetter => lGetter.UValue == slot.Equipper.USelected.UValue)) return false;
+                    if (!slot.Equipper.UInventory.HasQuantity (state.Missile, 1)) return false;
+                    if ((slot.Equipper.USelected.UValue.transform.position - slot.Equipper.transform.position).sqrMagnitude > state.Missile.Range * state.Missile.Range) return false;
                     return true;
                 }
             } else {
                 // If equipment is not activated
                 // Assume user wants to activate equipment
-                if (slot.Equipper.Selected == null) return false;
+                if (slot.Equipper.USelected.UValue == null) return false;
                 if (state.Missile == null) return false;
                 if (!CompatibleMissiles.Contains (state.Missile)) return false;
-                if (!slot.Equipper.Locks.ContainsKey (slot.Equipper.Selected)) return false;
-                if (!slot.Equipper.Inventory.HasQuantity (state.Missile, 1)) return false;
-                if ((slot.Equipper.Selected.transform.position - slot.Equipper.transform.position).sqrMagnitude > state.Missile.Range * state.Missile.Range) return false;
+                if (!slot.Equipper.ULocks.Keys.Any (lGetter => lGetter.UValue == slot.Equipper.USelected.UValue)) return false;
+                if (!slot.Equipper.UInventory.HasQuantity (state.Missile, 1)) return false;
+                if ((slot.Equipper.USelected.UValue.transform.position - slot.Equipper.transform.position).sqrMagnitude > state.Missile.Range * state.Missile.Range) return false;
                 return true;
             }
         }
@@ -87,20 +93,20 @@ namespace DarkFrontier.Equipment {
 
             if (slot.Equipper == null) return;
 
-            State state = (slot.State as State)!;
+            State state = (slot.UState as State)!;
 
             if (state.Activated) {
                 // If equipment is activated and selected is null or target
                 // Assume user wants to deactivate equipment
-                if (slot.Equipper.Selected == null || slot.Equipper.Selected == state.Target) state.Activated = false;
+                if (slot.Equipper.USelected.UValue == null || slot.Equipper.USelected.UValue == state.Target) state.Activated = false;
                 // If equipment is activated and selected is not null
                 // Assume user wants to change target
-                else state.Target = slot.Equipper.Selected;
+                else state.Target = slot.Equipper.USelected.UValue;
             } else {
                 // If equipment is not activated
                 // Assume user wants to activate equipment
                 state.Activated = true;
-                state.Target = slot.Equipper.Selected;
+                state.Target = slot.Equipper.USelected.UValue;
             }
         }
 
@@ -124,7 +130,7 @@ namespace DarkFrontier.Equipment {
                     Durability = Durability,
                     Charge = Charge,
                     Activated = Activated,
-                    TargetId = Target == null ? "" : Target.Id,
+                    TargetId = Target == null ? "" : Target.UId,
                     MissileId = Missile == null ? "" : Missile.Id,
                 };
             }
@@ -134,7 +140,7 @@ namespace DarkFrontier.Equipment {
                 Durability = converted.Durability;
                 Charge = converted.Charge;
                 Activated = converted.Activated;
-                Target = Singletons.Get<StructureManager> ().GetStructure (converted.TargetId);
+                Target = Singletons.Get<Structures.StructureManager> ().GetStructure (converted.TargetId);
                 Missile = ItemManager.Instance.GetItem (converted.MissileId) as MissileSO;
             }
 

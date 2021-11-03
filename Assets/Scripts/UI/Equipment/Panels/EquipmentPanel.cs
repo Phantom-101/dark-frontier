@@ -1,7 +1,10 @@
 ﻿using DarkFrontier.Equipment;
+using DarkFrontier.UI.States;
 
-public class EquipmentPanel : UIStateView {
-    public EquipmentSlot Slot;
+namespace DarkFrontier.UI.Equipment.Panels {
+    public class EquipmentPanel : UIStateView {
+        public EquipmentSlot Slot;
 
-    public virtual void Initialize () { }
+        public virtual void Initialize () { }
+    }
 }

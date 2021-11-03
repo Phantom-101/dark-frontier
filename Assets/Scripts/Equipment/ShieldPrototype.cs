@@ -10,25 +10,25 @@ namespace DarkFrontier.Equipment {
         public float RechargeConsumption;
         public float RechargeEfficiency;
 
-        public override void Tick (EquipmentSlot slot, float dt) {
-            if (slot.Equipper == null) return;
+        public override void Tick (EquipmentSlot aSlot, float aDt) {
+            if (aSlot.Equipper == null) return;
 
-            State state = (slot.State as State)!;
+            State lState = (aSlot.UState as State)!;
 
-            float consumption = RechargeConsumption * dt;
-            float lack = (MaxStrength - state.Strength) / RechargeEfficiency;
-            float request = Mathf.Min (consumption, lack);
-            float given = 0;
-            slot.Equipper.GetEquipmentStates<CapacitorPrototype.State> ().ForEach (capacitor => {
-                float chargeLeft = capacitor.Charge;
-                float dischargeLeft = capacitor.DischargeLeft;
-                float allocated = Mathf.Min (chargeLeft, dischargeLeft, request - given);
-                given += allocated;
-                capacitor.Charge -= allocated;
-                capacitor.DischargeLeft -= allocated;
-            });
+            var lConsumption = RechargeConsumption * aDt;
+            var lLack = (MaxStrength - lState.Strength) / RechargeEfficiency;
+            var lRequest = Mathf.Min (lConsumption, lLack);
+            float lGiven = 0;
+            foreach (var lCapacitor in aSlot.Equipper.GetEquipmentStates<CapacitorPrototype.State>()) {
+                var lChargeLeft = lCapacitor.Charge;
+                var lDischargeLeft = lCapacitor.DischargeLeft;
+                var lAllocated = Mathf.Min (lChargeLeft, lDischargeLeft, lRequest - lGiven);
+                lGiven += lAllocated;
+                lCapacitor.Charge -= lAllocated;
+                lCapacitor.DischargeLeft -= lAllocated;
+            }
 
-            state.Strength += given * RechargeEfficiency;
+            lState.Strength += lGiven * RechargeEfficiency;
         }
 
         public override void EnsureStateType (EquipmentSlot slot) {

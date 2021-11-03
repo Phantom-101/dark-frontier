@@ -1,24 +1,41 @@
 ﻿using System.Collections.Generic;
+using DarkFrontier.Equipment;
+using DarkFrontier.Items.Prototypes;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace DarkFrontier.Equipment {
+namespace DarkFrontier.UI.Equipment.Panels {
     public class HangarBayPanelLaunchable : MonoBehaviour {
         public HangarBayPrototype.State State;
         public HangarLaunchableSO Launchable;
-        [SerializeField] private Button button;
+        public EventTrigger EventTrigger;
         [SerializeField] private Image icon;
         [SerializeField] private Text quantity;
 
         private void Start () {
-            button.onClick.AddListener (() => {
+            EventTrigger.Entry clickEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerClick };
+            clickEntry.callback.AddListener ((data) => {
                 List<HangarBayPrototype.State.SlotState> unloaded = State.LaunchSlots.FindAll (s => s.Status == HangarBayPrototype.State.SlotState.SlotStatus.Unloaded);
                 if (unloaded.Count > 0) {
-                    if (State.Slot.Equipper.Inventory.RemoveQuantity (Launchable, 1) == 1) {
+                    if (State.Slot.Equipper.UInventory.RemoveQuantity (Launchable, 1) == 1) {
                         unloaded[0].Load (Launchable);
                     }
                 }
             });
+            EventTrigger.triggers.Add (clickEntry);
+
+            EventTrigger.Entry beginDragEntry = new EventTrigger.Entry { eventID = EventTriggerType.BeginDrag };
+            beginDragEntry.callback.AddListener ((data) => {
+                List<HangarBayPrototype.State.SlotState> unloaded = State.LaunchSlots.FindAll (s => s.Status == HangarBayPrototype.State.SlotState.SlotStatus.Unloaded);
+                int q = State.Slot.Equipper.UInventory.GetQuantity (Launchable);
+                for (int i = 0; i < q && i < unloaded.Count; i++) {
+                    if (State.Slot.Equipper.UInventory.RemoveQuantity (Launchable, 1) == 1) {
+                        unloaded[i].Load (Launchable);
+                    }
+                }
+            });
+            EventTrigger.triggers.Add (beginDragEntry);
         }
 
         private void Update () {
@@ -26,7 +43,7 @@ namespace DarkFrontier.Equipment {
                 Destroy (gameObject);
                 return;
             }
-            int q = State.Slot.Equipper.Inventory.GetQuantity (Launchable);
+            int q = State.Slot.Equipper.UInventory.GetQuantity (Launchable);
             if (q == 0) {
                 Destroy (gameObject);
                 return;

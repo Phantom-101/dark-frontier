@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: References
   m_EditorClassIdentifier: 
   _gameObject: {fileID: 0}
-  _material: {fileID: 0}
+  _material: {fileID: 2100000, guid: 7f2d79d94fa163c4d954c0b082338e5a, type: 2}
   _audioClip: {fileID: 0}
-  _itemSO: {fileID: 11400000, guid: e6686b177d04d6b4397af0df3385eb78, type: 2}
-  _structureSO: {fileID: 11400000, guid: 72aba58902639954090d201c68fa7849, type: 2}
+  _itemPrototype: {fileID: 11400000, guid: e6686b177d04d6b4397af0df3385eb78, type: 2}
+  _structurePrototype: {fileID: 11400000, guid: d8918a682d29510439c6b44ad2e4ca01,
+    type: 2}

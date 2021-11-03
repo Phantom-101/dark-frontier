@@ -171,6 +171,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1114906185105546291}
+  - component: {fileID: 843006609539766898}
+  - component: {fileID: 3138401788489946763}
+  - component: {fileID: 7636544220074958021}
   m_Layer: 0
   m_Name: Tall Icy Asteroid 1
   m_TagString: Untagged
@@ -194,6 +197,105 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &843006609539766898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114906185105546290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f96422bb2a2196446b2deefb6d70844b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iState:
+    uPrototype: {fileID: 11400000, guid: 68927fb996fc2ac469ad200171a71ee7, type: 2}
+    uId:
+      value: 
+    uFaction:
+      id:
+        value: 
+      value:
+        id: 0
+    uSector:
+      id:
+        value: 
+      value: {fileID: 0}
+    uHull: 10000
+    uInventory:
+      quantities:
+        reorderableList:
+          canAdd: 0
+          canRemove: 0
+          draggable: 0
+          expandable: 0
+          multipleSelection: 0
+          isExpanded: 0
+          label:
+            m_Text: 
+            m_Image: {fileID: 0}
+            m_Tooltip: 
+          headerHeight: 0
+          footerHeight: 0
+          slideEasing: 0
+          verticalSpacing: 0
+          showDefaultBackground: 0
+          elementDisplayType: 0
+          elementNameProperty: 
+          elementNameOverride: 
+          elementIcon: {fileID: 0}
+        reqReferences: {fileID: 0}
+        isExpanded: 0
+        _keyValues: []
+        _keys: []
+        _values: 
+      volume: 0
+      storedVolume: 0
+      precision: 1
+    uEquipmentSlots: []
+    uDockingPoints: []
+    uDockedAt:
+      id:
+        value: 
+      value: {fileID: 0}
+    uSelected:
+      id:
+        value: 
+      value: {fileID: 0}
+    uAI: {fileID: 0}
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }
+--- !u!54 &3138401788489946763
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114906185105546290}
+  serializedVersion: 2
+  m_Mass: 500
+  m_Drag: 1
+  m_AngularDrag: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!75 &7636544220074958021
+ConstantForce:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114906185105546290}
+  m_Enabled: 1
+  m_Force: {x: 0, y: 0, z: 0}
+  m_RelativeForce: {x: 0, y: 0, z: 0}
+  m_Torque: {x: 0, y: 0, z: 0}
+  m_RelativeTorque: {x: 0, y: 0, z: 0}
 --- !u!1 &1114906185193775600
 GameObject:
   m_ObjectHideFlags: 0
