@@ -24,7 +24,7 @@ namespace DarkFrontier.Structures {
         [SerializeField] private State iState = new State (null);
 
         public StructurePrototype? UPrototype => iState.uPrototype;
-        public string UId => iState.uId.Value;
+        public string UId => iState.uId.uId;
 
         public FactionGetter UFaction => iState.uFaction;
         public SectorGetter USector => iState.uSector;
@@ -98,7 +98,7 @@ namespace DarkFrontier.Structures {
             if (iState.uSector.UValue == null) {
                 Sector lSector = GetComponentInParent<Sector> ();
                 if (lSector != null) {
-                    iState.uSector.UId.Value = lSector.UId;
+                    iState.uSector.UId.Value = lSector.UId.uId;
                 }
             }
             if (iState.uSector.UValue != null) {
@@ -111,10 +111,10 @@ namespace DarkFrontier.Structures {
         public override void Disable () {
             iEnabled = false;
 
-            iStructureManager.Value.Registry.Remove (iState.uId.Value);
-            iState.uFaction.UValue?.Property.Remove (iState.uId.Value);
+            iStructureManager.Value.Registry.Remove (iState.uId.uId);
+            iState.uFaction.UValue?.Property.Remove (iState.uId.uId);
             if (iState.uSector.UValue != null) {
-                iState.uSector.UValue.UPopulation.Remove (iState.uId.Value);
+                iState.uSector.UValue.UPopulation.Remove (iState.uId.uId);
             }
 
             iState.Disable ();
@@ -159,31 +159,19 @@ namespace DarkFrontier.Structures {
             return ULocks.ContainsKey(lQuery);
         }
 
-        private EquipmentSlot[] iFoundBuffer = new EquipmentSlot[0];
-        private int iFoundBufferLength;
         private int iSlotsLength;
-        private int iFoundLength;
         
-        private readonly Dictionary<Type, EquipmentSlot[]> iEquipmentSlotsCache = new Dictionary<Type, EquipmentSlot[]>();
-        public EquipmentSlot[] GetEquipmentSlots<T> () where T : EquipmentPrototype.State {
+        private readonly Dictionary<Type, List<EquipmentSlot>> iEquipmentSlotsCache = new Dictionary<Type, List<EquipmentSlot>>();
+        public List<EquipmentSlot> GetEquipmentSlots<T> () where T : EquipmentPrototype.State {
             if (iEquipmentSlotsCache.ContainsKey(typeof(T))) {
                 return iEquipmentSlotsCache[typeof(T)];
             }
             
             iSlotsLength = iState.uEquipmentSlots.Count;
-            if (iFoundBufferLength != iSlotsLength) {
-                iFoundBuffer = new EquipmentSlot[iSlotsLength];
-                iFoundBufferLength = iSlotsLength;
-            }
-            iFoundLength = 0;
+            List<EquipmentSlot> lRet = new List<EquipmentSlot>(iSlotsLength);
             for (var lIndex = 0; lIndex < iSlotsLength; lIndex++) {
                 if (!(iState.uEquipmentSlots[lIndex].UState is T)) continue;
-                iFoundBuffer[iFoundLength] = iState.uEquipmentSlots[lIndex];
-                iFoundLength++;
-            }
-            EquipmentSlot[] lRet = new EquipmentSlot[iFoundLength];
-            for (var lIndex = 0; lIndex < iFoundLength; lIndex++) {
-                lRet[lIndex] = iFoundBuffer[lIndex];
+                lRet.Add(iState.uEquipmentSlots[lIndex]);
             }
 
             iEquipmentSlotsCache[typeof(T)] = lRet;
@@ -191,25 +179,16 @@ namespace DarkFrontier.Structures {
         }
         
         private readonly Dictionary<Type, object> iEquipmentStatesCache = new Dictionary<Type, object>();
-        public T[] GetEquipmentStates<T> () where T : EquipmentPrototype.State {
+        public List<T> GetEquipmentStates<T> () where T : EquipmentPrototype.State {
             if (iEquipmentStatesCache.ContainsKey(typeof(T))) {
-                return (iEquipmentStatesCache[typeof(T)] as T[])!;
+                return (iEquipmentStatesCache[typeof(T)] as List<T>)!;
             }
             
             iSlotsLength = iState.uEquipmentSlots.Count;
-            if (iFoundBufferLength != iSlotsLength) {
-                iFoundBuffer = new EquipmentSlot[iSlotsLength];
-                iFoundBufferLength = iSlotsLength;
-            }
-            iFoundLength = 0;
+            List<T> lRet = new List<T>(iSlotsLength);
             for (var lIndex = 0; lIndex < iSlotsLength; lIndex++) {
-                if (!(iState.uEquipmentSlots[lIndex].UState is T)) continue;
-                iFoundBuffer[iFoundLength] = iState.uEquipmentSlots[lIndex];
-                iFoundLength++;
-            }
-            T[] lRet = new T[iFoundLength];
-            for (var lIndex = 0; lIndex < iFoundLength; lIndex++) {
-                lRet[lIndex] = (iFoundBuffer[lIndex].UState as T)!;
+                if (!(iState.uEquipmentSlots[lIndex].UState is T lState)) continue;
+                lRet.Add(lState);
             }
 
             iEquipmentStatesCache[typeof(T)] = lRet;
@@ -479,7 +458,7 @@ namespace DarkFrontier.Structures {
 
                 public bool Recalculate (StructurePrototype? aPrototype) {
                     if (!iRecalculate) return false;
-                    iValues = aPrototype == null ? new Structure.Stats() : aPrototype.Stats;
+                    iValues = aPrototype == null ? new Structure.Stats() : aPrototype.Stats.Clone();
                     foreach (Structure.Stats.Modifier lModifier in iModifiers) {
                         iValues = lModifier.Modify (iValues);
                     }
@@ -560,7 +539,7 @@ namespace DarkFrontier.Structures {
 
                         JObject lObj = new JObject {
                             new JProperty ("PrototypeId", aValue.uPrototype?.Id ?? ""),
-                            new JProperty ("Id", aValue.uId.Value),
+                            new JProperty ("Id", aValue.uId.uId),
 
                             new JProperty ("FactionId", aValue.uFaction.UId.Value),
                             new JProperty ("SectorId", aValue.uSector.UId.Value),
@@ -746,13 +725,13 @@ namespace DarkFrontier.Structures {
                         BehaviorManager lBehaviorManager = Singletons.Get<BehaviorManager> ();
                         lBehaviorManager.InitializeImmediately (lComponent);
 
-                        lObj.Value<JArray> ("EquipmentSlots").ToList ().ForEach (lSerializedSlot => {
-                            EquipmentSlot.Serializable lDeserializedSlot = lSerializer.Deserialize<EquipmentSlot.Serializable> (new JTokenReader (lSerializedSlot)) ?? new EquipmentSlot.Serializable ();
-                            lState.uEquipmentSlots.Find (lSlot => lSlot.USerializationId == lSerializedSlot.Value<string> ("SerializationId")).FromSerializable (lDeserializedSlot);
+                        lObj.Value<JArray> ("EquipmentSlots").ToList ().ForEach (aSerializedSlot => {
+                            EquipmentSlot.Serializable lDeserializedSlot = lSerializer.Deserialize<EquipmentSlot.Serializable> (new JTokenReader (aSerializedSlot)) ?? new EquipmentSlot.Serializable ();
+                            lState.uEquipmentSlots.Find (aSlot => aSlot.USerializationId == aSerializedSlot.Value<string> ("SerializationId")).FromSerializable (lDeserializedSlot);
                         });
-                        lObj.Value<JArray> ("DockingPoints").ToList ().ForEach (lSerializedPoint => {
-                            DockingPoint.State lDeserializedPoint = lSerializer.Deserialize<DockingPoint.State> (new JTokenReader (lSerializedPoint)) ?? new DockingPoint.State ();
-                            lState.uDockingPoints.Find (lPoint => lPoint.USerializationId == lSerializedPoint.Value<string> ("SerializationId")).Construct (lDeserializedPoint);
+                        lObj.Value<JArray> ("DockingPoints").ToList ().ForEach (aSerializedPoint => {
+                            DockingPoint.State lDeserializedPoint = lSerializer.Deserialize<DockingPoint.State> (new JTokenReader (aSerializedPoint)) ?? new DockingPoint.State ();
+                            lState.uDockingPoints.Find (aPoint => aPoint.USerializationId == aSerializedPoint.Value<string> ("SerializationId")).Construct (lDeserializedPoint);
                         });
 
                         return lComponent;

@@ -72,7 +72,7 @@ namespace DarkFrontier.Equipment {
         public virtual State GetNewState (EquipmentSlot slot) => new State (slot, this);
 
         [Serializable]
-        public class State : ISavableState<State.Serializable> {
+        public new class State : ISavableState<State.Serializable> {
             public EquipmentSlot Slot;
             public float Durability;
 

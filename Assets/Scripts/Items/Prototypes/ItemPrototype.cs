@@ -21,6 +21,14 @@ namespace DarkFrontier.Items.Prototypes {
         public virtual bool CanUse () {
             return Usable;
         }
+
+        public class State {
+            public readonly ItemPrototype uPrototype;
+
+            public State(ItemPrototype aPrototype) {
+                uPrototype = aPrototype;
+            }
+        }
     }
 }
 

@@ -29,7 +29,7 @@ namespace DarkFrontier.Locations {
                 Name = gameObject.name,
                 Position = transform.localPosition.ToArray (),
                 Rotation = transform.localRotation.ToArray (),
-                Id = iId,
+                Id = iId.uId,
             };
         }
 
