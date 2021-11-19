@@ -6,13 +6,13 @@ using DarkFrontier.Controllers;
 using DarkFrontier.Equipment;
 using DarkFrontier.Factions;
 using DarkFrontier.Foundation.Behaviors;
+using DarkFrontier.Foundation.Events;
 using DarkFrontier.Foundation.Identification;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Items;
 using DarkFrontier.Items.Inventories;
 using DarkFrontier.Items.Prototypes;
 using DarkFrontier.Locations;
-using DarkFrontier.Structures;
 using DarkFrontier.UI.Indicators;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -42,7 +42,7 @@ namespace DarkFrontier.Structures {
         public State.Stats UStats => iState.uStats;
 
         public Inventory UInventory => iState.uInventory;
-        public List<EquipmentSlot> UEquipmentSlots => iState.uEquipmentSlots;
+        public Equipment UEquipment;
         public List<DockingPoint> UDockingPoints => iState.uDockingPoints;
         public StructureGetter UDockedAt => iState.uDockedAt;
         public bool UIsDocked => iState.uDockedAt.UValue != null;
@@ -61,7 +61,7 @@ namespace DarkFrontier.Structures {
         private bool iEnabled;
 
         public void Construct (State aState) => iState = aState;
-
+        
         public override void Initialize () {
             if (iRigidbody == null) {
                 iRigidbody = GetComponent<Rigidbody> ();
@@ -70,11 +70,15 @@ namespace DarkFrontier.Structures {
             iState.uStats.Recalculate (iState.uPrototype);
 
             iState.uInventory.Volume = iState.uStats.UValues.InventoryVolume;
-            if (iState.uEquipmentSlots.Count == 0) {
-                iState.uEquipmentSlots.AddRange (GetComponentsInChildren<EquipmentSlot> ());
+            
+            if (iState.uEquipment.Count == 0) {
+                iState.uEquipment.AddRange (GetComponentsInChildren<EquipmentSlot> ());
             } else {
-                iState.uEquipmentSlots.RemoveAll (aSlot => aSlot == null);
+                iState.uEquipment.RemoveAll (aSlot => aSlot == null);
             }
+            
+            UEquipment = new Equipment(iState);
+            
             if (iState.uDockingPoints.Count == 0) {
                 iState.uDockingPoints.AddRange (GetComponentsInChildren<DockingPoint> ());
             } else {
@@ -133,9 +137,9 @@ namespace DarkFrontier.Structures {
             ManageSelectedAndLocks ();
             TickLocks ();
 
-            var lEquipmentSlotsLength = iState.uEquipmentSlots.Count;
+            var lEquipmentSlotsLength = iState.uEquipment.Count;
             for (var lIndex = 0; lIndex < lEquipmentSlotsLength; lIndex++) {
-                iState.uEquipmentSlots[lIndex].Tick(this, aDt);
+                iState.uEquipment[lIndex].Tick(this, aDt);
             }
         }
 
@@ -147,9 +151,9 @@ namespace DarkFrontier.Structures {
                 }
             }
 
-            var lEquipmentSlotsLength = iState.uEquipmentSlots.Count;
+            var lEquipmentSlotsLength = iState.uEquipment.Count;
             for (var lIndex = 0; lIndex < lEquipmentSlotsLength; lIndex++) {
-                iState.uEquipmentSlots[lIndex].FixedTick(this, aDt);
+                iState.uEquipment[lIndex].FixedTick(this, aDt);
             }
         }
 
@@ -157,47 +161,6 @@ namespace DarkFrontier.Structures {
             var lQuery = new StructureGetter();
             lQuery.UId.Value = aTarget.UId;
             return ULocks.ContainsKey(lQuery);
-        }
-
-        private int iSlotsLength;
-        
-        private readonly Dictionary<Type, List<EquipmentSlot>> iEquipmentSlotsCache = new Dictionary<Type, List<EquipmentSlot>>();
-        public List<EquipmentSlot> GetEquipmentSlots<T> () where T : EquipmentPrototype.State {
-            if (iEquipmentSlotsCache.ContainsKey(typeof(T))) {
-                return iEquipmentSlotsCache[typeof(T)];
-            }
-            
-            iSlotsLength = iState.uEquipmentSlots.Count;
-            List<EquipmentSlot> lRet = new List<EquipmentSlot>(iSlotsLength);
-            for (var lIndex = 0; lIndex < iSlotsLength; lIndex++) {
-                if (!(iState.uEquipmentSlots[lIndex].UState is T)) continue;
-                lRet.Add(iState.uEquipmentSlots[lIndex]);
-            }
-
-            iEquipmentSlotsCache[typeof(T)] = lRet;
-            return lRet;
-        }
-        
-        private readonly Dictionary<Type, object> iEquipmentStatesCache = new Dictionary<Type, object>();
-        public List<T> GetEquipmentStates<T> () where T : EquipmentPrototype.State {
-            if (iEquipmentStatesCache.ContainsKey(typeof(T))) {
-                return (iEquipmentStatesCache[typeof(T)] as List<T>)!;
-            }
-            
-            iSlotsLength = iState.uEquipmentSlots.Count;
-            List<T> lRet = new List<T>(iSlotsLength);
-            for (var lIndex = 0; lIndex < iSlotsLength; lIndex++) {
-                if (!(iState.uEquipmentSlots[lIndex].UState is T lState)) continue;
-                lRet.Add(lState);
-            }
-
-            iEquipmentStatesCache[typeof(T)] = lRet;
-            return lRet;
-        }
-
-        public void InvalidateEquipmentQueryCache() {
-            iEquipmentSlotsCache.Clear();
-            iEquipmentStatesCache.Clear();
         }
         
         public void OnDocked (Structure aDockedAt, DockingPoint aDockingPoint) {
@@ -261,7 +224,7 @@ namespace DarkFrontier.Structures {
         public void TakeDamage (Damage aDamage, Location aSource) {
             ShieldPrototype.State? lShield = null;
             var lClosest = float.PositiveInfinity;
-            foreach (var lState in GetEquipmentStates<ShieldPrototype.State>()) {
+            foreach (var lState in UEquipment.States<ShieldPrototype.State>()) {
                 if (lShield == null) {
                     lShield = lState;
                     lClosest = (aSource.Position - lShield.Slot.transform.position).sqrMagnitude;
@@ -363,7 +326,7 @@ namespace DarkFrontier.Structures {
             public Stats uStats = new Stats ();
 
             public Inventory uInventory = new Inventory (0, 1);
-            public List<EquipmentSlot> uEquipmentSlots = new List<EquipmentSlot> ();
+            public List<EquipmentSlot> uEquipment = new List<EquipmentSlot> ();
             public List<DockingPoint> uDockingPoints = new List<DockingPoint> ();
             public StructureGetter uDockedAt = new StructureGetter ();
 
@@ -548,7 +511,7 @@ namespace DarkFrontier.Structures {
                             new JProperty ("Stats", JObject.FromObject (aValue.uStats, lSerializer)),
 
                             new JProperty ("Inventory", JObject.FromObject (aValue.uInventory.Save (), lSerializer)),
-                            new JProperty ("EquipmentSlots", new JArray (aValue.uEquipmentSlots.ConvertAll (lSlot => lSlot.ToSerializable ()))),
+                            new JProperty ("EquipmentSlots", new JArray (aValue.uEquipment.ConvertAll (lSlot => lSlot.ToSerializable ()))),
                             new JProperty ("DockingPoints", new JArray (aValue.uDockingPoints.ConvertAll (lPoint => JObject.FromObject (lPoint, lSerializer)))),
                             new JProperty ("DockedAtId", aValue.uDockedAt.UId.Value),
 
@@ -698,6 +661,63 @@ namespace DarkFrontier.Structures {
             }
         }
 
+        [Serializable]
+        public class Equipment : INotifier<Type> {
+            private readonly State iState;
+
+            public List<EquipmentSlot> UAll => iState.uEquipment;
+            
+            public event EventHandler<Type>? Notifier;
+
+            public Equipment(State aState) {
+                iState = aState;
+                iSlotsLength = iState.uEquipment.Count;
+            }
+
+            private int iSlotsLength;
+        
+            private readonly Dictionary<Type, List<EquipmentSlot>> iSlotsCache = new Dictionary<Type, List<EquipmentSlot>>();
+            public List<EquipmentSlot> Slots<T> () where T : EquipmentPrototype.State {
+                if (iSlotsCache.ContainsKey(typeof(T))) {
+                    return iSlotsCache[typeof(T)];
+                }
+            
+                List<EquipmentSlot> lRet = new List<EquipmentSlot>(iSlotsLength);
+                for (var lIndex = 0; lIndex < iSlotsLength; lIndex++) {
+                    if (!(iState.uEquipment[lIndex].UState is T)) continue;
+                    lRet.Add(iState.uEquipment[lIndex]);
+                }
+
+                iSlotsCache[typeof(T)] = lRet;
+                return lRet;
+            }
+        
+            private readonly Dictionary<Type, object> iStatesCache = new Dictionary<Type, object>();
+            public List<T> States<T> () where T : EquipmentPrototype.State {
+                if (iStatesCache.ContainsKey(typeof(T))) {
+                    return (iStatesCache[typeof(T)] as List<T>)!;
+                }
+            
+                List<T> lRet = new List<T>(iSlotsLength);
+                for (var lIndex = 0; lIndex < iSlotsLength; lIndex++) {
+                    if (!(iState.uEquipment[lIndex].UState is T lState)) continue;
+                    lRet.Add(lState);
+                }
+
+                iStatesCache[typeof(T)] = lRet;
+                return lRet;
+            }
+
+            public void Update(object aSender, Type aType) {
+                iSlotsLength = iState.uEquipment.Count;
+                
+                iSlotsCache.Clear();
+                iStatesCache.Clear();
+                
+                Notifier?.Invoke(this, aType);
+            }
+        }
+
         public class Converter : JsonConverter<Structure> {
             public override Structure ReadJson (JsonReader aReader, Type aType, Structure? aValue, bool aExists, JsonSerializer aSerializer) {
                 JObject lObj = (JToken.ReadFrom (aReader) as JObject)!;
@@ -727,7 +747,7 @@ namespace DarkFrontier.Structures {
 
                         lObj.Value<JArray> ("EquipmentSlots").ToList ().ForEach (aSerializedSlot => {
                             EquipmentSlot.Serializable lDeserializedSlot = lSerializer.Deserialize<EquipmentSlot.Serializable> (new JTokenReader (aSerializedSlot)) ?? new EquipmentSlot.Serializable ();
-                            lState.uEquipmentSlots.Find (aSlot => aSlot.USerializationId == aSerializedSlot.Value<string> ("SerializationId")).FromSerializable (lDeserializedSlot);
+                            lState.uEquipment.Find (aSlot => aSlot.USerializationId == aSerializedSlot.Value<string> ("SerializationId")).FromSerializable (lDeserializedSlot);
                         });
                         lObj.Value<JArray> ("DockingPoints").ToList ().ForEach (aSerializedPoint => {
                             DockingPoint.State lDeserializedPoint = lSerializer.Deserialize<DockingPoint.State> (new JTokenReader (aSerializedPoint)) ?? new DockingPoint.State ();

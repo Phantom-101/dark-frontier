@@ -61,6 +61,9 @@ namespace DarkFrontier.Equipment {
             
             if (Equipment != null) {
                 Equipment.OnUnequip(this);
+                if (Equipper != null) {
+                    Equipper.UEquipment.Update(this, UState.GetType());
+                }
             }
             Equipment = aTarget;
             if (Equipment == null) {
@@ -68,10 +71,9 @@ namespace DarkFrontier.Equipment {
             } else {
                 iHaveEquipment = true;
                 Equipment.OnEquip(this);
-            }
-
-            if (Equipper != null) {
-                Equipper.InvalidateEquipmentQueryCache();
+                if (Equipper != null) {
+                    Equipper.UEquipment.Update(this, UState.GetType());
+                }
             }
             
             return true;

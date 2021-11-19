@@ -29,7 +29,10 @@ namespace DarkFrontier.Equipment {
             var lLack = EnergyRequired - lState.Charge;
             var lRequest = Mathf.Min (lConsumption, lLack);
             float lGiven = 0;
-            foreach (var lCapacitor in aSlot.Equipper.GetEquipmentStates<CapacitorPrototype.State>()) {
+            var lCapacitors = aSlot.Equipper.UEquipment.States<CapacitorPrototype.State>();
+            var lCount = lCapacitors.Count;
+            for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                var lCapacitor = lCapacitors[lIndex];
                 var lChargeLeft = lCapacitor.Charge;
                 var lDischargeLeft = lCapacitor.DischargeLeft;
                 var lAllocated = Mathf.Min (lChargeLeft, lDischargeLeft, lRequest - lGiven);

@@ -67,40 +67,64 @@ namespace DarkFrontier.Controllers {
         public void SetFwd (float aSetting) {
             if (UPlayer == null) return;
             if (iReverseButtonUI.Reversing && aSetting != -1) return;
-            foreach (var lEngine in UPlayer.GetEquipmentStates<EnginePrototype.State> ()) {
+            var lEngines = UPlayer.UEquipment.States<EnginePrototype.State>();
+            var lCount = lEngines.Count;
+            for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                var lEngine = lEngines[lIndex];
                 lEngine.LinearSetting = new Vector3(lEngine.LinearSetting.x, lEngine.LinearSetting.y, aSetting);
             }
         }
 
         public void SetYaw (float setting) {
             if (UPlayer == null) return;
-            foreach (var lEngine in UPlayer.GetEquipmentStates<EnginePrototype.State> ()) {
+            var lEngines = UPlayer.UEquipment.States<EnginePrototype.State>();
+            var lCount = lEngines.Count;
+            for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                var lEngine = lEngines[lIndex];
                 lEngine.AngularSetting = new Vector3(lEngine.AngularSetting.x, setting, lEngine.AngularSetting.z);
             }
         }
 
         public void SetPitch (float setting) {
             if (UPlayer == null) return;
-            foreach (var lEngine in UPlayer.GetEquipmentStates<EnginePrototype.State> ()) {
+            var lEngines = UPlayer.UEquipment.States<EnginePrototype.State>();
+            var lCount = lEngines.Count;
+            for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                var lEngine = lEngines[lIndex];
                 lEngine.AngularSetting = new Vector3(setting, lEngine.AngularSetting.y, lEngine.AngularSetting.z);
             }
         }
 
         private void FireAll (object sender, EventArgs args) {
-            foreach (var lState in UPlayer.GetEquipmentStates<BeamLaserPrototype.State> ()) {
-                lState.Activated = false;
-                lState.Slot.Equipment.OnClicked (lState.Slot);
-                lState.Activated = true;
+            {
+                var lStates = UPlayer.UEquipment.States<BeamLaserPrototype.State>();
+                var lCount = lStates.Count;
+                for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                    var lState = lStates[lIndex];
+                    lState.Activated = false;
+                    lState.Slot.Equipment.OnClicked (lState.Slot);
+                    lState.Activated = true;
+                }
             }
-            foreach (var lState in UPlayer.GetEquipmentStates<PulseLaserPrototype.State> ()) {
-                lState.Activated = false;
-                lState.Slot.Equipment.OnClicked (lState.Slot);
-                lState.Activated = true;
+            {
+                var lStates = UPlayer.UEquipment.States<PulseLaserPrototype.State>();
+                var lCount = lStates.Count;
+                for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                    var lState = lStates[lIndex];
+                    lState.Activated = false;
+                    lState.Slot.Equipment.OnClicked (lState.Slot);
+                    lState.Activated = true;
+                }
             }
-            foreach (var lState in UPlayer.GetEquipmentStates<LauncherPrototype.State> ()) {
-                lState.Activated = false;
-                lState.Slot.Equipment.OnClicked (lState.Slot);
-                lState.Activated = true;
+            {
+                var lStates = UPlayer.UEquipment.States<LauncherPrototype.State>();
+                var lCount = lStates.Count;
+                for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                    var lState = lStates[lIndex];
+                    lState.Activated = false;
+                    lState.Slot.Equipment.OnClicked (lState.Slot);
+                    lState.Activated = true;
+                }
             }
         }
 

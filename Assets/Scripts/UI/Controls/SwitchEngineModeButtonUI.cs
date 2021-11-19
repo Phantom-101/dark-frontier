@@ -21,13 +21,16 @@ namespace DarkFrontier.UI.Controls {
             // Get player
             var lPlayer = iPlayerController.Value.UPlayer;
             // Get engines
-            var lEngines = lPlayer.GetEquipmentStates<EnginePrototype.State> ().ToList();
+            var lEngines = lPlayer.UEquipment.States<EnginePrototype.State> ();
+            var lCount = lEngines.Count;
             // Calculate target state
-            var lCurState = lEngines.Any() && lEngines[0].ManagedPropulsion;
-            var lTargetState = !lCurState;
+            var lTargetState = false;
+            if (lCount > 0) {
+                lTargetState = !lEngines[0].ManagedPropulsion;
+            }
             // Apply target states
-            foreach (var lEngine in lEngines) {
-                lEngine.ManagedPropulsion = lTargetState;
+            for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                lEngines[lIndex].ManagedPropulsion = lTargetState;
             }
         }
     }

@@ -29,7 +29,10 @@ namespace DarkFrontier.Controllers {
             if (lElevation > Missile.HeadingAllowance) lTarget[1].x = -1;
             else if (lElevation < -Missile.HeadingAllowance) lTarget[1].x = 1;
 
-            foreach (var lEngine in aStructure.GetEquipmentStates<EnginePrototype.State>()) {
+            var lEngines = aStructure.UEquipment.States<EnginePrototype.State>();
+            var lCount = lEngines.Count;
+            for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                var lEngine = lEngines[lIndex];
                 lEngine.ManagedPropulsion = true;
                 lEngine.LinearSetting = lTarget[0];
                 lEngine.AngularSetting = lTarget[1];

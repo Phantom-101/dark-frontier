@@ -32,9 +32,14 @@ namespace DarkFrontier.UI.Indicators {
 
             // Shield bubble indicator
             float lCurStrength = 0, lTotalStrength = 0;
-            foreach (var lShield in lPlayer.GetEquipmentStates<ShieldPrototype.State>()) {
-                lCurStrength += lShield.Strength;
-                lTotalStrength += ((ShieldPrototype) lShield.Slot.Equipment).MaxStrength;
+            {
+                var lShields = lPlayer.UEquipment.States<ShieldPrototype.State>();
+                var lCount = lShields.Count;
+                for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                    var lShield = lShields[lIndex];
+                    lCurStrength += lShield.Strength;
+                    lTotalStrength += ((ShieldPrototype) lShield.Slot.Equipment).MaxStrength;
+                }
             }
             _shield.color = _shieldGradient.Evaluate (lCurStrength / (lTotalStrength == 0 ? 1 : lTotalStrength));
 
@@ -45,9 +50,14 @@ namespace DarkFrontier.UI.Indicators {
 
             // Capacitor bar indicator
             float lStoredCap = 0, lTotalCap = 0;
-            foreach (var lCapacitor in lPlayer.GetEquipmentStates<CapacitorPrototype.State>()) {
-                lStoredCap += lCapacitor.Charge;
-                lTotalCap += ((CapacitorPrototype) lCapacitor.Slot.Equipment).Capacitance;
+            {
+                var lCapacitors = lPlayer.UEquipment.States<CapacitorPrototype.State>();
+                var lCount = lCapacitors.Count;
+                for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                    var lCapacitor = lCapacitors[lIndex];
+                    lStoredCap += lCapacitor.Charge;
+                    lTotalCap += ((CapacitorPrototype) lCapacitor.Slot.Equipment).Capacitance;
+                }
             }
             _capFill.sizeDelta = new Vector2 (_capOutline.sizeDelta.x * lStoredCap / (lTotalCap == 0 ? 1 : lTotalCap), _capFill.sizeDelta.y);
             _capImg.color = _capGradient.Evaluate (lStoredCap / (lTotalCap == 0 ? 1 : lTotalCap));

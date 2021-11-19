@@ -6,7 +6,10 @@ namespace DarkFrontier.Controllers {
     [CreateAssetMenu (menuName = "AI/Base")]
     public class AIBase : ScriptableObject {
         public virtual void Tick (Structure aStructure, float aDt) {
-            foreach (var lEngine in aStructure.GetEquipmentStates<EnginePrototype.State>()) {
+            var lEngines = aStructure.UEquipment.States<EnginePrototype.State>();
+            var lCount = lEngines.Count;
+            for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                var lEngine = lEngines[lIndex];
                 lEngine.ManagedPropulsion = true;
                 lEngine.LinearSetting = Vector3.zero;
                 lEngine.AngularSetting = Vector3.zero;

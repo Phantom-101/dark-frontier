@@ -45,7 +45,10 @@ namespace DarkFrontier.UI.Indicators {
             _hull.color = _hullGradient.Evaluate (selected.UHull / selected.UStats.UValues.MaxHull);
 
             float lCurStrength = 0, lTotalStrength = 0;
-            foreach (var lShield in selected.GetEquipmentStates<ShieldPrototype.State>()) {
+            var lShields = selected.UEquipment.States<ShieldPrototype.State>();
+            var lCount = lShields.Count;
+            for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                var lShield = lShields[lIndex];
                 lCurStrength += lShield.Strength;
                 lTotalStrength += (lShield.Slot.Equipment as ShieldPrototype).MaxStrength;
             }

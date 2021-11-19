@@ -23,6 +23,12 @@ namespace DarkFrontier.Foundation.Identification {
             UId.Notifier += OnIdChanged;
         }
 
+        public IdGetter(Func<string, T?> aGetter, string aId) {
+            iGetter = aGetter;
+            UId.Notifier += OnIdChanged;
+            UId.Value = aId;
+        }
+
         private T? GetValue () {
             if (value == null) {
                 value = iGetter (UId.Value);

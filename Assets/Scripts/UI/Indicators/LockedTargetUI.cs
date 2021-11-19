@@ -50,7 +50,10 @@ namespace DarkFrontier.UI.Indicators {
 
             hull.fillAmount = Structure.UHull / Structure.UStats.UValues.MaxHull / 2;
             float lStrength = 0, iMaxStrength = 0;
-            foreach (var lShield in Structure.GetEquipmentStates<ShieldPrototype.State>()) {
+            var lShields = Structure.UEquipment.States<ShieldPrototype.State>();
+            var lCount = lShields.Count;
+            for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                var lShield = lShields[lIndex];
                 lStrength += lShield.Strength;
                 iMaxStrength += (lShield.Slot.Equipment as ShieldPrototype).MaxStrength;
             }

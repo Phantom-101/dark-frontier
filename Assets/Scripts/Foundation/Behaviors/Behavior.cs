@@ -1,17 +1,16 @@
-﻿using DarkFrontier.Foundation.Services;
+﻿using System;
+using DarkFrontier.Foundation.Services;
 
 namespace DarkFrontier.Foundation.Behaviors {
     public class Behavior : IBehavior {
-        protected BehaviorManager oBehaviorManager;
+        protected readonly Lazy<BehaviorManager> oBehaviorManager = new Lazy<BehaviorManager>(() => Singletons.Get<BehaviorManager>(), false);
 
         public Behavior () : this (true) { }
 
         public Behavior (bool aInitialize) {
-            if (aInitialize) {
-                oBehaviorManager = Singletons.Get<BehaviorManager> ();
-                oBehaviorManager.QueueInitialize (this);
-                oBehaviorManager.QueueEnable (this);
-            }
+            if (!aInitialize) return;
+            oBehaviorManager.Value.QueueInitialize (this);
+            oBehaviorManager.Value.QueueEnable (this);
         }
 
         public virtual void Initialize () { }

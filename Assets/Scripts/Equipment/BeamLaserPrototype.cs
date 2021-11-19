@@ -51,8 +51,10 @@ namespace DarkFrontier.Equipment {
                 );
                 var lConsumption = EnergyConsumption * aDt;
                 float lGiven = 0;
-                var lCapacitors = aSlot.Equipper.GetEquipmentStates<CapacitorPrototype.State>();
-                foreach (var lCapacitor in lCapacitors) {
+                var lCapacitors = aSlot.Equipper.UEquipment.States<CapacitorPrototype.State>();
+                var lCount = lCapacitors.Count;
+                for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                    var lCapacitor = lCapacitors[lIndex];
                     var lChargeLeft = lCapacitor.Charge;
                     var lDischargeLeft = lCapacitor.DischargeLeft;
                     var lAllocated = Mathf.Min (lChargeLeft, lDischargeLeft, lConsumption - lGiven);

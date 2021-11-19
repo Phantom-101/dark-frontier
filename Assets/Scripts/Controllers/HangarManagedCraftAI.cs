@@ -37,20 +37,35 @@ namespace DarkFrontier.Controllers {
 
             structure.USelected.UId.Value = State.Target.UId;
             structure.Lock (structure.USelected.UValue);
-            foreach (var lState in structure.GetEquipmentStates<BeamLaserPrototype.State> ()) {
-                lState.Activated = false;
-                lState.Slot.Equipment.OnClicked (lState.Slot);
-                lState.Activated = true;
+            {
+                var lStates = structure.UEquipment.States<BeamLaserPrototype.State>();
+                var lCount = lStates.Count;
+                for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                    var lState = lStates[lIndex];
+                    lState.Activated = false;
+                    lState.Slot.Equipment.OnClicked (lState.Slot);
+                    lState.Activated = true;
+                }
             }
-            foreach (var lState in structure.GetEquipmentStates<PulseLaserPrototype.State> ()) {
-                lState.Activated = false;
-                lState.Slot.Equipment.OnClicked (lState.Slot);
-                lState.Activated = true;
+            {
+                var lStates = structure.UEquipment.States<PulseLaserPrototype.State>();
+                var lCount = lStates.Count;
+                for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                    var lState = lStates[lIndex];
+                    lState.Activated = false;
+                    lState.Slot.Equipment.OnClicked (lState.Slot);
+                    lState.Activated = true;
+                }
             }
-            foreach (var lState in structure.GetEquipmentStates<LauncherPrototype.State> ()) {
-                lState.Activated = false;
-                lState.Slot.Equipment.OnClicked (lState.Slot);
-                lState.Activated = true;
+            {
+                var lStates = structure.UEquipment.States<LauncherPrototype.State>();
+                var lCount = lStates.Count;
+                for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                    var lState = lStates[lIndex];
+                    lState.Activated = false;
+                    lState.Slot.Equipment.OnClicked (lState.Slot);
+                    lState.Activated = true;
+                }
             }
         }
 
@@ -66,7 +81,10 @@ namespace DarkFrontier.Controllers {
             if (lElevation > Launchable.HeadingAllowance) lTarget[1].x = -1;
             else if (lElevation < -Launchable.HeadingAllowance) lTarget[1].x = 1;
 
-            foreach (var lEngine in aStructure.GetEquipmentStates<EnginePrototype.State>()) {
+            var lEngines = aStructure.UEquipment.States<EnginePrototype.State>();
+            var lCount = lEngines.Count;
+            for (var lIndex = 0; lIndex < lCount; lIndex++) {
+                var lEngine = lEngines[lIndex];
                 lEngine.ManagedPropulsion = true;
                 lEngine.LinearSetting = lTarget[0];
                 lEngine.AngularSetting = lTarget[1];
