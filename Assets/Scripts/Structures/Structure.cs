@@ -50,7 +50,7 @@ namespace DarkFrontier.Structures {
         public StructureGetter USelected => iState.uSelected;
         public Dictionary<StructureGetter, float> ULocks => iState.uLocks;
 
-        public AIBase? UAI { get => iState.uAI; set => iState.uAI = value; }
+        public NpcController? UNpcController { get => iState.uNpcController; set => iState.uNpcController = value; }
 
         private Rigidbody? iRigidbody;
 
@@ -85,6 +85,8 @@ namespace DarkFrontier.Structures {
                 iState.uDockingPoints.RemoveAll (aPoint => aPoint == null);
             }
 
+            UNpcController = GetComponent<NpcController>();
+            
             StructureInventoryAdder lInventoryAdder = GetComponent<StructureInventoryAdder> ();
             if (lInventoryAdder != null) {
                 lInventoryAdder.Run (this);
@@ -130,8 +132,8 @@ namespace DarkFrontier.Structures {
             iState.uStats.Recalculate (iState.uPrototype);
             iState.uStats.Tick (this, aDt);
 
-            if (iState.uAI != null) {
-                iState.uAI.Tick (this, aDt);
+            if (iState.uNpcController != null) {
+                iState.uNpcController.Tick (this, aDt);
             }
 
             ManageSelectedAndLocks ();
@@ -155,6 +157,22 @@ namespace DarkFrontier.Structures {
             for (var lIndex = 0; lIndex < lEquipmentSlotsLength; lIndex++) {
                 iState.uEquipment[lIndex].FixedTick(this, aDt);
             }
+        }
+
+        public NpcController CreateNpcController<T>() where T : NpcController {
+            if (UNpcController != null) {
+                Destroy(UNpcController);
+            }
+
+            return UNpcController = gameObject.AddComponent<T>();
+        }
+
+        public NpcController GetNpcController<T>() where T : NpcController {
+            if (UNpcController is T) {
+                return UNpcController;
+            }
+
+            return CreateNpcController<T>();
         }
 
         public bool IsLocked(Structure aTarget) {
@@ -333,7 +351,7 @@ namespace DarkFrontier.Structures {
             public StructureGetter uSelected = new StructureGetter ();
             public Dictionary<StructureGetter, float> uLocks = new Dictionary<StructureGetter, float> ();
 
-            public AIBase? uAI;
+            public NpcController? uNpcController;
 
             public State (StructurePrototype? aPrototype) : base (false) => uPrototype = aPrototype;
 
@@ -563,6 +581,7 @@ namespace DarkFrontier.Structures {
                 };
             }
             
+            [Serializable]
             public class Modifier : Behavior {
                 public readonly int uOrder;
                 

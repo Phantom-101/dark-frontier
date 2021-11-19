@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Force Field
+  m_Name: Red Shield
   m_Shader: {fileID: -6465566751694194690, guid: 655bcc58951a6554e8fb0e2c9823feb1,
     type: 3}
   m_ShaderKeywords: 
@@ -45,6 +45,6 @@ Material:
     - _ShimmerAnimation: 0
     - _ShimmerWidth: 0.03
     m_Colors:
-    - _Color: {r: 0, g: 1, b: 1, a: 0}
+    - _Color: {r: 1, g: 0, b: 0, a: 0}
     - _ShimmerColor: {r: 2, g: 0.5019608, b: 0, a: 0}
   m_BuildTextureStacks: []

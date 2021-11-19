@@ -46,14 +46,14 @@ namespace DarkFrontier.Equipment {
 
             if (lState.Activated && lState.Charge >= EnergyRequired) {
                 lState.Charge = 0;
-                Structure structure = Singletons.Get<Structures.StructureManager> ().SpawnStructure (lState.Missile!.MissileStructure, aSlot.Equipper.UFaction.UId.Value, aSlot.Equipper.USector.UId.Value, new Location (aSlot.transform));
-                Singletons.Get<BehaviorManager> ().InitializeImmediately (structure);
-                Singletons.Get<BehaviorManager> ().EnableImmediately (structure);
-                MissileAI ai = CreateInstance<MissileAI> ();
-                ai.Target = lState.Target;
-                ai.Missile = lState.Missile;
-                ai.DamageMultiplier = aSlot.Equipper.ULocks.Where (lPair => lPair.Key.UValue == lState.Target).First ().Value;
-                structure.UAI = ai;
+                Structure lStructure = Singletons.Get<Structures.StructureManager> ().SpawnStructure (lState.Missile!.MissileStructure, aSlot.Equipper.UFaction.UId.Value, aSlot.Equipper.USector.UId.Value, new Location (aSlot.transform));
+                Singletons.Get<BehaviorManager> ().InitializeImmediately (lStructure);
+                Singletons.Get<BehaviorManager> ().EnableImmediately (lStructure);
+                MissileNpcController lNpcController = (MissileNpcController) lStructure.GetNpcController<MissileNpcController>();
+                lNpcController.Target = lState.Target;
+                lNpcController.Missile = lState.Missile;
+                lNpcController.DamageMultiplier = aSlot.Equipper.ULocks.Where (lPair => lPair.Key.UValue == lState.Target).First ().Value;
+                lStructure.UNpcController = lNpcController;
                 aSlot.Equipper.UInventory.RemoveQuantity (lState.Missile, 1);
                 lState.Activated = AutoCycle;
             }

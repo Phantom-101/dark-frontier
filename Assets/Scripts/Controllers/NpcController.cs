@@ -1,12 +1,13 @@
 ﻿using DarkFrontier.Equipment;
+using DarkFrontier.Foundation.Behaviors;
 using DarkFrontier.Structures;
 using UnityEngine;
 
 namespace DarkFrontier.Controllers {
-    [CreateAssetMenu (menuName = "AI/Base")]
-    public class AIBase : ScriptableObject {
-        public virtual void Tick (Structure aStructure, float aDt) {
-            var lEngines = aStructure.UEquipment.States<EnginePrototype.State>();
+    public class NpcController : ComponentBehavior {
+        public override void Tick(object aTicker, float aDt) {
+            if (!(aTicker is Structure lStructure)) return;
+            var lEngines = lStructure.UEquipment.States<EnginePrototype.State>();
             var lCount = lEngines.Count;
             for (var lIndex = 0; lIndex < lCount; lIndex++) {
                 var lEngine = lEngines[lIndex];
@@ -15,7 +16,7 @@ namespace DarkFrontier.Controllers {
                 lEngine.AngularSetting = Vector3.zero;
             }
         }
-
-        public virtual AIBase Copy () => CreateInstance<AIBase> ();
+        
+        // TODO add nav functions
     }
 }

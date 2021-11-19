@@ -98,4 +98,4 @@ MonoBehaviour:
     - 100
   BeamPrefab: {fileID: 930999058288108214, guid: 1a53d00be0c0d0f49a05fab213c2b948,
     type: 3}
-  BeamWidth: 0.3
+  BeamWidth: 2

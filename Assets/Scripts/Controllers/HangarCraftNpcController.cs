@@ -6,39 +6,40 @@ using DarkFrontier.Structures;
 using UnityEngine;
 
 namespace DarkFrontier.Controllers {
-    public class HangarManagedCraftAI : AIBase {
+    public class HangarCraftNpcController : NpcController {
         public HangarLaunchableSO Launchable;
         public HangarBayPrototype.State State;
 
-        public override void Tick (Structure structure, float aDt) {
+        public override void Tick(object aTicker, float aDt) {
+            if (!(aTicker is Structure lStructure)) return;
             if (Launchable == null || State.Slot == null) {
-                structure.UHull = 0;
+                lStructure.UHull = 0;
                 return;
             }
 
             if (State.Target == null) {
-                MoveTo (structure, State.Slot.Equipper);
+                MoveTo (lStructure, State.Slot.Equipper);
                 return;
             }
 
-            float disToHangar = Singletons.Get<NavigationManager> ().Distance (new Location (structure.transform), new Location (State.Slot.Equipper.transform), DistanceType.Chebyshev);
-            float disFromHangarToTarget = Singletons.Get<NavigationManager> ().Distance (new Location (State.Target.transform), new Location (State.Slot.Equipper.transform), DistanceType.Chebyshev);
+            var lDisToHangar = Singletons.Get<NavigationManager> ().Distance (new Location (lStructure.transform), new Location (State.Slot.Equipper.transform), DistanceType.Chebyshev);
+            var lDisFromHangarToTarget = Singletons.Get<NavigationManager> ().Distance (new Location (State.Target.transform), new Location (State.Slot.Equipper.transform), DistanceType.Chebyshev);
 
-            if (disToHangar > Launchable.SignalConnectionRange) {
+            if (lDisToHangar > Launchable.SignalConnectionRange) {
                 return;
             }
 
-            if (disFromHangarToTarget > Launchable.MaxOperationalRange) {
-                MoveTo (structure, State.Slot.Equipper);
+            if (lDisFromHangarToTarget > Launchable.MaxOperationalRange) {
+                MoveTo (lStructure, State.Slot.Equipper);
                 return;
             }
 
-            MoveTo (structure, State.Target);
+            MoveTo (lStructure, State.Target);
 
-            structure.USelected.UId.Value = State.Target.UId;
-            structure.Lock (structure.USelected.UValue);
+            lStructure.USelected.UId.Value = State.Target.UId;
+            lStructure.Lock (lStructure.USelected.UValue);
             {
-                var lStates = structure.UEquipment.States<BeamLaserPrototype.State>();
+                var lStates = lStructure.UEquipment.States<BeamLaserPrototype.State>();
                 var lCount = lStates.Count;
                 for (var lIndex = 0; lIndex < lCount; lIndex++) {
                     var lState = lStates[lIndex];
@@ -48,7 +49,7 @@ namespace DarkFrontier.Controllers {
                 }
             }
             {
-                var lStates = structure.UEquipment.States<PulseLaserPrototype.State>();
+                var lStates = lStructure.UEquipment.States<PulseLaserPrototype.State>();
                 var lCount = lStates.Count;
                 for (var lIndex = 0; lIndex < lCount; lIndex++) {
                     var lState = lStates[lIndex];
@@ -58,7 +59,7 @@ namespace DarkFrontier.Controllers {
                 }
             }
             {
-                var lStates = structure.UEquipment.States<LauncherPrototype.State>();
+                var lStates = lStructure.UEquipment.States<LauncherPrototype.State>();
                 var lCount = lStates.Count;
                 for (var lIndex = 0; lIndex < lCount; lIndex++) {
                     var lState = lStates[lIndex];
@@ -89,13 +90,6 @@ namespace DarkFrontier.Controllers {
                 lEngine.LinearSetting = lTarget[0];
                 lEngine.AngularSetting = lTarget[1];
             }
-        }
-
-        public override AIBase Copy () {
-            HangarManagedCraftAI ret = CreateInstance<HangarManagedCraftAI> ();
-            ret.Launchable = Launchable;
-            ret.State = State;
-            return ret;
         }
     }
 }

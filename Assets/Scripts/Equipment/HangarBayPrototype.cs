@@ -231,10 +231,10 @@ namespace DarkFrontier.Equipment {
                         if (launchingProgress >= launchable.LaunchingPreparation) {
                             // Spawn structure
                             structure = Singletons.Get<StructureManager> ().SpawnStructure (launchable, slot.Equipper.UFaction.UId.Value, slot.Equipper.USector.UId.Value, new Location (slot.transform));
-                            HangarManagedCraftAI ai = CreateInstance<HangarManagedCraftAI> ();
-                            ai.Launchable = launchable;
-                            ai.State = state;
-                            structure.UAI = ai;
+                            HangarCraftNpcController lNpcController = (HangarCraftNpcController) structure.GetNpcController<MissileNpcController>();
+                            lNpcController.Launchable = launchable;
+                            lNpcController.State = state;
+                            structure.UNpcController = lNpcController;
                             // Set state to launched
                             status = SlotStatus.Launched;
                         }
