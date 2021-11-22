@@ -67,7 +67,7 @@ namespace DarkFrontier.Structures {
         }
         
         public Structure SpawnStructure (StructurePrototype profile, string faction, string sector, Location location) {
-            GameObject gameObject = Instantiate (profile.Prefab, location.Position, Quaternion.identity);
+            GameObject gameObject = Instantiate (profile.Prefab, location.UPosition, Quaternion.identity);
             Structure spawned = gameObject.GetComponent<Structure> ();
             if (spawned == null) {
                 spawned = gameObject.AddComponent<Structure> ();

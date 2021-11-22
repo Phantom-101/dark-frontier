@@ -175,8 +175,8 @@ namespace DarkFrontier.Equipment {
                 public void Tick (EquipmentSlot slot, float dt) {
                     if (slot.Equipper == null) return;
 
-                    HangarBayPrototype hangarBay = (slot.Equipment as HangarBayPrototype)!;
-                    State state = (slot.UState as State)!;
+                    HangarBayPrototype hangarBay = (HangarBayPrototype) slot.Equipment!;
+                    State state = (State) slot.UState!;
 
                     if (status == SlotStatus.Unloaded) {
                         // Enforce expected state
@@ -231,7 +231,7 @@ namespace DarkFrontier.Equipment {
                         if (launchingProgress >= launchable.LaunchingPreparation) {
                             // Spawn structure
                             structure = Singletons.Get<StructureManager> ().SpawnStructure (launchable, slot.Equipper.UFaction.UId.Value, slot.Equipper.USector.UId.Value, new Location (slot.transform));
-                            HangarCraftNpcController lNpcController = (HangarCraftNpcController) structure.GetNpcController<MissileNpcController>();
+                            HangarCraftNpcController lNpcController = (HangarCraftNpcController) structure.GetNpcController<HangarCraftNpcController>();
                             lNpcController.Launchable = launchable;
                             lNpcController.State = state;
                             structure.UNpcController = lNpcController;

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace DarkFrontier.Locations {
     public class NavigationManager {
         public float Distance (Location aLocationA, Location aLocationB, DistanceType aType) {
-            Vector3 lDif = aLocationA.Position - aLocationB.Position;
+            Vector3 lDif = aLocationA.UPosition - aLocationB.UPosition;
             switch (aType) {
                 case DistanceType.Euclidean:
                     return lDif.magnitude;

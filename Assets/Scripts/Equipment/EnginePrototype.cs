@@ -25,117 +25,109 @@ namespace DarkFrontier.Equipment {
 
             State lState = (aSlot.UState as State)!;
 
-            float lConsumption = GetConsumption (aSlot) * aDt;
+            var (lAccelerations, lConsumption) = Calculate(aSlot);
+            lConsumption *= aDt;
+            
             float lGiven = 0;
             var lCapacitors = aSlot.Equipper.UEquipment.States<CapacitorPrototype.State>();
             var lCount = lCapacitors.Count;
             for (var lIndex = 0; lIndex < lCount; lIndex++) {
                 var lCapacitor = lCapacitors[lIndex];
-                float lChargeLeft = lCapacitor.Charge;
-                float lDischargeLeft = lCapacitor.DischargeLeft;
-                float lAllocated = Mathf.Min (lChargeLeft, lDischargeLeft, lConsumption - lGiven);
+                var lChargeLeft = lCapacitor.Charge;
+                var lDischargeLeft = lCapacitor.DischargeLeft;
+                var lAllocated = Mathf.Min (lChargeLeft, lDischargeLeft, lConsumption - lGiven);
                 lGiven += lAllocated;
                 lCapacitor.Charge -= lAllocated;
                 lCapacitor.DischargeLeft -= lAllocated;
             }
 
-            lState.EnergySatisfaction = Mathf.Clamp01 (lGiven / (lConsumption == 0 ? 1 : lConsumption));
+            var lEnergySatisfaction = lState.EnergySatisfaction = lConsumption == 0 ? 1 : Mathf.Clamp01 (lGiven / lConsumption);
+            
+            ConstantForce lConstantForce = aSlot.Equipper.GetComponent<ConstantForce> ();
+            
+            lConstantForce.relativeForce = lEnergySatisfaction * lAccelerations[0];
+            lConstantForce.relativeTorque = lEnergySatisfaction * lAccelerations[1];
         }
 
         public override void FixedTick (EquipmentSlot aSlot, float aDt) {
             if (aSlot.Equipper == null) return;
 
-            State state = (aSlot.UState as State)!;
+            State lState = (State) aSlot.UState!;
 
-            Rigidbody rb = aSlot.Equipper.GetComponent<Rigidbody> ();
-            ConstantForce cf = aSlot.Equipper.GetComponent<ConstantForce> ();
+            Rigidbody lRigidbody = aSlot.Equipper.GetComponent<Rigidbody> ();
 
-            rb.drag = 0;
-            rb.angularDrag = 0;
+            lRigidbody.drag = 0;
+            lRigidbody.angularDrag = 0;
 
-            if (state.EnergySatisfaction > 0) {
-                if (rb.velocity.sqrMagnitude > Sqr (GetLinearMaxSpeed (aSlot))) rb.velocity = rb.velocity.normalized * GetLinearMaxSpeed (aSlot);
-                rb.maxAngularVelocity = GetAngularMaxSpeed (aSlot) * Mathf.Deg2Rad;
-            } else rb.maxAngularVelocity = 0;
+            if (lState.EnergySatisfaction > 0) {
+                if (lRigidbody.velocity.sqrMagnitude > Sqr (GetLinearMaxSpeed (aSlot))) lRigidbody.velocity = lRigidbody.velocity.normalized * GetLinearMaxSpeed (aSlot);
+                lRigidbody.maxAngularVelocity = GetAngularMaxSpeed (aSlot) * Mathf.Deg2Rad;
+            } else lRigidbody.maxAngularVelocity = 0;
 
-            Vector3[] accels = GetAccelerations (aSlot);
-            cf.relativeForce = accels[0] * state.EnergySatisfaction;
-            cf.relativeTorque = accels[1] * state.EnergySatisfaction;
-
-            foreach (Transform t in aSlot.Equipper.transform) t.localEulerAngles = new Vector3 (0, 0, -BankAmount * rb.angularVelocity.y);
+            foreach (Transform lChild in aSlot.Equipper.transform) lChild.localEulerAngles = new Vector3 (0, 0, -BankAmount * lRigidbody.angularVelocity.y);
         }
 
-        public override void EnsureStateType (EquipmentSlot slot) {
-            if (!(slot.UnsafeState is State)) slot.UnsafeState = GetNewState (slot);
+        public override void EnsureStateType (EquipmentSlot aSlot) {
+            if (!(aSlot.UnsafeState is State)) aSlot.UnsafeState = GetNewState (aSlot);
         }
 
-        public override EquipmentPrototype.State GetNewState (EquipmentSlot slot) => new State (slot, this);
+        public override EquipmentPrototype.State GetNewState (EquipmentSlot aSlot) => new State (aSlot, this);
 
-        private Vector3[] GetAccelerations (EquipmentSlot slot) {
-            if (slot.Equipper == null) return new Vector3[2];
+        private (Vector3[], float) Calculate (EquipmentSlot aSlot) {
+            if (aSlot.Equipper == null) return (new Vector3[2], 0);
 
-            State state = (slot.UState as State)!;
+            State lState = (aSlot.UState as State)!;
+            Rigidbody lRigidbody = aSlot.Equipper.GetComponent<Rigidbody> ();
 
-            Rigidbody rb = slot.Equipper.GetComponent<Rigidbody> ();
-
-            Vector3[] res = new Vector3[2];
+            Vector3[] lAccelerations = new Vector3[2];
+            float lConsumption = 0;
+            
             // Linear
-            for (int d = 0; d < 3; d++) {
-                if (state.ManagedPropulsion) {
-                    float cur = slot.Equipper.transform.InverseTransformDirection (rb.velocity)[d] / GetLinearMaxSpeed (slot);
-                    float dif = state.LinearSetting[d] - cur;
-                    if (Mathf.Abs (dif) > LinearSleepThreshold) {
-                        float mul = Mathf.Clamp (dif * CorrectionStrictness, -1, 1);
-                        res[0][d] = GetLinearAcceleration (slot, d, mul);
-                    }
-                } else res[0][d] = GetLinearAcceleration (slot, d, state.LinearSetting[d]);
+            for (var lDimension = 0; lDimension < 3; lDimension++) {
+                if (lState.ManagedPropulsion) {
+                    var lCurrentSpeed = aSlot.Equipper.transform.InverseTransformDirection (lRigidbody.velocity)[lDimension] / GetLinearMaxSpeed (aSlot);
+                    var lSpeedDif = lState.LinearSetting[lDimension] - lCurrentSpeed;
+                    
+                    if (Mathf.Abs(lSpeedDif) <= LinearSleepThreshold) continue;
+                    
+                    var lTargetPower = Mathf.Clamp (lSpeedDif * CorrectionStrictness, -1, 1);
+                    
+                    lAccelerations[0][lDimension] = GetLinearAcceleration (aSlot, lDimension, lTargetPower);
+                    lConsumption += Lerp (lTargetPower, LinearConsumptionPos[lDimension], LinearConsumptionNeg[lDimension]);
+                } else {
+                    lAccelerations[0][lDimension] = GetLinearAcceleration (aSlot, lDimension, lState.LinearSetting[lDimension]);
+                    lConsumption += Lerp (lState.LinearSetting[lDimension], LinearConsumptionPos[lDimension], LinearConsumptionNeg[lDimension]);
+                }
             }
+            
             // Angular
-            for (int d = 0; d < 3; d++) {
-                if (state.ManagedPropulsion) {
-                    float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity * Mathf.Rad2Deg)[d] / GetAngularMaxSpeed (slot);
-                    float dif = state.AngularSetting[d] - cur;
-                    if (Mathf.Abs (dif) > AngularSleepThreshold) {
-                        float mul = Mathf.Clamp (dif * CorrectionStrictness, -1, 1);
-                        res[1][d] = GetAngularAcceleration (slot, d, mul);
-                    }
-                } else res[1][d] = GetAngularAcceleration (slot, d, state.AngularSetting[d]);
+            for (var lDimension = 0; lDimension < 3; lDimension++) {
+                if (lState.ManagedPropulsion) {
+                    var lCurrentSpeed = aSlot.Equipper.transform.InverseTransformDirection (lRigidbody.angularVelocity * Mathf.Rad2Deg)[lDimension] / GetAngularMaxSpeed (aSlot);
+                    var lSpeedDif = lState.AngularSetting[lDimension] - lCurrentSpeed;
+                    
+                    if (Mathf.Abs(lSpeedDif) <= AngularSleepThreshold) continue;
+                    
+                    var lTargetPower = Mathf.Clamp (lSpeedDif * CorrectionStrictness, -1, 1);
+                    
+                    lAccelerations[1][lDimension] = GetAngularAcceleration (aSlot, lDimension, lTargetPower);
+                    lConsumption += Lerp (lTargetPower, AngularConsumptionPos[lDimension], AngularConsumptionNeg[lDimension]);
+                } else {
+                    lAccelerations[1][lDimension] = GetAngularAcceleration (aSlot, lDimension, lState.AngularSetting[lDimension]);
+                    lConsumption += Lerp (lState.AngularSetting[lDimension], AngularConsumptionPos[lDimension], AngularConsumptionNeg[lDimension]);
+                }
             }
-            return res;
-        }
-
-        private float GetConsumption (EquipmentSlot slot) {
-            if (slot.Equipper == null) return 0;
-
-            State state = (slot.UState as State)!;
-
-            Rigidbody rb = slot.Equipper.GetComponent<Rigidbody> ();
-
-            float res = 0;
-            // Linear
-            for (int d = 0; d < 3; d++) {
-                float cur = slot.Equipper.transform.InverseTransformDirection (rb.velocity)[d] / MaxLinearSpeed;
-                float dif = state.LinearSetting[d] - cur;
-                float mul = Mathf.Clamp (dif * CorrectionStrictness, -1, 1);
-                res += Lerp (mul, LinearConsumptionPos[d], LinearConsumptionNeg[d]);
-            }
-            // Angular
-            for (int d = 0; d < 3; d++) {
-                float cur = slot.Equipper.transform.InverseTransformDirection (rb.angularVelocity * Mathf.Rad2Deg)[d] / MaxAngularSpeed;
-                float dif = state.AngularSetting[d] - cur;
-                float mul = Mathf.Clamp (dif * CorrectionStrictness, -1, 1);
-                res += Lerp (mul, AngularConsumptionPos[d], AngularConsumptionNeg[d]);
-            }
-            return res;
+            
+            return (lAccelerations, lConsumption);
         }
 
         private float GetLinearMaxSpeed (EquipmentSlot slot) => MaxLinearSpeed * slot.Equipper!.UStats.UValues.LinearMaxSpeedMultiplier;
         private float GetAngularMaxSpeed (EquipmentSlot slot) => MaxAngularSpeed * slot.Equipper!.UStats.UValues.AngularMaxSpeedMultiplier;
         private float GetLinearAcceleration (EquipmentSlot slot, int d, float s) => Lerp (s, LinearForcePos[d], LinearForceNeg[d]) * slot.Equipper!.UStats.UValues.LinearAccelerationMultiplier;
         private float GetAngularAcceleration (EquipmentSlot slot, int d, float s) => Lerp (s, AngularForcePos[d], AngularForceNeg[d]) * slot.Equipper!.UStats.UValues.AngularAccelerationMultiplier;
-        private float Sqr (float n) => n * n;
+        private static float Sqr (float n) => n * n;
 
-        private float Lerp (float p, float pos, float neg) {
+        private static float Lerp (float p, float pos, float neg) {
             if (p >= 0) return p * pos;
             return -p * neg;
         }

@@ -6,8 +6,10 @@ using System;
 namespace DarkFrontier.Factions {
     [Serializable]
     public class FactionGetter : IdGetter<Faction> {
-        public FactionGetter () : base (Getter) { }
-        private static Faction? Getter (string id) => Singletons.Get<FactionManager> ().Registry.Find (id);
+        private static readonly Lazy<FactionManager> iFactionManager = new Lazy<FactionManager>(() => Singletons.Get<FactionManager>(), false);
+        
+        public FactionGetter () : base (iGetter) { }
+        private static Func<string, Faction?> iGetter = aId => iFactionManager.Value.Registry.Find(aId);
     }
 }
 #nullable restore

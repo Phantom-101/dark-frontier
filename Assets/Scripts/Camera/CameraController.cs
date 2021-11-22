@@ -28,20 +28,20 @@ namespace DarkFrontier.Camera {
 
             Structure player = iPlayerController.Value.UPlayer;
             if (player == null) return;
-            Transform pt = _anchor?.Transform == null ? player.transform : _anchor.Transform;
+            Transform pt = _anchor?.UTransform == null ? player.transform : _anchor.UTransform;
 
-            if (_target.Transform == null) {
+            if (_target.UTransform == null) {
 
                 Vector3 scOff = _offset * player.UPrototype.ApparentSize;
                 Vector3 targetPos = pt.position + pt.rotation * scOff;
                 Vector3 offset = targetPos - transform.position;
                 Debug.DrawLine (transform.position, targetPos, Color.red);
-                transform.Translate (offset * _followSpeed * UnityEngine.Time.deltaTime, Space.World);
-                transform.LookAt (pt.position + pt.rotation * Vector3.forward * player.UPrototype.ApparentSize * 2, player.transform.up);
+                transform.Translate (offset * (_followSpeed * UnityEngine.Time.deltaTime), Space.World);
+                transform.LookAt (pt.position + pt.rotation * Vector3.forward * (player.UPrototype.ApparentSize * 2), player.transform.up);
 
             } else {
 
-                Vector3 difVec = _target.GetPosition () - pt.position;
+                Vector3 difVec = _target.UPosition - pt.position;
                 difVec.y = 0;
                 Vector3 norVec = difVec.normalized;
                 Vector3 scOff = _offset * player.UPrototype.ApparentSize;
@@ -49,8 +49,8 @@ namespace DarkFrontier.Camera {
                 Vector3 targetPos = pt.position + pt.rotation * targetOffset;
                 Vector3 offset = targetPos - transform.position;
                 Debug.DrawLine (transform.position, targetPos, Color.red);
-                transform.Translate (offset * _followSpeed * UnityEngine.Time.deltaTime, Space.World);
-                transform.LookAt (_target.GetPosition (), player.transform.up);
+                transform.Translate (offset * (_followSpeed * UnityEngine.Time.deltaTime), Space.World);
+                transform.LookAt (_target.UPosition, player.transform.up);
 
             }
 

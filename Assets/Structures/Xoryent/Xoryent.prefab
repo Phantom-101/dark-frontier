@@ -440,8 +440,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iState:
     uPrototype: {fileID: 11400000, guid: 8be95cdc9bbb7764ea30a118020641f8, type: 2}
-    uId:
-      value: 
     uFaction:
       iId:
         value: 
@@ -466,6 +464,7 @@ MonoBehaviour:
         MaxTargetLocks: 0
         CargoDropPercentage: 1
         InventoryVolume: 0
+      iModifiers: []
     uInventory:
       quantities:
         reorderableList:
@@ -496,7 +495,7 @@ MonoBehaviour:
       volume: 0
       storedVolume: 0
       precision: 1
-    uEquipmentSlots: []
+    uEquipment: []
     uDockingPoints: []
     uDockedAt:
       iId:
@@ -506,7 +505,7 @@ MonoBehaviour:
       iId:
         value: 
       value: {fileID: 0}
-    uAI: {fileID: 0}
+    uNpcController: {fileID: 0}
   references:
     version: 1
     00000000:
@@ -725,7 +724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Equipper: {fileID: 2512073521162136229}
   Filters: []
-  Equipment: {fileID: 11400000, guid: 44bd9c98f51eb3e4fb6d22dacd37c314, type: 2}
+  Equipment: {fileID: 11400000, guid: eb9e093613904164ba9aac6729b68e28, type: 2}
   iSerializationId: 
   UnsafeState:
     id: 0

@@ -6,8 +6,10 @@ using System;
 namespace DarkFrontier.Locations {
     [Serializable]
     public class SectorGetter : IdGetter<Sector> {
-        public SectorGetter () : base (Getter) { }
-        private static Sector? Getter (string aId) => Singletons.Get<SectorManager> ().Registry.Find (aId);
+        private static readonly Lazy<SectorManager> iSectorManager = new Lazy<SectorManager>(() => Singletons.Get<SectorManager>(), false);
+        
+        public SectorGetter () : base (iGetter) { }
+        private static Func<string, Sector?> iGetter = aId => iSectorManager.Value.Registry.Find(aId);
     }
 }
 #nullable restore

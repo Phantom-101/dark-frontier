@@ -42,7 +42,7 @@ namespace DarkFrontier.Structures {
         public State.Stats UStats => iState.uStats;
 
         public Inventory UInventory => iState.uInventory;
-        public Equipment UEquipment;
+        public Equipment UEquipment = null!;
         public List<DockingPoint> UDockingPoints => iState.uDockingPoints;
         public StructureGetter UDockedAt => iState.uDockedAt;
         public bool UIsDocked => iState.uDockedAt.UValue != null;
@@ -245,9 +245,9 @@ namespace DarkFrontier.Structures {
             foreach (var lState in UEquipment.States<ShieldPrototype.State>()) {
                 if (lShield == null) {
                     lShield = lState;
-                    lClosest = (aSource.Position - lShield.Slot.transform.position).sqrMagnitude;
+                    lClosest = (aSource.UPosition - lShield.Slot.transform.position).sqrMagnitude;
                 } else {
-                    var lDistance = (aSource.Position - lState.Slot.transform.position).sqrMagnitude;
+                    var lDistance = (aSource.UPosition - lState.Slot.transform.position).sqrMagnitude;
                     if (!(lDistance < lClosest)) continue;
                     lShield = lState;
                     lClosest = lDistance;
@@ -266,12 +266,12 @@ namespace DarkFrontier.Structures {
         }
 
         public float GetAngleTo (Location aLocation) {
-            var lHeading = aLocation.Position - transform.position;
+            var lHeading = aLocation.UPosition - transform.position;
             return Vector3.SignedAngle (transform.forward, lHeading, transform.up);
         }
 
         public float GetElevationTo (Location aLocation) {
-            var lHeading = aLocation.Position - transform.position;
+            var lHeading = aLocation.UPosition - transform.position;
             return Vector3.SignedAngle (transform.forward, lHeading, -transform.right);
         }
 
