@@ -11,33 +11,18 @@ using UnityEngine;
 namespace DarkFrontier.Serialization {
     public class SaveManager : MonoBehaviour {
         [SerializeField] private string _universe;
-        private static SaveLoadJob _job;
 
         [SerializeField] private VoidEventChannelSO _saveGameChannel;
 
         private static SaveManager _instance;
 
-        private SectorManager sectorManager;
-        private FactionManager factionManager;
-        private StructureManager structureManager;
+        private readonly Lazy<SectorManager> iSectorManager = new Lazy<SectorManager>(() => Singletons.Get<SectorManager>(), false);
+        private readonly Lazy<FactionManager> iFactionManager = new Lazy<FactionManager>(() => Singletons.Get<FactionManager>(), false);
+        private readonly Lazy<StructureManager> iStructureManager = new Lazy<StructureManager>(() => Singletons.Get<StructureManager>(), false);
 
         private void Awake () {
             _instance = this;
             _saveGameChannel.OnEventRaised += Save;
-
-            sectorManager = Singletons.Get<SectorManager> ();
-            factionManager = Singletons.Get<FactionManager> ();
-            structureManager = Singletons.Get<StructureManager> ();
-        }
-
-        private void Update () {
-            if (_job != null) {
-                sectorManager.LoadGame (_job.Directory);
-                factionManager.LoadGame (_job.Directory);
-                structureManager.LoadGame (_job.Directory);
-                _universe = _job.Directory.Parent.Name;
-                _job = null;
-            }
         }
 
         public string GetUniverse () { return _universe; }
@@ -51,9 +36,9 @@ namespace DarkFrontier.Serialization {
             string timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds ().ToString ();
             DirectoryInfo info = PathManager.GetSaveDirectory (_universe, timestamp);
             if (!info.Exists) info.Create ();
-            structureManager.SaveGame (info);
-            factionManager.SaveGame (info);
-            sectorManager.SaveGame (info);
+            iStructureManager.Value.SaveGame (info);
+            iFactionManager.Value.SaveGame (info);
+            iSectorManager.Value.SaveGame (info);
         }
 
         public void Load (string universeName) {
@@ -64,28 +49,26 @@ namespace DarkFrontier.Serialization {
             for (int i = 1; i < saves.Length; i++)
                 if (saves[i].Name.CompareTo (latest.Name) > 0)
                     latest = saves[i];
-            _job = new SaveLoadJob {
-                Directory = latest,
-            };
+            Load(latest);
         }
 
         public void Load (string universeName, string saveName) {
             CreateSavesDirectoryIfNotExists ();
             DirectoryInfo info = PathManager.GetSaveDirectory (universeName, saveName);
             if (!info.Exists) return;
-            _job = new SaveLoadJob {
-                Directory = info,
-            };
+            Load(info);
         }
 
         void CreateSavesDirectoryIfNotExists () {
             DirectoryInfo info = PathManager.GetUniversesDirectory ();
             if (!info.Exists) info.Create ();
         }
-    }
 
-    [Serializable]
-    public class SaveLoadJob {
-        public DirectoryInfo Directory;
+        private void Load(DirectoryInfo aDirectory) {
+            iSectorManager.Value.LoadGame (aDirectory);
+            iFactionManager.Value.LoadGame (aDirectory);
+            iStructureManager.Value.LoadGame (aDirectory);
+            _universe = aDirectory.Parent!.Name;
+        }
     }
 }
