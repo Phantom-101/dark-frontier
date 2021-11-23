@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using DarkFrontier.Channels;
 using DarkFrontier.Factions;
 using DarkFrontier.Files;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Locations;
+using DarkFrontier.SceneManagement;
 using DarkFrontier.Structures;
 using UnityEngine;
 
@@ -21,7 +23,12 @@ namespace DarkFrontier.Serialization {
         private readonly Lazy<StructureManager> iStructureManager = new Lazy<StructureManager>(() => Singletons.Get<StructureManager>(), false);
 
         private void Awake () {
+            if (_instance != null) {
+                Destroy(gameObject);
+                return;
+            }
             _instance = this;
+            DontDestroyOnLoad(gameObject);
             _saveGameChannel.OnEventRaised += Save;
         }
 
@@ -49,22 +56,23 @@ namespace DarkFrontier.Serialization {
             for (int i = 1; i < saves.Length; i++)
                 if (saves[i].Name.CompareTo (latest.Name) > 0)
                     latest = saves[i];
-            Load(latest);
+            StartCoroutine(Load(latest));
         }
 
         public void Load (string universeName, string saveName) {
             CreateSavesDirectoryIfNotExists ();
             DirectoryInfo info = PathManager.GetSaveDirectory (universeName, saveName);
             if (!info.Exists) return;
-            Load(info);
+            StartCoroutine(Load(info));
         }
 
-        void CreateSavesDirectoryIfNotExists () {
+        private static void CreateSavesDirectoryIfNotExists () {
             DirectoryInfo info = PathManager.GetUniversesDirectory ();
             if (!info.Exists) info.Create ();
         }
 
-        private void Load(DirectoryInfo aDirectory) {
+        private IEnumerator Load(DirectoryInfo aDirectory) {
+            yield return SceneUtils.Instance.LoadSceneAsync ("Empty Game");
             iSectorManager.Value.LoadGame (aDirectory);
             iFactionManager.Value.LoadGame (aDirectory);
             iStructureManager.Value.LoadGame (aDirectory);

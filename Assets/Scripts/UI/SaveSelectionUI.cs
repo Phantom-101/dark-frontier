@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using DarkFrontier.Files;
-using DarkFrontier.SceneManagement;
 using DarkFrontier.Serialization;
 using DarkFrontier.UI.States;
 using UnityEngine;
@@ -16,7 +15,6 @@ namespace DarkFrontier.UI {
         [SerializeField] private List<string> _expanded = new List<string> ();
 
         public void SaveSelected (string universe, string name) {
-            SceneUtils.Instance.LoadScene ("Game");
             SaveManager.GetInstance ().Load (universe, name);
         }
 

@@ -88,7 +88,7 @@ namespace DarkFrontier.Equipment {
         }
 
         public virtual void FromSerializable (Serializable serializable) {
-            Equipment = Singletons.Get<ItemManager> ().GetItem (serializable.EquipmentId) as EquipmentPrototype;
+            Equipment = ItemManager.Instance.GetItem (serializable.EquipmentId) as EquipmentPrototype;
             if (Equipment != null) {
                 UnsafeState = Equipment.GetNewState (this);
                 UState.FromSerializable (serializable.State);

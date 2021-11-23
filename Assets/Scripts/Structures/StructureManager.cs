@@ -125,7 +125,7 @@ namespace DarkFrontier.Structures {
         public void LoadGame (DirectoryInfo directory) {
             FileInfo file = PathManager.GetStructureFile (directory);
             if (!file.Exists) return;
-            registry.UStructures.ForEach (structure => DisposeStructure (structure));
+            registry.UStructures.ForEach (DisposeStructure);
             registry.Clear ();
             JsonConvert.DeserializeObject<List<Structure>> (File.ReadAllText (file.FullName), new Structure.Converter ()).ForEach (lStructure => {
                 registry.Add (lStructure);

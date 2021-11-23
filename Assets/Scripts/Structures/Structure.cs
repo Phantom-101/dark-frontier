@@ -365,11 +365,11 @@ namespace DarkFrontier.Structures {
                 uHull = aObj.Value<float> ("Hull");
                 uStats = aSerializer.Deserialize<Stats> (new JTokenReader (aObj.Value<JObject> ("Stats"))) ?? new Stats ();
 
-                uInventory = aObj.Value<InventorySaveData> ("Inventory").Load ();
+                uInventory = aSerializer.Deserialize<InventorySaveData> (new JTokenReader (aObj.Value<JObject> ("Inventory"))).Load ();
                 uDockedAt.UId.Value = aObj.Value<string> ("DockedAtId");
 
                 uSelected.UId.Value = aObj.Value<string> ("SelectedId");
-                aSerializer.Deserialize<Dictionary<string, float>> (new JTokenReader (aObj.Value<JObject> ("Locks"))).Select (aPair => {
+                aSerializer.Deserialize<List<KeyValuePair<string, float>>> (new JTokenReader (aObj.Value<JObject> ("Locks"))).Select (aPair => {
                     StructureGetter lGetter = new StructureGetter ();
                     lGetter.UId.Value = aPair.Key;
                     return new KeyValuePair<StructureGetter, float> (lGetter, aPair.Value);
@@ -529,12 +529,12 @@ namespace DarkFrontier.Structures {
                             new JProperty ("Stats", JObject.FromObject (aValue.uStats, lSerializer)),
 
                             new JProperty ("Inventory", JObject.FromObject (aValue.uInventory.Save (), lSerializer)),
-                            new JProperty ("EquipmentSlots", new JArray (aValue.uEquipment.ConvertAll (lSlot => lSlot.ToSerializable ()))),
+                            new JProperty ("EquipmentSlots", new JArray (aValue.uEquipment.ConvertAll (lSlot => JObject.FromObject(lSlot.ToSerializable (), lSerializer)))),
                             new JProperty ("DockingPoints", new JArray (aValue.uDockingPoints.ConvertAll (lPoint => JObject.FromObject (lPoint, lSerializer)))),
                             new JProperty ("DockedAtId", aValue.uDockedAt.UId.Value),
 
                             new JProperty ("SelectedId", aValue.uSelected.UId.Value),
-                            new JProperty ("Locks", JObject.FromObject(aValue.uLocks.Select(lPair => new KeyValuePair<string, float> (lPair.Key.UId.Value, lPair.Value)), lSerializer)),
+                            new JProperty ("Locks", JObject.FromObject(aValue.uLocks.Select(lPair => new KeyValuePair<string, float> (lPair.Key.UId.Value, lPair.Value)).ToList(), lSerializer)),
                         };
 
                         lObj.WriteTo (aWriter);

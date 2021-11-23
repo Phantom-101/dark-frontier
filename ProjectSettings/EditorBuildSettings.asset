@@ -9,7 +9,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Menu.unity
     guid: 8ddfc20eb1b1c464a89fb7c01f8a44b5
   - enabled: 1
-    path: Assets/Scenes/Game.unity
+    path: Assets/Scenes/Empty Game.unity
+    guid: 737028447854867449038e6769111fe2
+  - enabled: 1
+    path: Assets/Scenes/Game Preset.unity
     guid: a79746f449aa6ae428cbc47ea799b1da
   - enabled: 1
     path: Assets/Sandbox/SectorScenesTest/SectorScenesTest1.unity

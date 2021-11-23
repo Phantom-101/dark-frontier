@@ -93,8 +93,13 @@ namespace DarkFrontier.UI.Indicators {
                 Vector3 screen = cam.WorldToScreenPoint (Structure.transform.position);
                 Vector3 local = transform.parent.InverseTransformPoint (screen);
                 transform.localPosition = new Vector3 (local.x, local.y);
-                if (local.z > 0) _alphaMult = 1;
-                else _alphaMult = 0;
+                if (local.z > 0) {
+                    _alphaMult = 1;
+                    _button.enabled = true;
+                } else {
+                    _alphaMult = 0;
+                    _button.enabled = false;
+                }
             }
 
             SetAlpha ();
