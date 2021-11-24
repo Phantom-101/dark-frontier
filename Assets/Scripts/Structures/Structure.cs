@@ -7,6 +7,7 @@ using DarkFrontier.Equipment;
 using DarkFrontier.Factions;
 using DarkFrontier.Foundation.Behaviors;
 using DarkFrontier.Foundation.Events;
+using DarkFrontier.Foundation.Extensions;
 using DarkFrontier.Foundation.Identification;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Items;
@@ -529,12 +530,12 @@ namespace DarkFrontier.Structures {
                             new JProperty ("Stats", JObject.FromObject (aValue.uStats, lSerializer)),
 
                             new JProperty ("Inventory", JObject.FromObject (aValue.uInventory.Save (), lSerializer)),
-                            new JProperty ("EquipmentSlots", new JArray (aValue.uEquipment.ConvertAll (lSlot => JObject.FromObject(lSlot.ToSerializable (), lSerializer)))),
-                            new JProperty ("DockingPoints", new JArray (aValue.uDockingPoints.ConvertAll (lPoint => JObject.FromObject (lPoint, lSerializer)))),
+                            new JProperty ("EquipmentSlots", new JArray (aValue.uEquipment.ConvertAll (aSlot => JObject.FromObject(aSlot.ToSerializable (), lSerializer)))),
+                            new JProperty ("DockingPoints", new JArray (aValue.uDockingPoints.ConvertAll (aPoint => JObject.FromObject (aPoint, lSerializer)))),
                             new JProperty ("DockedAtId", aValue.uDockedAt.UId.Value),
 
                             new JProperty ("SelectedId", aValue.uSelected.UId.Value),
-                            new JProperty ("Locks", JObject.FromObject(aValue.uLocks.Select(lPair => new KeyValuePair<string, float> (lPair.Key.UId.Value, lPair.Value)).ToList(), lSerializer)),
+                            new JProperty ("Locks", JObject.FromObject(aValue.uLocks.Select(aPair => new KeyValuePair<string, float> (aPair.Key.UId.Value, aPair.Value)).ToList(), lSerializer)),
                         };
 
                         lObj.WriteTo (aWriter);
@@ -754,7 +755,11 @@ namespace DarkFrontier.Structures {
                 if ((lPrototype = lState.uPrototype) != null) {
                     GameObject? lPrefab;
                     if ((lPrefab = lPrototype.Prefab) != null) {
-                        GameObject lInstantiated = Instantiate (lPrefab);
+                        GameObject lInstantiated = Instantiate (
+                            lPrefab,
+                            lObj.Value<JArray>("WorldPosition").ToList().ConvertAll(aElement => lSerializer.Deserialize<float>(new JTokenReader(aElement))).ToArray().ToVector3().GetValueOrDefault(Vector3.zero),
+                            lObj.Value<JArray>("WorldRotation").ToList().ConvertAll(aElement => lSerializer.Deserialize<float>(new JTokenReader(aElement))).ToArray().ToQuaternion().GetValueOrDefault(Quaternion.identity)
+                        );
                         Structure? lComponent;
                         if ((lComponent = lInstantiated.GetComponent<Structure> ()) == null) {
                             lComponent = lInstantiated.AddComponent<Structure> ();
@@ -772,6 +777,10 @@ namespace DarkFrontier.Structures {
                             DockingPoint.State lDeserializedPoint = lSerializer.Deserialize<DockingPoint.State> (new JTokenReader (aSerializedPoint)) ?? new DockingPoint.State ();
                             lState.uDockingPoints.Find (aPoint => aPoint.USerializationId == aSerializedPoint.Value<string> ("SerializationId")).Construct (lDeserializedPoint);
                         });
+
+                        if (lObj.Value<bool>("IsPlayer")) {
+                            Singletons.Get<PlayerController>().UPlayer = lComponent;
+                        }
 
                         return lComponent;
                     }
@@ -791,7 +800,13 @@ namespace DarkFrontier.Structures {
                     };
                     lSerializer.Converters.Add (new State.Converter ());
 
-                    JObject.FromObject (aValue.iState, lSerializer).WriteTo (aWriter);
+                    var lObj = JObject.FromObject (aValue.iState, lSerializer);
+                    
+                    lObj.Add(new JProperty("WorldPosition", new JArray (aValue.transform.position.ToArray())));
+                    lObj.Add(new JProperty("WorldRotation", new JArray (aValue.transform.rotation.ToArray())));
+                    lObj.Add(new JProperty("IsPlayer", Singletons.Get<PlayerController>().UPlayer == aValue));
+                    
+                    lObj.WriteTo (aWriter);
                 }
             }
         }

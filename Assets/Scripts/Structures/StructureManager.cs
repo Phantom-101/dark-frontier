@@ -119,7 +119,7 @@ namespace DarkFrontier.Structures {
         public void SaveGame (DirectoryInfo directory) {
             FileInfo file = PathManager.GetStructureFile (directory);
             if (!file.Exists) file.Create ().Close ();
-            File.WriteAllText (file.FullName, JsonConvert.SerializeObject (registry.UStructures, new Structure.Converter ()));
+            File.WriteAllText (file.FullName, JsonConvert.SerializeObject (registry.UStructures, Formatting.Indented, new Structure.Converter ()));
         }
 
         public void LoadGame (DirectoryInfo directory) {
@@ -127,9 +127,7 @@ namespace DarkFrontier.Structures {
             if (!file.Exists) return;
             registry.UStructures.ForEach (DisposeStructure);
             registry.Clear ();
-            JsonConvert.DeserializeObject<List<Structure>> (File.ReadAllText (file.FullName), new Structure.Converter ()).ForEach (lStructure => {
-                registry.Add (lStructure);
-            });
+            JsonConvert.DeserializeObject<List<Structure>> (File.ReadAllText (file.FullName), new Structure.Converter ())!.ForEach (aStructure => registry.Add (aStructure));
         }
     }
 }
