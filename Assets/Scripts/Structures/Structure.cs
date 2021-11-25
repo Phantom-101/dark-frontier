@@ -35,7 +35,7 @@ namespace DarkFrontier.Structures {
 
             set {
                 iState.uHull = Mathf.Min (value, iState.uStats.UValues.MaxHull);
-                if (iState.uHull <= 0) {
+                if (iState.uHull <= 0 && iEnabled) {
                     iStructureManager.Value.DestroyStructure (this);
                 }
             }

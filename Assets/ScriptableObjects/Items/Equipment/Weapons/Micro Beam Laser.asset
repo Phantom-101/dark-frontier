@@ -59,6 +59,39 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  BeamPrefab: {fileID: 930999058288108214, guid: e3b26bd84ba365f40a5aff1f98a0cdbf,
+  BeamPrefab: {fileID: 930999058288108214, guid: 0bc3b84c2be5cf449b83b1c959071940,
     type: 3}
-  BeamWidth: 0.5
+  BeamMaterial: {fileID: 2100000, guid: decb66a87c57ba2419115c107a79c574, type: 2}
+  BeamAlpha:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 1
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 0.5
+      inSlope: 1
+      outSlope: -1
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: -2
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

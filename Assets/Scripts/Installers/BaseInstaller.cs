@@ -14,6 +14,12 @@ namespace DarkFrontier.Installers {
             if (!Singletons.Exists<BehaviorManager> ()) {
                 Singletons.Bind (new BehaviorManager ());
             }
+
+            if (!Singletons.Exists<BehaviorPooler>()) {
+                var lGameObject = new GameObject ("[Service] Behavior Pooler");
+                Singletons.Bind (lGameObject.AddComponent<BehaviorPooler> ());
+                DontDestroyOnLoad (lGameObject);
+            }
         }
     }
 }

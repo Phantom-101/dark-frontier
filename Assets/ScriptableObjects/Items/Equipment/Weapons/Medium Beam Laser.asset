@@ -29,7 +29,7 @@ MonoBehaviour:
     HullDamage: 16
     EquipmentDamage: 4
     ShieldPenetration: 0
-  DamageInterval: 0.5
+  DamageInterval: 2
   EnergyConsumption: 120
   MaxHeat: 100
   HeatGeneration: 15
@@ -59,6 +59,39 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  BeamPrefab: {fileID: 930999058288108214, guid: 1a53d00be0c0d0f49a05fab213c2b948,
+  BeamPrefab: {fileID: 930999058288108214, guid: 0bc3b84c2be5cf449b83b1c959071940,
     type: 3}
-  BeamWidth: 2
+  BeamMaterial: {fileID: 2100000, guid: e1b68e8a8fefc2c45b3bd2a77c89f61c, type: 2}
+  BeamAlpha:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 4
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 2
+      inSlope: 4
+      outSlope: -4
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -4
+      outSlope: -2
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

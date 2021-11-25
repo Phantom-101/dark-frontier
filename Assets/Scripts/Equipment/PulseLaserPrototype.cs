@@ -2,7 +2,10 @@
 using DarkFrontier.Locations;
 using DarkFrontier.Structures;
 using System;
+using System.Collections;
 using System.Linq;
+using DarkFrontier.Foundation.Behaviors;
+using DarkFrontier.Visuals;
 using UnityEngine;
 
 namespace DarkFrontier.Equipment {
@@ -17,7 +20,9 @@ namespace DarkFrontier.Equipment {
         public AnimationCurve PreemptiveDamageMultiplier = new AnimationCurve ();
         public AnimationCurve PreemptiveRangeMultiplier = new AnimationCurve ();
         public GameObject? BeamPrefab;
-        public float BeamWidth;
+        public Material? BeamMaterial;
+        public AnimationCurve BeamAlpha = new AnimationCurve();
+        public float BeamDuration;
 
         public override void Tick (EquipmentSlot aSlot, float aDt) {
             if (aSlot.Equipper == null) return;
@@ -45,15 +50,15 @@ namespace DarkFrontier.Equipment {
 
             if (lState.Activated) {
                 if (BeamPrefab != null) {
-                    GameObject beam = Instantiate (BeamPrefab, aSlot.transform);
-                    beam.transform.LookAt (lState.Target!.transform);
-                    beam.transform.localScale = Vector3.one;
-                    beam.transform.localScale = new Vector3 (
-                        BeamWidth / beam.transform.lossyScale.x,
-                        BeamWidth / beam.transform.lossyScale.y,
-                        Vector3.Distance (aSlot.transform.position, lState.Target.transform.position) / beam.transform.lossyScale.z
-                    );
-                    Destroy (beam, 0.2f);
+                    var lVisuals = (LaserVisuals) Singletons.Get<BehaviorPooler>().Take("laser-visuals", SpawnVisuals);
+                    lVisuals.uFrom = new Location(aSlot.transform);
+                    lVisuals.uTo = new Location(lState.Target!.transform);
+                    lVisuals.uMaterial = BeamMaterial;
+                    lVisuals.uAlpha = BeamAlpha;
+                    lVisuals.uPeriod = BeamDuration;
+                    lVisuals.uRepeat = false;
+                    lVisuals.Enable();
+                    Singletons.Get<BehaviorPooler>().ReclaimAfter("laser-visuals", lVisuals, BeamDuration);
                 }
                 /* Use raycast?
                 if (Physics.Raycast (slot.Equipper.transform.position, data.Target.transform.position - slot.Equipper.transform.position, out RaycastHit hit, Range)) {
@@ -127,6 +132,12 @@ namespace DarkFrontier.Equipment {
 
         public float GetRangeMultiplier (EquipmentSlot slot) {
             return PreemptiveRangeMultiplier.Evaluate ((slot.UState as State)!.Charge / EnergyRequired);
+        }
+        
+        private IBehavior SpawnVisuals() {
+            var lVisuals = Instantiate(BeamPrefab)!.GetComponent<LaserVisuals>();
+            lVisuals.Disable();
+            return lVisuals;
         }
 
         [Serializable]

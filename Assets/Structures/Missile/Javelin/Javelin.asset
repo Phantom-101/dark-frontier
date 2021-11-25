@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b631ed5d83fe9f45ac195241758721a, type: 3}
-  m_Name: Missile
+  m_Name: Javelin
   m_EditorClassIdentifier: 
   Name: Missile
   Description: A missile.

@@ -91,6 +91,8 @@ namespace DarkFrontier.Structures {
             if (structure.USector.UValue != null) structure.USector.UValue.UPopulation.Remove (structure);
             // Destroy docked structures
             structure.UDockingPoints.ForEach (e => DestroyStructure (e.UDocker));
+            // Destroy equipment
+            structure.UEquipment.UAll.ForEach(aSlot => aSlot.ChangeEquipment(null));
             // Spawn destruction effect
             if (structure.UPrototype.DestructionEffect != null) {
                 GameObject effect = Instantiate (structure.UPrototype.DestructionEffect, structure.transform.parent);
@@ -111,7 +113,9 @@ namespace DarkFrontier.Structures {
             structure.UFaction.UValue?.Property.Remove (structure);
             if (structure.USector.UValue != null) structure.USector.UValue.UPopulation.Remove (structure);
             // Destroy docked structures
-            structure.UDockingPoints.ForEach (e => DisposeStructure (e.UDocker));
+            structure.UDockingPoints.ForEach (aPoint => DisposeStructure (aPoint.UDocker));
+            // Destroy equipment
+            structure.UEquipment.UAll.ForEach(aSlot => aSlot.ChangeEquipment(null));
             // Destroy structure game object
             Destroy (structure.gameObject);
         }

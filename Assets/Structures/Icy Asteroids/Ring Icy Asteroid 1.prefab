@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1377245225604643783}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1267087400060185306}
   - component: {fileID: 3313825842934680375}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,12 +108,12 @@ GameObject:
   - component: {fileID: 1906994039133512267}
   - component: {fileID: 1906994039133512276}
   - component: {fileID: 1906994039133512277}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LOD3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1906994039133512267
 Transform:
@@ -189,12 +189,12 @@ GameObject:
   - component: {fileID: 1906994039776324466}
   - component: {fileID: 1906994039776324467}
   - component: {fileID: 1906994039776324476}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1906994039776324466
 Transform:
@@ -268,12 +268,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1906994040284096773}
-  m_Layer: 0
-  m_Name: Tube Icy Asteroid 1
+  m_Layer: 8
+  m_Name: Ring Icy Asteroid 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1906994040284096773
 Transform:
@@ -302,12 +302,12 @@ GameObject:
   - component: {fileID: 1906994040523832630}
   - component: {fileID: 1906994040523832631}
   - component: {fileID: 1906994040523832624}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1906994040523832630
 Transform:
@@ -383,12 +383,12 @@ GameObject:
   - component: {fileID: 1906994040605386530}
   - component: {fileID: 1906994040605386531}
   - component: {fileID: 1906994040605386540}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1906994040605386530
 Transform:
@@ -463,7 +463,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6194607637589758764}
   - component: {fileID: 6961306384234528145}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}

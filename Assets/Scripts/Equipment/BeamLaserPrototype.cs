@@ -3,11 +3,12 @@ using DarkFrontier.Locations;
 using DarkFrontier.Structures;
 using System;
 using System.Linq;
+using DarkFrontier.Foundation.Behaviors;
+using DarkFrontier.Visuals;
 using UnityEngine;
 
-namespace DarkFrontier.Equipment {
-
 #nullable enable
+namespace DarkFrontier.Equipment {
     [CreateAssetMenu (menuName = "Items/Equipment/Weapons/Beam Laser")]
     public class BeamLaserPrototype : EquipmentPrototype {
         public float Range;
@@ -20,14 +21,17 @@ namespace DarkFrontier.Equipment {
         public float OverheatDamage;
         public AnimationCurve HeatDamageMultiplier = new AnimationCurve ();
         public GameObject? BeamPrefab;
-        public float BeamWidth;
+        public Material? BeamMaterial;
+        public AnimationCurve BeamAlpha = new AnimationCurve();
 
-        public override void OnAwake (EquipmentSlot slot) => EnsureStateType (slot);
-        public override void OnEquip (EquipmentSlot slot) => slot.UnsafeState = GetNewState (slot);
+        public override void OnAwake (EquipmentSlot aSlot) => EnsureStateType (aSlot);
+        public override void OnEquip (EquipmentSlot aSlot) => aSlot.UnsafeState = GetNewState (aSlot);
 
-        public override void OnUnequip (EquipmentSlot slot) {
-            State state = (slot.UState as State)!;
-            if (state.Beam != null) Destroy (state.Beam);
+        public override void OnUnequip (EquipmentSlot aSlot) {
+            State lState = (aSlot.UState as State)!;
+            if (lState.Beam == null) return;
+            DisableVisuals(lState.Beam);
+            lState.Beam = null;
         }
 
         public override void Tick (EquipmentSlot aSlot, float aDt) {
@@ -40,15 +44,17 @@ namespace DarkFrontier.Equipment {
             lState.Heat = Mathf.Clamp (lState.Heat - CoolingRate * aDt + (lState.Activated ? HeatGeneration * aDt : 0), 0, MaxHeat);
 
             if (lState.Activated) {
-                if (lState.Beam == null) lState.Beam = Instantiate (BeamPrefab, aSlot.transform);
-                lState.Beam!.transform.LookAt (lState.Target!.transform);
-                lState.Beam.transform.localScale = Vector3.one;
-                var lBeamScale = lState.Beam.transform.lossyScale;
-                lState.Beam.transform.localScale = new Vector3 (
-                    BeamWidth / lBeamScale.x,
-                    BeamWidth / lBeamScale.y,
-                    Vector3.Distance (aSlot.transform.position, lState.Target.transform.position) / lBeamScale.z
-                );
+                if (lState.Beam == null) {
+                    lState.Beam = (LaserVisuals) Singletons.Get<BehaviorPooler>().Take("laser-visuals", SpawnVisuals);
+                    lState.Beam.uFrom = new Location(aSlot.transform);
+                    lState.Beam.uTo = new Location(lState.Target!.transform);
+                    lState.Beam.uMaterial = BeamMaterial;
+                    lState.Beam.uAlpha = BeamAlpha;
+                    lState.Beam.uPeriod = DamageInterval;
+                    lState.Beam.uRepeat = true;
+                    lState.Beam.Enable();
+                }
+
                 var lConsumption = EnergyConsumption * aDt;
                 float lGiven = 0;
                 var lCapacitors = aSlot.Equipper.UEquipment.States<CapacitorPrototype.State>();
@@ -75,7 +81,10 @@ namespace DarkFrontier.Equipment {
                 }
             } else {
                 lState.AccumulatedDamageMultiplier = 0;
-                if (lState.Beam != null) Destroy (lState.Beam);
+                if (lState.Beam != null) {
+                    DisableVisuals(lState.Beam);
+                    lState.Beam = null;
+                }
             }
 
             if (lState.Heat == MaxHeat) {
@@ -142,13 +151,24 @@ namespace DarkFrontier.Equipment {
 
         public override EquipmentPrototype.State GetNewState (EquipmentSlot slot) => new State (slot, this);
 
+        private IBehavior SpawnVisuals() {
+            var lVisuals = Instantiate(BeamPrefab)!.GetComponent<LaserVisuals>();
+            lVisuals.Disable();
+            return lVisuals;
+        }
+
+        private void DisableVisuals(LaserVisuals aVisuals) {
+            aVisuals.Disable();
+            Singletons.Get<BehaviorPooler>().Reclaim("laser-visuals", aVisuals);
+        }
+        
         [Serializable]
         public new class State : EquipmentPrototype.State {
             public float AccumulatedDamageMultiplier;
             public float Heat;
             public bool Activated;
             public Structure? Target;
-            public GameObject? Beam;
+            public LaserVisuals? Beam;
 
             public State (EquipmentSlot slot, BeamLaserPrototype equipment) : base (slot, equipment) { }
 

@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 1114906184517691581}
   - component: {fileID: 1114906184517691579}
   - component: {fileID: 1114906184517691578}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LOD3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1114906184517691581
 Transform:
@@ -92,12 +92,12 @@ GameObject:
   - component: {fileID: 1114906184953978972}
   - component: {fileID: 1114906184953978970}
   - component: {fileID: 1114906184953978973}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1114906184953978972
 Transform:
@@ -174,12 +174,12 @@ GameObject:
   - component: {fileID: 843006609539766898}
   - component: {fileID: 3138401788489946763}
   - component: {fileID: 7636544220074958021}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tall Icy Asteroid 1 Fragment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1114906185105546291
 Transform:
@@ -211,18 +211,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iState:
     uPrototype: {fileID: 11400000, guid: ec0fec80076463947a24e0381e74a12e, type: 2}
-    uId:
-      value: 
     uFaction:
-      id:
+      iId:
         value: 
       value:
         id: 0
     uSector:
-      id:
+      iId:
         value: 
       value: {fileID: 0}
     uHull: 10000
+    uStats:
+      iValues:
+        MaxHull: 1
+        LinearMaxSpeedMultiplier: 1
+        AngularMaxSpeedMultiplier: 1
+        LinearAccelerationMultiplier: 1
+        AngularAccelerationMultiplier: 1
+        SensorStrength: 0
+        ScannerStrength: 0
+        Detectability: 0
+        SignatureSize: 0
+        MaxTargetLocks: 0
+        CargoDropPercentage: 1
+        InventoryVolume: 0
+      iModifiers: []
     uInventory:
       quantities:
         reorderableList:
@@ -253,17 +266,17 @@ MonoBehaviour:
       volume: 0
       storedVolume: 0
       precision: 1
-    uEquipmentSlots: []
+    uEquipment: []
     uDockingPoints: []
     uDockedAt:
-      id:
+      iId:
         value: 
       value: {fileID: 0}
     uSelected:
-      id:
+      iId:
         value: 
       value: {fileID: 0}
-    uAI: {fileID: 0}
+    uNpcController: {fileID: 0}
   references:
     version: 1
     00000000:
@@ -307,12 +320,12 @@ GameObject:
   - component: {fileID: 1114906185193775601}
   - component: {fileID: 1114906185193775599}
   - component: {fileID: 1114906185193775598}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1114906185193775601
 Transform:
@@ -388,12 +401,12 @@ GameObject:
   - component: {fileID: 1114906185665165902}
   - component: {fileID: 1114906185665165900}
   - component: {fileID: 1114906185665165903}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1114906185665165902
 Transform:
@@ -468,7 +481,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8197490763659964571}
   - component: {fileID: 3233132475047212904}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -512,7 +525,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6522975675529889182}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -544,7 +557,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3852719918799391794}
   - component: {fileID: 4466005597105559317}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
