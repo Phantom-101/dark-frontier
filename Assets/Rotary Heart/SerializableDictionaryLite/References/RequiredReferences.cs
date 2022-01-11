@@ -1,4 +1,5 @@
-﻿using DarkFrontier.Items.Prototypes;
+﻿using DarkFrontier.Items;
+using DarkFrontier.Structures;
 using UnityEngine;
 
 namespace RotaryHeart.Lib.SerializableDictionary {

@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
-using DarkFrontier.Items.Prototypes;
+using DarkFrontier.Structures;
 
 namespace DarkFrontier.Items.Inventories {
     public interface IInventory {
-        float Volume { get; set; }
-        float StoredVolume { get; }
-        bool Overburdened { get; }
-        int Precision { get; set; }
+        float UVolume { get; set; }
+        float UStoredVolume { get; }
+        bool UOverburdened { get; }
+        int UPrecision { get; set; }
 
-        int GetQuantity (ItemPrototype item);
-        bool HasQuantity (ItemPrototype item, int quantity);
-        int AddQuantity (ItemPrototype item, int quantity);
-        int RemoveQuantity (ItemPrototype item, int quantity);
-        List<ItemPrototype> GetStoredItems ();
+        int GetQuantity (ItemPrototype.State aItem);
+        bool HasQuantity (ItemPrototype.State aItem, int aQuantity);
+        int AddQuantity (ItemPrototype.State aItem, int aQuantity);
+        int RemoveQuantity (ItemPrototype.State aItem, int aQuantity);
+        List<ItemPrototype.State> GetStoredItems ();
     }
 }

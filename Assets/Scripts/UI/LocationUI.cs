@@ -22,7 +22,7 @@ namespace DarkFrontier.UI {
         public override void Tick (object aTicker, float aDt) {
             var player = iPlayerController.Value.UPlayer;
             if (player == null) return;
-            _text.text = $"{player.UPrototype.Name} \"{player.gameObject.name}\" ({player.USector.UValue.gameObject.name})";
+            _text.text = $"{player.uPrototype.Name} \"{player.gameObject.name}\" ({player.uSector.UValue.gameObject.name})";
         }
     }
 }

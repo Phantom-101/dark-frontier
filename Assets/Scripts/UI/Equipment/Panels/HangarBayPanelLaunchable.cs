@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DarkFrontier.Equipment;
 using DarkFrontier.Items.Prototypes;
+using DarkFrontier.Structures;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -18,7 +19,7 @@ namespace DarkFrontier.UI.Equipment.Panels {
             clickEntry.callback.AddListener ((data) => {
                 List<HangarBayPrototype.State.SlotState> unloaded = State.LaunchSlots.FindAll (s => s.Status == HangarBayPrototype.State.SlotState.SlotStatus.Unloaded);
                 if (unloaded.Count > 0) {
-                    if (State.Slot.Equipper.UInventory.RemoveQuantity (Launchable, 1) == 1) {
+                    if (State.Slot.Equipper.uInventory.RemoveQuantity (Launchable.NewState(), 1) == 1) {
                         unloaded[0].Load (Launchable);
                     }
                 }
@@ -28,9 +29,9 @@ namespace DarkFrontier.UI.Equipment.Panels {
             EventTrigger.Entry beginDragEntry = new EventTrigger.Entry { eventID = EventTriggerType.BeginDrag };
             beginDragEntry.callback.AddListener ((data) => {
                 List<HangarBayPrototype.State.SlotState> unloaded = State.LaunchSlots.FindAll (s => s.Status == HangarBayPrototype.State.SlotState.SlotStatus.Unloaded);
-                int q = State.Slot.Equipper.UInventory.GetQuantity (Launchable);
+                int q = State.Slot.Equipper.uInventory.GetQuantity (Launchable.NewState());
                 for (int i = 0; i < q && i < unloaded.Count; i++) {
-                    if (State.Slot.Equipper.UInventory.RemoveQuantity (Launchable, 1) == 1) {
+                    if (State.Slot.Equipper.uInventory.RemoveQuantity (Launchable.NewState(), 1) == 1) {
                         unloaded[i].Load (Launchable);
                     }
                 }
@@ -43,7 +44,7 @@ namespace DarkFrontier.UI.Equipment.Panels {
                 Destroy (gameObject);
                 return;
             }
-            int q = State.Slot.Equipper.UInventory.GetQuantity (Launchable);
+            int q = State.Slot.Equipper.uInventory.GetQuantity (Launchable.NewState());
             if (q == 0) {
                 Destroy (gameObject);
                 return;

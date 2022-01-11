@@ -32,19 +32,19 @@ namespace DarkFrontier.Camera {
 
             if (_target.UTransform == null) {
 
-                Vector3 scOff = _offset * player.UPrototype.ApparentSize;
+                Vector3 scOff = _offset * player.uPrototype.ApparentSize;
                 Vector3 targetPos = pt.position + pt.rotation * scOff;
                 Vector3 offset = targetPos - transform.position;
                 Debug.DrawLine (transform.position, targetPos, Color.red);
                 transform.Translate (offset * (_followSpeed * UnityEngine.Time.deltaTime), Space.World);
-                transform.LookAt (pt.position + pt.rotation * Vector3.forward * (player.UPrototype.ApparentSize * 2), player.transform.up);
+                transform.LookAt (pt.position + pt.rotation * Vector3.forward * (player.uPrototype.ApparentSize * 2), player.transform.up);
 
             } else {
 
                 Vector3 difVec = _target.UPosition - pt.position;
                 difVec.y = 0;
                 Vector3 norVec = difVec.normalized;
-                Vector3 scOff = _offset * player.UPrototype.ApparentSize;
+                Vector3 scOff = _offset * player.uPrototype.ApparentSize;
                 Vector3 targetOffset = new Vector3 (scOff.x * norVec.x, scOff.y, scOff.z * norVec.z);
                 Vector3 targetPos = pt.position + pt.rotation * targetOffset;
                 Vector3 offset = targetPos - transform.position;

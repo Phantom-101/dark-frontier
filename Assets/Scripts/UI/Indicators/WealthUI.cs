@@ -13,7 +13,7 @@ namespace DarkFrontier.UI.Indicators {
         private void Update () {
             var lPlayer = iPlayerController.Value.UPlayer;
             if (lPlayer == null) return;
-            _text.text = $"{(iPlayerController.Value.UPlayer.UFaction.UValue?.Wealth ?? 0).ToString()} Cr";
+            _text.text = $"{(iPlayerController.Value.UPlayer.uFaction.UValue?.Wealth ?? 0).ToString()} Cr";
         }
     }
 }

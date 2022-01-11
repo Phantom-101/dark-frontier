@@ -33,7 +33,7 @@ namespace DarkFrontier.UI.Indicators {
                 }
             }
 
-            foreach (var lOther in lPlayer.USector.UValue.UPopulation.UStructures) {
+            foreach (var lOther in lPlayer.uSector.UValue.UPopulation.UStructures) {
                 if (lPlayer == lOther) continue;
                 if (!lPlayer.CanDetect(lOther)) continue;
                 if (iInstantiated.ContainsKey(lOther)) continue;

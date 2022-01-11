@@ -16,7 +16,7 @@ namespace DarkFrontier.UI {
 
         public void Initialize () {
             _name.text = _structure.gameObject.name;
-            _location.text = _structure.USector.UValue.gameObject.name;
+            _location.text = _structure.uSector.UValue.gameObject.name;
             _hp.SetStructure (_structure);
             _hp.Initialize ();
         }

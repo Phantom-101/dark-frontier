@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using DarkFrontier.Foundation;
-using DarkFrontier.Items.Prototypes;
+using DarkFrontier.Structures;
 using UnityEngine;
 
 namespace DarkFrontier.Items {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DarkFrontier.Equipment;
 using DarkFrontier.Items.Prototypes;
+using DarkFrontier.Structures;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,7 +27,7 @@ namespace DarkFrontier.UI.Equipment.Buttons {
             TooltipGroup.alpha = 0;
             Button.onClick.AddListener (() => cache.OnClicked (Slot));
             SwitchButton.onClick.AddListener (() => {
-                List<MissileSO> candidates = cache.CompatibleMissiles.FindAll (e => Slot.Equipper.UInventory.HasQuantity (e, 1));
+                List<MissileSO> candidates = cache.CompatibleMissiles.FindAll (e => Slot.Equipper.uInventory.HasQuantity (e.NewState(), 1));
                 LauncherPrototype.State state = Slot.UState as LauncherPrototype.State;
                 if (candidates.Count == 0) state.Missile = null;
                 else state.Missile = candidates[(candidates.IndexOf (state.Missile) + 1) % candidates.Count];

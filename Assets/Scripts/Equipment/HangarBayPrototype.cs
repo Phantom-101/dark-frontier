@@ -1,6 +1,5 @@
 ﻿using DarkFrontier.Foundation.Serialization;
 using DarkFrontier.Foundation.Services;
-using DarkFrontier.Locations;
 using DarkFrontier.Structures;
 using System;
 using System.Collections.Generic;
@@ -8,10 +7,15 @@ using System.Linq;
 using DarkFrontier.Controllers;
 using DarkFrontier.Items;
 using DarkFrontier.Items.Prototypes;
+using DarkFrontier.Items.Structures;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
+using DarkFrontier.Positioning.Navigation;
 
 #nullable enable
-namespace DarkFrontier.Equipment {
+namespace DarkFrontier.Equipment
+{
     [CreateAssetMenu (menuName = "Items/Equipment/Weapons/Hangar Bay")]
     public class HangarBayPrototype : EquipmentPrototype {
         public float LoadingSpeed;
@@ -49,7 +53,7 @@ namespace DarkFrontier.Equipment {
                         if (launchSlot.Status == State.SlotState.SlotStatus.Launched) {
                             // If launchable is within retrieve range
                             if (launchSlot.Structure != null) {
-                                if (Singletons.Get<NavigationManager> ().Distance (new Location (aSlot.Equipper.transform), new Location (launchSlot.Structure.transform), DistanceType.Chebyshev) <= RetrieveRange) {
+                                if (Navigation.Chebyshev (aSlot.Equipper.transform.position, launchSlot.Structure.transform.position) <= RetrieveRange) {
                                     launchSlot.Status = State.SlotState.SlotStatus.Landing;
                                     break;
                                 }
@@ -68,19 +72,19 @@ namespace DarkFrontier.Equipment {
             if (state.Activated) {
                 // If equipment is activated and selected is null or target
                 // Assume user wants to deactivate equipment
-                if (slot.Equipper.USelected.UValue == null || slot.Equipper.USelected.UValue == state.Target) return true;
+                if (slot.Equipper.uSelected.UValue == null || slot.Equipper.uSelected.UValue == state.Target) return true;
                 // If equipment is activated and selected is not null
                 // Assume user wants to change target
                 else {
-                    if (!slot.Equipper.ULocks.Keys.Any (lGetter => lGetter.UValue == slot.Equipper.USelected.UValue)) return false;
+                    if (!slot.Equipper.uLocks.Keys.Any (lGetter => lGetter.UValue == slot.Equipper.uSelected.UValue)) return false;
                     return true;
                 }
             } else {
                 // If equipment is not activated
                 // Assume user wants to activate equipment
-                if (slot.Equipper.USelected.UValue == null) return false;
+                if (slot.Equipper.uSelected.UValue == null) return false;
                 if (state.LaunchSlots.FindAll (s => s.Status == State.SlotState.SlotStatus.Loaded).Count == 0) return false;
-                if (!slot.Equipper.ULocks.Keys.Any (lGetter => lGetter.UValue == slot.Equipper.USelected.UValue)) return false;
+                if (!slot.Equipper.uLocks.Keys.Any (lGetter => lGetter.UValue == slot.Equipper.uSelected.UValue)) return false;
                 return true;
             }
         }
@@ -95,20 +99,20 @@ namespace DarkFrontier.Equipment {
             if (state.Activated) {
                 // If equipment is activated and selected is null or target
                 // Assume user wants to deactivate equipment
-                if (slot.Equipper.USelected.UValue == null || slot.Equipper.USelected.UValue == state.Target) state.Activated = false;
+                if (slot.Equipper.uSelected.UValue == null || slot.Equipper.uSelected.UValue == state.Target) state.Activated = false;
                 // If equipment is activated and selected is not null
                 // Assume user wants to change target
-                else state.Target = slot.Equipper.USelected.UValue;
+                else state.Target = slot.Equipper.uSelected.UValue;
             } else {
                 // If equipment is not activated
                 // Assume user wants to activate equipment
                 state.Activated = true;
-                state.Target = slot.Equipper.USelected.UValue;
+                state.Target = slot.Equipper.uSelected.UValue;
             }
         }
 
         public override void EnsureStateType (EquipmentSlot slot) {
-            if (!(slot.UnsafeState is State)) slot.UnsafeState = GetNewState (slot);
+            if (!(slot.UState is State)) slot.UState = GetNewState (slot);
         }
 
         public override EquipmentPrototype.State GetNewState (EquipmentSlot slot) => new State (slot, this);
@@ -127,7 +131,7 @@ namespace DarkFrontier.Equipment {
                 return new Serializable {
                     Durability = Durability,
                     Activated = Activated,
-                    TargetId = Target == null ? "" : Target.UId,
+                    TargetId = Target == null ? "" : Target.uId,
                     LaunchSlots = LaunchSlots.ConvertAll (s => s.ToSerializable ()),
                 };
             }
@@ -185,7 +189,7 @@ namespace DarkFrontier.Equipment {
                         fuelingProgress = 0;
                         launchingProgress = 0;
                         // If for some reason structure is non-null, destroy it
-                        if (structure != null) Singletons.Get<StructureManager> ().DisposeStructure (structure);
+                        if (structure != null) Singletons.Get<StructureManager> ().LifetimeUtilities.Dispose(structure);
                     } else if (status == SlotStatus.Unloading) {
                         if (launchable == null) {
                             status = SlotStatus.Unloaded;
@@ -195,7 +199,7 @@ namespace DarkFrontier.Equipment {
                         // If unloaded
                         if (loadingProgress <= 0) {
                             // If equipper has enough inventory space to hold the craft
-                            if (slot.Equipper.UInventory.AddQuantity (launchable, 1) == 1) {
+                            if (slot.Equipper.uInventory.AddQuantity (launchable.NewState(), 1) == 1) {
                                 // Set state to unloaded
                                 status = SlotStatus.Unloaded;
                             }
@@ -230,11 +234,11 @@ namespace DarkFrontier.Equipment {
                         // If launched
                         if (launchingProgress >= launchable.LaunchingPreparation) {
                             // Spawn structure
-                            structure = Singletons.Get<StructureManager> ().SpawnStructure (launchable, slot.Equipper.UFaction.UId.Value, slot.Equipper.USector.UId.Value, new Location (slot.transform));
-                            HangarCraftNpcController lNpcController = (HangarCraftNpcController) structure.GetNpcController<HangarCraftNpcController>();
-                            lNpcController.Launchable = launchable;
-                            lNpcController.State = state;
-                            structure.UNpcController = lNpcController;
+                            structure = Singletons.Get<StructureManager> ().LifetimeUtilities.Create (launchable, slot.Equipper.uSector.UValue, slot.transform, slot.Equipper.uFaction.UValue);
+                            HangarCraftController lController = (HangarCraftController) structure.GetNpcController<HangarCraftController>();
+                            lController.Launchable = launchable;
+                            lController.State = state;
+                            structure.uNpcController = lController;
                             // Set state to launched
                             status = SlotStatus.Launched;
                         }
@@ -256,13 +260,13 @@ namespace DarkFrontier.Equipment {
                         // Check fuel
                         if (fuelingProgress <= 0) {
                             // If out of fuel add penalties
-                            if (!structure.UStats.UModifiers.Any (lModifier => lModifier is Penalty)) {
-                                structure.UStats.Add (new Penalty (launchable.NoFuelMaxSpeedPenalty, launchable.NoFuelAccelerationPenalty));
+                            if (!structure.uStats.UModifiers.Any (lModifier => lModifier is Penalty)) {
+                                structure.uStats.Add (new Penalty (launchable.NoFuelMaxSpeedPenalty, launchable.NoFuelAccelerationPenalty));
                             }
                         } else {
                             // Remove modifiers if not out of fuel
-                            if (structure.UStats.UModifiers.Any (lModifier => lModifier is Penalty)) {
-                                structure.UStats.UModifiers.Remove (structure.UStats.UModifiers.Where (lModifier => lModifier is Penalty).First ());
+                            if (structure.uStats.UModifiers.Any (lModifier => lModifier is Penalty)) {
+                                structure.uStats.UModifiers.Remove (structure.uStats.UModifiers.Where (lModifier => lModifier is Penalty).First ());
                             }
                         }
                     } else if (status == SlotStatus.Landing) {
@@ -279,7 +283,7 @@ namespace DarkFrontier.Equipment {
                         // If landed
                         if (launchingProgress <= 0) {
                             // Destroy structure
-                            Singletons.Get<StructureManager> ().DisposeStructure (structure);
+                            Singletons.Get<StructureManager> ().LifetimeUtilities.Dispose (structure);
                             // Set state to loaded
                             status = SlotStatus.Loaded;
                         }
@@ -303,7 +307,7 @@ namespace DarkFrontier.Equipment {
                         LoadingProgress = LoadingProgress,
                         FuelingProgress = FuelingProgress,
                         LaunchingProgress = LaunchingProgress,
-                        StructureId = Structure == null ? "" : Structure.UId,
+                        StructureId = Structure == null ? "" : Structure.uId,
                     };
                 }
 
@@ -337,20 +341,25 @@ namespace DarkFrontier.Equipment {
 
         [Serializable]
         public class Penalty : Structure.Stats.Modifier {
+            [JsonProperty]
             public float MaxSpeedFactor;
+            
+            [JsonProperty]
             public float AccelFactor;
-
-            public Penalty (float maxSpeedFactor, float accelFactor) : base (0, float.PositiveInfinity) {
-                MaxSpeedFactor = maxSpeedFactor;
-                AccelFactor = accelFactor;
+            
+            public Penalty () { }
+            
+            public Penalty (float aMaxSpeedFactor, float aAccelFactor) : base (0, float.PositiveInfinity) {
+                MaxSpeedFactor = aMaxSpeedFactor;
+                AccelFactor = aAccelFactor;
             }
 
-            public override Structure.Stats Modify (Structure.Stats stats) {
-                stats.LinearMaxSpeedMultiplier *= MaxSpeedFactor;
-                stats.AngularMaxSpeedMultiplier *= MaxSpeedFactor;
-                stats.LinearAccelerationMultiplier *= AccelFactor;
-                stats.AngularAccelerationMultiplier *= AccelFactor;
-                return stats;
+            public override Structure.Stats Modify (Structure.Stats aStats) {
+                aStats.LinearMaxSpeedMultiplier *= MaxSpeedFactor;
+                aStats.AngularMaxSpeedMultiplier *= MaxSpeedFactor;
+                aStats.LinearAccelerationMultiplier *= AccelFactor;
+                aStats.AngularAccelerationMultiplier *= AccelFactor;
+                return aStats;
             }
         }
     }

@@ -28,7 +28,7 @@ namespace DarkFrontier.UI.Indicators {
         
         public override void Enable () {
             Singletons.Get<BehaviorTimekeeper> ().Subscribe (this);
-            button.onClick.AddListener (() => { iPlayerController.Value.UPlayer.USelected.UId.Value = Structure.UId; });
+            button.onClick.AddListener (() => { iPlayerController.Value.UPlayer.uSelected.UId.Value = Structure.uId; });
         }
 
         public override void Disable () {
@@ -43,14 +43,14 @@ namespace DarkFrontier.UI.Indicators {
 
             Structure player = iPlayerController.Value.UPlayer;
 
-            if (!player.ULocks.Keys.Any (lGetter => lGetter.UId.Value == Structure.UId)) {
+            if (!player.uLocks.Keys.Any (lGetter => lGetter.UId.Value == Structure.uId)) {
                 Destroy (gameObject);
                 return;
             }
 
-            hull.fillAmount = Structure.UHull / Structure.UStats.UValues.MaxHull / 2;
+            hull.fillAmount = Structure.uHull / Structure.uStats.UValues.MaxHull / 2;
             float lStrength = 0, iMaxStrength = 0;
-            var lShields = Structure.UEquipment.States<ShieldPrototype.State>();
+            var lShields = Structure.uEquipment.States<ShieldPrototype.State>();
             var lCount = lShields.Count;
             for (var lIndex = 0; lIndex < lCount; lIndex++) {
                 var lShield = lShields[lIndex];
@@ -58,11 +58,11 @@ namespace DarkFrontier.UI.Indicators {
                 iMaxStrength += (lShield.Slot.Equipment as ShieldPrototype).MaxStrength;
             }
             shield.fillAmount = lStrength / (iMaxStrength == 0 ? 1 : iMaxStrength) / 2;
-            float lFillAmount = player.ULocks.First (aPair => aPair.Key.UId.Value == Structure.UId).Value / 4;
+            float lFillAmount = player.uLocks.First (aPair => aPair.Key.UId.Value == Structure.uId).Value / 4;
             leftLock.fillAmount = lFillAmount;
             rightLock.fillAmount = lFillAmount;
             nameText.text = Structure.gameObject.name;
-            factionText.text = Structure.UFaction.UValue?.Name ?? "None";
+            factionText.text = Structure.uFaction.UValue?.Name ?? "None";
             distanceText.text = Vector3.Distance (iPlayerController.Value.UPlayer.transform.position, Structure.transform.position).ToString ("F0") + " m";
             Rigidbody rb = Structure.GetComponent<Rigidbody> ();
             if (rb == null) velocityText.text = "0 m/s";

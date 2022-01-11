@@ -87,6 +87,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -95,12 +96,12 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -118,6 +119,8 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
@@ -614,6 +617,28 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      Unlock_12: 1002608285037081642
+      Unlock_0: 7451771499657765821
+      Unlock_8: -5627593885012932572
+      Unlock_14: 2620630376329806324
+      Unlock_6: 1105067178119570217
+      Unlock_16: -3344109541669765412
+      Unlock_18: -5342184269542706308
+      Unlock_19: 7514702305661707078
+      Unlock_2: 4960712328845767599
+      Unlock_20: -7877514775327675889
+      Unlock_15: 7787001985632952361
+      Unlock_13: -4673453240706985649
+      Unlock_1: 1597167082804043468
+      Unlock_4: 2744383178465240054
+      Unlock_11: -1672077109082055516
+      Unlock_3: -4009958059853039726
+      Unlock_9: -5974836759650560201
+      Unlock_17: -7040018320799880105
+      Unlock_7: -5573252049762133710
+      Unlock_10: -4583422158358381605
+      Unlock_5: -8067401939426602366
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

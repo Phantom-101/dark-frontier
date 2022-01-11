@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b00934d2ecc14ab5bf2aa1bda84972ae, type: 3}
+  m_Name: Segment
+  m_EditorClassIdentifier: 
+  id: 80b1db48-a326-48e7-88da-b88d8fab803c
+  name: 
+  description: 
+  volume: 0
+  icon: {fileID: 0}
+  tags: []
+  hp: 100
+  poolHp: 50
+  rating: 0
+  hullIndicator: {fileID: 0}
+  selectorPrefab: {fileID: 3620263769258084297, guid: 410e4a159da0a14489844ae93fa2fa04,
+    type: 3}
+  prefab: {fileID: 4114420131141302008, guid: 9d75e9f876729114b874fff38bf6d237, type: 3}
+  destructionFx: {fileID: 0}

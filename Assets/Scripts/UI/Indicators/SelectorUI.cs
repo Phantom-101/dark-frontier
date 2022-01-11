@@ -29,7 +29,7 @@ namespace DarkFrontier.UI.Indicators {
         private void Start () {
             _cc = CameraController.GetInstance ();
             _button = GetComponent<Button> ();
-            _button.onClick.AddListener (() => { if (iPlayerController.Value.UPlayer != null && iPlayerController.Value.UPlayer != Structure) iPlayerController.Value.UPlayer.USelected.UId.Value = Structure.UId; });
+            _button.onClick.AddListener (() => { if (iPlayerController.Value.UPlayer != null && iPlayerController.Value.UPlayer != Structure) iPlayerController.Value.UPlayer.uSelected.UId.Value = Structure.uId; });
         }
 
         private void Update () {
@@ -48,8 +48,8 @@ namespace DarkFrontier.UI.Indicators {
                     _target = 0;
                     _destroy = true;
                 } else {
-                    if (player.ULocks.Keys.Any (lGetter => lGetter.UId.Value == Structure.UId)) {
-                        if (player.ULocks.Where (lPair => lPair.Key.UId.Value == Structure.UId).First ().Value == 1) _target = 2;
+                    if (player.uLocks.Keys.Any (lGetter => lGetter.UId.Value == Structure.uId)) {
+                        if (player.uLocks.Where (lPair => lPair.Key.UId.Value == Structure.uId).First ().Value == 1) _target = 2;
                         else _target = 1;
                         _destroy = false;
                     } else {

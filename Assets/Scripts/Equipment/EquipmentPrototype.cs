@@ -1,6 +1,7 @@
 ﻿using DarkFrontier.Foundation.Serialization;
 using System;
-using DarkFrontier.Items.Prototypes;
+using DarkFrontier.Items;
+using DarkFrontier.Structures;
 using UnityEngine;
 
 namespace DarkFrontier.Equipment {
@@ -21,7 +22,7 @@ namespace DarkFrontier.Equipment {
         /// Called when the equipment is added
         /// </summary>
         /// <param name="slot"></param>
-        public virtual void OnEquip (EquipmentSlot slot) => slot.UnsafeState = GetNewState (slot);
+        public virtual void OnEquip (EquipmentSlot slot) => slot.UState = GetNewState (slot);
 
         /// <summary>
         /// Called when the equipment is removed
@@ -61,7 +62,7 @@ namespace DarkFrontier.Equipment {
         /// </summary>
         /// <param name="slot"></param>
         public virtual void EnsureStateType (EquipmentSlot slot) {
-            if (!(slot.UnsafeState is State)) slot.UnsafeState = GetNewState (slot);
+            if (!(slot.UState is State)) slot.UState = GetNewState (slot);
         }
 
         /// <summary>
@@ -74,6 +75,7 @@ namespace DarkFrontier.Equipment {
         [Serializable]
         public new class State : ISavableState<State.Serializable> {
             public EquipmentSlot Slot;
+            public EquipmentPrototype Equipment;
             public float Durability;
 
             public State (EquipmentSlot slot) {
@@ -81,6 +83,7 @@ namespace DarkFrontier.Equipment {
             }
 
             public State (EquipmentSlot slot, EquipmentPrototype equipment) : this (slot) {
+                Equipment = equipment;
                 Durability = equipment.Durability;
             }
 

@@ -19,7 +19,7 @@ namespace DarkFrontier.UI {
             foreach (PropertyInfoUI info in _instantiated) Destroy (info.gameObject);
             _instantiated = new List<PropertyInfoUI> ();
 
-            faction = iPlayerController.Value.UPlayer.UFaction.UValue;
+            faction = iPlayerController.Value.UPlayer.uFaction.UValue;
 
             if (faction == null) {
                 base.SwitchIn ();

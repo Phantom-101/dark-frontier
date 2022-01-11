@@ -22,7 +22,7 @@ namespace DarkFrontier.UI {
 
         public void Initialize () {
             _name.text = _faction.Name;
-            string playerFaction = iPlayerController.Value.UPlayer.UFaction.UId.Value;
+            string playerFaction = iPlayerController.Value.UPlayer.uFaction.UId.Value;
             if (playerFaction == _faction.Id) {
                 _relationsBg.SetActive (false);
                 _state.text = "State: Self";

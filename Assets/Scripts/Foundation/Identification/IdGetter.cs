@@ -9,9 +9,7 @@ namespace DarkFrontier.Foundation.Identification {
         public event EventHandler<EventArgs>? Notifier;
 
         public StringValueNotifierF UId => iId;
-#pragma warning disable IDE0044 // Add readonly modifier
         [SerializeField] private StringValueNotifierF iId = new StringValueNotifierF ();
-#pragma warning restore IDE0044 // Add readonly modifier
 
         private readonly Func<string, T?> iGetter;
 

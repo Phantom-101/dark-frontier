@@ -2,6 +2,7 @@
 using System.Linq;
 using DarkFrontier.Equipment;
 using DarkFrontier.Items.Prototypes;
+using DarkFrontier.Structures;
 using UnityEngine;
 
 namespace DarkFrontier.UI.Equipment.Panels {
@@ -32,7 +33,7 @@ namespace DarkFrontier.UI.Equipment.Panels {
                 return;
             }
 
-            List<HangarLaunchableSO> inventoryLaunchables = Slot.Equipper.UInventory.GetStoredItems ().FindAll (i => cache.Launchables.Contains (i)).ConvertAll (i => i as HangarLaunchableSO);
+            List<HangarLaunchableSO> inventoryLaunchables = Slot.Equipper.uInventory.GetStoredItems ().FindAll (i => cache.Launchables.Contains (i.uPrototype)).ConvertAll (i => (HangarLaunchableSO) i.uPrototype);
             launchables.Keys.ToList ().FindAll (k => !inventoryLaunchables.Contains (k)).ForEach (k => launchables.Remove (k));
             inventoryLaunchables.FindAll (l => !launchables.ContainsKey (l)).ForEach (l => {
                 GameObject instantiated = Instantiate (launchablePrefab, launchableRoot);

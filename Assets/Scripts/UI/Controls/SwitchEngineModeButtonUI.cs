@@ -21,7 +21,7 @@ namespace DarkFrontier.UI.Controls {
             // Get player
             var lPlayer = iPlayerController.Value.UPlayer;
             // Get engines
-            var lEngines = lPlayer.UEquipment.States<EnginePrototype.State> ();
+            var lEngines = lPlayer.uEquipment.States<EnginePrototype.State> ();
             var lCount = lEngines.Count;
             // Calculate target state
             var lTargetState = false;

@@ -32,7 +32,7 @@ namespace DarkFrontier.UI.Indicators {
 
         private void Update () {
             Structure selected = iPlayerController.Value.UPlayer;
-            if (selected != null) selected = selected.USelected.UValue;
+            if (selected != null) selected = selected.uSelected.UValue;
 
             if (selected == null) {
                 TweenTo (0);
@@ -41,11 +41,11 @@ namespace DarkFrontier.UI.Indicators {
 
             TweenTo (1);
 
-            _hull.sprite = selected.UPrototype.HullWireframe;
-            _hull.color = _hullGradient.Evaluate (selected.UHull / selected.UStats.UValues.MaxHull);
+            _hull.sprite = selected.uPrototype.HullWireframe;
+            _hull.color = _hullGradient.Evaluate (selected.uHull / selected.uStats.UValues.MaxHull);
 
             float lCurStrength = 0, lTotalStrength = 0;
-            var lShields = selected.UEquipment.States<ShieldPrototype.State>();
+            var lShields = selected.uEquipment.States<ShieldPrototype.State>();
             var lCount = lShields.Count;
             for (var lIndex = 0; lIndex < lCount; lIndex++) {
                 var lShield = lShields[lIndex];
@@ -56,7 +56,7 @@ namespace DarkFrontier.UI.Indicators {
 
             _name.text = selected.gameObject.name;
 
-            _faction.text = selected.UFaction.UValue?.Name ?? "None";
+            _faction.text = selected.uFaction.UValue?.Name ?? "None";
 
             _distance.text = Vector3.Distance (iPlayerController.Value.UPlayer.transform.position, selected.transform.position).ToString ("F2") + " m";
 

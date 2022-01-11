@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DarkFrontier.Structures;
+using UnityEngine;
 
 namespace DarkFrontier.Items.Prototypes {
     [CreateAssetMenu (menuName = "Items/Hangar Launchable")]

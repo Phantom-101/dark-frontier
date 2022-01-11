@@ -12,7 +12,7 @@ namespace DarkFrontier.Equipment {
             if (aSlot.Equipper == null) return;
 
             var lPool = Generation * aDt;
-            var lCapacitors = aSlot.Equipper.UEquipment.States<CapacitorPrototype.State>();
+            var lCapacitors = aSlot.Equipper.uEquipment.States<CapacitorPrototype.State>();
             var lCount = lCapacitors.Count;
             for (var lIndex = 0; lIndex < lCount; lIndex++) {
                 var lCapacitor = lCapacitors[lIndex];
@@ -25,7 +25,7 @@ namespace DarkFrontier.Equipment {
         }
 
         public override void EnsureStateType (EquipmentSlot slot) {
-            if (!(slot.UnsafeState is State)) slot.UnsafeState = GetNewState (slot);
+            if (!(slot.UState is State)) slot.UState = GetNewState (slot);
         }
 
         public override EquipmentPrototype.State GetNewState (EquipmentSlot slot) => new State (slot, this);

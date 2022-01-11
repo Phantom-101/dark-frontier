@@ -1,13 +1,11 @@
 ﻿using DarkFrontier.Foundation.Behaviors;
 using DarkFrontier.Foundation.Serialization;
-using DarkFrontier.Foundation.Services;
 using DarkFrontier.Structures;
 using System;
 using System.Collections.Generic;
 using DarkFrontier.Items;
 using DarkFrontier.Items.Conditions;
 using UnityEngine;
-using UnityEngine.ProBuilder.MeshOperations;
 
 #nullable enable
 namespace DarkFrontier.Equipment {
@@ -19,27 +17,15 @@ namespace DarkFrontier.Equipment {
 
         public string USerializationId => iSerializationId;
 
-#pragma warning disable IDE0044 // Add readonly modifier
         [SerializeField] private string iSerializationId = "";
-#pragma warning restore IDE0044 // Add readonly modifier
 
-        public EquipmentPrototype.State UState {
-            get {
-                // State might be of a left-over incompatible type
-                if (Equipment == null) UnsafeState = new EquipmentPrototype.State (this);
-                else Equipment.EnsureStateType (this);
-
-                // State might be null if EnsureStateType is implemented incorrectly
-                return UnsafeState ??= new EquipmentPrototype.State(this);
-            }
-        }
-        [SerializeReference] public EquipmentPrototype.State? UnsafeState;
+        [SerializeReference] public EquipmentPrototype.State? UState;
 
         private bool iHaveEquipment = false;
         
         public override void Initialize () {
             Equipper = GetComponentInParent<Structure> ();
-            iHaveEquipment = Equipment != null;
+            if (iHaveEquipment = Equipment != null) Equipment!.EnsureStateType(this);
         }
 
         public override void Tick (object aTicker, float aDt) {
@@ -51,6 +37,7 @@ namespace DarkFrontier.Equipment {
         }
 
         public bool ChangeEquipment (EquipmentPrototype? aTarget) {
+            // Check if target equipment is allowed on this slot
             if (aTarget != null) {
                 foreach (ItemConditionSO lFilter in Filters) {
                     if (!lFilter.MeetsCondition(aTarget)) {
@@ -59,20 +46,24 @@ namespace DarkFrontier.Equipment {
                 }
             }
             
+            // Unequip old equipment
             if (Equipment != null) {
                 Equipment.OnUnequip(this);
                 if (Equipper != null) {
-                    Equipper.UEquipment.Update(this, UState.GetType());
+                    Equipper.uEquipment.Update(this, UState.GetType());
                 }
             }
+            
+            // Equip new equipment
             Equipment = aTarget;
             if (Equipment == null) {
                 iHaveEquipment = false;
             } else {
                 iHaveEquipment = true;
                 Equipment.OnEquip(this);
+                Equipment.EnsureStateType(this);
                 if (Equipper != null) {
-                    Equipper.UEquipment.Update(this, UState.GetType());
+                    Equipper.uEquipment.Update(this, UState.GetType());
                 }
             }
             
@@ -90,7 +81,7 @@ namespace DarkFrontier.Equipment {
         public virtual void FromSerializable (Serializable serializable) {
             Equipment = ItemManager.Instance.GetItem (serializable.EquipmentId) as EquipmentPrototype;
             if (Equipment != null) {
-                UnsafeState = Equipment.GetNewState (this);
+                UState = Equipment.GetNewState (this);
                 UState.FromSerializable (serializable.State);
             }
         }

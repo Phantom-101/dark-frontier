@@ -56,7 +56,7 @@ namespace DarkFrontier.Controllers {
                     if (lHit.collider.transform.parent != null) {
                         var lGameObject = lHit.collider.transform.parent.gameObject;
                         var lStructure = lGameObject.GetComponent<Structure> ();
-                        if (lStructure != UPlayer && UPlayer.CanDetect (lStructure)) UPlayer.USelected.UId.Value = lStructure.UId;
+                        if (lStructure != UPlayer && UPlayer.CanDetect (lStructure)) UPlayer.uSelected.UId.Value = lStructure.uId;
                     }
                 }
             }
@@ -67,7 +67,7 @@ namespace DarkFrontier.Controllers {
         public void SetFwd (float aSetting) {
             if (UPlayer == null) return;
             if (iReverseButtonUI.Reversing && aSetting != -1) return;
-            var lEngines = UPlayer.UEquipment.States<EnginePrototype.State>();
+            var lEngines = UPlayer.uEquipment.States<EnginePrototype.State>();
             var lCount = lEngines.Count;
             for (var lIndex = 0; lIndex < lCount; lIndex++) {
                 var lEngine = lEngines[lIndex];
@@ -77,7 +77,7 @@ namespace DarkFrontier.Controllers {
 
         public void SetYaw (float setting) {
             if (UPlayer == null) return;
-            var lEngines = UPlayer.UEquipment.States<EnginePrototype.State>();
+            var lEngines = UPlayer.uEquipment.States<EnginePrototype.State>();
             var lCount = lEngines.Count;
             for (var lIndex = 0; lIndex < lCount; lIndex++) {
                 var lEngine = lEngines[lIndex];
@@ -87,7 +87,7 @@ namespace DarkFrontier.Controllers {
 
         public void SetPitch (float setting) {
             if (UPlayer == null) return;
-            var lEngines = UPlayer.UEquipment.States<EnginePrototype.State>();
+            var lEngines = UPlayer.uEquipment.States<EnginePrototype.State>();
             var lCount = lEngines.Count;
             for (var lIndex = 0; lIndex < lCount; lIndex++) {
                 var lEngine = lEngines[lIndex];
@@ -97,7 +97,7 @@ namespace DarkFrontier.Controllers {
 
         private void FireAll (object sender, EventArgs args) {
             {
-                var lStates = UPlayer.UEquipment.States<BeamLaserPrototype.State>();
+                var lStates = UPlayer.uEquipment.States<BeamLaserPrototype.State>();
                 var lCount = lStates.Count;
                 for (var lIndex = 0; lIndex < lCount; lIndex++) {
                     var lState = lStates[lIndex];
@@ -107,7 +107,7 @@ namespace DarkFrontier.Controllers {
                 }
             }
             {
-                var lStates = UPlayer.UEquipment.States<PulseLaserPrototype.State>();
+                var lStates = UPlayer.uEquipment.States<PulseLaserPrototype.State>();
                 var lCount = lStates.Count;
                 for (var lIndex = 0; lIndex < lCount; lIndex++) {
                     var lState = lStates[lIndex];
@@ -117,7 +117,7 @@ namespace DarkFrontier.Controllers {
                 }
             }
             {
-                var lStates = UPlayer.UEquipment.States<LauncherPrototype.State>();
+                var lStates = UPlayer.uEquipment.States<LauncherPrototype.State>();
                 var lCount = lStates.Count;
                 for (var lIndex = 0; lIndex < lCount; lIndex++) {
                     var lState = lStates[lIndex];
@@ -129,7 +129,7 @@ namespace DarkFrontier.Controllers {
         }
 
         private void LockSelected (object sender, EventArgs args) {
-            if (UPlayer != null) UPlayer.Lock (UPlayer.USelected.UValue);
+            if (UPlayer != null) UPlayer.Lock (UPlayer.uSelected.UValue);
         }
 
         private bool ClickingUI () {

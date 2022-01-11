@@ -25,8 +25,8 @@ namespace DarkFrontier.UI.Indicators {
         public override void Tick (object aTicker, float aDt) {
             Structure player = iPlayerController.Value.UPlayer;
             if (player == null) return;
-            foreach (Structure s in player.USector.UValue.UPopulation.UStructures) {
-                if (s != player && s.UPrototype.ShowBlip) {
+            foreach (Structure s in player.uSector.UValue.UPopulation.UStructures) {
+                if (s != player && s.uPrototype.ShowBlip) {
                     if (!blips.ContainsKey (s) || blips[s] == null) {
                         GameObject go = Instantiate (prefab, transform);
                         BlipUI ei = go.GetComponent<BlipUI> ();

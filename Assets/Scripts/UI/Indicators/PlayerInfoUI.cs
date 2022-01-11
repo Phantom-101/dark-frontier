@@ -27,13 +27,13 @@ namespace DarkFrontier.UI.Indicators {
             if (lPlayer == null) return;
 
             // Hull wireframe indicator
-            _hull.sprite = lPlayer.UPrototype.HullWireframe;
-            _hull.color = _hullGradient.Evaluate (lPlayer.UHull / lPlayer.UStats.UValues.MaxHull);
+            _hull.sprite = lPlayer.uPrototype.HullWireframe;
+            _hull.color = _hullGradient.Evaluate (lPlayer.uHull / lPlayer.uStats.UValues.MaxHull);
 
             // Shield bubble indicator
             float lCurStrength = 0, lTotalStrength = 0;
             {
-                var lShields = lPlayer.UEquipment.States<ShieldPrototype.State>();
+                var lShields = lPlayer.uEquipment.States<ShieldPrototype.State>();
                 var lCount = lShields.Count;
                 for (var lIndex = 0; lIndex < lCount; lIndex++) {
                     var lShield = lShields[lIndex];
@@ -51,7 +51,7 @@ namespace DarkFrontier.UI.Indicators {
             // Capacitor bar indicator
             float lStoredCap = 0, lTotalCap = 0;
             {
-                var lCapacitors = lPlayer.UEquipment.States<CapacitorPrototype.State>();
+                var lCapacitors = lPlayer.uEquipment.States<CapacitorPrototype.State>();
                 var lCount = lCapacitors.Count;
                 for (var lIndex = 0; lIndex < lCount; lIndex++) {
                     var lCapacitor = lCapacitors[lIndex];
@@ -63,10 +63,10 @@ namespace DarkFrontier.UI.Indicators {
             _capImg.color = _capGradient.Evaluate (lStoredCap / (lTotalCap == 0 ? 1 : lTotalCap));
 
             // Selected direction indicator
-            if (lPlayer.USelected.UValue == null) _direction.gameObject.SetActive (false);
+            if (lPlayer.uSelected.UValue == null) _direction.gameObject.SetActive (false);
             else {
                 _direction.gameObject.SetActive (true);
-                _direction.rotation = Quaternion.Euler (0, 0, -lPlayer.GetAngleTo (new Location (lPlayer.USelected.UValue.transform)));
+                _direction.rotation = Quaternion.Euler (0, 0, -lPlayer.GetAngleTo (new Location (lPlayer.uSelected.UValue.transform)));
             }
         }
     }

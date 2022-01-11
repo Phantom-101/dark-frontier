@@ -1,5 +1,8 @@
 ﻿using System;
+using Newtonsoft.Json;
+using Unity.Mathematics;
 using UnityEngine;
+using Math = DarkFrontier.Foundation.Mathematics.Math;
 
 namespace DarkFrontier.Equipment {
 
@@ -11,7 +14,7 @@ namespace DarkFrontier.Equipment {
         public float MaxDischargeRate;
 
         public override void OnAwake (EquipmentSlot slot) => EnsureStateType (slot);
-        public override void OnEquip (EquipmentSlot slot) => slot.UnsafeState = GetNewState (slot);
+        public override void OnEquip (EquipmentSlot slot) => slot.UState = GetNewState (slot);
         public override void OnUnequip (EquipmentSlot slot) { }
 
         public override void Tick (EquipmentSlot aSlot, float aDt) {
@@ -22,23 +25,43 @@ namespace DarkFrontier.Equipment {
         }
 
         public override void FixedTick (EquipmentSlot slot, float aDt) { }
-        public override bool CanClick (EquipmentSlot slot) { return false; }
+        public override bool CanClick(EquipmentSlot slot) => false;
         public override void OnClicked (EquipmentSlot slot) { }
 
         public override void EnsureStateType (EquipmentSlot slot) {
-            if (!(slot.UnsafeState is State)) slot.UnsafeState = GetNewState (slot);
+            if (!(slot.UState is State)) slot.UState = GetNewState (slot);
         }
 
         public override EquipmentPrototype.State GetNewState (EquipmentSlot slot) => new State (slot, this);
 
         [Serializable]
+        [JsonObject(MemberSerialization.OptIn)]
         public new class State : EquipmentPrototype.State {
+            [JsonProperty]
             public float Charge;
+            
+            [JsonProperty]
             public float ChargeLeft;
+            
+            [JsonProperty]
             public float DischargeLeft;
 
             public State (EquipmentSlot slot, CapacitorPrototype equipment) : base (slot, equipment) { }
 
+            public float Recharge(float v) {
+                var ret = Math.Min(((CapacitorPrototype)Equipment).Capacitance - Charge, ChargeLeft, v);
+                Charge += ret;
+                ChargeLeft += ret;
+                return ret;
+            }
+            
+            public float Discharge(float v) {
+                var ret = Math.Min(Charge, DischargeLeft, v);
+                Charge -= ret;
+                DischargeLeft -= ret;
+                return ret;
+            }
+            
             public override EquipmentPrototype.State.Serializable ToSerializable () {
                 return new Serializable {
                     Durability = Durability,

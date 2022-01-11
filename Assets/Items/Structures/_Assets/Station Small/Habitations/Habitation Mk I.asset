@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b00934d2ecc14ab5bf2aa1bda84972ae, type: 3}
+  m_Name: Habitation Mk I
+  m_EditorClassIdentifier: 
+  id: 237d2ade-c0f1-4fac-943a-4a1eda92c193
+  name: Habitation Mk I
+  description: 
+  volume: 0
+  icon: {fileID: 0}
+  tags: []
+  hp: 60000
+  poolHp: 50000
+  rating: 0
+  hullIndicator: {fileID: 0}
+  selectorPrefab: {fileID: 3620263769258084297, guid: 410e4a159da0a14489844ae93fa2fa04,
+    type: 3}
+  prefab: {fileID: 2208912771554965670, guid: f258d049125f2b44992055c84e0d3931, type: 3}
+  destructionFx: {fileID: 0}

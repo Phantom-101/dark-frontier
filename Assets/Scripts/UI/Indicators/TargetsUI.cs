@@ -32,7 +32,7 @@ namespace DarkFrontier.UI.Indicators {
 
             Structure player = iPlayerController.Value.UPlayer;
             if (player == null) return;
-            foreach (StructureGetter lGetter in player.ULocks.Keys.ToArray ()) {
+            foreach (StructureGetter lGetter in player.uLocks.Keys.ToArray ()) {
                 LockedTargetUI instantiated = Instantiate (prefab, root).GetComponent<LockedTargetUI> ();
                 instantiated.Structure = lGetter.UValue;
                 comps.Add (instantiated);

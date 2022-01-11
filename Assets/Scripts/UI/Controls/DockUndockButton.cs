@@ -21,9 +21,9 @@ namespace DarkFrontier.UI.Controls {
             Structure player = iPlayerController.Value.UPlayer;
             if (player == null) return;
 
-            _button.interactable = (player.USelected.UValue != null && player.USelected.UValue.CanAccept (player)) || (player.UIsDocked && player.UDockedAt.UValue.CanRelease (player));
+            _button.interactable = (player.uSelected.UValue != null && player.uSelected.UValue.CanAccept (player)) || (player.uIsDocked && player.uDockedAt.UValue.CanRelease (player));
 
-            if (player.USelected.UValue != null && player.USelected.UValue.CanAccept (player)) {
+            if (player.uSelected.UValue != null && player.uSelected.UValue.CanAccept (player)) {
                 _dock.enabled = true;
                 _undock.enabled = false;
             } else {
@@ -33,16 +33,16 @@ namespace DarkFrontier.UI.Controls {
         }
 
         void Toggle () {
-            if (iPlayerController.Value.UPlayer.UIsDocked) Undock ();
+            if (iPlayerController.Value.UPlayer.uIsDocked) Undock ();
             else Dock ();
         }
 
         void Dock () {
-            iPlayerController.Value.UPlayer.USelected.UValue.TryAccept (iPlayerController.Value.UPlayer);
+            iPlayerController.Value.UPlayer.uSelected.UValue.TryAccept (iPlayerController.Value.UPlayer);
         }
 
         void Undock () {
-            iPlayerController.Value.UPlayer.UDockedAt.UValue.TryRelease (iPlayerController.Value.UPlayer);
+            iPlayerController.Value.UPlayer.uDockedAt.UValue.TryRelease (iPlayerController.Value.UPlayer);
         }
     }
 }

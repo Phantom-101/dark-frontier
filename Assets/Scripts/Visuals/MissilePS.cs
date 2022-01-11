@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
-namespace DarkFrontier.Other {
+namespace DarkFrontier.Visuals {
     public class MissilePS : MonoBehaviour {
 
         [SerializeField]

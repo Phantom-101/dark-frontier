@@ -21,13 +21,13 @@ namespace DarkFrontier.UI.Equipment.Buttons {
             if (player == null) return;
 
             foreach (EquipmentSlot key in buttons.Keys.ToArray ()) {
-                if (!player.UEquipment.UAll.Contains (key)) {
+                if (!player.uEquipment.uAll.Contains (key)) {
                     buttons.Remove (key);
                     Destroy (key.gameObject);
                 }
             }
 
-            foreach (EquipmentSlot slot in player.UEquipment.UAll)
+            foreach (EquipmentSlot slot in player.uEquipment.uAll)
                 if (slot.Equipment != null && slot.Equipment.ButtonPrefab != null && !buttons.ContainsKey (slot))
                     buttons[slot] = null;
 

@@ -25,18 +25,18 @@ namespace DarkFrontier.Structures {
 
         public bool CanAccept (Structure docker) {
             if (UDocker != null) return false;
-            if ((docker.UPrototype?.Volume ?? 0) > UMaxVolume) return false;
-            if ((docker.UPrototype?.ApparentSize ?? 0) > UMaxSize) return false;
+            if ((docker.uPrototype?.Volume ?? 0) > UMaxVolume) return false;
+            if ((docker.uPrototype?.ApparentSize ?? 0) > UMaxSize) return false;
             return true;
         }
 
         public bool TryAccept (Structure docker) {
             if (!CanAccept (docker)) return false;
-            iState.uDocker.UId.Value = docker.UId;
+            iState.uDocker.UId.Value = docker.uId;
             return true;
         }
 
-        public bool CanRelease (Structure docker) => iState.uDocker.UId.Value == docker.UId;
+        public bool CanRelease (Structure docker) => iState.uDocker.UId.Value == docker.uId;
 
         public bool TryRelease (Structure docker) {
             if (!CanRelease (docker)) return false;

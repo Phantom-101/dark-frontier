@@ -1,6 +1,7 @@
 ﻿using DarkFrontier.Foundation.Identification;
 using DarkFrontier.Foundation.Services;
 using System;
+using DarkFrontier.Items.Structures;
 
 #nullable enable
 namespace DarkFrontier.Structures {

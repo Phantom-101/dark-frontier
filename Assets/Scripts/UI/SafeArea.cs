@@ -13,7 +13,7 @@ namespace DarkFrontier.UI {
         public static UnityEvent OnResolutionOrOrientationChanged = new UnityEvent ();
 
         private static bool _screenChangeVarsInitialized = false;
-        private static ScreenOrientation _lastOrientation = ScreenOrientation.Landscape;
+        private static ScreenOrientation _lastOrientation = ScreenOrientation.LandscapeLeft;
         private static Vector2 _lastResolution = Vector2.zero;
         private static Rect _lastSafeArea = Rect.zero;
 

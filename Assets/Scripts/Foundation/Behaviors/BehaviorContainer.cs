@@ -5,6 +5,26 @@ namespace DarkFrontier.Foundation.Behaviors {
     public class BehaviorContainer : MonoBehaviour, IBehavior {
         public Behavior uBehavior;
 
+        public bool Enabled
+        {
+            get
+            {
+                if (uBehavior != null)
+                {
+                    return uBehavior.Enabled;
+                }
+
+                return false;
+            }
+            set
+            {
+                if (uBehavior != null)
+                {
+                    uBehavior.Enabled = value;
+                }
+            }
+        }
+
         private BehaviorManager iBehaviorManager;
 
         protected virtual void Awake () {

@@ -5,6 +5,7 @@ using DarkFrontier.Channels;
 using DarkFrontier.Factions;
 using DarkFrontier.Files;
 using DarkFrontier.Foundation.Services;
+using DarkFrontier.Items.Structures;
 using DarkFrontier.Locations;
 using DarkFrontier.SceneManagement;
 using DarkFrontier.Structures;
@@ -72,7 +73,7 @@ namespace DarkFrontier.Serialization {
         }
 
         private IEnumerator Load(DirectoryInfo aDirectory) {
-            yield return SceneUtils.Instance.LoadSceneAsync ("Empty Game");
+            yield return SceneUtils.Instance.LoadSceneAsync ("Game");
             iSectorManager.Value.LoadGame (aDirectory);
             iFactionManager.Value.LoadGame (aDirectory);
             iStructureManager.Value.LoadGame (aDirectory);

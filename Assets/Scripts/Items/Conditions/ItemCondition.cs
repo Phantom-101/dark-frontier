@@ -1,4 +1,4 @@
-﻿using DarkFrontier.Items.Prototypes;
+﻿using DarkFrontier.Structures;
 
 namespace DarkFrontier.Items.Conditions {
     public abstract class ItemCondition {

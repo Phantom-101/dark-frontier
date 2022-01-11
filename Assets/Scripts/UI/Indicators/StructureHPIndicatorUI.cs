@@ -51,8 +51,8 @@ namespace DarkFrontier.UI.Indicators {
 
         private void Update () {
 
-            _hull.sprite = _structure.UPrototype.HullWireframe;
-            _hull.color = _hullGradient.Evaluate (_structure.UHull / _structure.UStats.UValues.MaxHull);
+            _hull.sprite = _structure.uPrototype.HullWireframe;
+            _hull.color = _hullGradient.Evaluate (_structure.uHull / _structure.uStats.UValues.MaxHull);
             /*
         ShieldStrengths strengths = _structure.GetEquipment<ShieldSlot> ()[0].GetStrengths ();
         if (strengths.GetSectorCount () != _shields.Count) Initialize ();

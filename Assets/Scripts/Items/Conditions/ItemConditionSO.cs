@@ -1,4 +1,4 @@
-﻿using DarkFrontier.Items.Prototypes;
+﻿using DarkFrontier.Structures;
 using UnityEngine;
 
 namespace DarkFrontier.Items.Conditions {

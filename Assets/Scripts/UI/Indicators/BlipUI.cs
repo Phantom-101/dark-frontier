@@ -26,23 +26,23 @@ namespace DarkFrontier.UI.Indicators {
             }
 
             Structure player = iPlayerController.Value.UPlayer;
-            string pf = player.UFaction.UId.Value;
+            string pf = player.uFaction.UId.Value;
 
             if (target == player) {
                 Destroy (gameObject);
                 return;
             }
-            if (target.USector.UValue != player.USector.UValue) {
+            if (target.uSector.UValue != player.uSector.UValue) {
                 Destroy (gameObject);
                 return;
             }
 
-            if (target.UPrototype.ApparentSize >= player.UPrototype.ApparentSize) _img.sprite = _big;
+            if (target.uPrototype.ApparentSize >= player.uPrototype.ApparentSize) _img.sprite = _big;
             else _img.sprite = _small;
 
-            if (target.UFaction.UId.Value == pf) _img.color = _own;
+            if (target.uFaction.UId.Value == pf) _img.color = _own;
             else {
-                float r = player.UFaction.UValue?.GetRelation (target.UFaction.UId.Value) ?? 0;
+                float r = player.uFaction.UValue?.GetRelation (target.uFaction.UId.Value) ?? 0;
                 _img.color = _relations.Evaluate ((r + 1) / 2);
             }
 
