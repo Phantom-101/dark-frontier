@@ -12,7 +12,6 @@ using DarkFrontier.Foundation.Identification;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Items;
 using DarkFrontier.Items.Inventories;
-using DarkFrontier.Items.Structures;
 using DarkFrontier.Locations;
 using DarkFrontier.UI.Indicators;
 using Newtonsoft.Json;

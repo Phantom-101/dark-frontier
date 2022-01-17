@@ -34,7 +34,7 @@ namespace DarkFrontier.UI.Indicators {
             Structure selected = iPlayerController.Value.UPlayer;
             if (selected != null) selected = selected.uSelected.UValue;
 
-            if (selected == null) {
+            if (selected == null || !selected.Enabled) {
                 TweenTo (0);
                 return;
             }

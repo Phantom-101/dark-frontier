@@ -18,10 +18,10 @@ namespace DarkFrontier.Structures
             _behaviorManager = behaviorManager;
             _registry = registry;
         }
-        
-        public Structure Create(StructurePrototype prototype, Scene scene)
+
+        public Structure Create(StructurePrototype prototype, Sector sector)
         {
-            var gameObject = UnityEngine.Object.Instantiate(prototype.Prefab);
+            var gameObject = UnityEngine.Object.Instantiate(prototype.Prefab, sector.transform);
             
             Structure structure = gameObject.GetComponent<Structure>();
             if (structure == null)
@@ -29,33 +29,22 @@ namespace DarkFrontier.Structures
                 structure = gameObject.AddComponent<Structure>();
             }
             
-            SceneManager.MoveGameObjectToScene(gameObject, scene);
-
             return structure;
         }
 
-        public Structure Create(StructurePrototype prototype, Sector sector) =>
-            Create(prototype, sector.gameObject.scene);
-
-        public Structure Create(StructurePrototype prototype, Scene scene, Transform parent)
+        public Structure Create(StructurePrototype prototype, Sector sector, Transform parent)
         {
-            var structure = Create(prototype, scene);
-            structure.transform.SetParent(parent);
+            var structure = Create(prototype, sector);
+            structure.transform.position = parent.position;
             return structure;
         }
 
-        public Structure Create(StructurePrototype prototype, Sector sector, Transform parent) =>
-            Create(prototype, sector.gameObject.scene, parent);
-
-        public Structure Create(StructurePrototype prototype, Scene scene, Transform parent, Faction faction)
+        public Structure Create(StructurePrototype prototype, Sector sector, Transform parent, Faction? faction)
         {
-            var structure = Create(prototype, scene, parent);
-            structure.uFaction.UId.Value = faction.Id;
+            var structure = Create(prototype, sector, parent);
+            structure.uFaction.UId.Value = faction?.Id ?? "";
             return structure;
         }
-
-        public Structure Create(StructurePrototype prototype, Sector sector, Transform parent, Faction faction) =>
-            Create(prototype, sector.gameObject.scene, parent, faction);
 
         public void Destroy(Structure structure, StructureDestructionMode mode)
         {

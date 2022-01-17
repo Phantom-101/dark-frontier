@@ -36,7 +36,7 @@ namespace DarkFrontier.UI.Indicators {
         }
 
         public override void Tick (object aTicker, float aDt) {
-            if (Structure == null) {
+            if (Structure == null || !Structure.Enabled) {
                 Destroy (gameObject);
                 return;
             }

@@ -1,5 +1,6 @@
 ﻿using DarkFrontier.Foundation.Services;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace DarkFrontier.Foundation.Behaviors
@@ -88,19 +89,19 @@ namespace DarkFrontier.Foundation.Behaviors
 
         public override void Tick(object aTicker, float aDt)
         {
-            foreach (var behavior in _initializeQueue)
+            foreach (var behavior in _initializeQueue.ToArray())
             {
                 behavior.Initialize();
             }
             _initializeQueue.Clear();
             
-            foreach (var behavior in _enableQueue)
+            foreach (var behavior in _enableQueue.ToArray())
             {
                 behavior.Enable();
             }
             _enableQueue.Clear();
             
-            foreach (var behavior in _disableQueue)
+            foreach (var behavior in _disableQueue.ToArray())
             {
                 behavior.Disable();
             }
