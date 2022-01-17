@@ -53,16 +53,14 @@ namespace DarkFrontier.Items.Structures
         {
         }
 
-        [OnSerializing]
-        private void PreSerialize(StreamingContext context)
+        private void PreSerialize()
         {
             _factionId = Faction?.Id ?? "";
             _sectorId = "";
             _selectedId = Selected == null ? "" : Selected.instance?.Id ?? "";
         }
 
-        [OnDeserialized]
-        private void PostDeserialize(StreamingContext context)
+        private void PostDeserialize()
         {
             Faction = _factionId.Length > 0 ? Singletons.Get<FactionManager>().Registry.Find(_factionId) : Faction;
             Sector = _sectorId.Length > 0 ? null : Sector;

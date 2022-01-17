@@ -29,43 +29,20 @@ namespace DarkFrontier.Utils
         
         private void OnEnable()
         {
-            var root = rootVisualElement;
-
             var box = new Box();
-            root.Add(box);
+            rootVisualElement.Add(box);
 
-            _prefix = new TextField("Prefix");
-            box.Add(_prefix);
-
-            _mode = EditorUtils.Toggle("Specular", true);
-            box.Add(_mode);
-            
-            _albedo = EditorUtils.Texture2DField("Albedo");
-            box.Add(_albedo);
-
-            _normal = EditorUtils.Texture2DField("Normal");
-            box.Add(_normal);
-
-            _specular = EditorUtils.Texture2DField("Specular");
-            box.Add(_specular);
-            
-            _metallic = EditorUtils.Texture2DField("Metallic");
-            box.Add(_metallic);
-            
-            _emission = EditorUtils.Texture2DField("Emission");
-            box.Add(_emission);
-
-            _occlusion = EditorUtils.Texture2DField("Occlusion");
-            box.Add(_occlusion);
-
-            _hull = EditorUtils.Texture2DField("Hull");
-            box.Add(_hull);
-
-            _icon = EditorUtils.Texture2DField("Icon");
-            box.Add(_icon);
-
-            _standardize = EditorUtils.Button("Standardize", Standardize);
-            box.Add(_standardize);
+            box.Add(_prefix = new TextField("Prefix"));
+            box.Add(_mode = EditorUtils.Toggle("Specular", true));
+            box.Add(_albedo = EditorUtils.Texture2DField("Albedo"));
+            box.Add(_normal = EditorUtils.Texture2DField("Normal"));
+            box.Add(_specular = EditorUtils.Texture2DField("Specular"));
+            box.Add(_metallic = EditorUtils.Texture2DField("Metallic"));
+            box.Add(_emission = EditorUtils.Texture2DField("Emission"));
+            box.Add(_occlusion = EditorUtils.Texture2DField("Occlusion"));
+            box.Add(_hull = EditorUtils.Texture2DField("Hull"));
+            box.Add(_icon = EditorUtils.Texture2DField("Icon"));
+            box.Add(_standardize = EditorUtils.Button("Standardize", Standardize));
         }
 
         private void Update()

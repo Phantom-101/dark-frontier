@@ -1,9 +1,9 @@
 using UnityEngine;
 
 #nullable enable
-namespace DarkFrontier
+namespace DarkFrontier.Utils
 {
-    public class ComponentUtils
+    public static class ComponentUtils
     {
         public static T AddOrGet<T>(GameObject gameObject) where T : Component
         {

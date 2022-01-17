@@ -3,6 +3,7 @@ using DarkFrontier.Attributes;
 using DarkFrontier.Items.Segments;
 using DarkFrontier.Structures;
 using DarkFrontier.UI.Indicators.Selectors;
+using DarkFrontier.Utils;
 using UnityEngine;
 
 #nullable enable
@@ -15,7 +16,7 @@ namespace DarkFrontier.Items.Structures
 
         public ISelectable? Parent => null;
 
-        public ISelectable[] Children => Segments;
+        public ISelectable[] Children => Segments.Copy<SegmentComponent, ISelectable>();
 
         public Vector3 Position => transform.position;
         
@@ -34,11 +35,6 @@ namespace DarkFrontier.Items.Structures
         [field: SerializeReference]
         public SegmentComponent[] Segments { get; private set; } = Array.Empty<SegmentComponent>();
 
-        private void Start()
-        {
-            Initialize();
-        }
-        
         public bool Initialize()
         {
             if (instance == null) return false;
@@ -59,6 +55,10 @@ namespace DarkFrontier.Items.Structures
                 if (Segments[i].Initialize(this, instance.Segments))
                 {
                     MaxHp += Segments[i].instance!.Prototype.poolHp;
+                }
+                else
+                {
+                    return false;
                 }
             }
 

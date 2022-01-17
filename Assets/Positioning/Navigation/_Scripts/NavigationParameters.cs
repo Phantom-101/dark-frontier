@@ -8,28 +8,22 @@ namespace DarkFrontier.Positioning.Navigation
         [field: SerializeField]
         public Transform Target { get; private set; }
 
-        [field: ReadOnly]
-        [field: SerializeField]
+        [field: SerializeField, ReadOnly]
         public float Azimuth { get; private set; }
 
-        [field: ReadOnly]
-        [field: SerializeField]
+        [field: SerializeField, ReadOnly]
         public float Altitude { get; private set; }
 
-        [field: ReadOnly]
-        [field: SerializeField]
+        [field: SerializeField, ReadOnly]
         public float AzimuthDir { get; private set; }
 
-        [field: ReadOnly]
-        [field: SerializeField]
+        [field: SerializeField, ReadOnly]
         public float AltitudeDir { get; private set; }
 
-        [field: ReadOnly]
-        [field: SerializeField]
+        [field: SerializeField, ReadOnly]
         public float AzimuthNorm { get; private set; }
 
-        [field: ReadOnly]
-        [field: SerializeField]
+        [field: SerializeField, ReadOnly]
         public float AltitudeNorm { get; private set; }
 
         private void Update()

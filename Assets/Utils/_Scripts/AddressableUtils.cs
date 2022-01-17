@@ -2,15 +2,15 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 #nullable enable
-namespace DarkFrontier
+namespace DarkFrontier.Utils
 {
-    public class AddressableUtils
+    public static class AddressableUtils
     {
         public static void Destroy(GameObject obj)
         {
             if(!Addressables.ReleaseInstance(obj))
             {
-                Destroy(obj);
+                Object.Destroy(obj);
             }
         }
     }

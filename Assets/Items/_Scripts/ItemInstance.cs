@@ -39,14 +39,12 @@ namespace DarkFrontier.Items._Scripts
             Prototype = prototype;
         }
 
-        [OnSerializing]
-        private void PreSerialize(StreamingContext context)
+        private void PreSerialize()
         {
             _prototypeId = Prototype.id;
         }
 
-        [OnDeserialized]
-        private void PostDeserialize(StreamingContext context)
+        private void PostDeserialize()
         {
             Prototype = _prototypeId.Length > 0 ? new ItemRegistry().Get(_prototypeId)! : Prototype;
         }

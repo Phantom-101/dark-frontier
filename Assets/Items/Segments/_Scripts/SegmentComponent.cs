@@ -74,7 +74,10 @@ namespace DarkFrontier.Items.Segments
 
             for(int i = 0, l = Equipment.Length; i < l; i++)
             {
-                Equipment[i].Initialize(this, instance.Equipment);
+                if(!Equipment[i].Initialize(this, instance.Equipment))
+                {
+                    return false;
+                }
             }
 
             return true;
