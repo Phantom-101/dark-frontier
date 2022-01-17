@@ -58,7 +58,7 @@ namespace DarkFrontier.Positioning.Navigation
                 }
                 var cross = Vector3.Cross(ray.Dir, Vector3.up);
                 var offset = cross * intersected.RoughSize();
-                ret.AddRange(GetRoute(current, current = intersected.Center + offset, depth + 1));
+                ret.AddRange(GetRoute(current, current = MovePointOutOfAabb(intersected.Center + offset), depth + 1));
             }
             return ret;
         }
