@@ -3,7 +3,7 @@ using DarkFrontier.Items.Equipment._Scripts;
 using Newtonsoft.Json;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items.Equipment
 {
     [Serializable]
@@ -19,4 +19,3 @@ namespace DarkFrontier.Items.Equipment
         public EquipmentInstance Instance { get; private set; } = new EquipmentInstance();
     }
 }
-#nullable restore

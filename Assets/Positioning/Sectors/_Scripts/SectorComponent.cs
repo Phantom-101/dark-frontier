@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-#nullable enable
+
 namespace DarkFrontier.Positioning.Sectors
 {
     public class SectorComponent : MonoBehaviour, ISelectable
@@ -43,4 +43,3 @@ namespace DarkFrontier.Positioning.Sectors
         }
     }
 }
-#nullable restore

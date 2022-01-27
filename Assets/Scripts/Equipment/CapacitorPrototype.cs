@@ -6,7 +6,7 @@ using Math = DarkFrontier.Foundation.Mathematics.Math;
 
 namespace DarkFrontier.Equipment {
 
-#nullable enable
+
     [CreateAssetMenu (menuName = "Items/Equipment/Capacitor")]
     public class CapacitorPrototype : EquipmentPrototype {
         public float Capacitance;
@@ -88,4 +88,4 @@ namespace DarkFrontier.Equipment {
         }
     }
 }
-#nullable restore
+

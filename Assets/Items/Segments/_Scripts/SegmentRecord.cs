@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items.Segments
 {
     [Serializable]
@@ -18,4 +18,3 @@ namespace DarkFrontier.Items.Segments
         public SegmentInstance Instance { get; private set; } = new SegmentInstance();
     }
 }
-#nullable restore

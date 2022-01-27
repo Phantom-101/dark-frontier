@@ -5,7 +5,7 @@ using DarkFrontier.Items.Structures;
 using Newtonsoft.Json;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items._Scripts
 {
     [Serializable]
@@ -70,4 +70,3 @@ namespace DarkFrontier.Items._Scripts
         }
     }
 }
-#nullable restore

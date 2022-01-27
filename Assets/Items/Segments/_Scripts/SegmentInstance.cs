@@ -4,7 +4,7 @@ using DarkFrontier.Items.Equipment;
 using Newtonsoft.Json;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items.Segments
 {
     [Serializable]
@@ -47,4 +47,3 @@ namespace DarkFrontier.Items.Segments
         }
     }
 }
-#nullable restore

@@ -2,8 +2,6 @@
 using UnityEngine;
 
 namespace DarkFrontier.Equipment {
-
-#nullable enable
     [CreateAssetMenu (menuName = "Items/Equipment/Shield")]
     public class ShieldPrototype : EquipmentPrototype {
         public float MaxStrength;
@@ -65,4 +63,3 @@ namespace DarkFrontier.Equipment {
         }
     }
 }
-#nullable restore

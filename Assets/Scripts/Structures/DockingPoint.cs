@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Structures {
     public class DockingPoint : ComponentBehavior, ICtorArgs<DockingPoint.State> {
         public State UState { get => iState; }
@@ -99,4 +99,4 @@ namespace DarkFrontier.Structures {
         }
     }
 }
-#nullable restore
+

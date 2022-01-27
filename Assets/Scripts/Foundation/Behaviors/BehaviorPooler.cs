@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using DarkFrontier.Foundation.Extensions;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Foundation.Behaviors {
     public class BehaviorPooler : MonoBehaviour {
         private readonly Dictionary<object, List<IBehavior>> iPools = new Dictionary<object, List<IBehavior>>();
@@ -37,4 +37,4 @@ namespace DarkFrontier.Foundation.Behaviors {
         }
     }
 }
-#nullable restore
+

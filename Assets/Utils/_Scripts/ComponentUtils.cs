@@ -1,6 +1,6 @@
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Utils
 {
     public static class ComponentUtils
@@ -48,4 +48,3 @@ namespace DarkFrontier.Utils
         }
     }
 }
-#nullable restore

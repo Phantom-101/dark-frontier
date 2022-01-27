@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="Basic Info" src="project://database/Assets/UI/Items/Info/_Assets/Basic%20Info.uxml?fileID=9197481963319205126&amp;guid=efee90906c4a9f34dab096c8743d533f&amp;type=3#Basic Info" />
+    <ui:Template name="Damage Info" src="project://database/Assets/UI/Items/Info/_Assets/Damage%20Info.uxml?fileID=9197481963319205126&amp;guid=9b4fe919c3ad73343ab06c0e2acaf2d9&amp;type=3#Damage Info" />
+    <ui:Template name="Range Info" src="project://database/Assets/UI/Items/Info/_Assets/Range%20Info.uxml?fileID=9197481963319205126&amp;guid=b712171e8965f8a48af0d8462f60e946&amp;type=3#Range Info" />
+    <ui:Instance template="Basic Info" name="Basic Info" />
+    <ui:Instance template="Damage Info" name="Damage Info" />
+    <ui:Instance template="Range Info" name="Range Info" />
+</ui:UXML>

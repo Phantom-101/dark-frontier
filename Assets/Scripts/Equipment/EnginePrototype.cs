@@ -2,7 +2,7 @@
 using DarkFrontier.Positioning.Navigation;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Equipment
 {
     [CreateAssetMenu (menuName = "Items/Equipment/Engine")]
@@ -154,4 +154,4 @@ namespace DarkFrontier.Equipment
         }
     }
 }
-#nullable restore
+

@@ -1,6 +1,6 @@
 ﻿using System;
 
-#nullable enable
+
 namespace DarkFrontier.Foundation.Identification {
     [Serializable]
     public class Id {
@@ -10,4 +10,4 @@ namespace DarkFrontier.Foundation.Identification {
         public Id (string aId) => uId = aId;
     }
 }
-#nullable restore
+

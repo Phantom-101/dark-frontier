@@ -1,4 +1,4 @@
-﻿#nullable enable
+﻿
 namespace DarkFrontier.Items.Structures
 {
     public interface IInstanceInfo
@@ -6,4 +6,3 @@ namespace DarkFrontier.Items.Structures
         public IInfo? InstanceInfo { get; }
     }
 }
-#nullable disable

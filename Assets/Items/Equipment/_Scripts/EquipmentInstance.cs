@@ -3,7 +3,7 @@ using DarkFrontier.Items._Scripts;
 using Newtonsoft.Json;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items.Equipment._Scripts
 {
     [Serializable]
@@ -42,4 +42,3 @@ namespace DarkFrontier.Items.Equipment._Scripts
         }
     }
 }
-#nullable restore

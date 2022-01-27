@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="info" style="border-left-color: rgb(191, 191, 191); border-right-color: rgb(191, 191, 191); border-top-color: rgb(191, 191, 191); border-bottom-color: rgb(191, 191, 191); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; margin-left: 8px; margin-right: 8px; margin-top: 8px; margin-bottom: 8px; padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 8px;">
+        <ui:VisualElement name="row" style="flex-direction: row; justify-content: space-around; margin-top: 4px; margin-bottom: 4px;">
+            <ui:VisualElement name="type" style="flex-direction: row; align-items: center; justify-content: center;">
+                <ui:VisualElement name="icon" style="background-image: url(&apos;project://database/Assets/UI/Equipment/Info/_Assets/Directed%20Damage.png?fileID=2800000&amp;guid=17da234455789a546af1ff624a752628&amp;type=3#Directed Damage&apos;); width: 32px; height: 32px; margin-left: 8px; margin-right: 8px; -unity-background-image-tint-color: rgb(255, 191, 0);" />
+                <ui:Label text="123" display-tooltip-when-elided="true" name="text" style="font-size: 16px; color: rgb(255, 255, 255);" />
+            </ui:VisualElement>
+            <ui:VisualElement name="type" style="flex-direction: row; align-items: center; justify-content: center;">
+                <ui:VisualElement name="icon" style="background-image: url(&apos;project://database/Assets/UI/Equipment/Info/_Assets/Dispersed%20Damage.png?fileID=2800000&amp;guid=6cce90bce30085a4181332cb559b1e6b&amp;type=3#Dispersed Damage&apos;); width: 32px; height: 32px; margin-left: 8px; margin-right: 8px; -unity-background-image-tint-color: rgb(255, 191, 0);" />
+                <ui:Label text="123" display-tooltip-when-elided="true" name="text" style="font-size: 16px; color: rgb(255, 255, 255);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="row" style="flex-direction: row; justify-content: space-around; margin-top: 4px; margin-bottom: 4px;">
+            <ui:VisualElement name="type" style="flex-direction: row; align-items: center; justify-content: center;">
+                <ui:VisualElement name="icon" style="background-image: url(&apos;project://database/Assets/UI/Equipment/Info/_Assets/Directed%20Damage.png?fileID=2800000&amp;guid=17da234455789a546af1ff624a752628&amp;type=3#Directed Damage&apos;); width: 32px; height: 32px; margin-left: 8px; margin-right: 8px; -unity-background-image-tint-color: rgb(128, 191, 255);" />
+                <ui:Label text="123" display-tooltip-when-elided="true" name="text" style="font-size: 16px; color: rgb(255, 255, 255);" />
+            </ui:VisualElement>
+            <ui:VisualElement name="type" style="flex-direction: row; align-items: center; justify-content: center;">
+                <ui:VisualElement name="icon" style="background-image: url(&apos;project://database/Assets/UI/Equipment/Info/_Assets/Dispersed%20Damage.png?fileID=2800000&amp;guid=6cce90bce30085a4181332cb559b1e6b&amp;type=3#Dispersed Damage&apos;); width: 32px; height: 32px; margin-left: 8px; margin-right: 8px; -unity-background-image-tint-color: rgb(128, 191, 255);" />
+                <ui:Label text="123" display-tooltip-when-elided="true" name="text" style="font-size: 16px; color: rgb(255, 255, 255);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

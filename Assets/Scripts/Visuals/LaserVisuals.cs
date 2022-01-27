@@ -4,7 +4,7 @@ using DarkFrontier.Foundation.Services;
 using DarkFrontier.Locations;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Visuals {
     public class LaserVisuals : ComponentBehavior {
         public LineRenderer? uRenderer;
@@ -80,4 +80,3 @@ namespace DarkFrontier.Visuals {
         }
     }
 }
-#nullable restore

@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Positioning.Navigation
 {
 #if UNITY_EDITOR
@@ -29,4 +29,3 @@ namespace DarkFrontier.Positioning.Navigation
     }
 #endif
 }
-#nullable restore

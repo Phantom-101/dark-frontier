@@ -1,7 +1,7 @@
 ﻿using DarkFrontier.Items.Structures;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.UI.Indicators.Selectors
 {
     public interface ISelectable : IInfo
@@ -17,4 +17,3 @@ namespace DarkFrontier.UI.Indicators.Selectors
         Selector? CreateSelector(Transform? root);
     }
 }
-#nullable restore

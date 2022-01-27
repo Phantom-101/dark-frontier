@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items.Structures
 {
     class StructureSerializer : MonoBehaviour
@@ -26,4 +26,3 @@ namespace DarkFrontier.Items.Structures
         }
     }
 }
-#nullable restore

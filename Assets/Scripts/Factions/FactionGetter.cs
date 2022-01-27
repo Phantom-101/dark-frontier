@@ -2,7 +2,7 @@
 using DarkFrontier.Foundation.Services;
 using System;
 
-#nullable enable
+
 namespace DarkFrontier.Factions {
     [Serializable]
     public class FactionGetter : IdGetter<Faction> {
@@ -12,4 +12,4 @@ namespace DarkFrontier.Factions {
         private static Func<string, Faction?> iGetter = aId => iFactionManager.Value.Registry.Find(aId);
     }
 }
-#nullable restore
+

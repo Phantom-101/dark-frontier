@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items.Equipment
 {
     [CreateAssetMenu(menuName = "Items/Prototypes/Equipment/Equipment")]
@@ -17,4 +17,3 @@ namespace DarkFrontier.Items.Equipment
         public GameObject? destructionFx;
     }
 }
-#nullable restore

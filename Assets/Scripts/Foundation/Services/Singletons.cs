@@ -2,7 +2,7 @@ using DarkFrontier.Foundation.Extensions;
 using System;
 using System.Collections.Generic;
 
-#nullable enable
+
 namespace DarkFrontier.Foundation.Services {
     public static class Singletons {
         private static readonly Dictionary<Type, Dictionary<string, object>> Instances = new Dictionary<Type, Dictionary<string, object>> ();
@@ -28,4 +28,4 @@ namespace DarkFrontier.Foundation.Services {
         public static bool Exists<T> (string key = "") where T : class => Instances.TryGet (typeof (T), new Dictionary<string, object> ()).ContainsKey (key);
     }
 }
-#nullable disable
+

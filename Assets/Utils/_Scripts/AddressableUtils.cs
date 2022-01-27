@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-#nullable enable
+
 namespace DarkFrontier.Utils
 {
     public static class AddressableUtils
@@ -15,4 +15,3 @@ namespace DarkFrontier.Utils
         }
     }
 }
-#nullable restore

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-#nullable enable
+
 namespace DarkFrontier.UI.Indicators.Selectors
 {
     public class BasicSelector : Selector
@@ -44,4 +44,3 @@ namespace DarkFrontier.UI.Indicators.Selectors
         }
     }
 }
-#nullable restore

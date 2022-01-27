@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace DarkFrontier.Equipment {
 
-#nullable enable
+
     [CreateAssetMenu (menuName = "Items/Equipment/Weapons/Pulse Laser")]
     public class PulseLaserPrototype : EquipmentPrototype {
         public float Range;
@@ -175,4 +175,4 @@ namespace DarkFrontier.Equipment {
         }
     }
 }
-#nullable restore
+

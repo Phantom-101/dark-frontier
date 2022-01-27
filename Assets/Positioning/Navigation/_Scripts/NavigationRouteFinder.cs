@@ -2,7 +2,7 @@
 using Unity.Collections;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Positioning.Navigation
 {
     public class NavigationRouteFinder : MonoBehaviour
@@ -35,4 +35,3 @@ namespace DarkFrontier.Positioning.Navigation
         }
     }
 }
-#nullable restore

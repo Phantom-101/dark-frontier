@@ -4,7 +4,7 @@ using DarkFrontier.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-#nullable enable
+
 namespace DarkFrontier.Positioning.Navigation
 {
     public class NavigationPathfinder : MonoBehaviour
@@ -98,4 +98,3 @@ namespace DarkFrontier.Positioning.Navigation
         }
     }
 }
-#nullable restore

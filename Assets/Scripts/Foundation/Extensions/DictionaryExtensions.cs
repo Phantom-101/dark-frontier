@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-#nullable enable
+
 namespace DarkFrontier.Foundation.Extensions {
     public static class DictionaryExtensions {
         public static V TryGet<K, V> (this IDictionary<K, V> dict, K key, V value) {
@@ -21,4 +21,4 @@ namespace DarkFrontier.Foundation.Extensions {
         }
     }
 }
-#nullable restore
+

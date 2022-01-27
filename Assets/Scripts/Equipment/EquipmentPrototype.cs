@@ -5,8 +5,6 @@ using DarkFrontier.Structures;
 using UnityEngine;
 
 namespace DarkFrontier.Equipment {
-
-#nullable enable
     public class EquipmentPrototype : ItemPrototype {
         public float Durability;
         public GameObject? ButtonPrefab;
@@ -104,4 +102,3 @@ namespace DarkFrontier.Equipment {
         }
     }
 }
-#nullable restore

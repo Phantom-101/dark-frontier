@@ -2,7 +2,7 @@
 using DarkFrontier.Attributes;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Positioning.Navigation
 {
     public class NavigationRegistry : MonoBehaviour
@@ -27,4 +27,3 @@ namespace DarkFrontier.Positioning.Navigation
         }
     }
 }
-#nullable restore

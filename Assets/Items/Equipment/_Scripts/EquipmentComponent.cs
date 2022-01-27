@@ -7,7 +7,7 @@ using DarkFrontier.Structures;
 using DarkFrontier.UI.Indicators.Selectors;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items.Equipment._Scripts
 {
     public class EquipmentComponent : MonoBehaviour, IInstanceInfo, IDamageable
@@ -91,4 +91,3 @@ namespace DarkFrontier.Items.Equipment._Scripts
         }
     }
 }
-#nullable restore

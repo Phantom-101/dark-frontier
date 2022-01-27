@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Structures
 {
     public class Structure : ComponentBehavior, ICtorArgs<Structure.State>
@@ -932,4 +932,3 @@ namespace DarkFrontier.Structures
         }
     }
 }
-#nullable restore

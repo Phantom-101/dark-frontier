@@ -1,6 +1,6 @@
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Positioning.Navigation
 {
     public class NavigationCollider : MonoBehaviour
@@ -21,4 +21,3 @@ namespace DarkFrontier.Positioning.Navigation
         }
     }
 }
-#nullable restore

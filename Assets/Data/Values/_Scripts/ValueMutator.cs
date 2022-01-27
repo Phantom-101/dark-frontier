@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Data.Values
 {
     public class ValueMutator<T>
@@ -20,4 +20,3 @@ namespace DarkFrontier.Data.Values
         public virtual T Mutate(T value) => value;
     }
 }
-#nullable restore

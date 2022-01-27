@@ -13,7 +13,7 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using DarkFrontier.Positioning.Navigation;
 
-#nullable enable
+
 namespace DarkFrontier.Equipment
 {
     [CreateAssetMenu (menuName = "Items/Equipment/Weapons/Hangar Bay")]
@@ -364,4 +364,4 @@ namespace DarkFrontier.Equipment
         }
     }
 }
-#nullable restore
+

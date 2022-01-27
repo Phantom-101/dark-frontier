@@ -3,7 +3,7 @@ using DarkFrontier.Foundation.Services;
 using System;
 using DarkFrontier.Items.Structures;
 
-#nullable enable
+
 namespace DarkFrontier.Structures {
     [Serializable]
     public class StructureGetter : IdGetter<Structure> {
@@ -13,4 +13,4 @@ namespace DarkFrontier.Structures {
         private static Func<string, Structure?> iGetter = aId => iStructureManager.Value.Registry.Find(aId);
     }
 }
-#nullable restore
+

@@ -6,7 +6,7 @@ using DarkFrontier.UI.Indicators.Selectors;
 using DarkFrontier.Utils;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items.Structures
 {
     public class StructureComponent : MonoBehaviour, IInstanceInfo, IDamageable
@@ -89,4 +89,3 @@ namespace DarkFrontier.Items.Structures
         }
     }
 }
-#nullable restore

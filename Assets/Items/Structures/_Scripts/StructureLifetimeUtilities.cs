@@ -5,7 +5,7 @@ using DarkFrontier.Locations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-#nullable enable
+
 namespace DarkFrontier.Structures
 {
     public class StructureLifetimeUtilities
@@ -147,4 +147,3 @@ namespace DarkFrontier.Structures
         Dispose
     }
 }
-#nullable restore

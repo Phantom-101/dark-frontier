@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Foundation.Identification {
     [Serializable]
     public class IdGetter<T> : INotifier, IEquatable<IdGetter<T>> where T : class {
@@ -54,4 +54,4 @@ namespace DarkFrontier.Foundation.Identification {
         public override int GetHashCode() => UId.Value.GetHashCode();
     }
 }
-#nullable restore
+

@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Positioning.Sectors
 {
     [JsonObject(MemberSerialization.OptIn)]
@@ -33,4 +33,3 @@ namespace DarkFrontier.Positioning.Sectors
         public string SelectorPrefabAddress { get; private set; } = "";
     }
 }
-#nullable restore

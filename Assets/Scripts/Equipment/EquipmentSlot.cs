@@ -7,7 +7,7 @@ using DarkFrontier.Items;
 using DarkFrontier.Items.Conditions;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Equipment {
     public class EquipmentSlot : ComponentBehavior, ISavableState<EquipmentSlot.Serializable> {
         public Structure? Equipper;
@@ -94,4 +94,4 @@ namespace DarkFrontier.Equipment {
         }
     }
 }
-#nullable restore
+

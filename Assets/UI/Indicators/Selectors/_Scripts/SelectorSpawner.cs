@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using DarkFrontier.Utils;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.UI.Indicators.Selectors
 {
     public class SelectorSpawner : MonoBehaviour
@@ -94,4 +94,3 @@ namespace DarkFrontier.UI.Indicators.Selectors
         }
     }
 }
-#nullable restore

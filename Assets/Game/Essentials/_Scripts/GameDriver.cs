@@ -7,7 +7,7 @@ using DarkFrontier.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-#nullable enable
+
 namespace DarkFrontier.Game.Essentials
 {
     public class GameDriver : MonoBehaviour
@@ -67,4 +67,3 @@ namespace DarkFrontier.Game.Essentials
         }
     }
 }
-#nullable restore

@@ -2,7 +2,7 @@
 using DarkFrontier.Utils;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Positioning.Navigation
 {
     public class NavigationIntersection : MonoBehaviour
@@ -23,4 +23,3 @@ namespace DarkFrontier.Positioning.Navigation
         }
     }
 }
-#nullable restore

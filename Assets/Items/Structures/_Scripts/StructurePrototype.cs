@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items.Structures
 {
     [CreateAssetMenu(menuName = "Items/Prototypes/Structure")]
@@ -17,4 +17,3 @@ namespace DarkFrontier.Items.Structures
         public GameObject? destructionFx;
     }
 }
-#nullable restore

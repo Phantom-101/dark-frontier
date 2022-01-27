@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-#nullable enable
+
 namespace DarkFrontier.Data.Values
 {
     public class Value<T>
@@ -27,4 +27,3 @@ namespace DarkFrontier.Data.Values
         }
     }
 }
-#nullable restore

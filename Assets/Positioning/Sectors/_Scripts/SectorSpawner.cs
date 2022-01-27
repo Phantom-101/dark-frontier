@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-#nullable enable
+
 namespace DarkFrontier.Positioning.Sectors
 {
     public class SectorSpawner
@@ -29,4 +29,3 @@ namespace DarkFrontier.Positioning.Sectors
         }
     }
 }
-#nullable restore

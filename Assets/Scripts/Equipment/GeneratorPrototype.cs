@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DarkFrontier.Equipment {
 
-#nullable enable
+
     [CreateAssetMenu (menuName = "Items/Equipment/Generator")]
     public class GeneratorPrototype : EquipmentPrototype {
         public float Generation;
@@ -50,4 +50,4 @@ namespace DarkFrontier.Equipment {
         }
     }
 }
-#nullable restore
+

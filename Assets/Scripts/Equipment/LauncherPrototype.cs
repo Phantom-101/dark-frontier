@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace DarkFrontier.Equipment {
 
-#nullable enable
+
     [CreateAssetMenu (menuName = "Items/Equipment/Weapons/Launcher")]
     public class LauncherPrototype : EquipmentPrototype {
         public float EnergyRequired;
@@ -158,4 +158,4 @@ namespace DarkFrontier.Equipment {
         }
     }
 }
-#nullable restore
+

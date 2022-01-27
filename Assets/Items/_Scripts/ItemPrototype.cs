@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DarkFrontier.Items.Conditions;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items._Scripts
 {
     [CreateAssetMenu(menuName = "Items/Prototypes/Item")]
@@ -25,4 +25,3 @@ namespace DarkFrontier.Items._Scripts
         public virtual ItemInstance NewState() => new ItemInstance(this);
     }
 }
-#nullable restore

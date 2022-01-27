@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items.Segments
 {
     [CreateAssetMenu(menuName = "Items/Prototypes/Segment")]
@@ -21,4 +21,3 @@ namespace DarkFrontier.Items.Segments
         public GameObject? destructionFx;
     }
 }
-#nullable restore

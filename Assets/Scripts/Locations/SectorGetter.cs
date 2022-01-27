@@ -2,7 +2,7 @@
 using DarkFrontier.Foundation.Services;
 using System;
 
-#nullable enable
+
 namespace DarkFrontier.Locations {
     [Serializable]
     public class SectorGetter : IdGetter<Sector> {
@@ -12,4 +12,4 @@ namespace DarkFrontier.Locations {
         private static Func<string, Sector?> iGetter = aId => iSectorManager.Value.Registry.Find(aId);
     }
 }
-#nullable restore
+

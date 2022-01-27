@@ -2,7 +2,7 @@ using DarkFrontier.Positioning.Navigation;
 using DarkFrontier.Utils;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Game.Player.Camera
 {
     public class CameraSpring : MonoBehaviour
@@ -69,4 +69,3 @@ namespace DarkFrontier.Game.Player.Camera
         }
     }
 }
-#nullable restore

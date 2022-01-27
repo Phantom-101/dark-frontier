@@ -11,8 +11,6 @@ using DarkFrontier.Visuals;
 using UnityEngine;
 
 namespace DarkFrontier.Equipment {
-
-#nullable enable
     [CreateAssetMenu (menuName = "Items/Equipment/Weapons/Phased Beam Laser")]
     public class PhasedBeamLaserPrototype : EquipmentPrototype {
         public float Range;
@@ -201,4 +199,3 @@ namespace DarkFrontier.Equipment {
         }
     }
 }
-#nullable restore

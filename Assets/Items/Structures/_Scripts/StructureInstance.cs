@@ -8,7 +8,7 @@ using DarkFrontier.Positioning.Sectors;
 using Newtonsoft.Json;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items.Structures
 {
     [Serializable]
@@ -85,4 +85,3 @@ namespace DarkFrontier.Items.Structures
         }
     }
 }
-#nullable restore

@@ -8,7 +8,7 @@ using DarkFrontier.Items.Structures;
 using DarkFrontier.Visuals;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Equipment {
     [CreateAssetMenu (menuName = "Items/Equipment/Weapons/Beam Laser")]
     public class BeamLaserPrototype : EquipmentPrototype {
@@ -202,4 +202,4 @@ namespace DarkFrontier.Equipment {
         }
     }
 }
-#nullable restore
+

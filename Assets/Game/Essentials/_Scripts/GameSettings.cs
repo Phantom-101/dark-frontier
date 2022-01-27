@@ -1,6 +1,6 @@
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Game.Essentials
 {
     public class GameSettings : MonoBehaviour
@@ -14,4 +14,3 @@ namespace DarkFrontier.Game.Essentials
         }
     }
 }
-#nullable restore

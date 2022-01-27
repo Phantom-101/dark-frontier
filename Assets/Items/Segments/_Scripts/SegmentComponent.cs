@@ -7,7 +7,7 @@ using DarkFrontier.Structures;
 using DarkFrontier.UI.Indicators.Selectors;
 using UnityEngine;
 
-#nullable enable
+
 namespace DarkFrontier.Items.Segments
 {
     public class SegmentComponent : MonoBehaviour, IInstanceInfo, IDamageable
@@ -104,4 +104,3 @@ namespace DarkFrontier.Items.Segments
         }
     }
 }
-#nullable restore
