@@ -20,9 +20,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Sandbox/SectorScenesTest/SectorScenesTest2.unity
     guid: 036dc85dd66f7ce459ac7552d015720c
-  - enabled: 1
-    path: Assets/Sandbox/JobSystemTest/JobSystemTest.unity
-    guid: d89a8c83609dae1499b1a95354b00557
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 54b09d6ad77e1b44cbb8b97ab8232854,
       type: 2}
