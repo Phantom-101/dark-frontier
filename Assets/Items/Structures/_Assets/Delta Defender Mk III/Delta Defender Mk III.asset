@@ -21,7 +21,7 @@ MonoBehaviour:
   Tags: []
   Usable: 0
   Prefab: {fileID: 2869013932428447122, guid: 01d3b3e41279c74489c131c0b41597bb, type: 3}
-  ApparentSize: 125
+  ApparentSize: 120
   HullWireframe: {fileID: 21300000, guid: 5f56fb9ca780c664e94278c0651f1afe, type: 3}
   ShowBlip: 1
   DestructionEffect: {fileID: 1121192042590650, guid: 83859e68a02a8e2499f66e422ff236e4,

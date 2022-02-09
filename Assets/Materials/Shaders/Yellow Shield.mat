@@ -52,6 +52,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _Oscillate: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _Random: 1
     - _RandomSpeed: 25
     - _RandomStrength: 0.05
