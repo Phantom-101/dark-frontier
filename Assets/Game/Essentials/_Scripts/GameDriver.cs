@@ -22,6 +22,9 @@ namespace DarkFrontier.Game.Essentials
         private NavigationPathfinder _pathfinder = null!;
 
         [SerializeReference, ReadOnly]
+        private DetectableRegistry _detectableRegistry = null!;
+        
+        [SerializeReference, ReadOnly]
         private CameraSpring? _cameraSpring;
 
         private void Start()
@@ -34,7 +37,7 @@ namespace DarkFrontier.Game.Essentials
         {
             Singletons.Bind(_gameSettings = ComponentUtils.AddOrGet<GameSettings>(gameObject));
             _pathfinder = ComponentUtils.AddOrGet<NavigationPathfinder>(gameObject);
-            Singletons.Bind(new DetectableRegistry());
+            Singletons.Bind(_detectableRegistry = new DetectableRegistry());
             _cameraSpring = FindObjectOfType<CameraSpring>();
         }
 

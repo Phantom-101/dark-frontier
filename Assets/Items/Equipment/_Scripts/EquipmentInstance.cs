@@ -42,17 +42,17 @@ namespace DarkFrontier.Items.Equipment._Scripts
         
         public bool IsDetected(StructureInstance structure)
         {
-            return true;
+            return Component != null && Component.segment != null && Component.segment.structure != null && (Component.segment.structure.Instance?.IsDetected(structure) ?? false);
         }
 
         public VisualElement CreateSelector()
         {
-            return new VisualElement();
+            return Prototype.selectorElement == null ? new VisualElement() : Prototype.selectorElement.CloneTree();
         }
 
         public Vector3 GetSelectorPosition()
         {
-            return Vector3.zero;
+            return Component == null ? Vector3.zero : UnityEngine.Camera.main!.WorldToViewportPoint(Component.transform.position);
         }
         
         public VisualElement CreateSelected()

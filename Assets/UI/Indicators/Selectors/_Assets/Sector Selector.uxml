@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="pivot" style="height: 0; width: 0; position: absolute;">
+        <ui:VisualElement name="selector" style="width: 100px; height: 100px; position: absolute; left: -50px; top: -50px; background-image: url(&apos;project://database/Assets/UI/Indicators/Selectors/_Assets/Sector%20Selector.png?fileID=2800000&amp;guid=7dc1ce33c39a5be44a3b7bd13a112eae&amp;type=3#Sector Selector&apos;);" />
+    </ui:VisualElement>
+</ui:UXML>

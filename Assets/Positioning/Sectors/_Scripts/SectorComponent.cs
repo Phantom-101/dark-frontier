@@ -1,4 +1,6 @@
 #nullable enable
+using DarkFrontier.Foundation.Services;
+using DarkFrontier.UI.Indicators.Selectors;
 using UnityEngine;
 
 namespace DarkFrontier.Positioning.Sectors
@@ -20,7 +22,14 @@ namespace DarkFrontier.Positioning.Sectors
         
         public bool SetInstance(SectorInstance instance)
         {
+            var detectableRegistry = Singletons.Get<DetectableRegistry>();
+            if(Instance != null)
+            {
+                detectableRegistry.Detectables.Remove(Instance);
+            }
+            
             (Instance = instance).SetComponent(this);
+            detectableRegistry.Detectables.Add(instance);
             return true;
         }
     }

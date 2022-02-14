@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-
+﻿#nullable enable
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Equipment
 {
@@ -10,7 +11,7 @@ namespace DarkFrontier.Items.Equipment
 
         public int rating;
 
-        public GameObject? selectorPrefab;
+        public VisualTreeAsset? selectorElement;
 
         public GameObject? prefab;
         

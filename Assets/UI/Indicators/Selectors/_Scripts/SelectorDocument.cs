@@ -31,6 +31,7 @@ namespace DarkFrontier.UI.Indicators.Selectors
                     _document.rootVisualElement.Add(selector);
                     _selectors[_registry.Detectables[i]] = selector;
                 }
+                // TODO check detectability
                 var position = _registry.Detectables[i].GetSelectorPosition();
                 var element = _selectors[_registry.Detectables[i]];
                 if(position.z > 0)

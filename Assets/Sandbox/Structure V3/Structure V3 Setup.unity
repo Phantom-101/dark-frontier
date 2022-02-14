@@ -590,14 +590,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57c767bd64207eb4c9731476b3413a2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _document: {fileID: 227332055}
-  _registry:
-    rid: -2
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
 --- !u!1001 &272475753
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2807,6 +2799,8 @@ MonoBehaviour:
         <Description>k__BackingField: Custom
         <Position>k__BackingField: {x: 0, y: 0, z: 0}
         <Size>k__BackingField: 50000
+        <SelectorAddressableKey>k__BackingField: Assets/UI/Indicators/Selectors/_Assets/Sector
+          Selector.uxml
 --- !u!1001 &1789696414
 PrefabInstance:
   m_ObjectHideFlags: 0

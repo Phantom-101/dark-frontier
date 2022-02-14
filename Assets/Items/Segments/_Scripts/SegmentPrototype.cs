@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-
+﻿#nullable enable
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Segments
 {
@@ -14,7 +15,7 @@ namespace DarkFrontier.Items.Segments
         
         public Sprite? hullIndicator;
 
-        public GameObject? selectorPrefab;
+        public VisualTreeAsset? selectorElement;
 
         public GameObject? prefab;
         

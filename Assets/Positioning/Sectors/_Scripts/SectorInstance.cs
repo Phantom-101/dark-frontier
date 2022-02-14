@@ -4,6 +4,7 @@ using System;
 using DarkFrontier.Attributes;
 using DarkFrontier.Items.Structures;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
 namespace DarkFrontier.Positioning.Sectors
@@ -33,6 +34,10 @@ namespace DarkFrontier.Positioning.Sectors
         [field: SerializeReference]
         [JsonProperty("size")]
         public float Size { get; private set; } = 50000;
+
+        [field: SerializeReference]
+        [JsonProperty("selector-addressable-key")]
+        public string SelectorAddressableKey { get; private set; } = "";
         
         public bool SetComponent(SectorComponent component)
         {
@@ -42,17 +47,17 @@ namespace DarkFrontier.Positioning.Sectors
 
         public bool IsDetected(StructureInstance structure)
         {
-            return true;
+            return structure.Sector != this;
         }
 
         public VisualElement CreateSelector()
         {
-            return new VisualElement();
+            return Addressables.LoadAssetAsync<VisualTreeAsset>(SelectorAddressableKey).WaitForCompletion().CloneTree();
         }
 
         public Vector3 GetSelectorPosition()
         {
-            return Vector3.zero;
+            return Component == null ? Vector3.zero : UnityEngine.Camera.main!.WorldToViewportPoint(Position);
         }
 
         public VisualElement CreateSelected()

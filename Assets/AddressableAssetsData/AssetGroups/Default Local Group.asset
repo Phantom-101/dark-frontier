@@ -21,6 +21,10 @@ MonoBehaviour:
     m_Address: Assets/UI/Indicators/Selectors/_Assets/Sector Selector.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: e406e17526580314fbd4733f9ec29e5b
+    m_Address: Assets/UI/Indicators/Selectors/_Assets/Sector Selector.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 39daaa07d63e1a6409fcf7e84986cabf, type: 2}
   m_SchemaSet:
