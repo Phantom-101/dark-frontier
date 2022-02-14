@@ -2,11 +2,9 @@
 using System;
 using UnityEngine;
 
-
 namespace DarkFrontier.Items.Segments
 {
-    [Serializable]
-    [JsonObject(MemberSerialization.OptIn)]
+    [Serializable, JsonObject(MemberSerialization.OptIn, IsReference = true)]
     public class SegmentRecord
     {
         [JsonProperty]
@@ -15,6 +13,16 @@ namespace DarkFrontier.Items.Segments
 
         [JsonProperty]
         [field: SerializeReference]
-        public SegmentInstance Instance { get; private set; } = new SegmentInstance();
+        public SegmentInstance Instance { get; private set; } = new();
+
+        public SegmentRecord()
+        {
+        }
+
+        public SegmentRecord(string name, SegmentInstance instance)
+        {
+            Name = name;
+            Instance = instance;
+        }
     }
 }

@@ -1,15 +1,13 @@
+#nullable enable
 using System;
-using System.Runtime.Serialization;
 using DarkFrontier.Attributes;
 using DarkFrontier.Items.Structures;
 using Newtonsoft.Json;
 using UnityEngine;
 
-
 namespace DarkFrontier.Items._Scripts
 {
-    [Serializable]
-    [JsonObject(MemberSerialization.OptIn)]
+    [Serializable, JsonObject(MemberSerialization.OptIn, IsReference = true)]
     public class ItemInstance : IInfo, IEquatable<ItemInstance>
     {
         [field: SerializeReference, Expandable]
@@ -39,12 +37,12 @@ namespace DarkFrontier.Items._Scripts
             Prototype = prototype;
         }
 
-        private void PreSerialize()
+        public virtual void PreSerialize()
         {
             _prototypeId = Prototype.id;
         }
 
-        private void PostDeserialize()
+        public virtual void PostDeserialize()
         {
             Prototype = _prototypeId.Length > 0 ? new ItemRegistry().Get(_prototypeId)! : Prototype;
         }

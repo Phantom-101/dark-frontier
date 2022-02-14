@@ -1,8 +1,11 @@
+#nullable enable
 using DarkFrontier.Attributes;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Game.Player.Camera;
 using DarkFrontier.Items.Structures;
 using DarkFrontier.Positioning.Navigation;
+using DarkFrontier.Positioning.Sectors;
+using DarkFrontier.UI.Indicators.Selectors;
 using DarkFrontier.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,7 +20,7 @@ namespace DarkFrontier.Game.Essentials
 
         [SerializeReference, ReadOnly]
         private NavigationPathfinder _pathfinder = null!;
-        
+
         [SerializeReference, ReadOnly]
         private CameraSpring? _cameraSpring;
 
@@ -31,13 +34,25 @@ namespace DarkFrontier.Game.Essentials
         {
             Singletons.Bind(_gameSettings = ComponentUtils.AddOrGet<GameSettings>(gameObject));
             _pathfinder = ComponentUtils.AddOrGet<NavigationPathfinder>(gameObject);
+            Singletons.Bind(new DetectableRegistry());
             _cameraSpring = FindObjectOfType<CameraSpring>();
         }
 
         private void InitializeOthers()
         {
             _gameSettings.Initialize();
+
             _pathfinder.Initialize(SceneManager.GetActiveScene());
+
+            var sectors = FindObjectsOfType<SectorComponent>();
+            for(int i = 0, l = sectors.Length; i < l; i++)
+            {
+                if(!sectors[i].Initialize())
+                {
+                    Destroy(sectors[i].gameObject);
+                }
+            }
+            
             var structures = FindObjectsOfType<StructureComponent>();
             for(int i = 0, l = structures.Length; i < l; i++)
             {
@@ -46,10 +61,8 @@ namespace DarkFrontier.Game.Essentials
                     Destroy(structures[i].gameObject);
                 }
             }
-            if(_cameraSpring != null)
-            {
-                _cameraSpring.Initialize();
-            }
+
+            if(_cameraSpring != null) _cameraSpring.Initialize();
         }
 
         private void Update()
@@ -60,10 +73,8 @@ namespace DarkFrontier.Game.Essentials
             {
                 finders[i].Tick();
             }
-            if(_cameraSpring != null)
-            {
-                _cameraSpring.Tick();
-            }
+
+            if(_cameraSpring != null) _cameraSpring.Tick();
         }
     }
 }

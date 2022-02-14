@@ -21,7 +21,7 @@ namespace DarkFrontier.Items.Structures
         {
             if (_component != null)
             {
-                _serialized = JsonConvert.SerializeObject(_component.instance);
+                _serialized = JsonConvert.SerializeObject(_component.Instance);
             }
         }
     }

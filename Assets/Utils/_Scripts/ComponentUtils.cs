@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 namespace DarkFrontier.Utils
@@ -12,6 +14,7 @@ namespace DarkFrontier.Utils
             {
                 component = gameObject.AddComponent<T>();
             }
+
             return component;
         }
 
@@ -23,20 +26,24 @@ namespace DarkFrontier.Utils
                 component = gameObject.AddComponent<T>();
                 return false;
             }
+
             return true;
         }
 
-        public static TInterface AddOrGet<TInterface, TComponent>(GameObject gameObject) where TComponent : Component, TInterface
+        public static TInterface AddOrGet<TInterface, TComponent>(GameObject gameObject)
+            where TComponent : Component, TInterface
         {
             TInterface component = gameObject.GetComponent<TInterface>();
             if(component == null)
             {
                 component = gameObject.AddComponent<TComponent>();
             }
+
             return component;
         }
 
-        public static bool AddOrGet<TInterface, TComponent>(GameObject gameObject, out TInterface component) where TComponent : Component, TInterface
+        public static bool AddOrGet<TInterface, TComponent>(GameObject gameObject, out TInterface component)
+            where TComponent : Component, TInterface
         {
             component = gameObject.GetComponent<TInterface>();
             if(component == null)
@@ -44,7 +51,23 @@ namespace DarkFrontier.Utils
                 component = gameObject.AddComponent<TComponent>();
                 return false;
             }
+
             return true;
+        }
+
+        public static List<T> FindComponentsOfType<T>()
+        {
+            var ret = new List<T>();
+            var rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
+            for(int i = 0, li = rootGameObjects.Length; i < li; i++)
+            {
+                var interfaces = rootGameObjects[i].GetComponentsInChildren<T>();
+                for(int j = 0, lj = interfaces.Length; j < lj; j++)
+                {
+                    ret.Add(interfaces[j]);
+                }
+            }
+            return ret;
         }
     }
 }

@@ -1,10 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 namespace DarkFrontier.Positioning.Sectors
 {
-    public class SectorSpawner
+    public static class SectorSpawner
     {
         public static SectorComponent Create(SectorInstance instance)
         {
@@ -14,14 +13,14 @@ namespace DarkFrontier.Positioning.Sectors
             SceneManager.MoveGameObjectToScene(instantiated, scene);
             
             var sector = instantiated.AddComponent<SectorComponent>();
-            sector.instance = instance;
+            sector.SetInstance(instance);
             
             return sector;
         }
 
         public static Scene Create(SectorComponent component)
         {
-            var scene = SceneManager.CreateScene(component.instance?.Name ?? "Unknown Sector", new CreateSceneParameters(LocalPhysicsMode.Physics3D));
+            var scene = SceneManager.CreateScene(component.Instance?.Name ?? "Unknown Sector", new CreateSceneParameters(LocalPhysicsMode.Physics3D));
 
             SceneManager.MoveGameObjectToScene(component.gameObject, scene);
 

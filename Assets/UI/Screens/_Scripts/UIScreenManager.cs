@@ -1,20 +1,10 @@
-﻿using DarkFrontier.UI.Inspector;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace DarkFrontier.UI.Screens
 {
-    public class UIScreenManager : MonoBehaviour, IInspectable
+    public class UIScreenManager : MonoBehaviour
     {
-        public VisualElement CreateInspector()
-        {
-            return DefaultInspector.Create(this);
-        }
-
-        public int test;
-        private int _test;
-        private float _float;
-        
         public bool Pop()
         {
             return true;

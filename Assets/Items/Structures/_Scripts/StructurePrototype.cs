@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-
+﻿#nullable enable
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Structures
 {
@@ -10,7 +11,7 @@ namespace DarkFrontier.Items.Structures
         
         public Sprite? hullIndicator;
 
-        public GameObject? selectorPrefab;
+        public VisualTreeAsset? selectorElement;
 
         public GameObject? prefab;
         

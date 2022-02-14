@@ -1,91 +1,58 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using DarkFrontier.Attributes;
+using DarkFrontier.Foundation.Services;
 using DarkFrontier.Items.Segments;
-using DarkFrontier.Structures;
 using DarkFrontier.UI.Indicators.Selectors;
-using DarkFrontier.Utils;
 using UnityEngine;
-
 
 namespace DarkFrontier.Items.Structures
 {
-    public class StructureComponent : MonoBehaviour, IInstanceInfo, IDamageable
+    public class StructureComponent : MonoBehaviour
     {
-        [SerializeReference]
-        public StructureInstance? instance;
-
-        public ISelectable? Parent => null;
-
-        public ISelectable[] Children => Segments.Copy<SegmentComponent, ISelectable>();
-
-        public Vector3 Position => transform.position;
-        
-        public IInfo? InstanceInfo => instance;
-        
-        public string Name => instance?.Prototype.name ?? "";
-
-        public string Description => instance?.Prototype.description ?? "";
-
-        [field: ReadOnly]
         [field: SerializeReference]
-        public float MaxHp { get; private set; }
+        public StructureInstance? Instance { get; private set; }
 
-        public float CurrentHp => instance?.PoolHp ?? 0;
-
-        [field: SerializeReference]
+        [field: SerializeReference, ReadOnly]
         public SegmentComponent[] Segments { get; private set; } = Array.Empty<SegmentComponent>();
 
         public bool Initialize()
         {
-            if (instance == null) return false;
-
-            instance.Component = this;
-
-            if (instance.Prototype.prefab != null)
-            {
-                Instantiate(instance.Prototype.prefab, transform);
-            }
-
-            Segments = GetComponentsInChildren<SegmentComponent>();
-            
-            MaxHp = 0;
-            
-            for (int i = 0, l = Segments.Length; i < l; i++)
-            {
-                if (Segments[i].Initialize(this, instance.Segments))
-                {
-                    MaxHp += Segments[i].instance!.Prototype.poolHp;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return Instance != null && SetInstance(Instance);
         }
         
-        public bool IsDetected(StructureComponent structure)
+        public bool SetInstance(StructureInstance instance)
         {
-            return true;
-        }
-
-        public Selector? CreateSelector(Transform? root)
-        {
-            if (instance == null || instance.Prototype.selectorPrefab == null)
+            var detectableRegistry = Singletons.Get<DetectableRegistry>();
+            if(Instance != null)
             {
-                return null;
+                detectableRegistry.Detectables.Remove(Instance);
             }
-
-            var selector = Instantiate(instance.Prototype.selectorPrefab, root).GetComponent<BasicSelector>();
-            selector.selectable = this;
-
-            return selector;
-        }
-
-        public void Inflict(Damage damage)
-        {
-            throw new NotImplementedException();
+            
+            (Instance = instance).SetComponent(this);
+            detectableRegistry.Detectables.Add(instance);
+            
+            if (Instance.Prototype.prefab != null)
+            {
+                Instantiate(Instance.Prototype.prefab, transform);
+            }
+            
+            for (int i = 0, li = (Segments = GetComponentsInChildren<SegmentComponent>()).Length; i < li; i++)
+            {
+                Segments[i].structure = this;
+                for(int j = 0, lj = Instance.Segments.Length; j < lj; j++)
+                {
+                    if(Segments[i].Name == Instance.Segments[j]?.Name)
+                    {
+                        if(!Segments[i].SetInstance(Instance.Segments[j]!.Instance))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            
+            return true;
         }
     }
 }

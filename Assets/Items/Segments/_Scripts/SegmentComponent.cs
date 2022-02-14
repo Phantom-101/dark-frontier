@@ -1,106 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#nullable enable
+using System;
 using DarkFrontier.Attributes;
+using DarkFrontier.Foundation.Services;
 using DarkFrontier.Items.Equipment._Scripts;
 using DarkFrontier.Items.Structures;
-using DarkFrontier.Structures;
 using DarkFrontier.UI.Indicators.Selectors;
 using UnityEngine;
 
-
 namespace DarkFrontier.Items.Segments
 {
-    public class SegmentComponent : MonoBehaviour, IInstanceInfo, IDamageable
+    public class SegmentComponent : MonoBehaviour
     {
+        public StructureComponent? structure;
+
         [field: SerializeReference]
-        public StructureComponent? Structure { get; private set; }
-
-        [SerializeReference]
-        public SegmentInstance? instance;
-
-        public ISelectable? Parent => Structure;
-
-        public ISelectable[] Children => Equipment;
-
-        public Vector3 Position => transform.position;
-
-        public IInfo? InstanceInfo => instance;
+        public SegmentInstance? Instance { get; private set; }
 
         [field: SerializeReference]
         public string Name { get; private set; } = "";
 
-        [field: TextArea]
-        [field: SerializeReference]
+        [field: SerializeReference, TextArea]
         public string Description { get; private set; } = "";
-
-        [field: ReadOnly]
-        [field: SerializeReference]
-        public float MaxHp { get; private set; }
-
-        public float CurrentHp => instance?.Hp ?? 0;
 
         [field: SerializeReference]
         public SegmentPrototype[] Compatible { get; private set; } = Array.Empty<SegmentPrototype>();
 
-        [field: SerializeReference]
+        [field: SerializeReference, ReadOnly]
         public EquipmentComponent[] Equipment { get; private set; } = Array.Empty<EquipmentComponent>();
 
-        public bool Initialize(StructureComponent structure, SegmentRecord?[] records)
+        public bool SetInstance(SegmentInstance instance)
         {
-            Structure = structure;
-
-            for(int i = 0, l = records.Length; i < l; i++)
+            var detectableRegistry = Singletons.Get<DetectableRegistry>();
+            if(Instance != null)
             {
-                if(records[i] != null)
+                detectableRegistry.Detectables.Remove(Instance);
+            }
+            
+            (Instance = instance).SetComponent(this);
+            detectableRegistry.Detectables.Add(instance);
+            
+            if(Instance.Prototype.prefab != null)
+            {
+                Instantiate(Instance.Prototype.prefab, transform);
+            }
+            
+            for (int i = 0, li = (Equipment = GetComponentsInChildren<EquipmentComponent>()).Length; i < li; i++)
+            {
+                Equipment[i].segment = this;
+                for(int j = 0, lj = Instance.Equipment.Length; j < lj; j++)
                 {
-                    if(records[i]!.Name == Name)
+                    if(Equipment[i].Name == Instance.Equipment[j]?.Name)
                     {
-                        instance = records[i]!.Instance;
-                        break;
+                        if(!Equipment[i].SetInstance(Instance.Equipment[j]!.Instance))
+                        {
+                            return false;
+                        }
                     }
-                }
-            }
-
-            if(instance == null) return false;
-
-            if(instance.Prototype.prefab != null)
-            {
-                Instantiate(instance.Prototype.prefab, transform);
-            }
-
-            Equipment = GetComponentsInChildren<EquipmentComponent>();
-
-            MaxHp = instance.Prototype.hp;
-
-            for(int i = 0, l = Equipment.Length; i < l; i++)
-            {
-                if(!Equipment[i].Initialize(this, instance.Equipment))
-                {
-                    return false;
                 }
             }
 
             return true;
         }
 
-        public bool IsDetected(StructureComponent structure) => Parent == null ? false : Parent.IsDetected(structure);
-
-        public Selector? CreateSelector(Transform? root)
+        public bool RemoveInstance()
         {
-            if(instance == null || instance.Prototype.selectorPrefab == null)
-            {
-                return null;
-            }
-
-            var selector = Instantiate(instance.Prototype.selectorPrefab, root).GetComponent<BasicSelector>();
-            selector.selectable = this;
-
-            return selector;
-        }
-
-        public void Inflict(Damage damage)
-        {
-            throw new NotImplementedException();
+            Instance?.RemoveComponent();
+            Instance = null;
+            return true;
         }
     }
 }

@@ -20,7 +20,7 @@ MonoBehaviour:
   tags: []
   size: 2
   hullIndicator: {fileID: 0}
-  selectorPrefab: {fileID: 6453253569354626127, guid: 0efbc7bb7574e9b4c99d32aa2b153c45,
+  selectorElement: {fileID: 9197481963319205126, guid: 19dd24d06ba76144a8fd1e16ff19da76,
     type: 3}
   prefab: {fileID: 9058488159523567237, guid: 3cc15315c8d625c4da9ef023b049da34, type: 3}
   destructionFx: {fileID: 0}

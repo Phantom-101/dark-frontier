@@ -1,9 +1,9 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 namespace DarkFrontier.Positioning.Sectors
 {
-#if UNITY_EDITOR
     [CustomEditor(typeof(SectorComponent))]
     public class SectorEditor : Editor
     {
@@ -22,11 +22,11 @@ namespace DarkFrontier.Positioning.Sectors
 
             if(GUILayout.Button("Create Instance"))
             {
-                _component.instance = new SectorInstance();
+                _component.SetInstance(new SectorInstance());
             }
 
             serializedObject.ApplyModifiedProperties();
         }
     }
-#endif
 }
+#endif

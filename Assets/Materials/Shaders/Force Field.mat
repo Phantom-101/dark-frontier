@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3779858940100368737
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 5
 --- !u!21 &2100000
 Material:
   serializedVersion: 6
@@ -20,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Low Hull
+  m_Name: Force Field
   m_Shader: {fileID: -6465566751694194690, guid: 655bcc58951a6554e8fb0e2c9823feb1,
     type: 3}
   m_ShaderKeywords: 
@@ -51,14 +38,29 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Oscillate: 1
-    - _Random: 1
-    - _RandomSpeed: 25
-    - _RandomStrength: 0.05
+    - _Oscillate: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _Random: 0
+    - _RandomSpeed: 3
+    - _RandomStrength: 0.3
     - _Shimmer: 0
     - _ShimmerAnimation: 0
-    - _ShimmerWidth: 0.03
+    - _ShimmerWidth: 0.05
     m_Colors:
     - _Color: {r: 1, g: 0, b: 0, a: 0}
-    - _ShimmerColor: {r: 2, g: 0.5019608, b: 0, a: 0}
+    - _ShimmerColor: {r: 1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
+--- !u!114 &1573337579203327013
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5

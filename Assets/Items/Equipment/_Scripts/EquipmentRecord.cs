@@ -3,11 +3,9 @@ using DarkFrontier.Items.Equipment._Scripts;
 using Newtonsoft.Json;
 using UnityEngine;
 
-
 namespace DarkFrontier.Items.Equipment
 {
-    [Serializable]
-    [JsonObject(MemberSerialization.OptIn)]
+    [Serializable, JsonObject(MemberSerialization.OptIn, IsReference = true)]
     public class EquipmentRecord
     {
         [JsonProperty]
@@ -16,6 +14,16 @@ namespace DarkFrontier.Items.Equipment
 
         [JsonProperty]
         [field: SerializeReference]
-        public EquipmentInstance Instance { get; private set; } = new EquipmentInstance();
+        public EquipmentInstance Instance { get; private set; } = new();
+        
+        public EquipmentRecord()
+        {
+        }
+
+        public EquipmentRecord(string name, EquipmentInstance instance)
+        {
+            Name = name;
+            Instance = instance;
+        }
     }
 }

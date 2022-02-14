@@ -1,7 +1,7 @@
 ﻿namespace DarkFrontier.Data.Composition
 {
-    public interface IHave<T>
+    public interface IHave<out T>
     {
-        void Get(ref T value);
+        T Value { get; }
     }
 }

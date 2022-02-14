@@ -1,11 +1,11 @@
-﻿using DarkFrontier.Items.Equipment;
+﻿#if UNITY_EDITOR
+using DarkFrontier.Items.Equipment;
 using DarkFrontier.Items.Segments;
 using UnityEditor;
 using UnityEngine;
 
 namespace DarkFrontier.Items.Structures
 {
-#if UNITY_EDITOR
     [CustomEditor(typeof(StructureComponent))]
     public class StructureEditor : Editor
     {
@@ -24,26 +24,23 @@ namespace DarkFrontier.Items.Structures
 
             if(GUILayout.Button("Create Instance"))
             {
-                _component.instance = new StructureInstance();
+                if(_component.Instance == null)
+                {
+                    _component.SetInstance(new StructureInstance());
+                }
             }
 
-            if(_component.instance != null)
+            if(_component.Instance != null)
             {
                 if(GUILayout.Button("Fix Nulls"))
                 {
-                    for(int i = 0, li = _component.instance.Segments.Length; i < li; i++)
+                    for(int i = 0, li = _component.Instance.Segments.Length; i < li; i++)
                     {
-                        if (_component.instance.Segments[i] == null)
-                        {
-                            _component.instance.Segments[i] = new SegmentRecord();
-                        }
+                        _component.Instance.Segments[i] ??= new SegmentRecord();
 
-                        for(int j = 0, lj = _component.instance.Segments[i].Instance.Equipment.Length; j < lj; j++)
+                        for(int j = 0, lj = _component.Instance.Segments[i].Instance.Equipment.Length; j < lj; j++)
                         {
-                            if (_component.instance.Segments[i].Instance.Equipment[j] == null)
-                            {
-                                _component.instance.Segments[i].Instance.Equipment[j] = new EquipmentRecord();
-                            }
+                            _component.Instance.Segments[i].Instance.Equipment[j] ??= new EquipmentRecord();
                         }
                     }
                 }
@@ -52,5 +49,5 @@ namespace DarkFrontier.Items.Structures
             serializedObject.ApplyModifiedProperties();
         }
     }
-#endif
 }
+#endif

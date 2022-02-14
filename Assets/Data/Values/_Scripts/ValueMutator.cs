@@ -2,9 +2,9 @@
 using Newtonsoft.Json;
 using UnityEngine;
 
-
 namespace DarkFrontier.Data.Values
 {
+    [Serializable, JsonObject(MemberSerialization.OptIn, IsReference = true)]
     public class ValueMutator<T>
     {
         [field: SerializeReference]
