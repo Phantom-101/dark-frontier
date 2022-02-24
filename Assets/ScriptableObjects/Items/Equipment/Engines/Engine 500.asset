@@ -36,7 +36,4 @@ MonoBehaviour:
   LinearConsumptionNeg: {x: 100, y: 100, z: 100}
   AngularConsumptionPos: {x: 50, y: 50, z: 50}
   AngularConsumptionNeg: {x: 50, y: 50, z: 50}
-  CorrectionStrictness: 5
-  LinearSleepThreshold: 0.001
-  AngularSleepThreshold: 0.002
   BankAmount: 15

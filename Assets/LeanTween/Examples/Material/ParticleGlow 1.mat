@@ -22,9 +22,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: ParticleGlow 1
   m_Shader: {fileID: 4800000, guid: 0406db5a14f94604a8c57ccfbc9f3b46, type: 3}
-  m_ShaderKeywords: _FADING_ON _FLIPBOOKBLENDING_ON _NORMALMAP _SOFTPARTICLES_ON
-    _SURFACE_TYPE_TRANSPARENT
-  m_LightmapFlags: 4
+  m_ShaderKeywords: _EMISSION _FLIPBOOKBLENDING_ON _NORMALMAP _SURFACE_TYPE_TRANSPARENT
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 3000
@@ -89,7 +88,7 @@ Material:
     - _Cull: 2
     - _Cutoff: 0
     - _DetailNormalMapScale: 1
-    - _DistortionBlend: 0
+    - _DistortionBlend: 1
     - _DistortionEnabled: 0
     - _DistortionStrength: 1
     - _DistortionStrengthScaled: 0.1
@@ -102,7 +101,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _QueueOffset: 0
-    - _SoftParticlesEnabled: 1
+    - _SoftParticlesEnabled: 0
     - _SoftParticlesFarFadeDistance: 1
     - _SoftParticlesNearFadeDistance: 0
     - _SrcBlend: 5
@@ -110,10 +109,10 @@ Material:
     - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 1, g: 0.43673247, b: 0, a: 0.12156863}
     - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0.004635695, b: 1, a: 1}
-    - _SoftParticleFadeParams: {r: 0, g: 1, b: 0, a: 0}
+    - _Color: {r: 1, g: 0.4367324, b: 0, a: 0.12156863}
+    - _EmissionColor: {r: 0.40349045, g: 2.693219, b: 25.688938, a: 1}
+    - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

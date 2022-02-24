@@ -15,13 +15,13 @@ MonoBehaviour:
   Name: Xoryent
   Description: 
   Id: items.structures.crafts.xoryent
-  Icon: {fileID: 21300000, guid: 9d33dc9820692f34789377f7a13532d2, type: 3}
+  Icon: {fileID: 21300000, guid: 937d2a0832bc89540ad39a15a464f381, type: 3}
   Volume: 100
   Tags: []
   Usable: 0
   Prefab: {fileID: 2512073521162136224, guid: dde1a62d85098a843ababc29644c27ed, type: 3}
   ApparentSize: 15
-  HullWireframe: {fileID: 21300000, guid: 21db48d8619e7a946a2bff74625762c1, type: 3}
+  HullWireframe: {fileID: 21300000, guid: 5c0c08deea9d9bf4b8e85f9fdb8afe53, type: 3}
   ShowBlip: 1
   DestructionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664,
     type: 3}
