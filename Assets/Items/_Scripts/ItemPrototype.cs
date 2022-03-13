@@ -1,8 +1,8 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using DarkFrontier.Items.Conditions;
 using UnityEngine;
-
 
 namespace DarkFrontier.Items._Scripts
 {
@@ -20,7 +20,7 @@ namespace DarkFrontier.Items._Scripts
         
         public Sprite? icon;
 
-        public List<ItemTag> tags = new List<ItemTag>();
+        public List<ItemTag> tags = new();
 
         public virtual ItemInstance NewState() => new ItemInstance(this);
     }

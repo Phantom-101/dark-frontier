@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace DarkFrontier.Items.Structures
 {
-    [CustomEditor(typeof(StructureComponent))]
+    [CustomEditor(typeof(StructureAuthoring))]
     public class StructureEditor : Editor
     {
-        private StructureComponent _component;
+        private StructureAuthoring _component;
 
         private void OnEnable()
         {
-            _component = (StructureComponent)target;
+            _component = (StructureAuthoring)target;
         }
 
         public override void OnInspectorGUI()
@@ -24,23 +24,20 @@ namespace DarkFrontier.Items.Structures
 
             if(GUILayout.Button("Create Instance"))
             {
-                if(_component.Instance == null)
-                {
-                    _component.SetInstance(new StructureInstance());
-                }
+                _component.instance ??= new StructureInstance();
             }
 
-            if(_component.Instance != null)
+            if(_component.instance != null)
             {
                 if(GUILayout.Button("Fix Nulls"))
                 {
-                    for(int i = 0, li = _component.Instance.Segments.Length; i < li; i++)
+                    for(int i = 0, li = _component.instance.SegmentRecords.Length; i < li; i++)
                     {
-                        _component.Instance.Segments[i] ??= new SegmentRecord();
+                        _component.instance.SegmentRecords[i] ??= new SegmentRecord();
 
-                        for(int j = 0, lj = _component.Instance.Segments[i].Instance.Equipment.Length; j < lj; j++)
+                        for(int j = 0, lj = _component.instance.SegmentRecords[i].Instance.EquipmentRecords.Length; j < lj; j++)
                         {
-                            _component.Instance.Segments[i].Instance.Equipment[j] ??= new EquipmentRecord();
+                            _component.instance.SegmentRecords[i].Instance.EquipmentRecords[j] ??= new EquipmentRecord();
                         }
                     }
                 }

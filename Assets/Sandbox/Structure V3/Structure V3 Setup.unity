@@ -295,7 +295,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameSettings: {fileID: 0}
   _pathfinder: {fileID: 0}
+  _detectableRegistry:
+    rid: -2
   _cameraSpring: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!4 &47357948
 Transform:
   m_ObjectHideFlags: 0
@@ -2782,25 +2789,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1769496084}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1c15eb278a913549b2d8c90506f4eee, type: 3}
+  m_Script: {fileID: 11500000, guid: 024539a6661742f09829a15bfb64dc82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Instance>k__BackingField:
-    rid: 403328510869372939
-  references:
-    version: 2
-    RefIds:
-    - rid: 403328510869372939
-      type: {class: SectorInstance, ns: DarkFrontier.Positioning.Sectors, asm: Assembly-CSharp}
-      data:
-        <Component>k__BackingField: {fileID: 1769496086}
-        <Id>k__BackingField: a3756e7f-c7ac-4c7a-9225-173cd9ae431e
-        <Name>k__BackingField: Custom
-        <Description>k__BackingField: Custom
-        <Position>k__BackingField: {x: 0, y: 0, z: 0}
-        <Size>k__BackingField: 50000
-        <SelectorAddressableKey>k__BackingField: Assets/UI/Indicators/Selectors/_Assets/Sector
-          Selector.uxml
+  instance:
+    <Component>k__BackingField: {fileID: 0}
+    <Id>k__BackingField: a2185cb1-9a2f-4429-a630-fa795791c5f6
+    <Name>k__BackingField: Custom
+    <Description>k__BackingField: Custom
+    <Position>k__BackingField: {x: 0, y: 0, z: 0}
+    <Size>k__BackingField: 50000
+    <SelectorAddressableKey>k__BackingField: Assets/UI/Indicators/Selectors/_Assets/Sector
+      Selector.uxml
 --- !u!1001 &1789696414
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3014,8 +3014,8 @@ Camera:
   m_GameObject: {fileID: 1890211252}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -3264,7 +3264,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2091946814}
-  - component: {fileID: 2091946815}
   - component: {fileID: 2091946816}
   m_Layer: 0
   m_Name: Component
@@ -3288,80 +3287,6 @@ Transform:
   m_Father: {fileID: 1769496085}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2091946815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2091946813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04461a5649cc4eca80a21e1a21080dbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Instance>k__BackingField:
-    rid: 403328510869372928
-  <Segments>k__BackingField: []
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 403328510869372928
-      type: {class: StructureInstance, ns: DarkFrontier.Items.Structures, asm: Assembly-CSharp}
-      data:
-        <Prototype>k__BackingField: {fileID: 11400000, guid: f209fc0ca2fe0674ca960659d0f02f94,
-          type: 2}
-        <Id>k__BackingField: 1010411d-d177-42cb-b8e5-3612eb9b4d57
-        <Name>k__BackingField: Custom
-        <Description>k__BackingField: Custom
-        <Component>k__BackingField: {fileID: 2091946815}
-        <MaxHp>k__BackingField: 0
-        <CurrentHp>k__BackingField: 0
-        <Segments>k__BackingField:
-        - rid: 403328510869372935
-        <Faction>k__BackingField:
-          rid: -2
-        <Sector>k__BackingField:
-          rid: -2
-        <Selected>k__BackingField:
-          rid: -2
-    - rid: 403328510869372935
-      type: {class: SegmentRecord, ns: DarkFrontier.Items.Segments, asm: Assembly-CSharp}
-      data:
-        <Name>k__BackingField: Main
-        <Instance>k__BackingField:
-          rid: 403328510869372936
-    - rid: 403328510869372936
-      type: {class: SegmentInstance, ns: DarkFrontier.Items.Segments, asm: Assembly-CSharp}
-      data:
-        <Prototype>k__BackingField: {fileID: 11400000, guid: 11786e90997e67c438272c0b113ea788,
-          type: 2}
-        <Id>k__BackingField: 0f8669b8-d1b3-4b24-846e-5095d286957c
-        <Name>k__BackingField: Custom
-        <Description>k__BackingField: Custom
-        <Component>k__BackingField: {fileID: 0}
-        <Hp>k__BackingField: 0
-        <Equipment>k__BackingField:
-        - rid: 403328510869372937
-    - rid: 403328510869372937
-      type: {class: EquipmentRecord, ns: DarkFrontier.Items.Equipment, asm: Assembly-CSharp}
-      data:
-        <Name>k__BackingField: Main
-        <Instance>k__BackingField:
-          rid: 403328510869372938
-    - rid: 403328510869372938
-      type: {class: EquipmentInstance, ns: DarkFrontier.Items.Equipment._Scripts,
-        asm: Assembly-CSharp}
-      data:
-        <Prototype>k__BackingField: {fileID: 11400000, guid: f4b92bad46d7ece4183b290dc49005b5,
-          type: 2}
-        <Id>k__BackingField: 49e25e5e-748c-43cd-a6b3-769e9956ff26
-        <Name>k__BackingField: Custom
-        <Description>k__BackingField: Custom
-        <Component>k__BackingField: {fileID: 0}
-        <Hp>k__BackingField: 0
 --- !u!114 &2091946816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3371,10 +3296,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 2091946813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78ef2c297552ba94a888e09331987716, type: 3}
+  m_Script: {fileID: 11500000, guid: cfe51704a7804a71a66e89aa2bd7f459, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _serialized: 
+  instance:
+    <Prototype>k__BackingField: {fileID: 0}
+    <PrototypeId>k__BackingField: 1b9be144-587b-47ce-858a-fec2d40841dc
+    <Id>k__BackingField: 2d9ddcd4-4feb-438d-bd50-76d8e6e2fa6a
+    <Name>k__BackingField: Custom
+    <Description>k__BackingField: Custom
+    <MaxHp>k__BackingField: 0
+    <CurrentHp>k__BackingField: 0
+    <Segments>k__BackingField: []
+    <SegmentRecords>k__BackingField: []
+    <Faction>k__BackingField:
+      rid: -2
+    <FactionId>k__BackingField: 
+    <Sector>k__BackingField: {fileID: 0}
+    <SectorId>k__BackingField: 
+    <Selected>k__BackingField: {fileID: 0}
+    <SelectedId>k__BackingField: 
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1 &2096067168
 GameObject:
   m_ObjectHideFlags: 0

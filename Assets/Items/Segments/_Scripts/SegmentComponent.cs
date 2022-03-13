@@ -2,16 +2,17 @@
 using System;
 using DarkFrontier.Attributes;
 using DarkFrontier.Foundation.Services;
-using DarkFrontier.Items.Equipment._Scripts;
 using DarkFrontier.Items.Structures;
 using DarkFrontier.UI.Indicators.Selectors;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Segments
 {
-    public class SegmentComponent : MonoBehaviour
+    public class SegmentComponent : MonoBehaviour, IDetectable
     {
-        public StructureComponent? structure;
+        [field: SerializeReference, ReadOnly]
+        public StructureComponent? Structure { get; private set; }
 
         [field: SerializeReference]
         public SegmentInstance? Instance { get; private set; }
@@ -24,49 +25,114 @@ namespace DarkFrontier.Items.Segments
 
         [field: SerializeReference]
         public SegmentPrototype[] Compatible { get; private set; } = Array.Empty<SegmentPrototype>();
-
-        [field: SerializeReference, ReadOnly]
-        public EquipmentComponent[] Equipment { get; private set; } = Array.Empty<EquipmentComponent>();
-
-        public bool SetInstance(SegmentInstance instance)
+        
+        private DetectableRegistry _detectableRegistry = null!;
+        
+        private bool _initialized;
+        private bool _registered;
+        private bool _enabled;
+        
+        public void Initialize(StructureComponent component)
         {
-            var detectableRegistry = Singletons.Get<DetectableRegistry>();
-            if(Instance != null)
-            {
-                detectableRegistry.Detectables.Remove(Instance);
-            }
+            if(_initialized) return;
             
-            (Instance = instance).SetComponent(this);
-            detectableRegistry.Detectables.Add(instance);
+            Structure = component;
+
+            _detectableRegistry = Singletons.Get<DetectableRegistry>();
+
+            _initialized = true;
+        }
+        
+        public void Set(SegmentInstance? instance)
+        {
+            Disable();
+            Unregister();
+
+            Instance = instance;
+            
+            Register();
+        }
+        
+        private void Register()
+        {
+            if(!_initialized || _registered || Instance == null) return;
+            
+            _registered = true;
+        }
+
+        private void Unregister()
+        {
+            if(!_initialized || !_registered || Instance == null) return;
+            
+            _registered = false;
+        }
+
+        public void Enable()
+        {
+            if(!_initialized || _enabled || Instance == null) return;
+
+            Instance.FromSerialized();
             
             if(Instance.Prototype.prefab != null)
             {
                 Instantiate(Instance.Prototype.prefab, transform);
             }
             
-            for (int i = 0, li = (Equipment = GetComponentsInChildren<EquipmentComponent>()).Length; i < li; i++)
+            Instance.FindEquipment(gameObject);
+            for(int i = 0, li = Instance.Equipment.Length; i < li; i++)
             {
-                Equipment[i].segment = this;
-                for(int j = 0, lj = Instance.Equipment.Length; j < lj; j++)
+                Instance.Equipment[i].Initialize(this);
+                for(int j = 0, lj = Instance.EquipmentRecords.Length; j < lj; j++)
                 {
-                    if(Equipment[i].Name == Instance.Equipment[j]?.Name)
+                    if(Instance.Equipment[i].Name == Instance.EquipmentRecords[j]?.Name)
                     {
-                        if(!Equipment[i].SetInstance(Instance.Equipment[j]!.Instance))
-                        {
-                            return false;
-                        }
+                        Instance.Equipment[j].Set(Instance.EquipmentRecords[j]!.Instance);
+                        Instance.Equipment[i].Enable();
                     }
                 }
             }
-
-            return true;
+            
+            _detectableRegistry.Detectables.Add(this);
+            
+            _enabled = true;
         }
 
-        public bool RemoveInstance()
+        private void Disable()
         {
-            Instance?.RemoveComponent();
-            Instance = null;
-            return true;
+            if(!_initialized || !_enabled || Instance == null) return;
+
+            for(int i = 0, l = transform.childCount; i < l; i++)
+            {
+                Destroy(transform.GetChild(i).gameObject);
+            }
+            
+            Instance.ClearEquipment();
+            
+            _detectableRegistry.Detectables.Remove(this);
+            
+            Instance.ToSerialized();
+
+            _enabled = false;
+        }
+        
+        public bool IsDetected(StructureInstance structure)
+        {
+            return Structure != null && Structure.IsDetected(structure);
+        }
+
+        public VisualElement CreateSelector()
+        {
+            return Instance == null || Instance.Prototype.selectorElement == null ? new VisualElement() : Instance.Prototype.selectorElement.CloneTree();
+        }
+
+        public Vector3 GetSelectorPosition()
+        {
+            return UnityEngine.Camera.main!.WorldToViewportPoint(transform.position);
+        }
+        
+        public VisualElement CreateSelected()
+        {
+            return new VisualElement();
         }
     }
 }

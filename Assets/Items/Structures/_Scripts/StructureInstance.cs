@@ -1,54 +1,56 @@
 ﻿#nullable enable
 using System;
+using System.Collections.Generic;
 using DarkFrontier.Attributes;
 using DarkFrontier.Factions;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Items._Scripts;
-using DarkFrontier.Items.Equipment._Scripts;
 using DarkFrontier.Items.Segments;
 using DarkFrontier.Positioning.Sectors;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Structures
 {
-    public class StructureInstance : ItemInstance, IEquatable<StructureInstance>, IDetectable
+    [Serializable]
+    public class StructureInstance : ItemInstance, IEquatable<StructureInstance>
     {
-        [field: SerializeReference, ReadOnly]
-        public StructureComponent? Component { get; private set; }
-
         public new StructurePrototype Prototype => (StructurePrototype)base.Prototype;
-
+        
         [field: SerializeReference, ReadOnly]
         public float MaxHp { get; private set; }
 
-        [field: SerializeReference]
-        [JsonProperty("pool-hp")]
+        [field: SerializeReference] [JsonProperty("pool-hp")]
         public float CurrentHp { get; private set; }
+        
+        [field: SerializeReference, ReadOnly]
+        public SegmentComponent[] Segments { get; private set; } = Array.Empty<SegmentComponent>();
+        
+        [field: SerializeReference] [JsonProperty("segments")]
+        public SegmentRecord?[] SegmentRecords { get; private set; } = Array.Empty<SegmentRecord?>();
 
-        [field: SerializeReference]
-        [JsonProperty("segments")]
-        public SegmentRecord?[] Segments { get; set; } = Array.Empty<SegmentRecord?>();
+        public void ClearSegments() => Segments = Array.Empty<SegmentComponent>();
+
+        public void FindSegments(GameObject gameObject) => Segments = gameObject.GetComponentsInChildren<SegmentComponent>();
 
         [field: SerializeReference]
         public Faction? Faction { get; private set; }
 
-        [JsonProperty("faction-id")]
-        private string _factionId = "";
+        [field: SerializeReference] [JsonProperty("faction-id")]
+        public string FactionId { get; private set; } = "";
 
         [field: SerializeReference]
-        public SectorInstance? Sector { get; private set; }
+        public SectorComponent? Sector { get; private set; }
 
-        [JsonProperty("sector-id")]
-        private string _sectorId = "";
-
+        [field: SerializeReference] [JsonProperty("sector-id")]
+        public string SectorId { get; private set; } = "";
+        
         [field: SerializeReference]
-        public StructureInstance? Selected { get; private set; }
+        public StructureComponent? Selected { get; private set; }
 
-        [JsonProperty("selected-id")]
-        private string _selectedId = "";
-
+        [field: SerializeReference] [JsonProperty("selected-id")]
+        public string SelectedId { get; private set; } = "";
+        
         public StructureInstance()
         {
         }
@@ -57,90 +59,33 @@ namespace DarkFrontier.Items.Structures
         {
         }
 
-        public bool SetComponent(StructureComponent component)
+        public override void ToSerialized()
         {
-            Component = component;
-            return true;
-        }
-        
-        public void ChangeSegment(SegmentComponent segmentComponent, SegmentInstance newInstance)
-        {
-            segmentComponent.RemoveInstance();
-            if(newInstance.Component != null)
-            {
-                newInstance.Component.RemoveInstance();
-            }
-            segmentComponent.SetInstance(newInstance);
-            UpdateMaxHp();
-        }
-
-        public void ChangeEquipment(EquipmentComponent equipmentComponent, EquipmentInstance newInstance)
-        {
+            base.ToSerialized();
             
-        }
-
-        public void UpdateMaxHp()
-        {
-            MaxHp = 0;
-            if(Component == null) return;
-            for(int i = 0, l = Component.Segments.Length; i < l; i++)
-            {
-                MaxHp += Component.Segments[i].Instance?.Prototype.hp ?? 0;
-            }
-        }
-
-        public bool IsDetected(StructureInstance structure)
-        {
-            return true;
-        }
-
-        public VisualElement CreateSelector()
-        {
-            return Prototype.selectorElement == null ? new VisualElement() : Prototype.selectorElement.CloneTree();
-        }
-
-        public Vector3 GetSelectorPosition()
-        {
-            return Component == null ? Vector3.zero : UnityEngine.Camera.main!.WorldToViewportPoint(Component.transform.position);
-        }
-
-        public VisualElement CreateSelected()
-        {
-            return new VisualElement();
-        }
-
-        public override void PreSerialize()
-        {
-            base.PreSerialize();
-            _factionId = Faction?.Id ?? "";
-            _sectorId = "";
-            _selectedId = Selected == null ? "" : Selected?.Id ?? "";
+            FactionId = Faction?.Id ?? "";
+            SectorId = Sector == null ? "" : Sector.Instance?.Id ?? "";
+            SelectedId = Selected == null ? "" : Selected.Instance?.Id ?? "";
             
-            if(Component == null) return;
-            int l;
-            Segments = new SegmentRecord?[l = Component.Segments.Length];
+            var l = Segments.Length;
+            List<SegmentRecord> records = new(l);
             for(var i = 0; i < l; i++)
             {
-                if(Component.Segments[i].Instance != null)
+                if(Segments[i].Instance != null)
                 {
-                    Component.Segments[i].Instance!.PreSerialize();
-                    Segments[i] = new SegmentRecord(Component.Segments[i].Name, Component.Segments[i].Instance);
+                    records.Add(new SegmentRecord(Segments[i].Name, Segments[i].Instance));
                 }
             }
+            SegmentRecords = records.ToArray();
         }
 
-        public override void PostDeserialize()
+        public override void FromSerialized()
         {
-            base.PostDeserialize();
-            Faction = _factionId.Length > 0 ? Singletons.Get<FactionManager>().Registry.Find(_factionId) : Faction;
-            Sector = _sectorId.Length > 0 ? null : Sector;
-            Selected = _selectedId.Length > 0 ? null : Selected;
-
-            if(Component == null) return;
-            for(int i = 0, l = Component.Segments.Length; i < l; i++)
-            {
-                Component.Segments[i].Instance?.PostDeserialize();
-            }
+            base.FromSerialized();
+            
+            Faction = FactionId.Length > 0 ? Singletons.Get<FactionManager>().Registry.Find(FactionId) : Faction;
+            Sector = SectorId.Length > 0 ? null : Sector;
+            Selected = SelectedId.Length > 0 ? null : Selected;
         }
 
         public bool Equals(StructureInstance? other)

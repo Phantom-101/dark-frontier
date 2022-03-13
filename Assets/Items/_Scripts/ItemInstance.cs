@@ -12,20 +12,17 @@ namespace DarkFrontier.Items._Scripts
     {
         [field: SerializeReference, Expandable]
         public ItemPrototype Prototype { get; private set; } = null!;
-
-        [JsonProperty("prototype-id")]
-        private string _prototypeId = "";
-
-        [JsonProperty("id")]
-        [field: SerializeReference]
+        
+        [field: SerializeReference] [JsonProperty("prototype-id")]
+        public string PrototypeId { get; private set; } = "";
+        
+        [field: SerializeReference] [JsonProperty("id")]
         public string Id { get; private set; } = Guid.NewGuid().ToString();
-
-        [JsonProperty("name")]
-        [field: SerializeReference]
+        
+        [field: SerializeReference] [JsonProperty("name")]
         public string Name { get; protected set; } = "";
-
-        [JsonProperty("description")]
-        [field: SerializeReference, TextArea]
+        
+        [field: SerializeReference, TextArea] [JsonProperty("description")]
         public string Description { get; protected set; } = "";
 
         public ItemInstance()
@@ -35,16 +32,16 @@ namespace DarkFrontier.Items._Scripts
         public ItemInstance(ItemPrototype prototype)
         {
             Prototype = prototype;
+            PrototypeId = Prototype.id;
         }
 
-        public virtual void PreSerialize()
+        public virtual void ToSerialized()
         {
-            _prototypeId = Prototype.id;
         }
 
-        public virtual void PostDeserialize()
+        public virtual void FromSerialized()
         {
-            Prototype = _prototypeId.Length > 0 ? new ItemRegistry().Get(_prototypeId)! : Prototype;
+            Prototype = PrototypeId.Length > 0 ? new ItemRegistry().Get(PrototypeId)! : Prototype;
         }
 
         public bool Equals(ItemInstance? other)
@@ -62,9 +59,8 @@ namespace DarkFrontier.Items._Scripts
 
         public override int GetHashCode()
         {
-            // ReSharper disable NonReadonlyMemberInGetHashCode
-            return Prototype != null ? Prototype.GetHashCode() : 0;
-            // ReSharper restore NonReadonlyMemberInGetHashCode
+            // ReSharper disable once NonReadonlyMemberInGetHashCode
+            return PrototypeId.GetHashCode();
         }
     }
 }

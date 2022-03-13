@@ -23,6 +23,9 @@ namespace DarkFrontier.Game.Essentials
 
         [SerializeReference, ReadOnly]
         private DetectableRegistry _detectableRegistry = null!;
+
+        [SerializeReference, ReadOnly]
+        private StructureRegistry _structureRegistry = null!;
         
         [SerializeReference, ReadOnly]
         private CameraSpring? _cameraSpring;
@@ -37,6 +40,7 @@ namespace DarkFrontier.Game.Essentials
         {
             Singletons.Bind(_gameSettings = ComponentUtils.AddOrGet<GameSettings>(gameObject));
             _pathfinder = ComponentUtils.AddOrGet<NavigationPathfinder>(gameObject);
+            Singletons.Bind(_structureRegistry = new StructureRegistry());
             Singletons.Bind(_detectableRegistry = new DetectableRegistry());
             _cameraSpring = FindObjectOfType<CameraSpring>();
         }
@@ -47,25 +51,41 @@ namespace DarkFrontier.Game.Essentials
 
             _pathfinder.Initialize(SceneManager.GetActiveScene());
 
+            InitializeSectors();
+            
+            InitializeStructures();
+
+            if(_cameraSpring != null) _cameraSpring.Initialize();
+        }
+
+        private void InitializeSectors()
+        {
+            var authorings = FindObjectsOfType<SectorAuthoring>();
+            for(int i = 0, l = authorings.Length; i < l; i++)
+            {
+                authorings[i].Generate();
+            }
+            
             var sectors = FindObjectsOfType<SectorComponent>();
             for(int i = 0, l = sectors.Length; i < l; i++)
             {
-                if(!sectors[i].Initialize())
-                {
-                    Destroy(sectors[i].gameObject);
-                }
+                sectors[i].Enable();
+            }
+        }
+
+        private void InitializeStructures()
+        {
+            var authorings = FindObjectsOfType<StructureAuthoring>();
+            for(int i = 0, l = authorings.Length; i < l; i++)
+            {
+                authorings[i].Generate();
             }
             
             var structures = FindObjectsOfType<StructureComponent>();
             for(int i = 0, l = structures.Length; i < l; i++)
             {
-                if(!structures[i].Initialize())
-                {
-                    Destroy(structures[i].gameObject);
-                }
+                structures[i].Enable();
             }
-
-            if(_cameraSpring != null) _cameraSpring.Initialize();
         }
 
         private void Update()

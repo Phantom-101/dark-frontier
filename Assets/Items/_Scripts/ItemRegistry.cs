@@ -1,6 +1,7 @@
-﻿using System;
+﻿#nullable enable
+using System;
+using UnityEditor;
 using UnityEngine;
-
 
 namespace DarkFrontier.Items._Scripts
 {
@@ -12,7 +13,13 @@ namespace DarkFrontier.Items._Scripts
         
         public ItemRegistry()
         {
-            prototypes = Resources.FindObjectsOfTypeAll<ItemPrototype>();
+            var ids = AssetDatabase.FindAssets($"t: {typeof(ItemPrototype)}");
+            var l = ids.Length;
+            prototypes = new ItemPrototype[l];
+            for(var i = 0; i < l; i++)
+            {
+                prototypes[i] = AssetDatabase.LoadAssetAtPath<ItemPrototype>(AssetDatabase.GUIDToAssetPath(ids[i]));
+            }
         }
 
         public ItemRegistry(ItemPrototype[] prototypes)

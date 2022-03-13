@@ -1,29 +1,34 @@
 ﻿#nullable enable
 using System;
+using System.Collections.Generic;
 using DarkFrontier.Attributes;
 using DarkFrontier.Items._Scripts;
 using DarkFrontier.Items.Equipment;
-using DarkFrontier.Items.Structures;
+using DarkFrontier.Items.Equipment._Scripts;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Segments
 {
-    public class SegmentInstance : ItemInstance, IEquatable<SegmentInstance>, IDetectable
+    public class SegmentInstance : ItemInstance, IEquatable<SegmentInstance>
     {
         [field: SerializeReference, ReadOnly]
         public SegmentComponent? Component { get; private set; }
         
         public new SegmentPrototype Prototype => (SegmentPrototype)base.Prototype;
 
-        [field: SerializeReference]
-        [JsonProperty("hp")]
+        [field: SerializeReference] [JsonProperty("hp")]
         public float Hp { get; private set; }
 
-        [field: SerializeReference]
-        [JsonProperty("equipment")]
-        public EquipmentRecord?[] Equipment { get; set; } = Array.Empty<EquipmentRecord?>();
+        [field: SerializeReference, ReadOnly]
+        public EquipmentComponent[] Equipment { get; private set; } = Array.Empty<EquipmentComponent>();
+        
+        [field: SerializeReference] [JsonProperty("equipment")]
+        public EquipmentRecord?[] EquipmentRecords { get; set; } = Array.Empty<EquipmentRecord?>();
+        
+        public void ClearEquipment() => Equipment = Array.Empty<EquipmentComponent>();
+        
+        public void FindEquipment(GameObject gameObject) => Equipment = gameObject.GetComponentsInChildren<EquipmentComponent>();
 
         public SegmentInstance()
         {
@@ -32,63 +37,21 @@ namespace DarkFrontier.Items.Segments
         public SegmentInstance(SegmentPrototype prototype) : base(prototype)
         {
         }
-        
-        public bool SetComponent(SegmentComponent component)
-        {
-            Component = component;
-            return true;
-        }
 
-        public bool RemoveComponent()
+        public override void ToSerialized()
         {
-            Component = null;
-            return true;
-        }
-        
-        public bool IsDetected(StructureInstance structure)
-        {
-            return Component != null && Component.structure != null && (Component.structure.Instance?.IsDetected(structure) ?? false);
-        }
+            base.ToSerialized();
 
-        public VisualElement CreateSelector()
-        {
-            return Prototype.selectorElement == null ? new VisualElement() : Prototype.selectorElement.CloneTree();
-        }
-
-        public Vector3 GetSelectorPosition()
-        {
-            return Component == null ? Vector3.zero : UnityEngine.Camera.main!.WorldToViewportPoint(Component.transform.position);
-        }
-        
-        public VisualElement CreateSelected()
-        {
-            return new VisualElement();
-        }
-
-        public override void PreSerialize()
-        {
-            base.PreSerialize();
-            if(Component == null) return;
-            int l;
-            Equipment = new EquipmentRecord?[l = Component.Equipment.Length];
+            var l = Equipment.Length;
+            List<EquipmentRecord> records = new();
             for(var i = 0; i < l; i++)
             {
-                if(Component.Equipment[i].Instance != null)
+                if(Equipment[i].Instance != null)
                 {
-                    Component.Equipment[i].Instance!.PreSerialize();
-                    Equipment[i] = new EquipmentRecord(Component.Equipment[i].Name, Component.Equipment[i].Instance);
+                    records.Add(new EquipmentRecord(Equipment[i].Name, Equipment[i].Instance));
                 }
             }
-        }
-
-        public override void PostDeserialize()
-        {
-            base.PostDeserialize();
-            if(Component == null) return;
-            for(int i = 0, l = Component.Equipment.Length; i < l; i++)
-            {
-                Component.Equipment[i].Instance?.PostDeserialize();
-            }
+            EquipmentRecords = records.ToArray();
         }
 
         public bool Equals(SegmentInstance? other)

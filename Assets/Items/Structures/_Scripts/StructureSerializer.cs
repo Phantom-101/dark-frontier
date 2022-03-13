@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿#nullable enable
+using Newtonsoft.Json;
 using UnityEngine;
-
 
 namespace DarkFrontier.Items.Structures
 {
-    class StructureSerializer : MonoBehaviour
+    public class StructureSerializer : MonoBehaviour
     {
-        [SerializeField]
-        [TextArea(1, 10)]
+        [SerializeField, TextArea(1, 10)]
         private string _serialized = "";
 
         private StructureComponent? _component;

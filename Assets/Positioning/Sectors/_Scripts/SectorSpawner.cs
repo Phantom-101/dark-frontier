@@ -13,7 +13,9 @@ namespace DarkFrontier.Positioning.Sectors
             SceneManager.MoveGameObjectToScene(instantiated, scene);
             
             var sector = instantiated.AddComponent<SectorComponent>();
-            sector.SetInstance(instance);
+            sector.Initialize();
+            sector.Set(instance);
+            sector.Enable();
             
             return sector;
         }

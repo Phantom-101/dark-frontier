@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace DarkFrontier.Positioning.Sectors
 {
-    [CustomEditor(typeof(SectorComponent))]
+    [CustomEditor(typeof(SectorAuthoring))]
     public class SectorEditor : Editor
     {
-        private SectorComponent _component;
+        private SectorAuthoring _component;
 
         private void OnEnable()
         {
-            _component = (SectorComponent)target;
+            _component = (SectorAuthoring)target;
         }
 
         public override void OnInspectorGUI()
@@ -22,7 +22,7 @@ namespace DarkFrontier.Positioning.Sectors
 
             if(GUILayout.Button("Create Instance"))
             {
-                _component.SetInstance(new SectorInstance());
+                _component.instance ??= new SectorInstance();
             }
 
             serializedObject.ApplyModifiedProperties();
