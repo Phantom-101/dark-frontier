@@ -31,10 +31,10 @@ MonoBehaviour:
   active: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1.48
   intensity:
     m_OverrideState: 1
-    m_Value: 0.05
+    m_Value: 0.5
   scatter:
     m_OverrideState: 0
     m_Value: 0.7
@@ -55,7 +55,7 @@ MonoBehaviour:
     m_Value: {fileID: 2800000, guid: c701d8bbcea7c2c4abbf9c22ee81138a, type: 3}
   dirtIntensity:
     m_OverrideState: 1
-    m_Value: 4.71
+    m_Value: 3.58
 --- !u!114 &-4928347912477467117
 MonoBehaviour:
   m_ObjectHideFlags: 3
