@@ -1,39 +1,40 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace DarkFrontier.Data.Values
 {
+    [Serializable]
     public class IntMaxMutator : ValueMutator<int>
     {
-        [field: SerializeReference]
-        [JsonProperty("parameter")]
-        public int Parameter { get; private set; }
+        [SerializeReference, JsonProperty("parameter")]
+        public MutableValue<int> parameter;
 
-        public IntMaxMutator(int parameter, int order) : base(order)
+        public IntMaxMutator(MutableValue<int> parameter, int order) : base(order)
         {
-            Parameter = parameter;
+            this.parameter = parameter;
         }
 
         public override int Mutate(int value)
         {
-            return Mathf.Max(value, Parameter);
+            return Mathf.Max(value, parameter.Value);
         }
     }
 
+    [Serializable]
     public class FloatMaxMutator : ValueMutator<float>
     {
-        [field: SerializeReference]
-        [JsonProperty("parameter")]
-        public float Parameter { get; private set; }
+        [SerializeReference, JsonProperty("parameter")]
+        public MutableValue<float> parameter;
         
-        public FloatMaxMutator(float parameter, int order) : base(order)
+        public FloatMaxMutator(MutableValue<float> parameter, int order) : base(order)
         {
-            Parameter = parameter;
+            this.parameter = parameter;
         }
 
         public override float Mutate(float value)
         {
-            return Mathf.Max(value, Parameter);
+            return Mathf.Max(value, parameter.Value);
         }
     }
 }

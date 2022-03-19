@@ -13,7 +13,7 @@ namespace DarkFrontier.Data.Values
         
         [field: SerializeReference]
         [JsonProperty("order")]
-        public virtual int Order { get; private set; }
+        public int Order { get; private set; }
 
         public ValueMutator(int order) => Order = order;
 

@@ -3,23 +3,23 @@ using DarkFrontier.Attributes;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Game.Player.Camera;
 using DarkFrontier.Items.Structures;
-using DarkFrontier.Positioning.Navigation;
 using DarkFrontier.Positioning.Sectors;
 using DarkFrontier.UI.Indicators.Selectors;
 using DarkFrontier.Utils;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-
 
 namespace DarkFrontier.Game.Essentials
 {
     public class GameDriver : MonoBehaviour
     {
+        [SerializeField]
+        private string _universeName = "";
+        
         [SerializeReference, ReadOnly]
         private GameSettings _gameSettings = null!;
 
         [SerializeReference, ReadOnly]
-        private NavigationPathfinder _pathfinder = null!;
+        private SerializationDriver _serializationDriver = null!;
 
         [SerializeReference, ReadOnly]
         private DetectableRegistry _detectableRegistry = null!;
@@ -39,7 +39,14 @@ namespace DarkFrontier.Game.Essentials
         private void InitializeSelf()
         {
             Singletons.Bind(_gameSettings = ComponentUtils.AddOrGet<GameSettings>(gameObject));
-            _pathfinder = ComponentUtils.AddOrGet<NavigationPathfinder>(gameObject);
+            if(Singletons.Exists<SerializationDriver>())
+            {
+                (_serializationDriver = Singletons.Get<SerializationDriver>()).Deserialize();
+            }
+            else
+            {
+                Singletons.Bind(_serializationDriver = new SerializationDriver());
+            }
             Singletons.Bind(_structureRegistry = new StructureRegistry());
             Singletons.Bind(_detectableRegistry = new DetectableRegistry());
             _cameraSpring = FindObjectOfType<CameraSpring>();
@@ -49,8 +56,6 @@ namespace DarkFrontier.Game.Essentials
         {
             _gameSettings.Initialize();
 
-            _pathfinder.Initialize(SceneManager.GetActiveScene());
-
             InitializeSectors();
             
             InitializeStructures();
@@ -58,7 +63,7 @@ namespace DarkFrontier.Game.Essentials
             if(_cameraSpring != null) _cameraSpring.Initialize();
         }
 
-        private void InitializeSectors()
+        private static void InitializeSectors()
         {
             var authorings = FindObjectsOfType<SectorAuthoring>();
             for(int i = 0, l = authorings.Length; i < l; i++)
@@ -73,7 +78,7 @@ namespace DarkFrontier.Game.Essentials
             }
         }
 
-        private void InitializeStructures()
+        private static void InitializeStructures()
         {
             var authorings = FindObjectsOfType<StructureAuthoring>();
             for(int i = 0, l = authorings.Length; i < l; i++)
@@ -90,13 +95,7 @@ namespace DarkFrontier.Game.Essentials
 
         private void Update()
         {
-            _pathfinder.Tick();
-            var finders = FindObjectsOfType<NavigationRouteFinder>();
-            for(int i = 0, l = finders.Length; i < l; i++)
-            {
-                finders[i].Tick();
-            }
-
+            // TODO Tick sector and structure registries
             if(_cameraSpring != null) _cameraSpring.Tick();
         }
     }

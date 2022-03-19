@@ -293,9 +293,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888f4e1f488f2f247a4244f9e3e6ac29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _universeName: 
   _gameSettings: {fileID: 0}
-  _pathfinder: {fileID: 0}
+  _serializationDriver:
+    rid: -2
   _detectableRegistry:
+    rid: -2
+  _structureRegistry:
     rid: -2
   _cameraSpring: {fileID: 0}
   references:
@@ -331,73 +335,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _targetFrameRate: -1
---- !u!1 &108469555
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 108469558}
-  - component: {fileID: 108469557}
-  - component: {fileID: 108469556}
-  m_Layer: 0
-  m_Name: EventSystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &108469556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 108469555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
---- !u!114 &108469557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 108469555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
-  m_DragThreshold: 10
---- !u!4 &108469558
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 108469555}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &122760515
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2402,6 +2339,93 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1447827006}
   m_CullTransparentMesh: 1
+--- !u!1 &1455596244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1455596247}
+  - component: {fileID: 1455596246}
+  - component: {fileID: 1455596245}
+  m_Layer: 0
+  m_Name: Event System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1455596245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455596244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018,
+    type: 3}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
+--- !u!114 &1455596246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455596244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &1455596247
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455596244}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1463518174
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3264,7 +3288,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2091946814}
-  - component: {fileID: 2091946816}
+  - component: {fileID: 2091946815}
   m_Layer: 0
   m_Name: Component
   m_TagString: Untagged
@@ -3287,7 +3311,7 @@ Transform:
   m_Father: {fileID: 1769496085}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2091946816
+--- !u!114 &2091946815
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3300,15 +3324,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instance:
-    <Prototype>k__BackingField: {fileID: 0}
+    <Prototype>k__BackingField: {fileID: 11400000, guid: f209fc0ca2fe0674ca960659d0f02f94,
+      type: 2}
     <PrototypeId>k__BackingField: 1b9be144-587b-47ce-858a-fec2d40841dc
-    <Id>k__BackingField: 2d9ddcd4-4feb-438d-bd50-76d8e6e2fa6a
+    <Id>k__BackingField: d06a4cd2-4da7-459b-8894-ad482db49a24
     <Name>k__BackingField: Custom
     <Description>k__BackingField: Custom
     <MaxHp>k__BackingField: 0
     <CurrentHp>k__BackingField: 0
     <Segments>k__BackingField: []
-    <SegmentRecords>k__BackingField: []
+    <SegmentRecords>k__BackingField:
+    - rid: 7535907994513440813
+    <Capacitor>k__BackingField:
+      rid: 7535907994513440811
     <Faction>k__BackingField:
       rid: -2
     <FactionId>k__BackingField: 
@@ -3321,6 +3349,53 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 7535907994513440811
+      type: {class: StructureInstance/CapacitorValue, ns: DarkFrontier.Items.Structures,
+        asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+        <Value>k__BackingField: 0
+        mutators: []
+        <Max>k__BackingField:
+          baseValue: 0
+          <Value>k__BackingField: 0
+          mutators: []
+    - rid: 7535907994513440813
+      type: {class: SegmentRecord, ns: DarkFrontier.Items.Segments, asm: Assembly-CSharp}
+      data:
+        <Name>k__BackingField: Main
+        <Instance>k__BackingField:
+          rid: 7535907994513440814
+    - rid: 7535907994513440814
+      type: {class: SegmentInstance, ns: DarkFrontier.Items.Segments, asm: Assembly-CSharp}
+      data:
+        <Prototype>k__BackingField: {fileID: 11400000, guid: 11786e90997e67c438272c0b113ea788,
+          type: 2}
+        <PrototypeId>k__BackingField: 80b1db48-a326-48e7-88da-b88d8fab803c
+        <Id>k__BackingField: 77a8cebd-60d5-49d8-a2f5-657882321413
+        <Name>k__BackingField: Custom
+        <Description>k__BackingField: Custom
+        <Component>k__BackingField: {fileID: 0}
+        <Hp>k__BackingField: 0
+        <Equipment>k__BackingField: []
+        <EquipmentRecords>k__BackingField:
+        - rid: 7535907994513440815
+    - rid: 7535907994513440815
+      type: {class: EquipmentRecord, ns: DarkFrontier.Items.Equipment, asm: Assembly-CSharp}
+      data:
+        <Name>k__BackingField: Main
+        <Instance>k__BackingField:
+          rid: 7535907994513440816
+    - rid: 7535907994513440816
+      type: {class: EquipmentInstance, ns: DarkFrontier.Items.Equipment, asm: Assembly-CSharp}
+      data:
+        <Prototype>k__BackingField: {fileID: 11400000, guid: 5376ac1aec5aa2744acfbee98db5bd47,
+          type: 2}
+        <PrototypeId>k__BackingField: f75a31cc-6574-4520-b7d7-9153de7c0439
+        <Id>k__BackingField: 4b1c3f09-d9d4-4427-8543-19f4d87478d5
+        <Name>k__BackingField: Custom
+        <Description>k__BackingField: Custom
+        <Hp>k__BackingField: 0
 --- !u!1 &2096067168
 GameObject:
   m_ObjectHideFlags: 0

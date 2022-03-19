@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using DarkFrontier.Items._Scripts;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,5 +17,7 @@ namespace DarkFrontier.Items.Structures
         public GameObject? prefab;
         
         public GameObject? destructionFx;
+        
+        public override ItemInstance NewState() => new StructureInstance(this);
     }
 }

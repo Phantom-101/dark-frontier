@@ -8,7 +8,7 @@ using DarkFrontier.UI.Indicators.Selectors;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace DarkFrontier.Items.Equipment._Scripts
+namespace DarkFrontier.Items.Equipment
 {
     public class EquipmentComponent : MonoBehaviour, IDetectable
     {
@@ -80,6 +80,12 @@ namespace DarkFrontier.Items.Equipment._Scripts
             }
             
             _detectableRegistry.Detectables.Add(this);
+
+            // TODO remove this
+            if(Instance.Prototype != null)
+            {
+                Instance.Prototype.OnEquipped(this);
+            }
             
             _enabled = true;
         }

@@ -2,28 +2,19 @@
 using DarkFrontier.Attributes;
 using UnityEngine;
 
-
 namespace DarkFrontier.Positioning.Navigation
 {
     public class NavigationRegistry : MonoBehaviour
     {
         [field: SerializeReference, ReadOnly]
-        public List<NavigationCollider> Colliders { get; private set; } = new();
+        public List<NavigationCollider> Colliders { get; } = new();
 
-        public bool Add(NavigationCollider collider)
+        public void Add(NavigationCollider navigationCollider)
         {
-            if(Colliders.Contains(collider))
+            if(!Colliders.Contains(navigationCollider))
             {
-                return false;
+                Colliders.Add(navigationCollider);
             }
-
-            Colliders.Add(collider);
-            return true;
-        }
-
-        public bool Remove(NavigationCollider collider)
-        {
-            return Colliders.Remove(collider);
         }
     }
 }

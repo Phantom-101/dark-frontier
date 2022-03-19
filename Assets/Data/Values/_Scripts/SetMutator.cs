@@ -1,39 +1,40 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace DarkFrontier.Data.Values
 {
+    [Serializable]
     public class IntSetMutator : ValueMutator<int>
     {
-        [field: SerializeReference]
-        [JsonProperty("parameter")]
-        public int Parameter { get; private set; }
+        [SerializeReference, JsonProperty("parameter")]
+        public MutableValue<int> parameter;
 
-        public IntSetMutator(int parameter, int order) : base(order)
+        public IntSetMutator(MutableValue<int> parameter, int order) : base(order)
         {
-            Parameter = parameter;
+            this.parameter = parameter;
         }
 
         public override int Mutate(int value)
         {
-            return Parameter;
+            return parameter.Value;
         }
     }
 
+    [Serializable]
     public class FloatSetMutator : ValueMutator<float>
     {
-        [field: SerializeReference]
-        [JsonProperty("parameter")]
-        public float Parameter { get; private set; }
+        [SerializeReference, JsonProperty("parameter")]
+        public MutableValue<float> parameter;
         
-        public FloatSetMutator(float parameter, int order) : base(order)
+        public FloatSetMutator(MutableValue<float> parameter, int order) : base(order)
         {
-            Parameter = parameter;
+            this.parameter = parameter;
         }
 
         public override float Mutate(float value)
         {
-            return Parameter;
+            return parameter.Value;
         }
     }
 }

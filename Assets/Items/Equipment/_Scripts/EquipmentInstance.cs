@@ -1,21 +1,16 @@
 ﻿#nullable enable
 using System;
-using DarkFrontier.Attributes;
 using DarkFrontier.Items._Scripts;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace DarkFrontier.Items.Equipment._Scripts
+namespace DarkFrontier.Items.Equipment
 {
     public class EquipmentInstance : ItemInstance, IEquatable<EquipmentInstance>
     {
-        [field: SerializeReference, ReadOnly]
-        public EquipmentComponent? Component { get; private set; }
-        
         public new EquipmentPrototype Prototype => (EquipmentPrototype)base.Prototype;
         
-        [field: SerializeReference]
-        [JsonProperty("hp")]
+        [field: SerializeReference] [JsonProperty("hp")]
         public float Hp { get; private set; }
         
         public EquipmentInstance()

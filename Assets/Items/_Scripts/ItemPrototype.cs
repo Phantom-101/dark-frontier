@@ -22,6 +22,6 @@ namespace DarkFrontier.Items._Scripts
 
         public List<ItemTag> tags = new();
 
-        public virtual ItemInstance NewState() => new ItemInstance(this);
+        public virtual ItemInstance NewState() => new(this);
     }
 }
