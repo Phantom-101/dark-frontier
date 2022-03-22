@@ -2,6 +2,8 @@
 using Newtonsoft.Json;
 using System;
 using DarkFrontier.Attributes;
+using DarkFrontier.Positioning.Navigation;
+using DarkFrontier.Utils;
 using UnityEngine;
 
 namespace DarkFrontier.Positioning.Sectors
@@ -35,5 +37,9 @@ namespace DarkFrontier.Positioning.Sectors
         [field: SerializeReference]
         [JsonProperty("selector-addressable-key")]
         public string SelectorAddressableKey { get; private set; } = "";
+        
+        public NavigationPathfinder? Pathfinder { get; private set; }
+
+        public void UpdatePathfinder(GameObject gameObject) => ComponentUtils.AddOrGet<NavigationPathfinder>(gameObject).Initialize(gameObject.scene);
     }
 }

@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using DarkFrontier.Items._Scripts;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,5 +17,19 @@ namespace DarkFrontier.Items.Equipment
         public GameObject? prefab;
         
         public GameObject? destructionFx;
+        
+        public override ItemInstance NewState() => new EquipmentInstance(this);
+
+        public virtual void OnEquipped(EquipmentComponent component)
+        {
+        }
+
+        public virtual void OnUnequipped(EquipmentComponent component)
+        {
+        }
+
+        public virtual void CheckType(EquipmentComponent component)
+        {
+        }
     }
 }

@@ -42,12 +42,16 @@ namespace DarkFrontier.Positioning.Sectors
         {
             if(!_initialized || _registered || Instance == null) return;
             
+            // TODO add to sector registry
+            
             _registered = true;
         }
 
         private void Unregister()
         {
             if(!_initialized || !_registered || Instance == null) return;
+            
+            // TODO remove from sector registry
             
             _registered = false;
         }
@@ -60,6 +64,8 @@ namespace DarkFrontier.Positioning.Sectors
             
             _detectableRegistry.Detectables.Add(this);
             
+            Instance.UpdatePathfinder(gameObject);
+            
             _enabled = true;
         }
 
@@ -70,6 +76,16 @@ namespace DarkFrontier.Positioning.Sectors
             _detectableRegistry.Detectables.Remove(this);
             
             _enabled = false;
+        }
+
+        public void Tick(float deltaTime)
+        {
+            if(!_initialized || !_enabled || Instance == null) return;
+
+            if(Instance.Pathfinder != null)
+            {
+                Instance.Pathfinder.Tick();
+            }
         }
         
         public bool IsDetected(StructureInstance structure)

@@ -8,57 +8,47 @@ namespace DarkFrontier.Data.Values
     [Serializable, JsonObject(MemberSerialization.OptIn, IsReference = true)]
     public class MutableValue<T>
     {
-        [field: SerializeReference]
-        [JsonProperty("base-value")]
-        public T BaseValue { get; private set; }
+        [SerializeReference, JsonProperty("base-value")]
+        public T baseValue;
         
         [field: SerializeReference]
-        public T Value { get; private set; }
+        public T Value { get; protected set; }
         
-        private readonly List<ValueMutator<T>> _mutators = new();
+        [SerializeField, JsonProperty("mutators")]
+        protected List<ValueMutator<T>> mutators = new();
 
         public MutableValue(T baseValue)
         {
-            BaseValue = baseValue;
+            this.baseValue = baseValue;
             Value = baseValue;
         }
 
         public bool AddMutator(ValueMutator<T> mutator)
         {
             int i, l;
-            for (i = 0, l = _mutators.Count; i < l; i++)
+            for (i = 0, l = mutators.Count; i < l; i++)
             {
-                if (_mutators[i].Order == mutator.Order)
-                {
-                    return false;
-                }
-
-                if (_mutators[i].Order > mutator.Order)
-                {
-                    break;
-                }
+                if(mutators[i].Order == mutator.Order) return false;
+                if(mutators[i].Order > mutator.Order) break;
             }
-            _mutators.Insert(i, mutator);
-            Recalculate();
+            mutators.Insert(i, mutator);
+            Update();
             return true;
         }
 
         public bool RemoveMutator(ValueMutator<T> mutator)
         {
-            if(_mutators.Remove(mutator))
-            {
-                Recalculate();
-                return true;
-            }
-            return false;
+            if(!mutators.Remove(mutator)) return false;
+            Update();
+            return true;
         }
 
-        private void Recalculate()
+        public virtual void Update()
         {
-            Value = BaseValue;
-            for(int i = 0, l = _mutators.Count; i < l; i++)
+            Value = baseValue;
+            for(int i = 0, l = mutators.Count; i < l; i++)
             {
-                Value = _mutators[i].Mutate(Value);
+                Value = mutators[i].Mutate(Value);
             }
         }
 

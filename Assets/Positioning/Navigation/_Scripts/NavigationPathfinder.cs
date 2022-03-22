@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+using System.Collections.Generic;
 using DarkFrontier.Attributes;
 using DarkFrontier.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
 
 namespace DarkFrontier.Positioning.Navigation
 {
@@ -12,12 +12,12 @@ namespace DarkFrontier.Positioning.Navigation
         [field: SerializeReference, ReadOnly]
         public NavigationRegistry Registry { get; private set; } = null!;
 
-        private int _currentCalculationIndex;
-
         public void Initialize(Scene scene)
         {
             Registry = ComponentUtils.AddOrGet<NavigationRegistry>(gameObject);
             
+            Registry.Colliders.Clear();
+
             var colliders = FindObjectsOfType<NavigationCollider>();
             for(int i = 0, l = colliders.Length; i < l; i++)
             {
@@ -63,7 +63,7 @@ namespace DarkFrontier.Positioning.Navigation
             return ret;
         }
 
-        public Vector3 MovePointOutOfAabb(Vector3 point)
+        private Vector3 MovePointOutOfAabb(Vector3 point)
         {
             // ReSharper disable once TooWideLocalVariableScope
             Aabb? box;
@@ -78,8 +78,8 @@ namespace DarkFrontier.Positioning.Navigation
 
             return point;
         }
-        
-        public Aabb? GetClosestIntersectingAabb(IntersectRay ray)
+
+        private Aabb? GetClosestIntersectingAabb(IntersectRay ray)
         {
             // ReSharper disable once TooWideLocalVariableScope
             // ReSharper disable once InlineOutVariableDeclaration

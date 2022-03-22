@@ -1,49 +1,48 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace DarkFrontier.Data.Values
 {
+    [Serializable]
     public class IntClampMutator : ValueMutator<int>
     {
-        [field: SerializeReference]
-        [JsonProperty("min")]
-        public int Min { get; private set; }
-        
-        [field: SerializeReference]
-        [JsonProperty("max")]
-        public int Max { get; private set; }
+        [SerializeReference, JsonProperty("min")]
+        public MutableValue<int> min;
 
-        public IntClampMutator(int min, int max, int order) : base(order)
+        [SerializeReference, JsonProperty("max")]
+        public MutableValue<int> max;
+
+        public IntClampMutator(MutableValue<int> min, MutableValue<int> max, int order) : base(order)
         {
-            Min = min;
-            Max = max;
+            this.min = min;
+            this.max = max;
         }
 
         public override int Mutate(int value)
         {
-            return Mathf.Clamp(value, Min, Max);
+            return Mathf.Clamp(value, min.Value, max.Value);
         }
     }
 
+    [Serializable]
     public class FloatClampMutator : ValueMutator<float>
     {
-        [field: SerializeReference]
-        [JsonProperty("min")]
-        public float Min { get; private set; }
+        [SerializeReference, JsonProperty("min")]
+        public MutableValue<float> min;
+
+        [SerializeReference, JsonProperty("max")]
+        public MutableValue<float> max;
         
-        [field: SerializeReference]
-        [JsonProperty("max")]
-        public float Max { get; private set; }
-        
-        public FloatClampMutator(float min, float max, int order) : base(order)
+        public FloatClampMutator(MutableValue<float> min, MutableValue<float> max, int order) : base(order)
         {
-            Min = min;
-            Max = max;
+            this.min = min;
+            this.max = max;
         }
 
         public override float Mutate(float value)
         {
-            return Mathf.Clamp(value, Min, Max);
+            return Mathf.Clamp(value, min.Value, max.Value);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using DarkFrontier.Items.Equipment._Scripts;
 using Newtonsoft.Json;
 using UnityEngine;
 

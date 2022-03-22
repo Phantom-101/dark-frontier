@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using DarkFrontier.Attributes;
+using DarkFrontier.Data.Values;
 using DarkFrontier.Factions;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Items._Scripts;
@@ -32,6 +33,9 @@ namespace DarkFrontier.Items.Structures
         public void ClearSegments() => Segments = Array.Empty<SegmentComponent>();
 
         public void FindSegments(GameObject gameObject) => Segments = gameObject.GetComponentsInChildren<SegmentComponent>();
+
+        [field: SerializeReference]
+        public CapacitorValue Capacitor { get; private set; } = new(new MutableValue<float>(0));
 
         [field: SerializeReference]
         public Faction? Faction { get; private set; }
@@ -103,6 +107,25 @@ namespace DarkFrontier.Items.Structures
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        [Serializable]
+        public class CapacitorValue : MutableValue<float>
+        {
+            [field: SerializeField]
+            public MutableValue<float> Max { get; private set; }
+            
+            public CapacitorValue(MutableValue<float> max) : base(0)
+            {
+                Max = max;
+            }
+
+            public override void Update()
+            {
+                base.Update();
+                if(Value > Max.Value) Value = Max.Value;
+                if(Value < 0) Value = 0;
+            }
         }
     }
 }

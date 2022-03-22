@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using DarkFrontier.Attributes;
 using DarkFrontier.Items._Scripts;
 using DarkFrontier.Items.Equipment;
-using DarkFrontier.Items.Equipment._Scripts;
 using Newtonsoft.Json;
 using UnityEngine;
 
