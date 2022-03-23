@@ -20,6 +20,14 @@ namespace DarkFrontier.Items.Equipment
         public EquipmentInstance(EquipmentPrototype prototype) : base(prototype)
         {
         }
+        
+        public virtual void OnEnabled(EquipmentComponent component)
+        {
+        }
+
+        public virtual void OnDisabled(EquipmentComponent component)
+        {
+        }
 
         public bool Equals(EquipmentInstance? other)
         {

@@ -80,13 +80,9 @@ namespace DarkFrontier.Items.Equipment
             }
             
             _detectableRegistry.Detectables.Add(this);
-
-            // TODO remove this
-            if(Instance.Prototype != null)
-            {
-                Instance.Prototype.OnEquipped(this);
-            }
             
+            Instance.OnEnabled(this);
+
             _enabled = true;
         }
 
@@ -100,6 +96,8 @@ namespace DarkFrontier.Items.Equipment
             }
             
             _detectableRegistry.Detectables.Remove(this);
+            
+            Instance.OnDisabled(this);
             
             Instance.ToSerialized();
 

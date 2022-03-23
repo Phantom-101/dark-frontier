@@ -11,7 +11,7 @@ namespace DarkFrontier.Data.Values
         [SerializeReference, JsonProperty("base-value")]
         public T baseValue;
         
-        [field: SerializeReference]
+        [field: SerializeReference] [JsonProperty("value")]
         public T Value { get; protected set; }
         
         [SerializeField, JsonProperty("mutators")]
