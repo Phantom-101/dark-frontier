@@ -38,7 +38,7 @@ namespace DarkFrontier.Game.Essentials
 
         private void InitializeSelf()
         {
-            Singletons.Bind(_gameSettings = ComponentUtils.AddOrGet<GameSettings>(gameObject));
+            Singletons.Bind(_gameSettings = gameObject.AddOrGet<GameSettings>());
             if(Singletons.Exists<SerializationDriver>())
             {
                 (_serializationDriver = Singletons.Get<SerializationDriver>()).Deserialize();

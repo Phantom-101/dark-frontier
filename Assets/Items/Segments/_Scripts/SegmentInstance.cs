@@ -37,7 +37,7 @@ namespace DarkFrontier.Items.Segments
         {
         }
         
-        public SegmentInstance(SegmentAuthoring authoring) : base(authoring.prototype!)
+        public virtual void Apply(SegmentAuthoring authoring)
         {
             Id = authoring.id;
             Name = authoring.name;

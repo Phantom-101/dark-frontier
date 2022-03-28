@@ -69,8 +69,8 @@ namespace DarkFrontier.Items.Structures
         public StructureInstance(StructurePrototype prototype) : base(prototype)
         {
         }
-
-        public StructureInstance(StructureAuthoring authoring) : base(authoring.prototype!)
+        
+        public virtual void Apply(StructureAuthoring authoring)
         {
             Id = authoring.id;
             Name = authoring.name;
@@ -89,10 +89,7 @@ namespace DarkFrontier.Items.Structures
                 var segmentComponent = Segments[i];
                 if(segmentComponent.Name == segment)
                 {
-                    segmentComponent.Instance?.OnUnequipped(Segments[i]);
-                    segmentComponent.Set(instance);
-                    segmentComponent.Enable();
-                    segmentComponent.Instance?.OnEquipped(Segments[i]);
+                    segmentComponent.Equip(instance);
                     break;
                 }
             }
@@ -112,10 +109,7 @@ namespace DarkFrontier.Items.Structures
                             var equipmentComponent = segmentComponent.Instance!.Equipment[j];
                             if(equipmentComponent.Name == equipment)
                             {
-                                equipmentComponent.Instance?.OnUnequipped(equipmentComponent);
-                                equipmentComponent.Set(instance);
-                                equipmentComponent.Enable();
-                                equipmentComponent.Instance?.OnEquipped(equipmentComponent);
+                                equipmentComponent.Equip(instance);
                                 break;
                             }
                         }

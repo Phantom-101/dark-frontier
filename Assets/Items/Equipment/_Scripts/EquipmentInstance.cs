@@ -21,7 +21,7 @@ namespace DarkFrontier.Items.Equipment
         {
         }
         
-        public EquipmentInstance(EquipmentAuthoring authoring) : base(authoring.prototype!)
+        public virtual void Apply(EquipmentAuthoring authoring)
         {
             Id = authoring.id;
             Name = authoring.name;
