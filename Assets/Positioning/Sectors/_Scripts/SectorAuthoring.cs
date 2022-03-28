@@ -8,7 +8,7 @@ namespace DarkFrontier.Positioning.Sectors
     {
         public SectorInstance? instance;
 
-        public void Generate()
+        public void Author()
         {
             var component = ComponentUtils.AddOrGet<SectorComponent>(gameObject);
             component.Initialize();

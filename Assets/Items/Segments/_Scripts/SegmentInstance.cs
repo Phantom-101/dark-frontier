@@ -23,7 +23,7 @@ namespace DarkFrontier.Items.Segments
         public EquipmentComponent[] Equipment { get; private set; } = Array.Empty<EquipmentComponent>();
         
         [field: SerializeReference] [JsonProperty("equipment")]
-        public EquipmentRecord?[] EquipmentRecords { get; set; } = Array.Empty<EquipmentRecord?>();
+        public Dictionary<string, EquipmentInstance> EquipmentRecords { get; set; } = new();
         
         public void ClearEquipment() => Equipment = Array.Empty<EquipmentComponent>();
         
@@ -36,21 +36,49 @@ namespace DarkFrontier.Items.Segments
         public SegmentInstance(SegmentPrototype prototype) : base(prototype)
         {
         }
+        
+        public SegmentInstance(SegmentAuthoring authoring) : base(authoring.prototype!)
+        {
+            Id = authoring.id;
+            Name = authoring.name;
+        }
+        
+        public void Equip(string equipment, EquipmentInstance? instance)
+        {
+            for(int i = 0, l = Equipment.Length; i < l; i++)
+            {
+                var equipmentComponent = Equipment[i];
+                if(equipmentComponent.Name == equipment)
+                {
+                    equipmentComponent.Instance?.OnUnequipped(Equipment[i]);
+                    equipmentComponent.Set(instance);
+                    equipmentComponent.Enable();
+                    equipmentComponent.Instance?.OnEquipped(Equipment[i]);
+                    break;
+                }
+            }
+        }
 
+        public virtual void OnEquipped(SegmentComponent component)
+        {
+        }
+
+        public virtual void OnUnequipped(SegmentComponent component)
+        {
+        }
+        
         public override void ToSerialized()
         {
             base.ToSerialized();
 
-            var l = Equipment.Length;
-            List<EquipmentRecord> records = new();
-            for(var i = 0; i < l; i++)
+            EquipmentRecords.Clear();
+            for(int i = 0, l = Equipment.Length; i < l; i++)
             {
                 if(Equipment[i].Instance != null)
                 {
-                    records.Add(new EquipmentRecord(Equipment[i].Name, Equipment[i].Instance));
+                    EquipmentRecords.Add(Equipment[i].Name, Equipment[i].Instance!);
                 }
             }
-            EquipmentRecords = records.ToArray();
         }
 
         public bool Equals(SegmentInstance? other)

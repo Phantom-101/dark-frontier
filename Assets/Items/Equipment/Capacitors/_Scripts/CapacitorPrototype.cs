@@ -8,6 +8,6 @@ namespace DarkFrontier.Items.Equipment.Capacitors
     {
         public float capacitance;
         
-        public override ItemInstance NewState() => new CapacitorInstance(this);
+        public override ItemInstance NewInstance() => new CapacitorInstance(this);
     }
 }

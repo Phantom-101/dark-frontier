@@ -20,13 +20,13 @@ namespace DarkFrontier.Items.Equipment.Capacitors
         {
         }
         
-        public override void OnEnabled(EquipmentComponent component)
+        public override void OnEquipped(EquipmentComponent component)
         {
             if(mutator != null || component.Segment == null || component.Segment.Structure == null) return;
             component.Segment.Structure.Instance?.Capacitor.Max.AddMutator(mutator = new FloatAddMutator(new MutableValue<float>(Prototype.capacitance), 0));
         }
 
-        public override void OnDisabled(EquipmentComponent component)
+        public override void OnUnequipped(EquipmentComponent component)
         {
             if(mutator == null || component.Segment == null || component.Segment.Structure == null) return;
             component.Segment.Structure.Instance?.Capacitor.Max.RemoveMutator(mutator);

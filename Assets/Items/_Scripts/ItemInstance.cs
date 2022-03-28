@@ -14,10 +14,10 @@ namespace DarkFrontier.Items._Scripts
         public ItemPrototype Prototype { get; private set; } = null!;
         
         [field: SerializeReference] [JsonProperty("prototype-id")]
-        public string PrototypeId { get; private set; } = "";
+        public string PrototypeId { get; private init; } = "";
         
         [field: SerializeReference] [JsonProperty("id")]
-        public string Id { get; private set; } = Guid.NewGuid().ToString();
+        public string Id { get; protected set; } = Guid.NewGuid().ToString();
         
         [field: SerializeReference] [JsonProperty("name")]
         public string Name { get; protected set; } = "";

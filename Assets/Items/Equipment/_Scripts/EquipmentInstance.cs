@@ -21,11 +21,17 @@ namespace DarkFrontier.Items.Equipment
         {
         }
         
-        public virtual void OnEnabled(EquipmentComponent component)
+        public EquipmentInstance(EquipmentAuthoring authoring) : base(authoring.prototype!)
+        {
+            Id = authoring.id;
+            Name = authoring.name;
+        }
+        
+        public virtual void OnEquipped(EquipmentComponent component)
         {
         }
 
-        public virtual void OnDisabled(EquipmentComponent component)
+        public virtual void OnUnequipped(EquipmentComponent component)
         {
         }
 

@@ -18,6 +18,6 @@ namespace DarkFrontier.Items.Equipment
         
         public GameObject? destructionFx;
         
-        public override ItemInstance NewState() => new EquipmentInstance(this);
+        public override ItemInstance NewInstance() => new EquipmentInstance(this);
     }
 }

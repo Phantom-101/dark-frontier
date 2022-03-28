@@ -999,6 +999,54 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!1 &564198685
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 564198686}
+  - component: {fileID: 564198687}
+  m_Layer: 0
+  m_Name: Equipment
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &564198686
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564198685}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2126111333}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &564198687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564198685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f7a58cc32184998b75f4732af25fd43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slot: Main
+  prototype: {fileID: 11400000, guid: 5376ac1aec5aa2744acfbee98db5bd47, type: 2}
+  id: d5fd3b70-1a9b-4803-aecc-07c87fdded29
+  name: Equipment
 --- !u!1001 &593796195
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3290,7 +3338,7 @@ GameObject:
   - component: {fileID: 2091946814}
   - component: {fileID: 2091946815}
   m_Layer: 0
-  m_Name: Component
+  m_Name: Structure
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3307,7 +3355,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2126111333}
   m_Father: {fileID: 1769496085}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3320,82 +3369,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2091946813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfe51704a7804a71a66e89aa2bd7f459, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ee42cb5d9d54be3998c023f8905a5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instance:
-    <Prototype>k__BackingField: {fileID: 11400000, guid: f209fc0ca2fe0674ca960659d0f02f94,
-      type: 2}
-    <PrototypeId>k__BackingField: 1b9be144-587b-47ce-858a-fec2d40841dc
-    <Id>k__BackingField: d06a4cd2-4da7-459b-8894-ad482db49a24
-    <Name>k__BackingField: Custom
-    <Description>k__BackingField: Custom
-    <MaxHp>k__BackingField: 0
-    <CurrentHp>k__BackingField: 0
-    <Segments>k__BackingField: []
-    <SegmentRecords>k__BackingField:
-    - rid: 7535907994513440813
-    <Capacitor>k__BackingField:
-      rid: 7535907994513440811
-    <Faction>k__BackingField:
-      rid: -2
-    <FactionId>k__BackingField: 
-    <Sector>k__BackingField: {fileID: 0}
-    <SectorId>k__BackingField: 
-    <Selected>k__BackingField: {fileID: 0}
-    <SelectedId>k__BackingField: 
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 7535907994513440811
-      type: {class: StructureInstance/CapacitorValue, ns: DarkFrontier.Items.Structures,
-        asm: Assembly-CSharp}
-      data:
-        baseValue: 0
-        <Value>k__BackingField: 0
-        mutators: []
-        <Max>k__BackingField:
-          baseValue: 0
-          <Value>k__BackingField: 0
-          mutators: []
-    - rid: 7535907994513440813
-      type: {class: SegmentRecord, ns: DarkFrontier.Items.Segments, asm: Assembly-CSharp}
-      data:
-        <Name>k__BackingField: Main
-        <Instance>k__BackingField:
-          rid: 7535907994513440814
-    - rid: 7535907994513440814
-      type: {class: SegmentInstance, ns: DarkFrontier.Items.Segments, asm: Assembly-CSharp}
-      data:
-        <Prototype>k__BackingField: {fileID: 11400000, guid: 11786e90997e67c438272c0b113ea788,
-          type: 2}
-        <PrototypeId>k__BackingField: 80b1db48-a326-48e7-88da-b88d8fab803c
-        <Id>k__BackingField: 77a8cebd-60d5-49d8-a2f5-657882321413
-        <Name>k__BackingField: Custom
-        <Description>k__BackingField: Custom
-        <Component>k__BackingField: {fileID: 0}
-        <Hp>k__BackingField: 0
-        <Equipment>k__BackingField: []
-        <EquipmentRecords>k__BackingField:
-        - rid: 7535907994513440815
-    - rid: 7535907994513440815
-      type: {class: EquipmentRecord, ns: DarkFrontier.Items.Equipment, asm: Assembly-CSharp}
-      data:
-        <Name>k__BackingField: Main
-        <Instance>k__BackingField:
-          rid: 7535907994513440816
-    - rid: 7535907994513440816
-      type: {class: EquipmentInstance, ns: DarkFrontier.Items.Equipment, asm: Assembly-CSharp}
-      data:
-        <Prototype>k__BackingField: {fileID: 11400000, guid: 5376ac1aec5aa2744acfbee98db5bd47,
-          type: 2}
-        <PrototypeId>k__BackingField: f75a31cc-6574-4520-b7d7-9153de7c0439
-        <Id>k__BackingField: 4b1c3f09-d9d4-4427-8543-19f4d87478d5
-        <Name>k__BackingField: Custom
-        <Description>k__BackingField: Custom
-        <Hp>k__BackingField: 0
+  prototype: {fileID: 11400000, guid: f209fc0ca2fe0674ca960659d0f02f94, type: 2}
+  id: 83964d9e-6d00-4ac6-8f9e-2f8efe062ee8
+  name: Structure
+  segments: []
+  faction: 
+  sector: 
+  selected: 
 --- !u!1 &2096067168
 GameObject:
   m_ObjectHideFlags: 0
@@ -3519,3 +3502,53 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 202f5960fa2667a409b15f0f9f64a31f, type: 3}
+--- !u!1 &2126111332
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2126111333}
+  - component: {fileID: 2126111334}
+  m_Layer: 0
+  m_Name: Segment
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2126111333
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2126111332}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 564198686}
+  m_Father: {fileID: 2091946814}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2126111334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2126111332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 332e9ba9a61e44a5b4ced6f9d2ef1823, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slot: Main
+  prototype: {fileID: 11400000, guid: 11786e90997e67c438272c0b113ea788, type: 2}
+  id: d5ed45ab-7e49-47ae-a472-dc5e1a8eaf33
+  name: Segment
+  equipment: []
