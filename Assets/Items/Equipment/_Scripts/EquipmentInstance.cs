@@ -20,6 +20,20 @@ namespace DarkFrontier.Items.Equipment
         public EquipmentInstance(EquipmentPrototype prototype) : base(prototype)
         {
         }
+        
+        public virtual void Apply(EquipmentAuthoring authoring)
+        {
+            Id = authoring.id;
+            Name = authoring.name;
+        }
+        
+        public virtual void OnEquipped(EquipmentComponent component)
+        {
+        }
+
+        public virtual void OnUnequipped(EquipmentComponent component)
+        {
+        }
 
         public bool Equals(EquipmentInstance? other)
         {

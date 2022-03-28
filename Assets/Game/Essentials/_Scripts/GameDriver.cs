@@ -38,7 +38,7 @@ namespace DarkFrontier.Game.Essentials
 
         private void InitializeSelf()
         {
-            Singletons.Bind(_gameSettings = ComponentUtils.AddOrGet<GameSettings>(gameObject));
+            Singletons.Bind(_gameSettings = gameObject.AddOrGet<GameSettings>());
             if(Singletons.Exists<SerializationDriver>())
             {
                 (_serializationDriver = Singletons.Get<SerializationDriver>()).Deserialize();
@@ -68,9 +68,8 @@ namespace DarkFrontier.Game.Essentials
             var authorings = FindObjectsOfType<SectorAuthoring>();
             for(int i = 0, l = authorings.Length; i < l; i++)
             {
-                authorings[i].Generate();
+                authorings[i].Author();
             }
-            
             var sectors = FindObjectsOfType<SectorComponent>();
             for(int i = 0, l = sectors.Length; i < l; i++)
             {
@@ -80,16 +79,15 @@ namespace DarkFrontier.Game.Essentials
 
         private static void InitializeStructures()
         {
-            var authorings = FindObjectsOfType<StructureAuthoring>();
-            for(int i = 0, l = authorings.Length; i < l; i++)
-            {
-                authorings[i].Generate();
-            }
-            
             var structures = FindObjectsOfType<StructureComponent>();
             for(int i = 0, l = structures.Length; i < l; i++)
             {
                 structures[i].Enable();
+            }
+            var authorings = FindObjectsOfType<StructureAuthoring>();
+            for(int i = 0, l = authorings.Length; i < l; i++)
+            {
+                authorings[i].Author();
             }
         }
 

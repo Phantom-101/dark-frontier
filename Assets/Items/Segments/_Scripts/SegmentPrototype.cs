@@ -22,6 +22,6 @@ namespace DarkFrontier.Items.Segments
         
         public GameObject? destructionFx;
         
-        public override ItemInstance NewState() => new SegmentInstance(this);
+        public override ItemInstance NewInstance() => new SegmentInstance(this);
     }
 }
