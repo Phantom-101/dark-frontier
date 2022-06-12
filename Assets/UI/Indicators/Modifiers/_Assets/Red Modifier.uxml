@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="modifier" picking-mode="Ignore" style="width: 50px; height: 50px; margin-left: 8px; margin-right: 8px;">
+        <DarkFrontier.UI.Indicators.Modifiers.RadialProgressBar name="radial" high-value="1" value="1" stroke-color="#FF0000FF" line-width="5" radius-offset="-2.5" fill-color="#00000000" connect="false" lineCap="Butt" style="width: 100%; height: 100%; position: absolute; rotate: -90deg;" />
+        <ui:VisualElement name="fill" style="width: 100%; height: 100%; background-image: url(&apos;project://database/Assets/Textures/UI/Shapes/Circle.png?fileID=2800000&amp;guid=62cae22076774484f98fb89496c4186a&amp;type=3#Circle&apos;); -unity-background-image-tint-color: rgba(255, 0, 0, 0.25); justify-content: center; align-items: center; position: absolute;">
+            <ui:VisualElement name="image" style="background-image: url(&apos;project://database/Assets/Textures/Items/Equipment/Capacitor.tif?fileID=2800000&amp;guid=608ebddc3abdb6547a511a17e26df53f&amp;type=3#Capacitor&apos;); width: 75%; height: 75%;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

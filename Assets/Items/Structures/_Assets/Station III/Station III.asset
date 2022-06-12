@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8976e1351974cfaaaf43299e6ce09e6, type: 3}
+  m_Name: Station III
+  m_EditorClassIdentifier: 
+  id: 1d46e813-a5db-4ab3-bba3-c23bf0208b9f
+  name: Station III
+  description: 
+  volume: 0
+  icon: {fileID: 0}
+  tags: []
+  size: 0
+  hullIndicator: {fileID: 0}
+  selectorElement: {fileID: 9197481963319205126, guid: 19dd24d06ba76144a8fd1e16ff19da76,
+    type: 3}
+  selectedElement: {fileID: 9197481963319205126, guid: 0688e40aaed96764fba1d92894312923,
+    type: 3}
+  prefab: {fileID: 7554439906699277693, guid: 8f8d122c3c3cb0d459af2734c235d2e1, type: 3}
+  destructionFx: {fileID: 0}

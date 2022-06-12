@@ -1,35 +1,51 @@
 ﻿#nullable enable
-using DarkFrontier.Attributes;
+using DarkFrontier.Controllers.New;
 using DarkFrontier.Foundation.Services;
+using DarkFrontier.Game.Essentials;
+using DarkFrontier.Items.Equipment;
+using DarkFrontier.Items.Segments;
 using DarkFrontier.UI.Indicators.Selectors;
 using DarkFrontier.Utils;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Structures
 {
-    public class StructureComponent : MonoBehaviour, IDetectable
+    public class StructureComponent : MonoBehaviour, IId, IDetectable
     {
         [field: SerializeReference]
         public StructureInstance? Instance { get; private set; }
 
-        private StructureRegistry _structureRegistry = null!;
-        private DetectableRegistry _detectableRegistry = null!;
+        public string Id => Instance?.Id ?? string.Empty;
         
-        [SerializeField, ReadOnly]
+        [SerializeField, Attributes.ReadOnly]
         private bool _initialized;
         
-        [SerializeField, ReadOnly]
+        [SerializeField, Attributes.ReadOnly]
         private bool _registered;
         
-        [SerializeField, ReadOnly]
+        [SerializeField, Attributes.ReadOnly]
         private bool _enabled;
+        
+        private IdRegistry _idRegistry = null!;
+        private StructureRegistry _structureRegistry = null!;
+        private DetectableRegistry _detectableRegistry = null!;
+        private PlayerController _playerController = null!;
+        private UnityEngine.Camera _camera = null!;
+        
+        [ReadOnly]
+        public new Rigidbody rigidbody = null!;
         
         public void Initialize()
         {
             if(_initialized) return;
+            _idRegistry = Singletons.Get<IdRegistry>();
             _structureRegistry = Singletons.Get<StructureRegistry>();
             _detectableRegistry = Singletons.Get<DetectableRegistry>();
+            _playerController = Singletons.Get<PlayerController>();
+            rigidbody = gameObject.AddOrGet<Rigidbody>();
+            _camera = Singletons.Get<UnityEngine.Camera>();
             _initialized = true;
         }
 
@@ -44,14 +60,14 @@ namespace DarkFrontier.Items.Structures
         private void Register()
         {
             if(!_initialized || _registered || Instance == null) return;
-            _structureRegistry.Add(this);
+            _idRegistry.Register(this);
             _registered = true;
         }
 
         private void Unregister()
         {
             if(!_initialized || !_registered || Instance == null) return;
-            _structureRegistry.Remove(this);
+            _idRegistry.Unregister(this);
             _registered = false;
         }
 
@@ -73,7 +89,8 @@ namespace DarkFrontier.Items.Structures
                     Instance.Segments[i].Enable();
                 }
             }
-            _detectableRegistry.Detectables.Add(this);
+            _structureRegistry.Register(this);
+            _detectableRegistry.Register(this);
             _enabled = true;
         }
 
@@ -82,29 +99,106 @@ namespace DarkFrontier.Items.Structures
             if(!_initialized || !_enabled || Instance == null) return;
             transform.DestroyChildren();
             Instance.ClearSegments();
-            _detectableRegistry.Detectables.Remove(this);
+            _detectableRegistry.Unregister(this);
+            _structureRegistry.Unregister(this);
             Instance.ToSerialized(this);
             _enabled = false;
         }
         
-        public bool IsDetected(StructureInstance structure)
+        public void Equip(string segment, SegmentInstance? instance)
+        {
+            if(!_initialized || !_enabled || Instance == null) return;
+            for(int i = 0, l = Instance.Segments.Length; i < l; i++)
+            {
+                var segmentComponent = Instance.Segments[i];
+                if(segmentComponent.Name == segment)
+                {
+                    segmentComponent.Equip(instance);
+                    segmentComponent.Enable();
+                    break;
+                }
+            }
+        }
+
+        public void Equip(string segment, string equipment, EquipmentInstance? instance)
+        {
+            if(!_initialized || !_enabled || Instance == null) return;
+            for(int i = 0, li = Instance.Segments.Length; i < li; i++)
+            {
+                var segmentComponent = Instance.Segments[i];
+                if(segmentComponent.Name == segment)
+                {
+                    segmentComponent.Equip(equipment, instance);
+                    break;
+                }
+            }
+        }
+
+        public void Tick(float deltaTime)
+        {
+            if(Instance == null) return;
+
+            var normLinear = Instance.LinearTarget.sqrMagnitude > 1 ? Instance.LinearTarget.normalized : Instance.LinearTarget;
+            var curLinear = rigidbody.velocity;
+            var targetLinear = transform.TransformVector(normLinear * Instance.LinearSpeed.Value);
+            var offsetLinear = targetLinear - curLinear;
+            var deltaLinear = offsetLinear.normalized * Instance.LinearAcceleration.Value * deltaTime;
+            rigidbody.AddForce(offsetLinear.sqrMagnitude < deltaLinear.sqrMagnitude ? offsetLinear : deltaLinear, ForceMode.VelocityChange);
+
+            var normAngular = Instance.AngularTarget.sqrMagnitude > 1 ? Instance.AngularTarget.normalized : Instance.AngularTarget;
+            var curAngular = rigidbody.angularVelocity;
+            var targetAngular = transform.TransformDirection(normAngular * Instance.AngularSpeed.Value);
+            var offsetAngular = targetAngular - curAngular;
+            var deltaAngular = offsetAngular.normalized * Instance.AngularAcceleration.Value * deltaTime;
+            rigidbody.AddTorque(offsetAngular.sqrMagnitude < deltaAngular.sqrMagnitude ? offsetAngular : deltaAngular, ForceMode.VelocityChange);
+            
+            if(_playerController.Player != this)
+            {
+                Instance.Controller.Tick(this);
+            }
+
+            for(int i = 0, l = Instance.Segments.Length; i < l; i++)
+            {
+                Instance.Segments[i].Tick(deltaTime);
+            }
+        }
+        
+        public bool IsDetectedBy(StructureComponent structure)
         {
             return true;
         }
 
         public VisualElement CreateSelector()
         {
-            return Instance == null || Instance.Prototype.selectorElement == null ? new VisualElement() : Instance.Prototype.selectorElement.CloneTree();
+            var element = Instance!.Prototype.selectorElement!.CloneTree();
+            element.Q("selected").Q<Label>("name").text = Instance?.Prototype.name ?? "";
+            return element;
         }
 
-        public Vector3 GetSelectorPosition()
+        public void UpdateSelector(VisualElement selector, bool selected)
         {
-            return UnityEngine.Camera.main!.WorldToViewportPoint(transform.position);
-        }
-
-        public VisualElement CreateSelected()
-        {
-            return new VisualElement();
+            if(_playerController.Player != null && IsDetectedBy(_playerController.Player))
+            {
+                var position = _camera.WorldToViewportPoint(transform.position);
+                if(position.z > 0)
+                {
+                    selector.style.visibility = Visibility.Visible;
+                    selector.style.left = new StyleLength(new Length(position.x * 100, LengthUnit.Percent));
+                    selector.style.top = new StyleLength(new Length(100 - position.y * 100, LengthUnit.Percent));
+                    
+                    selector.Q("selected").style.visibility = selected ? Visibility.Visible : Visibility.Hidden;
+                    selector.Q("unselected").style.visibility = selected ? Visibility.Hidden : Visibility.Visible;
+                    selector.Q("unselected").pickingMode = selected ? PickingMode.Ignore : PickingMode.Position;
+                }
+                else
+                {
+                    selector.style.visibility = Visibility.Hidden;
+                }
+            }
+            else
+            {
+                selector.style.visibility = Visibility.Hidden;
+            }
         }
     }
 }

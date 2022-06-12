@@ -1,58 +1,34 @@
+#nullable enable
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
 
 namespace DarkFrontier.Utils
 {
     public static class ComponentUtils
     {
+        public static T AddOrGet<T>() where T : Component
+        {
+            var component = Object.FindObjectOfType<T>();
+            return component == null ? new GameObject().AddComponent<T>() : component;
+        }
+
+        public static TInterface AddOrGet<TInterface, TComponent>() where TComponent : Component, TInterface
+        {
+            var components = FindComponentsOfType<TInterface>();
+            return components.Count == 0 ? new GameObject().AddComponent<TComponent>() : components[0];
+        }
+        
         public static T AddOrGet<T>(this GameObject gameObject) where T : Component
         {
-            T component = gameObject.GetComponent<T>();
-            if(component == null)
-            {
-                component = gameObject.AddComponent<T>();
-            }
-
-            return component;
+            var component = gameObject.GetComponent<T>();
+            return component == null ? gameObject.AddComponent<T>() : component;
         }
 
-        public static bool AddOrGet<T>(this GameObject gameObject, out T component) where T : Component
+        public static TInterface AddOrGet<TInterface, TComponent>(this GameObject gameObject) where TComponent : Component, TInterface
         {
-            component = gameObject.GetComponent<T>();
-            if(component == null)
-            {
-                component = gameObject.AddComponent<T>();
-                return false;
-            }
-
-            return true;
-        }
-
-        public static TInterface AddOrGet<TInterface, TComponent>(this GameObject gameObject)
-            where TComponent : Component, TInterface
-        {
-            TInterface component = gameObject.GetComponent<TInterface>();
-            if(component == null)
-            {
-                component = gameObject.AddComponent<TComponent>();
-            }
-
-            return component;
-        }
-
-        public static bool AddOrGet<TInterface, TComponent>(this GameObject gameObject, out TInterface component)
-            where TComponent : Component, TInterface
-        {
-            component = gameObject.GetComponent<TInterface>();
-            if(component == null)
-            {
-                component = gameObject.AddComponent<TComponent>();
-                return false;
-            }
-
-            return true;
+            var component = gameObject.GetComponent<TInterface>();
+            return component == null ? gameObject.AddComponent<TComponent>() : component;
         }
 
         public static List<T> FindComponentsOfType<T>()

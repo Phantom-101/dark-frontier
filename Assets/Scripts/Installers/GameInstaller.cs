@@ -30,7 +30,7 @@ namespace DarkFrontier.Installers
             {
                 var instantiatedGameObject = new GameObject("[Service] Structure Manager");
                 var instantiatedComponent = instantiatedGameObject.AddComponent<StructureManager>();
-                var registry = new StructureRegistry();
+                var registry = new StructureRegistryOld();
                 var lifetimeUtilities = new StructureLifetimeUtilities(Singletons.Get<BehaviorManager>(), registry);
                 var serializationUtilities = new StructureSerializationUtilities(registry, lifetimeUtilities);
                 instantiatedComponent.Construct((Singletons.Get<BehaviorTimekeeper>(), registry, lifetimeUtilities,

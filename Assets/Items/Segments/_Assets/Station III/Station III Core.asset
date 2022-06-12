@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b00934d2ecc14ab5bf2aa1bda84972ae, type: 3}
+  m_Name: Station III Core
+  m_EditorClassIdentifier: 
+  id: efeb09a5-4683-431e-831c-574546c351d2
+  name: Station III Core
+  description: 
+  volume: 0
+  icon: {fileID: 0}
+  tags: []
+  hp: 0
+  poolHp: 0
+  rating: 0
+  hullIndicator: {fileID: 0}
+  selectorElement: {fileID: 9197481963319205126, guid: d5ccad8c9260d624086f7509235c717b,
+    type: 3}
+  selectedElement: {fileID: 9197481963319205126, guid: 0909cbead2f17534780f6c97067de153,
+    type: 3}
+  prefab: {fileID: 3443297809694803908, guid: 9aa347516d6cf91459785d872d24f8fc, type: 3}
+  destructionFx: {fileID: 0}

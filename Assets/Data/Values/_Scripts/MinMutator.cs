@@ -8,9 +8,9 @@ namespace DarkFrontier.Data.Values
     public class IntMinMutator : ValueMutator<int>
     {
         [SerializeReference, JsonProperty("parameter")]
-        public MutableValue<int> parameter;
+        public IValue<int> parameter;
 
-        public IntMinMutator(MutableValue<int> parameter, int order) : base(order)
+        public IntMinMutator(IValue<int> parameter, int order) : base(order)
         {
             this.parameter = parameter;
         }
@@ -25,9 +25,9 @@ namespace DarkFrontier.Data.Values
     public class FloatMinMutator : ValueMutator<float>
     {
         [SerializeReference, JsonProperty("parameter")]
-        public MutableValue<float> parameter;
+        public IValue<float> parameter;
         
-        public FloatMinMutator(MutableValue<float> parameter, int order) : base(order)
+        public FloatMinMutator(IValue<float> parameter, int order) : base(order)
         {
             this.parameter = parameter;
         }

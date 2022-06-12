@@ -1,12 +1,15 @@
 #nullable enable
-using DarkFrontier.Attributes;
+using DarkFrontier.Controllers;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Game.Player.Camera;
+using DarkFrontier.Items._Scripts;
 using DarkFrontier.Items.Structures;
 using DarkFrontier.Positioning.Sectors;
 using DarkFrontier.UI.Indicators.Selectors;
+using DarkFrontier.UI.States;
 using DarkFrontier.Utils;
 using UnityEngine;
+using PlayerController = DarkFrontier.Controllers.New.PlayerController;
 
 namespace DarkFrontier.Game.Essentials
 {
@@ -15,52 +18,47 @@ namespace DarkFrontier.Game.Essentials
         [SerializeField]
         private string _universeName = "";
         
-        [SerializeReference, ReadOnly]
         private GameSettings _gameSettings = null!;
-
-        [SerializeReference, ReadOnly]
         private SerializationDriver _serializationDriver = null!;
 
-        [SerializeReference, ReadOnly]
-        private DetectableRegistry _detectableRegistry = null!;
+        private UIStack _uiStack = null!;
 
-        [SerializeReference, ReadOnly]
+        private IdRegistry _idRegistry = null!;
+        private DetectableRegistry _detectableRegistry = null!;
         private StructureRegistry _structureRegistry = null!;
-        
-        [SerializeReference, ReadOnly]
-        private CameraSpring? _cameraSpring;
+        private SectorRegistry _sectorRegistry = null!;
+
+        private PlayerController _playerController = null!;
+        private CameraSpring _cameraSpring = null!;
+        private UnityEngine.Camera _camera = null!;
 
         private void Start()
         {
-            InitializeSelf();
-            InitializeOthers();
-        }
-
-        private void InitializeSelf()
-        {
             Singletons.Bind(_gameSettings = gameObject.AddOrGet<GameSettings>());
-            if(Singletons.Exists<SerializationDriver>())
-            {
-                (_serializationDriver = Singletons.Get<SerializationDriver>()).Deserialize();
-            }
-            else
-            {
-                Singletons.Bind(_serializationDriver = new SerializationDriver());
-            }
-            Singletons.Bind(_structureRegistry = new StructureRegistry());
+            (_serializationDriver = Singletons.Exists<SerializationDriver>() ? Singletons.Get<SerializationDriver>() : new SerializationDriver()).Deserialize();
+            Singletons.Bind(_uiStack = ComponentUtils.AddOrGet<UIStack>());
+            Singletons.Bind(_idRegistry = new IdRegistry());
             Singletons.Bind(_detectableRegistry = new DetectableRegistry());
-            _cameraSpring = FindObjectOfType<CameraSpring>();
+            Singletons.Bind(_sectorRegistry = new SectorRegistry());
+            Singletons.Bind(_structureRegistry = new StructureRegistry());
+            Singletons.Bind(_playerController = ComponentUtils.AddOrGet<PlayerController>());
+            Singletons.Bind(_cameraSpring = FindObjectOfType<CameraSpring>());
+            Singletons.Bind(_camera = _cameraSpring.camera = FindObjectOfType<UnityEngine.Camera>());
+            
+            _gameSettings.Initialize();
+            InitializeIdRegistry();
+            InitializeSectors();
+            InitializeStructures();
+            InitializePlayer();
         }
 
-        private void InitializeOthers()
+        private void InitializeIdRegistry()
         {
-            _gameSettings.Initialize();
-
-            InitializeSectors();
-            
-            InitializeStructures();
-
-            if(_cameraSpring != null) _cameraSpring.Initialize();
+            var itemRegistry = GetComponent<ItemRegistry>();
+            if(itemRegistry != null)
+            {
+                itemRegistry.Register(_idRegistry);
+            }
         }
 
         private static void InitializeSectors()
@@ -91,10 +89,48 @@ namespace DarkFrontier.Game.Essentials
             }
         }
 
+        private void InitializePlayer()
+        {
+            var playerFlag = GetComponent<PlayerFlag>();
+            if(playerFlag != null)
+            {
+                playerFlag.Execute(_idRegistry, _playerController);
+            }
+            if(_cameraSpring != null) _cameraSpring.Initialize();
+        }
+
         private void Update()
         {
-            // TODO Tick sector and structure registries
-            if(_cameraSpring != null) _cameraSpring.Tick();
+            _uiStack.Tick();
+            TickSectors();
+            TickStructures();
+            TickPlayer();
+        }
+
+        private void TickSectors()
+        {
+            for(int i = 0, l = _sectorRegistry.Registry.Count; i < l; i++)
+            {
+                _sectorRegistry.Registry[i].Tick(UnityEngine.Time.deltaTime);
+            }
+        }
+
+        private void TickStructures()
+        {
+            for(int i = 0, l = _structureRegistry.Registry.Count; i < l; i++)
+            {
+                _structureRegistry.Registry[i].Tick(UnityEngine.Time.deltaTime);
+            }
+        }
+
+        private void TickPlayer()
+        {
+            _playerController.Tick();
+            if(_cameraSpring != null)
+            {
+                _cameraSpring.target = _playerController.Player == null ? null : _playerController.Player.transform;
+                _cameraSpring.Tick();
+            }
         }
     }
 }

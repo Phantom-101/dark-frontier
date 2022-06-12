@@ -17,10 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: c7d7e2a0638e29d45979ff0f2782309f
   m_SerializeEntries:
-  - m_GUID: c5e47bc0b084fc24d8191bde925119a3
-    m_Address: Assets/UI/Indicators/Selectors/_Assets/Sector Selector.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: e406e17526580314fbd4733f9ec29e5b
     m_Address: Assets/UI/Indicators/Selectors/_Assets/Sector Selector.uxml
     m_ReadOnly: 0

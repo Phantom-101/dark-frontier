@@ -1,0 +1,5 @@
+VisualElement {}
+
+.transparent {
+    opacity: 0;
+}

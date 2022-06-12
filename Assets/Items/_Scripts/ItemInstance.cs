@@ -1,6 +1,8 @@
 #nullable enable
 using System;
 using DarkFrontier.Attributes;
+using DarkFrontier.Foundation.Services;
+using DarkFrontier.Game.Essentials;
 using DarkFrontier.Items.Structures;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -41,7 +43,8 @@ namespace DarkFrontier.Items._Scripts
 
         public virtual void FromSerialized()
         {
-            Prototype = PrototypeId.Length > 0 ? new ItemRegistry().Get(PrototypeId)! : Prototype;
+            var prototype = Singletons.Get<IdRegistry>().Get<ItemPrototype>(PrototypeId);
+            Prototype = prototype == null ? Prototype : prototype;
         }
 
         public bool Equals(ItemInstance? other)

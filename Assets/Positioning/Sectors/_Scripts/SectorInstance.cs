@@ -40,6 +40,6 @@ namespace DarkFrontier.Positioning.Sectors
         
         public NavigationPathfinder? Pathfinder { get; private set; }
 
-        public void UpdatePathfinder(GameObject gameObject) => ComponentUtils.AddOrGet<NavigationPathfinder>(gameObject).Initialize(gameObject.scene);
+        public void UpdatePathfinder(GameObject gameObject) => gameObject.AddOrGet<NavigationPathfinder>().Initialize(gameObject.scene);
     }
 }

@@ -11,9 +11,6 @@ namespace DarkFrontier.Items.Segments
 {
     public class SegmentInstance : ItemInstance, IEquatable<SegmentInstance>
     {
-        [field: SerializeReference, ReadOnly]
-        public SegmentComponent? Component { get; private set; }
-        
         public new SegmentPrototype Prototype => (SegmentPrototype)base.Prototype;
 
         [field: SerializeReference] [JsonProperty("hp")]
@@ -41,22 +38,6 @@ namespace DarkFrontier.Items.Segments
         {
             Id = authoring.id;
             Name = authoring.name;
-        }
-        
-        public void Equip(string equipment, EquipmentInstance? instance)
-        {
-            for(int i = 0, l = Equipment.Length; i < l; i++)
-            {
-                var equipmentComponent = Equipment[i];
-                if(equipmentComponent.Name == equipment)
-                {
-                    equipmentComponent.Instance?.OnUnequipped(Equipment[i]);
-                    equipmentComponent.Set(instance);
-                    equipmentComponent.Enable();
-                    equipmentComponent.Instance?.OnEquipped(Equipment[i]);
-                    break;
-                }
-            }
         }
 
         public virtual void OnEquipped(SegmentComponent component)

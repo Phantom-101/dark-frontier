@@ -11,8 +11,8 @@ namespace DarkFrontier.Locations {
     public class Sector : ComponentBehavior, ISavableState<Sector.Serializable> {
         public Id UId => iId;
         [SerializeField] private Id iId = new Id ();
-        public StructureRegistry UPopulation { get => iPopulation; }
-        [SerializeField] private StructureRegistry iPopulation = new StructureRegistry ();
+        public StructureRegistryOld UPopulation { get => iPopulation; }
+        [SerializeField] private StructureRegistryOld iPopulation = new StructureRegistryOld ();
 
         private SectorManager iSectorManager;
 

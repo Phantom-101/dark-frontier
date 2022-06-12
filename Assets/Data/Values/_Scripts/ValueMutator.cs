@@ -1,11 +1,13 @@
 ﻿using System;
+using DarkFrontier.Foundation.Services;
+using DarkFrontier.Game.Essentials;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace DarkFrontier.Data.Values
 {
     [Serializable, JsonObject(MemberSerialization.OptIn, IsReference = true)]
-    public class ValueMutator<T>
+    public class ValueMutator<T> : IId
     {
         [field: SerializeReference]
         [JsonProperty("id")]
@@ -15,7 +17,9 @@ namespace DarkFrontier.Data.Values
         [JsonProperty("order")]
         public int Order { get; private set; }
 
-        public ValueMutator(int order) => Order = order;
+        public ValueMutator() => Singletons.Get<IdRegistry>().Register(this);
+        
+        public ValueMutator(int order) : this() => Order = order;
 
         public virtual T Mutate(T value) => value;
     }

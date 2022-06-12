@@ -15,10 +15,13 @@ namespace DarkFrontier.Items.Structures
         public string faction = "";
         public string sector = "";
         public string selected = "";
+        public bool randomizeId = true;
 
         public void Author()
         {
+            // Structure
             if(prototype == null) return;
+            if(randomizeId) id = Guid.NewGuid().ToString();
             var component = gameObject.AddOrGet<StructureComponent>();
             component.Initialize();
             var instance = (StructureInstance)prototype.NewInstance();
@@ -26,6 +29,7 @@ namespace DarkFrontier.Items.Structures
             component.Set(instance);
             component.Enable();
             
+            // Segments
             var segments = GetComponentsInChildren<SegmentAuthoring>();
             for(int i = 0, li = segments.Length; i < li; i++)
             {
@@ -33,8 +37,9 @@ namespace DarkFrontier.Items.Structures
                 {
                     var segmentInstance = (SegmentInstance)segments[i].prototype!.NewInstance();
                     segmentInstance.Apply(segments[i]);
-                    component.Instance!.Equip(segments[i].slot, segmentInstance);
+                    component.Equip(segments[i].slot, segmentInstance);
                     
+                    // Equipment
                     var equipment = segments[i].GetComponentsInChildren<EquipmentAuthoring>();
                     for(int j = 0, lj = equipment.Length; j < lj; j++)
                     {
@@ -42,7 +47,7 @@ namespace DarkFrontier.Items.Structures
                         {
                             var equipmentInstance = (EquipmentInstance)equipment[i].prototype!.NewInstance();
                             equipmentInstance.Apply(equipment[i]);
-                            component.Instance!.Equip(segments[i].slot, equipment[i].slot, equipmentInstance);
+                            component.Equip(segments[i].slot, equipment[i].slot, equipmentInstance);
                         }
                         Destroy(equipment[i].gameObject);
                     }

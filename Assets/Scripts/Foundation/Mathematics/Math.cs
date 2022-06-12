@@ -1,8 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
-using Unity.IL2CPP.CompilerServices;
 
 namespace DarkFrontier.Foundation.Mathematics {
-    [Il2CppEagerStaticClassConstruction]
     public static class Math {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static sbyte Min(sbyte a, sbyte b) => a < b ? a : b;

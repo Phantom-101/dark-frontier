@@ -1,7 +1,9 @@
 ﻿#nullable enable
 using System;
+using System.Linq;
 using DarkFrontier.Attributes;
 using DarkFrontier.Foundation.Services;
+using DarkFrontier.Game.Essentials;
 using DarkFrontier.Items.Segments;
 using DarkFrontier.Items.Structures;
 using DarkFrontier.UI.Indicators.Selectors;
@@ -11,13 +13,17 @@ using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Equipment
 {
-    public class EquipmentComponent : MonoBehaviour, IDetectable
+    public class EquipmentComponent : MonoBehaviour, IId, IDetectable
     {
         [field: SerializeField, ReadOnly]
         public SegmentComponent? Segment { get; private set; }
 
+        public StructureComponent? Structure => Segment == null ? null : Segment.Structure;
+
         [field: SerializeReference]
         public EquipmentInstance? Instance { get; private set; }
+
+        public string Id => Instance?.Id ?? string.Empty;
         
         [field: SerializeField]
         public string Name { get; private set; } = "";
@@ -28,8 +34,6 @@ namespace DarkFrontier.Items.Equipment
         [field: SerializeField]
         public EquipmentPrototype[] Compatible { get; private set; } = Array.Empty<EquipmentPrototype>();
 
-        private DetectableRegistry _detectableRegistry = null!;
-        
         [SerializeField, ReadOnly]
         private bool _initialized;
         
@@ -39,16 +43,32 @@ namespace DarkFrontier.Items.Equipment
         [SerializeField, ReadOnly]
         private bool _enabled;
         
+        private IdRegistry _idRegistry = null!;
+        private DetectableRegistry _detectableRegistry = null!;
+        private UnityEngine.Camera _camera = null!;
+
         public void Initialize(SegmentComponent component)
         {
             if(_initialized) return;
             Segment = component;
+            _idRegistry = Singletons.Get<IdRegistry>();
             _detectableRegistry = Singletons.Get<DetectableRegistry>();
+            _camera = Singletons.Get<UnityEngine.Camera>();
             _initialized = true;
         }
 
+        public void Equip(EquipmentInstance? instance)
+        {
+            if(instance != null && Compatible.Length != 0 && !Compatible.Contains(instance.Prototype)) return;
+            instance?.OnUnequipped(this);
+            Set(instance);
+            Enable();
+            instance?.OnEquipped(this);
+        }
+        
         public void Set(EquipmentInstance? instance)
         {
+            if(instance != null && Compatible.Length != 0 && !Compatible.Contains(instance.Prototype)) return;
             Disable();
             Unregister();
             Instance = instance;
@@ -58,12 +78,14 @@ namespace DarkFrontier.Items.Equipment
         private void Register()
         {
             if(!_initialized || _registered || Instance == null) return;
+            _idRegistry.Register(this);
             _registered = true;
         }
 
         private void Unregister()
         {
             if(!_initialized || !_registered || Instance == null) return;
+            _idRegistry.Unregister(this);
             _registered = false;
         }
 
@@ -75,7 +97,7 @@ namespace DarkFrontier.Items.Equipment
             {
                 Instantiate(Instance.Prototype.prefab, transform);
             }
-            _detectableRegistry.Detectables.Add(this);
+            _detectableRegistry.Register(this);
             _enabled = true;
         }
 
@@ -83,37 +105,47 @@ namespace DarkFrontier.Items.Equipment
         {
             if(!_initialized || !_enabled || Instance == null) return;
             transform.DestroyChildren();
-            _detectableRegistry.Detectables.Remove(this);
+            _detectableRegistry.Unregister(this);
             Instance.ToSerialized();
             _enabled = false;
         }
-
-        public void Equip(EquipmentInstance? instance)
+        
+        public void Tick(float deltaTime)
         {
-            Instance?.OnUnequipped(this);
-            Set(instance);
-            Enable();
-            Instance?.OnEquipped(this);
+            if(Instance == null) return;
+            
+            Instance.OnTick(this, deltaTime);
         }
         
-        public bool IsDetected(StructureInstance structure)
+        public bool IsDetectedBy(StructureComponent structure)
         {
-            return Segment != null && Segment.IsDetected(structure);
+            return Segment != null && Segment.IsDetectedBy(structure);
         }
 
         public VisualElement CreateSelector()
         {
-            return Instance == null || Instance.Prototype.selectorElement == null ? new VisualElement() : Instance.Prototype.selectorElement.CloneTree();
+            var element = Instance!.Prototype.selectorElement!.CloneTree();
+            element.Q("selected").Q<Label>("name").text = Instance?.Prototype.name ?? "";
+            return element;
         }
 
-        public Vector3 GetSelectorPosition()
+        public void UpdateSelector(VisualElement selector, bool selected)
         {
-            return UnityEngine.Camera.main!.WorldToViewportPoint(transform.position);
-        }
-        
-        public VisualElement CreateSelected()
-        {
-            return new VisualElement();
+            var position = _camera.WorldToViewportPoint(transform.position);
+            if(position.z > 0)
+            {
+                selector.style.visibility = Visibility.Visible;
+                selector.style.left = new StyleLength(new Length(position.x * 100, LengthUnit.Percent));
+                selector.style.top = new StyleLength(new Length(100 - position.y * 100, LengthUnit.Percent));
+                    
+                selector.Q("selected").style.visibility = selected ? Visibility.Visible : Visibility.Hidden;
+                selector.Q("unselected").style.visibility = selected ? Visibility.Hidden : Visibility.Visible;
+                selector.Q("unselected").pickingMode = selected ? PickingMode.Ignore : PickingMode.Position;
+            }
+            else
+            {
+                selector.style.visibility = Visibility.Hidden;
+            }
         }
     }
 }

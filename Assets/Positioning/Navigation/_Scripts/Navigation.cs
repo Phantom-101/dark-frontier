@@ -1,10 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
-using Unity.IL2CPP.CompilerServices;
 using UnityEngine;
 
 namespace DarkFrontier.Positioning.Navigation
 {
-    [Il2CppEagerStaticClassConstruction]
     public static class Navigation
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

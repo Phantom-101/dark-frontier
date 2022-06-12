@@ -7,10 +7,10 @@ namespace DarkFrontier.Structures
 {
     public class StructureSerializationUtilities
     {
-        private readonly StructureRegistry _registry;
+        private readonly StructureRegistryOld _registry;
         private readonly StructureLifetimeUtilities _lifetimeUtilities;
 
-        public StructureSerializationUtilities(StructureRegistry registry, StructureLifetimeUtilities lifetimeUtilities)
+        public StructureSerializationUtilities(StructureRegistryOld registry, StructureLifetimeUtilities lifetimeUtilities)
         {
             _registry = registry;
             _lifetimeUtilities = lifetimeUtilities;

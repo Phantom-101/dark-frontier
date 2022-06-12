@@ -11,9 +11,9 @@ namespace DarkFrontier.Structures
     public class StructureLifetimeUtilities
     {
         private readonly BehaviorManager _behaviorManager;
-        private readonly StructureRegistry _registry;
+        private readonly StructureRegistryOld _registry;
         
-        public StructureLifetimeUtilities(BehaviorManager behaviorManager, StructureRegistry registry)
+        public StructureLifetimeUtilities(BehaviorManager behaviorManager, StructureRegistryOld registry)
         {
             _behaviorManager = behaviorManager;
             _registry = registry;

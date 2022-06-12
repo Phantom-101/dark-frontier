@@ -22,5 +22,7 @@ MonoBehaviour:
   hullIndicator: {fileID: 0}
   selectorElement: {fileID: 9197481963319205126, guid: 19dd24d06ba76144a8fd1e16ff19da76,
     type: 3}
+  selectedElement: {fileID: 9197481963319205126, guid: 0688e40aaed96764fba1d92894312923,
+    type: 3}
   prefab: {fileID: 9058488159523567237, guid: 3cc15315c8d625c4da9ef023b049da34, type: 3}
   destructionFx: {fileID: 0}

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b00934d2ecc14ab5bf2aa1bda84972ae, type: 3}
+  m_Name: Station III Large Docking
+  m_EditorClassIdentifier: 
+  id: 60b579f8-7502-42ef-991e-ec3c0b13b6c1
+  name: Station III Large Docking
+  description: 
+  volume: 0
+  icon: {fileID: 0}
+  tags: []
+  hp: 0
+  poolHp: 0
+  rating: 0
+  hullIndicator: {fileID: 0}
+  selectorElement: {fileID: 9197481963319205126, guid: d5ccad8c9260d624086f7509235c717b,
+    type: 3}
+  selectedElement: {fileID: 9197481963319205126, guid: 0909cbead2f17534780f6c97067de153,
+    type: 3}
+  prefab: {fileID: 7751824551949074356, guid: 8bbdeeaab2876ca419215ba4b836adc4, type: 3}
+  destructionFx: {fileID: 0}

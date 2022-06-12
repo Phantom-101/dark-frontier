@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="pivot" style="height: 0; width: 0; position: absolute;">
-        <ui:VisualElement name="selector" style="width: 100px; height: 100px; position: absolute; left: -50px; top: -50px; background-image: url(&apos;project://database/Assets/UI/Indicators/Selectors/_Assets/Segment%20Selector.png?fileID=2800000&amp;guid=97fe35c48ced35d4d84f1ed45ca0bde1&amp;type=3#Segment Selector&apos;);" />
-    </ui:VisualElement>
+    <ui:Template name="Segment Unselected" src="project://database/Assets/UI/Indicators/Selectors/_Assets/Segment%20Unselected.uxml?fileID=9197481963319205126&amp;guid=cd9d0dbfd6ca9ef4295a102dc9807e98&amp;type=3#Segment Unselected" />
+    <ui:Template name="Segment Selected" src="project://database/Assets/UI/Indicators/Selectors/_Assets/Segment%20Selected.uxml?fileID=9197481963319205126&amp;guid=0909cbead2f17534780f6c97067de153&amp;type=3#Segment Selected" />
+    <ui:Instance template="Segment Unselected" name="unselected" />
+    <ui:Instance template="Segment Selected" name="selected" picking-mode="Ignore" />
 </ui:UXML>

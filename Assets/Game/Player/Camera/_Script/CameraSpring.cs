@@ -1,14 +1,15 @@
+#nullable enable
 using DarkFrontier.Positioning.Navigation;
 using DarkFrontier.Utils;
 using UnityEngine;
-
 
 namespace DarkFrontier.Game.Player.Camera
 {
     public class CameraSpring : MonoBehaviour
     {
-        [SerializeField]
-        private UnityEngine.Camera? _camera;
+        public Transform? target;
+        
+        public new UnityEngine.Camera? camera;
 
         [SerializeField]
         private Transform? _lookAt;
@@ -50,7 +51,14 @@ namespace DarkFrontier.Game.Player.Camera
 
         public void Tick()
         {
-            if (_camera == null) return;
+            if (camera == null) return;
+
+            if(target != null)
+            {
+                var t = transform;
+                t.position = target.position;
+                t.rotation = target.rotation;
+            }
             
             if(_bounds != null)
             {
@@ -58,14 +66,15 @@ namespace DarkFrontier.Game.Player.Camera
             }
             _anchor.transform.localPosition = new Vector3(0, Mathf.Sin(_angle * Mathf.Deg2Rad), -Mathf.Cos(_angle * Mathf.Deg2Rad)) * _distance;
             
-            Rigidbody cameraRigidbody = ComponentUtils.AddOrGet<Rigidbody>(_camera.gameObject);
+            Rigidbody cameraRigidbody = camera.gameObject.AddOrGet<Rigidbody>();
             cameraRigidbody.drag = _drag;
             
             _spring.connectedBody = cameraRigidbody;
             _spring.spring = _force;
             _spring.damper = _damp;
             
-            _camera.transform.LookAt(_lookAt);
+            if(target == null) camera.transform.LookAt(_lookAt);
+            else camera.transform.LookAt(_lookAt, target.up);
         }
     }
 }

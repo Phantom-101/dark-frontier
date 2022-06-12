@@ -8,10 +8,10 @@ using UnityEngine;
 namespace DarkFrontier.Structures
 {
     public class StructureManager : ComponentBehavior,
-        ICtorArgs<(BehaviorTimekeeper, StructureRegistry, StructureLifetimeUtilities, StructureSerializationUtilities)>
+        ICtorArgs<(BehaviorTimekeeper, StructureRegistryOld, StructureLifetimeUtilities, StructureSerializationUtilities)>
     {
         [field: SerializeReference]
-        public StructureRegistry Registry { get; private set; }
+        public StructureRegistryOld Registry { get; private set; }
 
         public StructureLifetimeUtilities LifetimeUtilities { get; private set; }
 
@@ -23,7 +23,7 @@ namespace DarkFrontier.Structures
         private BehaviorTimekeeper _timekeeper;
 
         public void Construct(
-            (BehaviorTimekeeper, StructureRegistry, StructureLifetimeUtilities, StructureSerializationUtilities) args)
+            (BehaviorTimekeeper, StructureRegistryOld, StructureLifetimeUtilities, StructureSerializationUtilities) args)
         {
             var (timekeeper, registry, lifetimeUtilities, serializationUtilities) = args;
             _timekeeper = timekeeper;

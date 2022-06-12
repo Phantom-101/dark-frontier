@@ -10,7 +10,7 @@ namespace DarkFrontier.Positioning.Sectors
 
         public void Author()
         {
-            var component = ComponentUtils.AddOrGet<SectorComponent>(gameObject);
+            var component = gameObject.AddOrGet<SectorComponent>();
             component.Initialize();
             component.Set(instance);
             Destroy(this);

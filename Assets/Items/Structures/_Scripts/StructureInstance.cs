@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using DarkFrontier.Attributes;
+using DarkFrontier.Controllers.New;
 using DarkFrontier.Data.Values;
 using DarkFrontier.Factions;
 using DarkFrontier.Foundation.Services;
+using DarkFrontier.Game.Essentials;
 using DarkFrontier.Items._Scripts;
-using DarkFrontier.Items.Equipment;
 using DarkFrontier.Items.Segments;
 using DarkFrontier.Positioning.Sectors;
 using Newtonsoft.Json;
@@ -37,13 +38,42 @@ namespace DarkFrontier.Items.Structures
         [field: SerializeReference] [JsonProperty("segments")]
         public Dictionary<string, SegmentInstance> SegmentRecords { get; private set; } = new();
 
-        public void ClearSegments() => Segments = Array.Empty<SegmentComponent>();
-
-        public void FindSegments(GameObject gameObject) => Segments = gameObject.GetComponentsInChildren<SegmentComponent>();
-
+        [field: SerializeReference] [JsonProperty("generation")]
+        public MutableValue<float> Generation { get; private set; } = new(0);
+        
+        [field: SerializeReference] [JsonProperty("capacitance")]
+        public MutableValue<float> Capacitance { get; private set; } = new(0);
+        
         [field: SerializeReference] [JsonProperty("capacitor")]
-        public CapacitorValue Capacitor { get; private set; } = new(new MutableValue<float>(0));
-
+        public float Capacitor { get; private set; }
+        
+        [field: SerializeReference] [JsonProperty("speed-linear")]
+        public MutableValue<float> LinearSpeed { get; private set; } = new(0);
+        
+        [field: SerializeReference] [JsonProperty("speed-angular")]
+        public MutableValue<float> AngularSpeed { get; private set; } = new(0);
+        
+        [field: SerializeReference] [JsonProperty("acceleration-linear")]
+        public MutableValue<float> LinearAcceleration { get; private set; } = new(0);
+        
+        [field: SerializeReference] [JsonProperty("acceleration-angular")]
+        public MutableValue<float> AngularAcceleration { get; private set; } = new(0);
+        
+        [field: SerializeReference] [JsonProperty("target-linear")]
+        public Vector3 LinearTarget { get; set; }
+        
+        [field: SerializeReference] [JsonProperty("target-angular")]
+        public Vector3 AngularTarget { get; set; }
+        
+        [field: SerializeReference] [JsonProperty("shielding")]
+        public MutableValue<float> Shielding { get; private set; } = new(0);
+        
+        [field: SerializeReference] [JsonProperty("reinforcement")]
+        public MutableValue<float> Reinforcement { get; private set; } = new(0);
+        
+        [field: SerializeReference] [JsonProperty("shield")]
+        public float Shield { get; private set; }
+        
         [field: SerializeReference]
         public Faction? Faction { get; private set; }
 
@@ -61,6 +91,9 @@ namespace DarkFrontier.Items.Structures
 
         [field: SerializeField] [JsonProperty("selected-id")]
         public string SelectedId { get; private set; } = "";
+
+        [field: SerializeReference] [JsonProperty("controller")]
+        public Controller Controller { get; private set; } = new();
         
         public StructureInstance()
         {
@@ -81,43 +114,10 @@ namespace DarkFrontier.Items.Structures
             SectorId = authoring.sector;
             SelectedId = authoring.selected;
         }
+        
+        public void ClearSegments() => Segments = Array.Empty<SegmentComponent>();
 
-        public void Equip(string segment, SegmentInstance? instance)
-        {
-            for(int i = 0, l = Segments.Length; i < l; i++)
-            {
-                var segmentComponent = Segments[i];
-                if(segmentComponent.Name == segment)
-                {
-                    segmentComponent.Equip(instance);
-                    break;
-                }
-            }
-        }
-
-        public void Equip(string segment, string equipment, EquipmentInstance? instance)
-        {
-            for(int i = 0, li = Segments.Length; i < li; i++)
-            {
-                var segmentComponent = Segments[i];
-                if(segmentComponent.Name == segment)
-                {
-                    if(segmentComponent.Instance != null)
-                    {
-                        for(int j = 0, lj = segmentComponent.Instance!.Equipment.Length; j < lj; j++)
-                        {
-                            var equipmentComponent = segmentComponent.Instance!.Equipment[j];
-                            if(equipmentComponent.Name == equipment)
-                            {
-                                equipmentComponent.Equip(instance);
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-        }
+        public void FindSegments(GameObject gameObject) => Segments = gameObject.GetComponentsInChildren<SegmentComponent>();
         
         public void ToSerialized(StructureComponent component)
         {
@@ -156,7 +156,7 @@ namespace DarkFrontier.Items.Structures
             base.FromSerialized();
             Faction = FactionId.Length > 0 ? Singletons.Get<FactionManager>().Registry.Find(FactionId) : Faction;
             Sector = SectorId.Length > 0 ? null : Sector;
-            Selected = SelectedId.Length > 0 ? null : Selected;
+            Selected = SelectedId.Length > 0 ? Singletons.Get<IdRegistry>().Get<StructureComponent>(SelectedId) : Selected;
         }
 
         public bool Equals(StructureInstance? other)
@@ -174,25 +174,6 @@ namespace DarkFrontier.Items.Structures
         public override int GetHashCode()
         {
             return base.GetHashCode();
-        }
-
-        [Serializable]
-        public class CapacitorValue : MutableValue<float>
-        {
-            [field: SerializeField] [JsonProperty("max")]
-            public MutableValue<float> Max { get; private set; }
-            
-            public CapacitorValue(MutableValue<float> max) : base(0)
-            {
-                Max = max;
-            }
-
-            public override void Update()
-            {
-                base.Update();
-                if(Value > Max.Value) Value = Max.Value;
-                if(Value < 0) Value = 0;
-            }
         }
     }
 }

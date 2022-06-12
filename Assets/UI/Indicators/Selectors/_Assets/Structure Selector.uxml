@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="pivot" style="height: 0; width: 0; position: absolute;">
-        <ui:VisualElement name="selector" style="width: 100px; height: 100px; position: absolute; left: -50px; top: -50px; background-image: url(&apos;project://database/Assets/UI/Indicators/Selectors/_Assets/Structure%20Selector.png?fileID=2800000&amp;guid=648d0dae6e62d6043acc0d6e67a3c384&amp;type=3#Structure Selector&apos;);" />
-    </ui:VisualElement>
+    <ui:Template name="Structure Unselected" src="project://database/Assets/UI/Indicators/Selectors/_Assets/Structure%20Unselected.uxml?fileID=9197481963319205126&amp;guid=0051c41335b8cd340865cda6c999e7d4&amp;type=3#Structure Unselected" />
+    <ui:Template name="Structure Selected" src="project://database/Assets/UI/Indicators/Selectors/_Assets/Structure%20Selected.uxml?fileID=9197481963319205126&amp;guid=0688e40aaed96764fba1d92894312923&amp;type=3#Structure Selected" />
+    <ui:Instance template="Structure Unselected" name="unselected" />
+    <ui:Instance template="Structure Selected" name="selected" picking-mode="Ignore" />
 </ui:UXML>

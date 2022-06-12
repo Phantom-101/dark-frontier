@@ -22,7 +22,9 @@ MonoBehaviour:
   poolHp: 50
   rating: 0
   hullIndicator: {fileID: 0}
-  selectorPrefab: {fileID: 3620263769258084297, guid: 410e4a159da0a14489844ae93fa2fa04,
+  selectorElement: {fileID: 9197481963319205126, guid: d5ccad8c9260d624086f7509235c717b,
+    type: 3}
+  selectedElement: {fileID: 9197481963319205126, guid: 0909cbead2f17534780f6c97067de153,
     type: 3}
   prefab: {fileID: 4114420131141302008, guid: 9d75e9f876729114b874fff38bf6d237, type: 3}
   destructionFx: {fileID: 0}

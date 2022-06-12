@@ -8,9 +8,9 @@ namespace DarkFrontier.Data.Values
     public class IntAddMutator : ValueMutator<int>
     {
         [SerializeReference, JsonProperty("parameter")]
-        public MutableValue<int> parameter;
+        public IValue<int> parameter;
 
-        public IntAddMutator(MutableValue<int> parameter, int order) : base(order)
+        public IntAddMutator(IValue<int> parameter, int order) : base(order)
         {
             this.parameter = parameter;
         }
@@ -25,9 +25,9 @@ namespace DarkFrontier.Data.Values
     public class FloatAddMutator : ValueMutator<float>
     {
         [SerializeReference, JsonProperty("parameter")]
-        public MutableValue<float> parameter;
+        public IValue<float> parameter;
         
-        public FloatAddMutator(MutableValue<float> parameter, int order) : base(order)
+        public FloatAddMutator(IValue<float> parameter, int order) : base(order)
         {
             this.parameter = parameter;
         }

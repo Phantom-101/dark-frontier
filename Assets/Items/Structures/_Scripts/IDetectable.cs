@@ -1,16 +1,13 @@
-﻿using UnityEngine;
-using UnityEngine.UIElements;
+﻿using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Structures
 {
     public interface IDetectable
     {
-        bool IsDetected(StructureInstance detector);
+        bool IsDetectedBy(StructureComponent detector);
 
         VisualElement CreateSelector();
 
-        Vector3 GetSelectorPosition();
-
-        VisualElement CreateSelected();
+        void UpdateSelector(VisualElement selector, bool selected);
     }
 }

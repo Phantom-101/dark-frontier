@@ -1,10 +1,8 @@
 ﻿#nullable enable
-using Unity.IL2CPP.CompilerServices;
 using UnityEngine;
 
 namespace DarkFrontier.Utils
 {
-    [Il2CppEagerStaticClassConstruction]
     public static class GameObjectUtils
     {
         public static void DestroyChildren(this Transform transform)

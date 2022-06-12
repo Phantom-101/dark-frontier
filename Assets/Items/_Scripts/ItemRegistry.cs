@@ -1,43 +1,21 @@
 ﻿#nullable enable
 using System;
-using UnityEditor;
+using DarkFrontier.Game.Essentials;
 using UnityEngine;
 
 namespace DarkFrontier.Items._Scripts
 {
-    [Serializable]
-    public class ItemRegistry
+    public class ItemRegistry : MonoBehaviour
     {
-        [SerializeField]
-        private ItemPrototype[] prototypes;
-        
-        public ItemRegistry()
-        {
-            var ids = AssetDatabase.FindAssets($"t: {typeof(ItemPrototype)}");
-            var l = ids.Length;
-            prototypes = new ItemPrototype[l];
-            for(var i = 0; i < l; i++)
-            {
-                prototypes[i] = AssetDatabase.LoadAssetAtPath<ItemPrototype>(AssetDatabase.GUIDToAssetPath(ids[i]));
-            }
-        }
+        public ItemPrototype[] items = Array.Empty<ItemPrototype>();
 
-        public ItemRegistry(ItemPrototype[] prototypes)
+        public void Register(IdRegistry registry)
         {
-            this.prototypes = prototypes;
-        }
-        
-        public ItemPrototype? Get(string id)
-        {
-            for (int i = 0, l = prototypes.Length; i < l; i++)
+            for(int i = 0, l = items.Length; i < l; i++)
             {
-                if (prototypes[i].id.Equals(id))
-                {
-                    return prototypes[i];
-                }
+                registry.Register(items[i]);
             }
-
-            return null;
+            Destroy(this);
         }
     }
 }

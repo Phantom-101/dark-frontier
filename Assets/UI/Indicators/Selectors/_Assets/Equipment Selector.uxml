@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="pivot" style="height: 0; width: 0; position: absolute;">
-        <ui:VisualElement name="selector" style="width: 100px; height: 100px; position: absolute; left: -50px; top: -50px; background-image: url(&apos;project://database/Assets/UI/Indicators/Selectors/_Assets/Equipment%20Selector.png?fileID=2800000&amp;guid=3746f781b57ed9d45a18881ad84027a3&amp;type=3#Equipment Selector&apos;);" />
-    </ui:VisualElement>
+    <ui:Template name="Equipment Unselected" src="project://database/Assets/UI/Indicators/Selectors/_Assets/Equipment%20Unselected.uxml?fileID=9197481963319205126&amp;guid=26f602f14737fce4fb19ef4734aee601&amp;type=3#Equipment Unselected" />
+    <ui:Template name="Equipment Selected" src="project://database/Assets/UI/Indicators/Selectors/_Assets/Equipment%20Selected.uxml?fileID=9197481963319205126&amp;guid=28de9b89a9e66894887b8e4597d1e8cc&amp;type=3#Equipment Selected" />
+    <ui:Instance template="Equipment Unselected" name="unselected" />
+    <ui:Instance template="Equipment Selected" name="selected" picking-mode="Ignore" />
 </ui:UXML>

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DarkFrontier.Items.Structures;
-using UnityEngine;
 
 namespace DarkFrontier.UI.Indicators.Selectors
 {
-    [Serializable]
     public class DetectableRegistry
     {
-        [field: SerializeReference]
-        public List<IDetectable> Detectables { get; private set; } = new();
+        public List<IDetectable> Registry { get; } = new();
+        
+        public void Register(IDetectable detectable) => Registry.Add(detectable);
+
+        public void Unregister(IDetectable detectable) => Registry.Remove(detectable);
     }
 }

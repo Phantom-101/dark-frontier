@@ -35,6 +35,10 @@ namespace DarkFrontier.Items.Equipment
         {
         }
 
+        public virtual void OnTick(EquipmentComponent component, float deltaTime)
+        {
+        }
+
         public bool Equals(EquipmentInstance? other)
         {
             return !ReferenceEquals(null, other) && ReferenceEquals(this, other);

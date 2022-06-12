@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b631ed5d83fe9f45ac195241758721a, type: 3}
+  m_Name: Delta Defender Mk III Old
+  m_EditorClassIdentifier: 
+  Name: Delta Defender Mk III
+  Description: An advanced warship and escort. This is the 3rd iteration of this
+    class and has successfully deterred many raids on Delta supply lines and shipyards.
+  Id: items.structures.delta-defender-mk-iii
+  Icon: {fileID: 21300000, guid: 2edd48736cc841a40b05446b5ae47c48, type: 3}
+  Volume: 0
+  Tags: []
+  Usable: 0
+  Prefab: {fileID: 2869013932428447122, guid: 01d3b3e41279c74489c131c0b41597bb, type: 3}
+  ApparentSize: 190
+  HullWireframe: {fileID: 21300000, guid: 5f56fb9ca780c664e94278c0651f1afe, type: 3}
+  ShowBlip: 1
+  DestructionEffect: {fileID: 1121192042590650, guid: 83859e68a02a8e2499f66e422ff236e4,
+    type: 3}
+  SnapToPlane: 0
+  Stats:
+    MaxHull: 4500
+    LinearMaxSpeedMultiplier: 1
+    AngularMaxSpeedMultiplier: 1
+    LinearAccelerationMultiplier: 1
+    AngularAccelerationMultiplier: 1
+    SensorStrength: 600
+    ScannerStrength: 0.36
+    Detectability: 20000
+    SignatureSize: 1.3
+    MaxTargetLocks: 3
+    CargoDropPercentage: 1
+    InventoryVolume: 10000

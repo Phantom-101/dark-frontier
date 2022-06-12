@@ -20,7 +20,9 @@ MonoBehaviour:
   tags: []
   hp: 10
   rating: 0
-  selectorPrefab: {fileID: 7341360710056660641, guid: d55fba9fd77cc9241b9118d5cc9daf8a,
+  selectorElement: {fileID: 9197481963319205126, guid: 6117028934baddb4bb183aa330e4acc7,
+    type: 3}
+  selectedElement: {fileID: 9197481963319205126, guid: 28de9b89a9e66894887b8e4597d1e8cc,
     type: 3}
   prefab: {fileID: 8859105003078640317, guid: c94bb9d57458f824bba9e92761d8a303, type: 3}
   destructionFx: {fileID: 0}

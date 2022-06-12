@@ -13,38 +13,75 @@ namespace DarkFrontier.UI.Indicators.Selectors
         private UIDocument _document = null!;
         private DetectableRegistry _registry = null!;
 
-        private Dictionary<IDetectable, VisualElement> _selectors = new();
+        private IDetectable? _selected;
 
+        private readonly Dictionary<IDetectable, VisualElement> _selectors = new();
+        
         private void Start()
         {
-            _document = ComponentUtils.AddOrGet<UIDocument>(gameObject);
+            _document = gameObject.AddOrGet<UIDocument>();
             _registry = Singletons.Get<DetectableRegistry>();
         }
 
         private void Update()
         {
-            for(int i = 0, l = _registry.Detectables.Count; i < l; i++)
+            TrimSelectors();
+            UpdateSelectors();
+        }
+
+        private void TrimSelectors()
+        {
+            foreach(IDetectable key in _selectors.Keys)
             {
-                if(!_selectors.ContainsKey(_registry.Detectables[i]))
+                if(key == null)
                 {
-                    var selector = _registry.Detectables[i].CreateSelector();
-                    _document.rootVisualElement.Add(selector);
-                    _selectors[_registry.Detectables[i]] = selector;
+                    Destroy(key!, _selectors[key!]);
                 }
-                // TODO check detectability
-                var position = _registry.Detectables[i].GetSelectorPosition();
-                var element = _selectors[_registry.Detectables[i]];
-                if(position.z > 0)
+            }
+        }
+
+        private void UpdateSelectors()
+        {
+            // ReSharper disable once TooWideLocalVariableScope
+            IDetectable cur;
+            for(int i = 0, l = _registry.Registry.Count; i < l; i++)
+            {
+                cur = _registry.Registry[i];
+                if(_selectors.ContainsKey(cur))
                 {
-                    element.style.visibility = Visibility.Visible;
-                    element.style.left = new StyleLength(new Length(position.x * 100, LengthUnit.Percent));
-                    element.style.top = new StyleLength(new Length(100 - position.y * 100, LengthUnit.Percent));
+                    Update(cur, _selectors[cur]);
                 }
                 else
                 {
-                    element.style.visibility = Visibility.Hidden;
+                    var element = Create(cur);
+                    Update(cur, element);
                 }
             }
+        }
+        
+        private VisualElement Create(IDetectable detectable)
+        {
+            var selector = detectable.CreateSelector();
+            _document.rootVisualElement.Add(selector);
+            selector.Q("unselected").RegisterCallback<ClickEvent, IDetectable>(OnClick, detectable);
+            _selectors[detectable] = selector;
+            return selector;
+        }
+
+        private void Destroy(IDetectable detectable, VisualElement selector)
+        {
+            _document.rootVisualElement.Remove(selector);
+            _selectors.Remove(detectable);
+        }
+
+        private void Update(IDetectable detectable, VisualElement selector)
+        {
+            detectable.UpdateSelector(selector, _selected == detectable);
+        }
+        
+        private void OnClick(ClickEvent evt, IDetectable detectable)
+        {
+            _selected = detectable;
         }
     }
 }

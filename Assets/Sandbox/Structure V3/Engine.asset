@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 085ce595939d42eba1659a8ddceed00d, type: 3}
+  m_Name: Engine
+  m_EditorClassIdentifier: 
+  id: 268410d0-1a75-46ce-a386-f17df01fe90c
+  name: Engine
+  description: 
+  volume: 0
+  icon: {fileID: 0}
+  tags: []
+  hp: 0
+  rating: 0
+  selectorElement: {fileID: 9197481963319205126, guid: 6117028934baddb4bb183aa330e4acc7,
+    type: 3}
+  prefab: {fileID: 0}
+  destructionFx: {fileID: 0}
+  linearSpeed: 10
+  angularSpeed: 0.5
+  linearAcceleration: 20
+  angularAcceleration: 1

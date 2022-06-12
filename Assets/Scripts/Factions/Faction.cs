@@ -17,8 +17,8 @@ namespace DarkFrontier.Factions {
         [SerializeField] private long wealth;
         public StringToFloatDictionary Relations { get => relations; }
         [SerializeField] private StringToFloatDictionary relations = new StringToFloatDictionary ();
-        public StructureRegistry Property { get => property; }
-        [SerializeField] private StructureRegistry property = new StructureRegistry ();
+        public StructureRegistryOld Property { get => property; }
+        [SerializeField] private StructureRegistryOld property = new StructureRegistryOld ();
 
         public Faction () { }
         public Faction (FactionSaveData saveData) : this () {

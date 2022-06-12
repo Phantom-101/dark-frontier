@@ -8,12 +8,12 @@ namespace DarkFrontier.Data.Values
     public class IntClampMutator : ValueMutator<int>
     {
         [SerializeReference, JsonProperty("min")]
-        public MutableValue<int> min;
+        public IValue<int> min;
 
         [SerializeReference, JsonProperty("max")]
-        public MutableValue<int> max;
+        public IValue<int> max;
 
-        public IntClampMutator(MutableValue<int> min, MutableValue<int> max, int order) : base(order)
+        public IntClampMutator(IValue<int> min, IValue<int> max, int order) : base(order)
         {
             this.min = min;
             this.max = max;
@@ -29,12 +29,12 @@ namespace DarkFrontier.Data.Values
     public class FloatClampMutator : ValueMutator<float>
     {
         [SerializeReference, JsonProperty("min")]
-        public MutableValue<float> min;
+        public IValue<float> min;
 
         [SerializeReference, JsonProperty("max")]
-        public MutableValue<float> max;
+        public IValue<float> max;
         
-        public FloatClampMutator(MutableValue<float> min, MutableValue<float> max, int order) : base(order)
+        public FloatClampMutator(IValue<float> min, IValue<float> max, int order) : base(order)
         {
             this.min = min;
             this.max = max;

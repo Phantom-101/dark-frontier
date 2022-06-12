@@ -1,19 +1,13 @@
-using UnityEngine;
+using System.Collections.Generic;
 
 namespace DarkFrontier.Positioning.Sectors
 {
-    public class SectorRegistry : MonoBehaviour
+    public class SectorRegistry
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
+        public List<SectorComponent> Registry { get; } = new();
 
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
+        public void Register(SectorComponent sector) => Registry.Add(sector);
+
+        public void Unregister(SectorComponent sector) => Registry.Remove(sector);
     }
 }
