@@ -1,5 +1,6 @@
 #nullable enable
 using System.Collections.Generic;
+using DarkFrontier.Controllers.New;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Items.Structures;
 using DarkFrontier.Utils;
@@ -12,15 +13,15 @@ namespace DarkFrontier.UI.Indicators.Selectors
     {
         private UIDocument _document = null!;
         private DetectableRegistry _registry = null!;
+        private PlayerController _playerController = null!;
 
-        private IDetectable? _selected;
+        private readonly Dictionary<ISelectable, VisualElement> _selectors = new();
 
-        private readonly Dictionary<IDetectable, VisualElement> _selectors = new();
-        
         private void Start()
         {
             _document = gameObject.AddOrGet<UIDocument>();
             _registry = Singletons.Get<DetectableRegistry>();
+            _playerController = Singletons.Get<PlayerController>();
         }
 
         private void Update()
@@ -31,9 +32,9 @@ namespace DarkFrontier.UI.Indicators.Selectors
 
         private void TrimSelectors()
         {
-            foreach(IDetectable key in _selectors.Keys)
+            foreach(ISelectable key in _selectors.Keys)
             {
-                if(key == null)
+                if(key == null || key.SelectorDirty)
                 {
                     Destroy(key!, _selectors[key!]);
                 }
@@ -43,7 +44,7 @@ namespace DarkFrontier.UI.Indicators.Selectors
         private void UpdateSelectors()
         {
             // ReSharper disable once TooWideLocalVariableScope
-            IDetectable cur;
+            ISelectable cur;
             for(int i = 0, l = _registry.Registry.Count; i < l; i++)
             {
                 cur = _registry.Registry[i];
@@ -58,30 +59,33 @@ namespace DarkFrontier.UI.Indicators.Selectors
                 }
             }
         }
-        
-        private VisualElement Create(IDetectable detectable)
+
+        private VisualElement Create(ISelectable selectable)
         {
-            var selector = detectable.CreateSelector();
+            var selector = selectable.CreateSelector();
             _document.rootVisualElement.Add(selector);
-            selector.Q("unselected").RegisterCallback<ClickEvent, IDetectable>(OnClick, detectable);
-            _selectors[detectable] = selector;
+            selector.Q("unselected").RegisterCallback<ClickEvent, ISelectable>(OnClick, selectable);
+            _selectors[selectable] = selector;
             return selector;
         }
 
-        private void Destroy(IDetectable detectable, VisualElement selector)
+        private void Destroy(ISelectable selectable, VisualElement selector)
         {
             _document.rootVisualElement.Remove(selector);
-            _selectors.Remove(detectable);
+            _selectors.Remove(selectable);
         }
 
-        private void Update(IDetectable detectable, VisualElement selector)
+        private void Update(ISelectable selectable, VisualElement selector)
         {
-            detectable.UpdateSelector(selector, _selected == detectable);
+            selectable.UpdateSelector(_playerController.Player != null && _playerController.Player.Instance?.Selected == selectable);
         }
-        
-        private void OnClick(ClickEvent evt, IDetectable detectable)
+
+        private void OnClick(ClickEvent evt, ISelectable selectable)
         {
-            _selected = detectable;
+            if(_playerController.Player != null && _playerController.Player.Instance != null)
+            {
+                _playerController.Player.Instance.Selected = selectable;
+            }
         }
     }
 }

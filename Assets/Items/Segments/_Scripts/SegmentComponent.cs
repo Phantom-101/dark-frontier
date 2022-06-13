@@ -13,7 +13,7 @@ using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Segments
 {
-    public class SegmentComponent : MonoBehaviour, IId, IDetectable
+    public class SegmentComponent : MonoBehaviour, ISelectable
     {
         [field: SerializeReference, ReadOnly]
         public StructureComponent? Structure { get; private set; }
@@ -49,7 +49,11 @@ namespace DarkFrontier.Items.Segments
         
         private IdRegistry _idRegistry = null!;
         private DetectableRegistry _detectableRegistry = null!;
-        private UnityEngine.Camera _camera = null!;
+
+        [ReadOnly]
+        public new UnityEngine.Camera camera = null!;
+        
+        public bool SelectorDirty { get; private set; }
         
         public void Initialize(StructureComponent component)
         {
@@ -57,7 +61,7 @@ namespace DarkFrontier.Items.Segments
             Structure = component;
             _idRegistry = Singletons.Get<IdRegistry>();
             _detectableRegistry = Singletons.Get<DetectableRegistry>();
-            _camera = Singletons.Get<UnityEngine.Camera>();
+            camera = Singletons.Get<UnityEngine.Camera>();
             _initialized = true;
         }
 
@@ -76,6 +80,7 @@ namespace DarkFrontier.Items.Segments
             Disable();
             Unregister();
             Instance = instance;
+            SelectorDirty = true;
             Register();
         }
         
@@ -149,35 +154,20 @@ namespace DarkFrontier.Items.Segments
             }
         }
         
-        public bool IsDetectedBy(StructureComponent structure)
+        public bool CanBeSelectedBy(StructureComponent other)
         {
-            return Structure != null && Structure.IsDetectedBy(structure);
+            return Structure != null && Structure.CanBeSelectedBy(other);
         }
 
         public VisualElement CreateSelector()
         {
-            var element = Instance!.Prototype.selectorElement!.CloneTree();
-            element.Q("selected").Q<Label>("name").text = Instance?.Prototype.name ?? "";
-            return element;
+            SelectorDirty = false;
+            return Instance?.CreateSelector() ?? new VisualElement();
         }
 
-        public void UpdateSelector(VisualElement selector, bool selected)
+        public void UpdateSelector(bool selected)
         {
-            var position = _camera.WorldToViewportPoint(transform.position);
-            if(position.z > 0)
-            {
-                selector.style.visibility = Visibility.Visible;
-                selector.style.left = new StyleLength(new Length(position.x * 100, LengthUnit.Percent));
-                selector.style.top = new StyleLength(new Length(100 - position.y * 100, LengthUnit.Percent));
-                
-                selector.Q("selected").style.visibility = selected ? Visibility.Visible : Visibility.Hidden;
-                selector.Q("unselected").style.visibility = selected ? Visibility.Hidden : Visibility.Visible;
-                selector.Q("unselected").pickingMode = selected ? PickingMode.Ignore : PickingMode.Position;
-            }
-            else
-            {
-                selector.style.visibility = Visibility.Hidden;
-            }
+            Instance?.UpdateSelector(this, selected);
         }
     }
 }

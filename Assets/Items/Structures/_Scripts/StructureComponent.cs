@@ -12,7 +12,7 @@ using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Structures
 {
-    public class StructureComponent : MonoBehaviour, IId, IDetectable
+    public class StructureComponent : MonoBehaviour, ISelectable
     {
         [field: SerializeReference]
         public StructureInstance? Instance { get; private set; }
@@ -32,10 +32,14 @@ namespace DarkFrontier.Items.Structures
         private StructureRegistry _structureRegistry = null!;
         private DetectableRegistry _detectableRegistry = null!;
         private PlayerController _playerController = null!;
-        private UnityEngine.Camera _camera = null!;
-        
+
         [ReadOnly]
         public new Rigidbody rigidbody = null!;
+        
+        [ReadOnly]
+        public new UnityEngine.Camera camera = null!;
+
+        public bool SelectorDirty => false;
         
         public void Initialize()
         {
@@ -45,7 +49,7 @@ namespace DarkFrontier.Items.Structures
             _detectableRegistry = Singletons.Get<DetectableRegistry>();
             _playerController = Singletons.Get<PlayerController>();
             rigidbody = gameObject.AddOrGet<Rigidbody>();
-            _camera = Singletons.Get<UnityEngine.Camera>();
+            camera = Singletons.Get<UnityEngine.Camera>();
             _initialized = true;
         }
 
@@ -137,6 +141,21 @@ namespace DarkFrontier.Items.Structures
         public void Tick(float deltaTime)
         {
             if(Instance == null) return;
+            
+            if(_playerController.Player != this)
+            {
+                Instance.Controller.Tick(this);
+            }
+
+            for(int i = 0, l = Instance.Segments.Length; i < l; i++)
+            {
+                Instance.Segments[i].Tick(deltaTime);
+            }
+        }
+
+        public void FixedTick(float deltaTime)
+        {
+            if(Instance == null) return;
 
             var normLinear = Instance.LinearTarget.sqrMagnitude > 1 ? Instance.LinearTarget.normalized : Instance.LinearTarget;
             var curLinear = rigidbody.velocity;
@@ -151,54 +170,21 @@ namespace DarkFrontier.Items.Structures
             var offsetAngular = targetAngular - curAngular;
             var deltaAngular = offsetAngular.normalized * Instance.AngularAcceleration.Value * deltaTime;
             rigidbody.AddTorque(offsetAngular.sqrMagnitude < deltaAngular.sqrMagnitude ? offsetAngular : deltaAngular, ForceMode.VelocityChange);
-            
-            if(_playerController.Player != this)
-            {
-                Instance.Controller.Tick(this);
-            }
-
-            for(int i = 0, l = Instance.Segments.Length; i < l; i++)
-            {
-                Instance.Segments[i].Tick(deltaTime);
-            }
         }
         
-        public bool IsDetectedBy(StructureComponent structure)
+        public bool CanBeSelectedBy(StructureComponent other)
         {
             return true;
         }
 
         public VisualElement CreateSelector()
         {
-            var element = Instance!.Prototype.selectorElement!.CloneTree();
-            element.Q("selected").Q<Label>("name").text = Instance?.Prototype.name ?? "";
-            return element;
+            return Instance?.CreateSelector() ?? new VisualElement();
         }
 
-        public void UpdateSelector(VisualElement selector, bool selected)
+        public void UpdateSelector(bool selected)
         {
-            if(_playerController.Player != null && IsDetectedBy(_playerController.Player))
-            {
-                var position = _camera.WorldToViewportPoint(transform.position);
-                if(position.z > 0)
-                {
-                    selector.style.visibility = Visibility.Visible;
-                    selector.style.left = new StyleLength(new Length(position.x * 100, LengthUnit.Percent));
-                    selector.style.top = new StyleLength(new Length(100 - position.y * 100, LengthUnit.Percent));
-                    
-                    selector.Q("selected").style.visibility = selected ? Visibility.Visible : Visibility.Hidden;
-                    selector.Q("unselected").style.visibility = selected ? Visibility.Hidden : Visibility.Visible;
-                    selector.Q("unselected").pickingMode = selected ? PickingMode.Ignore : PickingMode.Position;
-                }
-                else
-                {
-                    selector.style.visibility = Visibility.Hidden;
-                }
-            }
-            else
-            {
-                selector.style.visibility = Visibility.Hidden;
-            }
+            Instance?.UpdateSelector(this, selected);
         }
     }
 }

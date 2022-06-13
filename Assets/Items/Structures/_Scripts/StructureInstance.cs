@@ -12,6 +12,7 @@ using DarkFrontier.Items.Segments;
 using DarkFrontier.Positioning.Sectors;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Structures
 {
@@ -87,13 +88,21 @@ namespace DarkFrontier.Items.Structures
         public string SectorId { get; private set; } = "";
         
         [field: SerializeReference]
-        public StructureComponent? Selected { get; private set; }
+        public ISelectable? Selected { get; set; }
 
         [field: SerializeField] [JsonProperty("selected-id")]
         public string SelectedId { get; private set; } = "";
 
         [field: SerializeReference] [JsonProperty("controller")]
         public Controller Controller { get; private set; } = new();
+        
+        private VisualElement _selector = null!;
+        private VisualElement _selected = null!;
+        private VisualElement _unselected = null!;
+        
+        public void ClearSegments() => Segments = Array.Empty<SegmentComponent>();
+
+        public void FindSegments(GameObject gameObject) => Segments = gameObject.GetComponentsInChildren<SegmentComponent>();
         
         public StructureInstance()
         {
@@ -114,10 +123,34 @@ namespace DarkFrontier.Items.Structures
             SectorId = authoring.sector;
             SelectedId = authoring.selected;
         }
-        
-        public void ClearSegments() => Segments = Array.Empty<SegmentComponent>();
 
-        public void FindSegments(GameObject gameObject) => Segments = gameObject.GetComponentsInChildren<SegmentComponent>();
+        public virtual VisualElement CreateSelector()
+        {
+            _selector = Prototype.selectorElement!.CloneTree();
+            _selector.Q<Label>("name").text = Prototype.name;
+            _selected = _selector.Q("selected");
+            _unselected = _selector.Q("unselected");
+            return _selector;
+        }
+
+        public virtual void UpdateSelector(StructureComponent component, bool selected)
+        {
+            var position = component.camera.WorldToViewportPoint(component.transform.position);
+            if(position.z > 0)
+            {
+                _selector.style.visibility = Visibility.Visible;
+                _selector.style.left = new StyleLength(new Length(position.x * 100, LengthUnit.Percent));
+                _selector.style.top = new StyleLength(new Length(100 - position.y * 100, LengthUnit.Percent));
+                
+                _selected.style.visibility = selected ? Visibility.Visible : Visibility.Hidden;
+                _unselected.style.visibility = selected ? Visibility.Hidden : Visibility.Visible;
+                _unselected.pickingMode = selected ? PickingMode.Ignore : PickingMode.Position;
+            }
+            else
+            {
+                _selector.style.visibility = Visibility.Hidden;
+            }
+        }
         
         public void ToSerialized(StructureComponent component)
         {
@@ -132,7 +165,7 @@ namespace DarkFrontier.Items.Structures
             base.ToSerialized();
             FactionId = Faction?.Id ?? "";
             SectorId = Sector == null ? "" : Sector.Instance?.Id ?? "";
-            SelectedId = Selected == null ? "" : Selected.Instance?.Id ?? "";
+            SelectedId = Selected == null ? "" : Selected.Id;
             SegmentRecords.Clear();
             for(int i = 0, l = Segments.Length; i < l; i++)
             {
@@ -156,7 +189,7 @@ namespace DarkFrontier.Items.Structures
             base.FromSerialized();
             Faction = FactionId.Length > 0 ? Singletons.Get<FactionManager>().Registry.Find(FactionId) : Faction;
             Sector = SectorId.Length > 0 ? null : Sector;
-            Selected = SelectedId.Length > 0 ? Singletons.Get<IdRegistry>().Get<StructureComponent>(SelectedId) : Selected;
+            Selected = SelectedId.Length > 0 ? Singletons.Get<IdRegistry>().Get<ISelectable>(SelectedId) : Selected;
         }
 
         public bool Equals(StructureInstance? other)

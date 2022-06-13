@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 namespace DarkFrontier.Positioning.Sectors
 {
-    public class SectorComponent : MonoBehaviour, IId, IDetectable
+    public class SectorComponent : MonoBehaviour, ISelectable
     {
         [field: SerializeReference]
         public SectorInstance? Instance { get; private set; }
@@ -32,7 +32,11 @@ namespace DarkFrontier.Positioning.Sectors
         private IdRegistry _idRegistry = null!;
         private SectorRegistry _sectorRegistry = null!;
         private DetectableRegistry _detectableRegistry = null!;
-        private UnityEngine.Camera _camera = null!;
+        
+        [ReadOnly]
+        public new UnityEngine.Camera camera = null!;
+
+        public bool SelectorDirty => false;
         
         public void Initialize()
         {
@@ -40,7 +44,7 @@ namespace DarkFrontier.Positioning.Sectors
             _idRegistry = Singletons.Get<IdRegistry>();
             _sectorRegistry = Singletons.Get<SectorRegistry>();
             _detectableRegistry = Singletons.Get<DetectableRegistry>();
-            _camera = Singletons.Get<UnityEngine.Camera>();
+            camera = Singletons.Get<UnityEngine.Camera>();
             _initialized = true;
         }
 
@@ -103,35 +107,19 @@ namespace DarkFrontier.Positioning.Sectors
             }
         }
         
-        public bool IsDetectedBy(StructureComponent structure)
+        public bool CanBeSelectedBy(StructureComponent other)
         {
-            return structure.Instance?.Sector != this;
+            return other.Instance?.Sector != this;
         }
 
         public VisualElement CreateSelector()
         {
-            var element = Addressables.LoadAssetAsync<VisualTreeAsset>(Instance!.SelectorAddressableKey).WaitForCompletion().CloneTree();
-            element.Q("selected").Q<Label>("name").text = Instance?.Name ?? "";
-            return element;
+            return Instance?.CreateSelector() ?? new VisualElement();
         }
 
-        public void UpdateSelector(VisualElement selector, bool selected)
+        public void UpdateSelector(bool selected)
         {
-            var position = Instance == null ? Vector3.zero : _camera.WorldToViewportPoint(Instance.Position);
-            if(position.z > 0)
-            {
-                selector.style.visibility = Visibility.Visible;
-                selector.style.left = new StyleLength(new Length(position.x * 100, LengthUnit.Percent));
-                selector.style.top = new StyleLength(new Length(100 - position.y * 100, LengthUnit.Percent));
-                
-                selector.Q("selected").style.visibility = selected ? Visibility.Visible : Visibility.Hidden;
-                selector.Q("unselected").style.visibility = selected ? Visibility.Hidden : Visibility.Visible;
-                selector.Q("unselected").pickingMode = selected ? PickingMode.Ignore : PickingMode.Position;
-            }
-            else
-            {
-                selector.style.visibility = Visibility.Hidden;
-            }
+            Instance?.UpdateSelector(this, selected);
         }
     }
 }

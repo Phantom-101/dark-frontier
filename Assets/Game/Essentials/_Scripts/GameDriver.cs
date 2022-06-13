@@ -103,7 +103,7 @@ namespace DarkFrontier.Game.Essentials
         {
             _uiStack.Tick();
             TickSectors();
-            TickStructures();
+            _structureRegistry.Tick(UnityEngine.Time.deltaTime);
             TickPlayer();
         }
 
@@ -115,14 +115,6 @@ namespace DarkFrontier.Game.Essentials
             }
         }
 
-        private void TickStructures()
-        {
-            for(int i = 0, l = _structureRegistry.Registry.Count; i < l; i++)
-            {
-                _structureRegistry.Registry[i].Tick(UnityEngine.Time.deltaTime);
-            }
-        }
-
         private void TickPlayer()
         {
             _playerController.Tick();
@@ -131,6 +123,11 @@ namespace DarkFrontier.Game.Essentials
                 _cameraSpring.target = _playerController.Player == null ? null : _playerController.Player.transform;
                 _cameraSpring.Tick();
             }
+        }
+
+        private void FixedUpdate()
+        {
+            _structureRegistry.FixedTick(UnityEngine.Time.fixedDeltaTime);
         }
     }
 }

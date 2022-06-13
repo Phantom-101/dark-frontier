@@ -14,6 +14,8 @@ namespace DarkFrontier.Items.Equipment
 
         public VisualTreeAsset? selectorElement;
 
+        public VisualTreeAsset? indicatorElement;
+
         public GameObject? prefab;
         
         public GameObject? destructionFx;

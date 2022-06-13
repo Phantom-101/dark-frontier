@@ -5,10 +5,10 @@ namespace DarkFrontier.UI.Indicators.Selectors
 {
     public class DetectableRegistry
     {
-        public List<IDetectable> Registry { get; } = new();
+        public List<ISelectable> Registry { get; } = new();
         
-        public void Register(IDetectable detectable) => Registry.Add(detectable);
+        public void Register(ISelectable selectable) => Registry.Add(selectable);
 
-        public void Unregister(IDetectable detectable) => Registry.Remove(detectable);
+        public void Unregister(ISelectable selectable) => Registry.Remove(selectable);
     }
 }
