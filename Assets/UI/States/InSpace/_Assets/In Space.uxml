@@ -1,6 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="Large Status" src="project://database/Assets/UI/Indicators/Status/_Assets/Large%20Status.uxml?fileID=9197481963319205126&amp;guid=f0ac032a3ac383049b16bd82d8bc2c58&amp;type=3#Large Status" />
-    <ui:Template name="Equipment Button" src="project://database/Assets/UI/Indicators/Equipment/_Assets/Equipment%20Button.uxml?fileID=9197481963319205126&amp;guid=2ce76e9643fa7984ebd944d3dc0ee5f0&amp;type=3#Equipment Button" />
     <ui:Template name="Blue Modifier" src="project://database/Assets/UI/Indicators/Modifiers/_Assets/Blue%20Modifier.uxml?fileID=9197481963319205126&amp;guid=be9d9bab6a2141c46a064e9dc8e44275&amp;type=3#Blue Modifier" />
     <ui:Template name="Green Modifier" src="project://database/Assets/UI/Indicators/Modifiers/_Assets/Green%20Modifier.uxml?fileID=9197481963319205126&amp;guid=d82f650d5d9a37c439d0014e48c211d6&amp;type=3#Green Modifier" />
     <ui:Template name="Red Modifier" src="project://database/Assets/UI/Indicators/Modifiers/_Assets/Red%20Modifier.uxml?fileID=9197481963319205126&amp;guid=f06a77fe221f8134eb933fdb15670f7d&amp;type=3#Red Modifier" />
@@ -12,10 +11,7 @@
     </ui:VisualElement>
     <ui:Instance template="Large Status" name="target" picking-mode="Ignore" style="width: 30%; position: absolute; right: 0; top: 0; height: 20%;" />
     <ui:Slider picking-mode="Ignore" value="0" high-value="1" name="acceleration" low-value="-1" direction="Vertical" style="position: absolute; right: 10%; height: 30%; top: 35%;" />
-    <ui:VisualElement name="equipment" picking-mode="Ignore" style="position: absolute; right: 0; top: 20%; width: 10%; height: 80%; justify-content: flex-end; align-items: flex-end;">
-        <ui:Instance template="Equipment Button" name="Equipment Button" />
-        <ui:Instance template="Equipment Button" name="Equipment Button" />
-    </ui:VisualElement>
+    <DarkFrontier.UI.Indicators.Equipment.EquipmentList name="equipment" style="position: absolute; top: 20%; right: 0; align-items: flex-end; justify-content: flex-end; width: 10%; height: 80%;" />
     <ui:VisualElement name="modifiers" picking-mode="Ignore" style="position: absolute; bottom: 10%; width: 100%; height: 50px; flex-direction: row; justify-content: center;">
         <ui:Instance template="Blue Modifier" name="Blue Modifier" />
         <ui:Instance template="Green Modifier" name="Green Modifier" />

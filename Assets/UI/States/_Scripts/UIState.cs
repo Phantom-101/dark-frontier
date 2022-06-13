@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using DarkFrontier.Utils;
+﻿using DarkFrontier.Utils;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,7 +12,7 @@ namespace DarkFrontier.UI.States.New
         {
             document.rootVisualElement.style.opacity = 0;
             document.rootVisualElement.style.AddTransition("opacity", 0, 0.5f, EasingMode.Ease);
-            StartCoroutine(ChangeOpacity(1));
+            document.rootVisualElement.schedule.Execute(() => document.rootVisualElement.style.opacity = 1);
         }
 
         public virtual void OnStateRemain()
@@ -22,13 +21,9 @@ namespace DarkFrontier.UI.States.New
 
         public virtual void OnStateExit()
         {
-            StartCoroutine(ChangeOpacity(0));
-        }
-
-        private IEnumerator ChangeOpacity(float target)
-        {
-            yield return null;
-            document.rootVisualElement.style.opacity = target;
+            document.rootVisualElement.style.opacity = 1;
+            document.rootVisualElement.style.AddTransition("opacity", 0, 0.5f, EasingMode.Ease);
+            document.rootVisualElement.schedule.Execute(() => document.rootVisualElement.style.opacity = 0);
         }
     }
 }

@@ -2,6 +2,8 @@
 using DarkFrontier.Controllers.New;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Input;
+using DarkFrontier.UI.Indicators.Equipment;
+using DarkFrontier.UI.Indicators.Interactions;
 using DarkFrontier.UI.Indicators.Modifiers;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -22,6 +24,9 @@ namespace DarkFrontier.UI.States.InSpace
         private RadialProgressBar _capacitor = null!;
         private RadialProgressBar _speed = null!;
         private Slider _acceleration = null!;
+        private EquipmentList _equipment = null!;
+        // private ModifierList _modifiers = null!;
+        private InteractionList _interactions = null!;
 
         private PlayerController _playerController = null!;
 
@@ -34,12 +39,13 @@ namespace DarkFrontier.UI.States.InSpace
             _speed = document.rootVisualElement.Q<RadialProgressBar>("speed");
             _acceleration = document.rootVisualElement.Q<Slider>("acceleration");
             _playerController = Singletons.Get<PlayerController>();
+            _equipment = document.rootVisualElement.Q<EquipmentList>("equipment");
+            _equipment.Initialize();
+            _interactions = document.rootVisualElement.Q<InteractionList>("interactions");
         }
 
         public override void OnStateRemain()
         {
-            forward.Send(_acceleration.value > 0 ? _acceleration.value : 0);
-            backward.Send(_acceleration.value > 0 ? 0 : -_acceleration.value);
             if(_playerController.Player != null && _playerController.Player.Instance != null)
             {
                 var component = _playerController.Player;
@@ -60,6 +66,9 @@ namespace DarkFrontier.UI.States.InSpace
             _shield.MarkDirtyRepaint();
             _capacitor.MarkDirtyRepaint();
             _speed.MarkDirtyRepaint();
+            forward.Send(_acceleration.value > 0 ? _acceleration.value : 0);
+            backward.Send(_acceleration.value > 0 ? 0 : -_acceleration.value);
+            _equipment.Tick();
         }
     }
 }

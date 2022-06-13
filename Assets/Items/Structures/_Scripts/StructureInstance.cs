@@ -8,6 +8,7 @@ using DarkFrontier.Factions;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Game.Essentials;
 using DarkFrontier.Items._Scripts;
+using DarkFrontier.Items.Equipment;
 using DarkFrontier.Items.Segments;
 using DarkFrontier.Positioning.Sectors;
 using Newtonsoft.Json;
@@ -38,6 +39,22 @@ namespace DarkFrontier.Items.Structures
         
         [field: SerializeReference] [JsonProperty("segments")]
         public Dictionary<string, SegmentInstance> SegmentRecords { get; private set; } = new();
+
+        public EquipmentComponent[] Equipment
+        {
+            get
+            {
+                List<EquipmentComponent> components = new();
+                for(int i = 0, l = Segments.Length; i < l; i++)
+                {
+                    if(Segments[i].Instance != null)
+                    {
+                        components.AddRange(Segments[i].Instance!.Equipment);
+                    }
+                }
+                return components.ToArray();
+            }
+        }
 
         [field: SerializeReference] [JsonProperty("generation")]
         public MutableValue<float> Generation { get; private set; } = new(0);

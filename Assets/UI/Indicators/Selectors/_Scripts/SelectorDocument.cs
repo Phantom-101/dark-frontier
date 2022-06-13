@@ -36,7 +36,7 @@ namespace DarkFrontier.UI.Indicators.Selectors
             {
                 if(key == null || key.SelectorDirty)
                 {
-                    Destroy(key!, _selectors[key!]);
+                    Destroy(key!);
                 }
             }
         }
@@ -50,32 +50,31 @@ namespace DarkFrontier.UI.Indicators.Selectors
                 cur = _registry.Registry[i];
                 if(_selectors.ContainsKey(cur))
                 {
-                    Update(cur, _selectors[cur]);
+                    Update(cur);
                 }
                 else
                 {
-                    var element = Create(cur);
-                    Update(cur, element);
+                    Create(cur);
+                    Update(cur);
                 }
             }
         }
 
-        private VisualElement Create(ISelectable selectable)
+        private void Create(ISelectable selectable)
         {
             var selector = selectable.CreateSelector();
             _document.rootVisualElement.Add(selector);
             selector.Q("unselected").RegisterCallback<ClickEvent, ISelectable>(OnClick, selectable);
             _selectors[selectable] = selector;
-            return selector;
         }
 
-        private void Destroy(ISelectable selectable, VisualElement selector)
+        private void Destroy(ISelectable selectable)
         {
-            _document.rootVisualElement.Remove(selector);
+            _document.rootVisualElement.Remove(_selectors[selectable]);
             _selectors.Remove(selectable);
         }
 
-        private void Update(ISelectable selectable, VisualElement selector)
+        private void Update(ISelectable selectable)
         {
             selectable.UpdateSelector(_playerController.Player != null && _playerController.Player.Instance?.Selected == selectable);
         }

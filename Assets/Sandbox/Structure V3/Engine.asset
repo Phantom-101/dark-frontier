@@ -22,6 +22,7 @@ MonoBehaviour:
   rating: 0
   selectorElement: {fileID: 9197481963319205126, guid: 6117028934baddb4bb183aa330e4acc7,
     type: 3}
+  indicatorElement: {fileID: 0}
   prefab: {fileID: 0}
   destructionFx: {fileID: 0}
   linearSpeed: 10
