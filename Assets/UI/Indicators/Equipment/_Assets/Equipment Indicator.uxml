@@ -1,21 +1,21 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="rect" style="width: 100px; height: 90px;">
-        <ui:VisualElement name="bg" style="background-image: url(&apos;project://database/Assets/Textures/UI/Equipment/Equipment%20Background.png?fileID=2800000&amp;guid=b6e596d12d64002499432de43f324712&amp;type=3#Equipment Background&apos;); width: 100px; height: 100px; position: absolute; top: -5px;" />
-        <ui:VisualElement name="center-rect" style="position: absolute; left: 23px; top: 12px; width: 66px; height: 66px;">
-            <ui:VisualElement name="center-fill" style="overflow: hidden; bottom: 0; position: absolute; width: 100%; height: 100%;">
+        <ui:VisualElement name="bg" picking-mode="Ignore" style="background-image: url(&apos;project://database/Assets/Textures/UI/Equipment/Equipment%20Background.png?fileID=2800000&amp;guid=b6e596d12d64002499432de43f324712&amp;type=3#Equipment Background&apos;); width: 100px; height: 100px; position: absolute; top: -5px;" />
+        <ui:VisualElement name="center-rect" picking-mode="Ignore" style="position: absolute; left: 23px; top: 12px; width: 66px; height: 66px;">
+            <ui:VisualElement name="center-fill" picking-mode="Ignore" style="overflow: hidden; bottom: 0; position: absolute; width: 100%; height: 100%;">
                 <ui:VisualElement name="center" picking-mode="Ignore" style="background-image: url(&apos;project://database/Assets/Textures/UI/Equipment/Equipment%20Center.png?fileID=2800000&amp;guid=f313a039fdfab7347882a7b616d7e973&amp;type=3#Equipment Center&apos;); width: 100px; height: 100px; position: absolute; -unity-background-image-tint-color: rgb(255, 255, 255); left: -23px; bottom: -17px;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="side-rect" style="position: absolute; left: 6px; top: 7.5px; width: 12px; height: 75px;">
-            <ui:VisualElement name="side-fill" style="position: absolute; width: 100%; height: 100%; overflow: hidden; bottom: 0;">
+        <ui:VisualElement name="side-rect" picking-mode="Ignore" style="position: absolute; left: 6px; top: 7.5px; width: 12px; height: 75px;">
+            <ui:VisualElement name="side-fill" picking-mode="Ignore" style="position: absolute; width: 100%; height: 100%; overflow: hidden; bottom: 0;">
                 <ui:VisualElement name="side" picking-mode="Ignore" style="background-image: url(&apos;project://database/Assets/Textures/UI/Equipment/Equipment%20Side.png?fileID=2800000&amp;guid=5e2a67853c695c949a054bf88e8cff2b&amp;type=3#Equipment Side&apos;); width: 100px; height: 100px; position: absolute; -unity-background-image-tint-color: rgb(128, 128, 255); left: -6px; bottom: -12.5px;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="bottom-rect" style="position: absolute; left: 21px; top: 76px; width: 32px; height: 7px;">
-            <ui:VisualElement name="bottom-fill" style="position: absolute; left: 0; width: 100%; height: 100%; overflow: hidden;">
+        <ui:VisualElement name="bottom-rect" picking-mode="Ignore" style="position: absolute; left: 21px; top: 76px; width: 32px; height: 7px;">
+            <ui:VisualElement name="bottom-fill" picking-mode="Ignore" style="position: absolute; left: 0; width: 100%; height: 100%; overflow: hidden;">
                 <ui:VisualElement name="bottom" picking-mode="Ignore" style="background-image: url(&apos;project://database/Assets/Textures/UI/Equipment/Equipment%20Bottom.png?fileID=2800000&amp;guid=672c2495965f9d44496db0ca7fe47f82&amp;type=3#Equipment Bottom&apos;); width: 100px; height: 100px; position: absolute; -unity-background-image-tint-color: rgb(255, 128, 128); top: -81px; left: -21px;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="img" style="background-image: url(&apos;project://database/Assets/Textures/Items/Equipment/Capacitor.tif?fileID=2800000&amp;guid=608ebddc3abdb6547a511a17e26df53f&amp;type=3#Capacitor&apos;); width: 60px; height: 60px; position: absolute; right: 14px; top: 15px;" />
+        <ui:VisualElement name="img" picking-mode="Ignore" style="background-image: url(&apos;project://database/Assets/Textures/Items/Equipment/Capacitor.tif?fileID=2800000&amp;guid=608ebddc3abdb6547a511a17e26df53f&amp;type=3#Capacitor&apos;); width: 60px; height: 60px; position: absolute; right: 14px; top: 15px;" />
     </ui:VisualElement>
 </ui:UXML>

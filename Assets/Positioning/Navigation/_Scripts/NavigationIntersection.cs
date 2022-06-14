@@ -1,7 +1,7 @@
-﻿using DarkFrontier.Attributes;
+﻿#nullable enable
+using DarkFrontier.Attributes;
 using DarkFrontier.Utils;
 using UnityEngine;
-
 
 namespace DarkFrontier.Positioning.Navigation
 {

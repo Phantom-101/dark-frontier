@@ -4,6 +4,7 @@ using DarkFrontier.Foundation.Services;
 using DarkFrontier.Game.Essentials;
 using DarkFrontier.Items.Equipment;
 using DarkFrontier.Items.Segments;
+using DarkFrontier.Items.Structures.New;
 using DarkFrontier.UI.Indicators.Selectors;
 using DarkFrontier.Utils;
 using Unity.Collections;
@@ -170,6 +171,11 @@ namespace DarkFrontier.Items.Structures
             var offsetAngular = targetAngular - curAngular;
             var deltaAngular = offsetAngular.normalized * Instance.AngularAcceleration.Value * deltaTime;
             rigidbody.AddTorque(offsetAngular.sqrMagnitude < deltaAngular.sqrMagnitude ? offsetAngular : deltaAngular, ForceMode.VelocityChange);
+        }
+
+        public void TakeDamage(Damage damage)
+        {
+            
         }
         
         public bool CanBeSelectedBy(StructureComponent other)

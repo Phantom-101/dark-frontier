@@ -56,9 +56,9 @@ namespace DarkFrontier.Positioning.Navigation
                     ret.Add(end);
                     break;
                 }
-                var cross = Vector3.Cross(ray.Dir, Vector3.up);
+                var cross = Vector3.Cross(ray.dir, Vector3.up);
                 var offset = cross * intersected.RoughSize();
-                ret.AddRange(GetRoute(current, current = MovePointOutOfAabb(intersected.Center + offset), depth + 1));
+                ret.AddRange(GetRoute(current, current = MovePointOutOfAabb((intersected.min + intersected.max) / 2 + offset), depth + 1));
             }
             return ret;
         }
@@ -71,7 +71,7 @@ namespace DarkFrontier.Positioning.Navigation
             {
                 box = Registry.Colliders[i].Aabb;
                 if(!box.Contains(point)) continue;
-                var dir = (point - box.Center).normalized;
+                var dir = (point - (box.min + box.max) / 2).normalized;
                 if(dir == Vector3.zero) dir = Vector3.up;
                 return MovePointOutOfAabb(point + dir * box.RoughSize());
             }

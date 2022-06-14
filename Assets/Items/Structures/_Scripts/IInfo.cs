@@ -1,5 +1,4 @@
-﻿
-namespace DarkFrontier.Items.Structures
+﻿namespace DarkFrontier.Items.Structures
 {
     public interface IInfo
     {
