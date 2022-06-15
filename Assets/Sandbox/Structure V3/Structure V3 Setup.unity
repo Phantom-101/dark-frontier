@@ -1200,6 +1200,7 @@ MonoBehaviour:
   prototype: {fileID: 11400000, guid: 315b876034520ae428dcfe961fe2c2b0, type: 2}
   id: 638ff16d-3dac-4920-b45b-64efe4727433
   name: Station
+  hp: 99999
   faction: 
   sector: 
   selected: 
@@ -1214,6 +1215,7 @@ GameObject:
   m_Component:
   - component: {fileID: 564198686}
   - component: {fileID: 564198687}
+  - component: {fileID: 564198688}
   m_Layer: 0
   m_Name: Equipment
   m_TagString: Untagged
@@ -1251,6 +1253,22 @@ MonoBehaviour:
   slot: Engine
   prototype: {fileID: 11400000, guid: 87330c970f3403f4a9923ad592233e77, type: 2}
   id: d5fd3b70-1a9b-4803-aecc-07c87fdded29
+  name: Equipment
+--- !u!114 &564198688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564198685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f7a58cc32184998b75f4732af25fd43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slot: Weapon
+  prototype: {fileID: 11400000, guid: 24a2f709392b3254e860b09dfce8bb8d, type: 2}
+  id: 8e62aea9-ce38-4f30-8c49-f0eaaf26a8e0
   name: Equipment
 --- !u!1001 &593796195
 PrefabInstance:
@@ -3693,6 +3711,7 @@ MonoBehaviour:
   prototype: {fileID: 11400000, guid: 61243d9cdc8fd3e45b1e345c0d583700, type: 2}
   id: 83964d9e-6d00-4ac6-8f9e-2f8efe062ee8
   name: Structure
+  hp: 99999
   faction: 
   sector: 
   selected: 

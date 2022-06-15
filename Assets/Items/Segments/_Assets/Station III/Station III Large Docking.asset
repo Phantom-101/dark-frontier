@@ -18,13 +18,11 @@ MonoBehaviour:
   volume: 0
   icon: {fileID: 0}
   tags: []
-  hp: 0
-  poolHp: 0
+  hp: 25000
+  poolHp: 20000
   rating: 0
   hullIndicator: {fileID: 0}
   selectorElement: {fileID: 9197481963319205126, guid: d5ccad8c9260d624086f7509235c717b,
-    type: 3}
-  selectedElement: {fileID: 9197481963319205126, guid: 0909cbead2f17534780f6c97067de153,
     type: 3}
   prefab: {fileID: 7751824551949074356, guid: 8bbdeeaab2876ca419215ba4b836adc4, type: 3}
   destructionFx: {fileID: 0}

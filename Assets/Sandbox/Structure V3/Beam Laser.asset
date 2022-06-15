@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae9aaf1442808c44bcbefede0fa900e, type: 3}
+  m_Name: Beam Laser
+  m_EditorClassIdentifier: 
+  id: 7cdd2459-2997-410a-bcca-0bd18e7bb32e
+  name: Beam Laser
+  description: 
+  volume: 0
+  icon: {fileID: 0}
+  tags: []
+  hp: 0
+  rating: 0
+  selectorElement: {fileID: 9197481963319205126, guid: 6117028934baddb4bb183aa330e4acc7,
+    type: 3}
+  indicatorElement: {fileID: 9197481963319205126, guid: 2ce76e9643fa7984ebd944d3dc0ee5f0,
+    type: 3}
+  prefab: {fileID: 0}
+  destructionFx: {fileID: 0}
+  damage:
+    field: 25
+    explosive: 0
+    particle: 75
+    kinetic: 0
+  multiplier: 2
+  gain: 0.01
+  interval: 1

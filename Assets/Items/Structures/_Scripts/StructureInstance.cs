@@ -11,6 +11,7 @@ using DarkFrontier.Items._Scripts;
 using DarkFrontier.Items.Equipment;
 using DarkFrontier.Items.Segments;
 using DarkFrontier.Positioning.Sectors;
+using DarkFrontier.UI.Indicators.Modifiers;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -29,10 +30,10 @@ namespace DarkFrontier.Items.Structures
         public Vector3 Rotation { get; private set; }
 
         [field: SerializeField, ReadOnly] [JsonProperty("pool-hp-max")]
-        public float MaxHp { get; private set; }
+        public float MaxHp { get; set; }
 
         [field: SerializeField] [JsonProperty("pool-hp")]
-        public float CurrentHp { get; private set; }
+        public float CurrentHp { get; set; }
         
         [field: SerializeField, ReadOnly]
         public SegmentComponent[] Segments { get; private set; } = Array.Empty<SegmentComponent>();
@@ -116,6 +117,8 @@ namespace DarkFrontier.Items.Structures
         private VisualElement _selector = null!;
         private VisualElement _selected = null!;
         private VisualElement _unselected = null!;
+        private RadialProgressBar _hull = null!;
+        private RadialProgressBar _shield = null!;
         
         public void ClearSegments() => Segments = Array.Empty<SegmentComponent>();
 
@@ -136,6 +139,7 @@ namespace DarkFrontier.Items.Structures
             var transform = authoring.transform;
             Position = transform.localPosition;
             Rotation = transform.localEulerAngles;
+            CurrentHp = authoring.hp;
             FactionId = authoring.faction;
             SectorId = authoring.sector;
             SelectedId = authoring.selected;
@@ -147,6 +151,8 @@ namespace DarkFrontier.Items.Structures
             _selector.Q<Label>("name").text = Prototype.name;
             _selected = _selector.Q("selected");
             _unselected = _selector.Q("unselected");
+            _hull = _selector.Q<RadialProgressBar>("hull");
+            _shield = _selector.Q<RadialProgressBar>("shield");
             return _selector;
         }
 
@@ -159,9 +165,22 @@ namespace DarkFrontier.Items.Structures
                 _selector.style.left = new StyleLength(new Length(position.x * 100, LengthUnit.Percent));
                 _selector.style.top = new StyleLength(new Length(100 - position.y * 100, LengthUnit.Percent));
                 
-                _selected.style.visibility = selected ? Visibility.Visible : Visibility.Hidden;
-                _unselected.style.visibility = selected ? Visibility.Hidden : Visibility.Visible;
-                _unselected.pickingMode = selected ? PickingMode.Ignore : PickingMode.Position;
+                if(selected)
+                {
+                    _selected.style.visibility = Visibility.Visible;
+                    _unselected.style.visibility = Visibility.Hidden;
+                    _unselected.pickingMode = PickingMode.Ignore;
+                    _hull.Value = MaxHp == 0 ? 0 : Mathf.Clamp01(CurrentHp / MaxHp) / 4;
+                    _shield.Value = Shielding.Value == 0 ? 0 : Mathf.Clamp01(Shield / Shielding.Value) / 4;
+                    _hull.MarkDirtyRepaint();
+                    _shield.MarkDirtyRepaint();
+                }
+                else
+                {
+                    _selected.style.visibility = Visibility.Hidden;
+                    _unselected.style.visibility = Visibility.Visible;
+                    _unselected.pickingMode = PickingMode.Position;
+                }
             }
             else
             {
@@ -180,9 +199,9 @@ namespace DarkFrontier.Items.Structures
         public override void ToSerialized()
         {
             base.ToSerialized();
-            FactionId = Faction?.Id ?? "";
-            SectorId = Sector == null ? "" : Sector.Instance?.Id ?? "";
-            SelectedId = Selected == null ? "" : Selected.Id;
+            FactionId = Faction?.Id ?? string.Empty;
+            SectorId = Sector == null ? string.Empty : Sector.Instance?.Id ?? string.Empty;
+            SelectedId = Selected == null ? string.Empty : Selected.Id;
             SegmentRecords.Clear();
             for(int i = 0, l = Segments.Length; i < l; i++)
             {
@@ -204,9 +223,9 @@ namespace DarkFrontier.Items.Structures
         public override void FromSerialized()
         {
             base.FromSerialized();
-            Faction = FactionId.Length > 0 ? Singletons.Get<FactionManager>().Registry.Find(FactionId) : Faction;
-            Sector = SectorId.Length > 0 ? null : Sector;
-            Selected = SelectedId.Length > 0 ? Singletons.Get<IdRegistry>().Get<ISelectable>(SelectedId) : Selected;
+            Faction = string.IsNullOrEmpty(FactionId) ? Faction : Singletons.Get<FactionManager>().Registry.Find(FactionId);
+            Sector = string.IsNullOrEmpty(SectorId) ? Sector : Singletons.Get<IdRegistry>().Get<SectorComponent>(SectorId);
+            Selected = string.IsNullOrEmpty(SelectedId) ? Selected : Singletons.Get<IdRegistry>().Get<ISelectable>(SelectedId);
         }
 
         public bool Equals(StructureInstance? other)

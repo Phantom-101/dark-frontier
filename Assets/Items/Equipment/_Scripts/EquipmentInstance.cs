@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using DarkFrontier.Items._Scripts;
+using DarkFrontier.UI.Indicators.Modifiers;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,6 +18,7 @@ namespace DarkFrontier.Items.Equipment
         private VisualElement _selector = null!;
         private VisualElement _selected = null!;
         private VisualElement _unselected = null!;
+        private RadialProgressBar _durability = null!;
         
         public EquipmentInstance()
         {
@@ -50,6 +52,7 @@ namespace DarkFrontier.Items.Equipment
             _selector.Q<Label>("name").text = Prototype.name;
             _selected = _selector.Q("selected");
             _unselected = _selector.Q("unselected");
+            _durability = _selector.Q<RadialProgressBar>("durability");
             return _selector;
         }
 
@@ -62,9 +65,20 @@ namespace DarkFrontier.Items.Equipment
                 _selector.style.left = new StyleLength(new Length(position.x * 100, LengthUnit.Percent));
                 _selector.style.top = new StyleLength(new Length(100 - position.y * 100, LengthUnit.Percent));
                 
-                _selected.style.visibility = selected ? Visibility.Visible : Visibility.Hidden;
-                _unselected.style.visibility = selected ? Visibility.Hidden : Visibility.Visible;
-                _unselected.pickingMode = selected ? PickingMode.Ignore : PickingMode.Position;
+                if(selected)
+                {
+                    _selected.style.visibility = Visibility.Visible;
+                    _unselected.style.visibility = Visibility.Hidden;
+                    _unselected.pickingMode = PickingMode.Ignore;
+                    _durability.Value = Prototype.hp == 0 ? 0 : Mathf.Clamp01(Hp / Prototype.hp) / 4;
+                    _durability.MarkDirtyRepaint();
+                }
+                else
+                {
+                    _selected.style.visibility = Visibility.Hidden;
+                    _unselected.style.visibility = Visibility.Visible;
+                    _unselected.pickingMode = PickingMode.Position;
+                }
             }
             else
             {

@@ -16,16 +16,16 @@ namespace DarkFrontier.Items._Scripts
         public ItemPrototype Prototype { get; private set; } = null!;
         
         [field: SerializeReference] [JsonProperty("prototype-id")]
-        public string PrototypeId { get; private init; } = "";
+        public string PrototypeId { get; private init; } = string.Empty;
         
         [field: SerializeReference] [JsonProperty("id")]
         public string Id { get; protected set; } = Guid.NewGuid().ToString();
         
         [field: SerializeReference] [JsonProperty("name")]
-        public string Name { get; protected set; } = "";
+        public string Name { get; protected set; } = string.Empty;
         
         [field: SerializeReference, TextArea] [JsonProperty("description")]
-        public string Description { get; protected set; } = "";
+        public string Description { get; protected set; } = string.Empty;
 
         public ItemInstance()
         {

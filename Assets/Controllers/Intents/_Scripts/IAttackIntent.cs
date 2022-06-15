@@ -4,6 +4,6 @@ namespace DarkFrontier.Controllers.Intents
 {
     public interface IAttackIntent
     {
-        void TryAttack(ISelectable target);
+        void Attack(ISelectable target);
     }
 }

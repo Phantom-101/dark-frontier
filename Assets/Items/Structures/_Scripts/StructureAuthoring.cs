@@ -12,9 +12,10 @@ namespace DarkFrontier.Items.Structures
         public StructurePrototype? prototype;
         public string id = Guid.NewGuid().ToString();
         public new string name = "Structure";
-        public string faction = "";
-        public string sector = "";
-        public string selected = "";
+        public float hp;
+        public string faction = string.Empty;
+        public string sector = string.Empty;
+        public string selected = string.Empty;
         public bool randomizeId = true;
 
         public void Author()
@@ -43,16 +44,28 @@ namespace DarkFrontier.Items.Structures
                     var equipment = segments[i].GetComponentsInChildren<EquipmentAuthoring>();
                     for(int j = 0, lj = equipment.Length; j < lj; j++)
                     {
-                        if(equipment[i].prototype != null)
+                        if(equipment[j].prototype != null)
                         {
-                            var equipmentInstance = (EquipmentInstance)equipment[i].prototype!.NewInstance();
-                            equipmentInstance.Apply(equipment[i]);
-                            component.Equip(segments[i].slot, equipment[i].slot, equipmentInstance);
+                            var equipmentInstance = (EquipmentInstance)equipment[j].prototype!.NewInstance();
+                            equipmentInstance.Apply(equipment[j]);
+                            component.Equip(segments[i].slot, equipment[j].slot, equipmentInstance);
                         }
-                        Destroy(equipment[i].gameObject);
+                    }
+                    for(int j = 0, lj = equipment.Length; j < lj; j++)
+                    {
+                        if(equipment[j].gameObject != null)
+                        {
+                            Destroy(equipment[j].gameObject);
+                        }
                     }
                 }
-                Destroy(segments[i].gameObject);
+            }
+            for(int i = 0, li = segments.Length; i < li; i++)
+            {
+                if(segments[i].gameObject != null)
+                {
+                    Destroy(segments[i].gameObject);
+                }
             }
             Destroy(this);
         }

@@ -142,15 +142,17 @@ namespace DarkFrontier.Items.Structures
         public void Tick(float deltaTime)
         {
             if(Instance == null) return;
-            
-            if(_playerController.Player != this)
+            if((Instance.CurrentHp = Mathf.Clamp(Instance.CurrentHp, 0, Instance.MaxHp)) == 0)
             {
-                Instance.Controller.Tick(this);
+                // TODO destroy structure
             }
-
             for(int i = 0, l = Instance.Segments.Length; i < l; i++)
             {
                 Instance.Segments[i].Tick(deltaTime);
+            }
+            if(_playerController.Player != this)
+            {
+                Instance.Controller.Tick(this);
             }
         }
 
@@ -173,9 +175,21 @@ namespace DarkFrontier.Items.Structures
             rigidbody.AddTorque(offsetAngular.sqrMagnitude < deltaAngular.sqrMagnitude ? offsetAngular : deltaAngular, ForceMode.VelocityChange);
         }
 
+        public void RecalculateMaxHp()
+        {
+            if(Instance == null) return;
+            Instance.MaxHp = 0;
+            for(int i = 0, l = Instance.Segments.Length; i < l; i++)
+            {
+                Instance.MaxHp += Instance.Segments[i].Instance?.Prototype.poolHp ?? 0;
+            }
+        }
+
         public void TakeDamage(Damage damage)
         {
-            
+            if(Instance == null) return;
+            // TODO temp logic
+            Instance.CurrentHp -= damage.Total;
         }
         
         public bool CanBeSelectedBy(StructureComponent other)

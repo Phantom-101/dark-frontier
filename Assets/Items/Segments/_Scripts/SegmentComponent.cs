@@ -80,6 +80,10 @@ namespace DarkFrontier.Items.Segments
             Disable();
             Unregister();
             Instance = instance;
+            if(Structure != null)
+            {
+                Structure.RecalculateMaxHp();
+            }
             SelectorDirty = true;
             Register();
         }
