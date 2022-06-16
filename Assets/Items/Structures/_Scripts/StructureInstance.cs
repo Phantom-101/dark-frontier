@@ -34,7 +34,19 @@ namespace DarkFrontier.Items.Structures
 
         [field: SerializeField] [JsonProperty("pool-hp")]
         public float CurrentHp { get; set; }
+
+        [field: SerializeField] [JsonProperty("hull-field-resist")]
+        public MutableValue<float> HullFieldResist { get; private set; } = new(0);
         
+        [field: SerializeField] [JsonProperty("hull-explosive-resist")]
+        public MutableValue<float> HullExplosiveResist { get; private set; } = new(0);
+        
+        [field: SerializeField] [JsonProperty("hull-particle-resist")]
+        public MutableValue<float> HullParticleResist { get; private set; } = new(0);
+        
+        [field: SerializeField] [JsonProperty("hull-kinetic-resist")]
+        public MutableValue<float> HullKineticResist { get; private set; } = new(0);
+
         [field: SerializeField, ReadOnly]
         public SegmentComponent[] Segments { get; private set; } = Array.Empty<SegmentComponent>();
         
@@ -57,41 +69,53 @@ namespace DarkFrontier.Items.Structures
             }
         }
 
-        [field: SerializeReference] [JsonProperty("generation")]
+        [field: SerializeField] [JsonProperty("generation")]
         public MutableValue<float> Generation { get; private set; } = new(0);
         
-        [field: SerializeReference] [JsonProperty("capacitance")]
+        [field: SerializeField] [JsonProperty("capacitance")]
         public MutableValue<float> Capacitance { get; private set; } = new(0);
         
-        [field: SerializeReference] [JsonProperty("capacitor")]
+        [field: SerializeField] [JsonProperty("capacitor")]
         public float Capacitor { get; private set; }
         
-        [field: SerializeReference] [JsonProperty("speed-linear")]
+        [field: SerializeField] [JsonProperty("speed-linear")]
         public MutableValue<float> LinearSpeed { get; private set; } = new(0);
         
-        [field: SerializeReference] [JsonProperty("speed-angular")]
+        [field: SerializeField] [JsonProperty("speed-angular")]
         public MutableValue<float> AngularSpeed { get; private set; } = new(0);
         
-        [field: SerializeReference] [JsonProperty("acceleration-linear")]
+        [field: SerializeField] [JsonProperty("acceleration-linear")]
         public MutableValue<float> LinearAcceleration { get; private set; } = new(0);
         
-        [field: SerializeReference] [JsonProperty("acceleration-angular")]
+        [field: SerializeField] [JsonProperty("acceleration-angular")]
         public MutableValue<float> AngularAcceleration { get; private set; } = new(0);
         
-        [field: SerializeReference] [JsonProperty("target-linear")]
+        [field: SerializeField] [JsonProperty("target-linear")]
         public Vector3 LinearTarget { get; set; }
         
-        [field: SerializeReference] [JsonProperty("target-angular")]
+        [field: SerializeField] [JsonProperty("target-angular")]
         public Vector3 AngularTarget { get; set; }
         
-        [field: SerializeReference] [JsonProperty("shielding")]
+        [field: SerializeField] [JsonProperty("shielding")]
         public MutableValue<float> Shielding { get; private set; } = new(0);
         
-        [field: SerializeReference] [JsonProperty("reinforcement")]
+        [field: SerializeField] [JsonProperty("reinforcement")]
         public MutableValue<float> Reinforcement { get; private set; } = new(0);
         
-        [field: SerializeReference] [JsonProperty("shield")]
-        public float Shield { get; private set; }
+        [field: SerializeField] [JsonProperty("shield")]
+        public float Shield { get; set; }
+        
+        [field: SerializeField] [JsonProperty("shield-field-resist")]
+        public MutableValue<float> ShieldFieldResist { get; private set; } = new(0);
+        
+        [field: SerializeField] [JsonProperty("shield-explosive-resist")]
+        public MutableValue<float> ShieldExplosiveResist { get; private set; } = new(0);
+        
+        [field: SerializeField] [JsonProperty("shield-particle-resist")]
+        public MutableValue<float> ShieldParticleResist { get; private set; } = new(0);
+        
+        [field: SerializeField] [JsonProperty("shield-kinetic-resist")]
+        public MutableValue<float> ShieldKineticResist { get; private set; } = new(0);
         
         [field: SerializeReference]
         public Faction? Faction { get; private set; }
@@ -99,19 +123,19 @@ namespace DarkFrontier.Items.Structures
         [field: SerializeField] [JsonProperty("faction-id")]
         public string FactionId { get; private set; } = "";
 
-        [field: SerializeReference]
+        [field: SerializeField]
         public SectorComponent? Sector { get; private set; }
 
         [field: SerializeField] [JsonProperty("sector-id")]
         public string SectorId { get; private set; } = "";
         
-        [field: SerializeReference]
+        [field: SerializeField]
         public ISelectable? Selected { get; set; }
 
         [field: SerializeField] [JsonProperty("selected-id")]
         public string SelectedId { get; private set; } = "";
 
-        [field: SerializeReference] [JsonProperty("controller")]
+        [field: SerializeField] [JsonProperty("controller")]
         public Controller Controller { get; private set; } = new();
         
         private VisualElement _selector = null!;

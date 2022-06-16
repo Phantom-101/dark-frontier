@@ -188,8 +188,25 @@ namespace DarkFrontier.Items.Structures
         public void TakeDamage(Damage damage)
         {
             if(Instance == null) return;
-            // TODO temp logic
-            Instance.CurrentHp -= damage.Total;
+            var scaledTotal = damage.field / (1 + Instance.ShieldFieldResist.Value)
+                              + damage.explosive / (1 + Instance.ShieldExplosiveResist.Value)
+                              + damage.particle / (1 + Instance.ShieldParticleResist.Value)
+                              + damage.kinetic / (1 + Instance.ShieldKineticResist.Value);
+            if(scaledTotal <= Instance.Shield)
+            {
+                Instance.Shield -= scaledTotal;
+            }
+            else
+            {
+                var absorbed = Instance.Shield / scaledTotal;
+                Instance.Shield = 0;
+                var scaledRemainder = damage.field / (1 + Instance.HullFieldResist.Value)
+                                      + damage.explosive / (1 + Instance.HullExplosiveResist.Value)
+                                      + damage.particle / (1 + Instance.HullParticleResist.Value)
+                                      + damage.kinetic / (1 + Instance.HullKineticResist.Value);
+                scaledRemainder *= 1 - absorbed;
+                Instance.CurrentHp -= scaledRemainder;
+            }
         }
         
         public bool CanBeSelectedBy(StructureComponent other)
