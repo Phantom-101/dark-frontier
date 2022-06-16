@@ -18,7 +18,7 @@ namespace DarkFrontier.Items.Equipment.Generators
         
         public GeneratorInstance(GeneratorPrototype prototype) : base(prototype)
         {
-            mutator = new FloatAddMutator(new ConstantValue<float>(Prototype.generation), 0);
+            mutator = new FloatAddMutator(new ConstantFloat(Prototype.generation), 0);
         }
         
         public override void OnEquipped(EquipmentComponent component)

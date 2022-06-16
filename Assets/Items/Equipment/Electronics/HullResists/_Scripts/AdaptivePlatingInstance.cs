@@ -27,10 +27,10 @@ namespace DarkFrontier.Items.Equipment.Electronics.HullResists
         
         public AdaptivePlatingInstance(AdaptivePlatingPrototype prototype) : base(prototype)
         {
-            fieldMutator = new FloatAddMutator(new ConstantValue<float>(Prototype.adaptation), 0);
-            explosiveMutator = new FloatAddMutator(new ConstantValue<float>(Prototype.adaptation), 0);
-            particleMutator = new FloatAddMutator(new ConstantValue<float>(Prototype.adaptation), 0);
-            kineticMutator = new FloatAddMutator(new ConstantValue<float>(Prototype.adaptation), 0);
+            fieldMutator = new FloatAddMutator(new ConstantFloat(Prototype.adaptation), 0);
+            explosiveMutator = new FloatAddMutator(new ConstantFloat(Prototype.adaptation), 0);
+            particleMutator = new FloatAddMutator(new ConstantFloat(Prototype.adaptation), 0);
+            kineticMutator = new FloatAddMutator(new ConstantFloat(Prototype.adaptation), 0);
         }
         
         public override void OnEquipped(EquipmentComponent component)

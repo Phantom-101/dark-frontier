@@ -27,10 +27,10 @@ namespace DarkFrontier.Items.Equipment.Engines
         
         public EngineInstance(EnginePrototype prototype) : base(prototype)
         {
-            linearSpeedMutator = new FloatMaxMutator(new ConstantValue<float>(Prototype.linearSpeed), 0);
-            angularSpeedMutator = new FloatMaxMutator(new ConstantValue<float>(Prototype.angularSpeed), 0);
-            linearAccelerationMutator = new FloatAddMutator(new ConstantValue<float>(Prototype.linearAcceleration), 0);
-            angularAccelerationMutator = new FloatAddMutator(new ConstantValue<float>(Prototype.angularAcceleration), 0);
+            linearSpeedMutator = new FloatMaxMutator(new ConstantFloat(Prototype.linearSpeed), 0);
+            angularSpeedMutator = new FloatMaxMutator(new ConstantFloat(Prototype.angularSpeed), 0);
+            linearAccelerationMutator = new FloatAddMutator(new ConstantFloat(Prototype.linearAcceleration), 0);
+            angularAccelerationMutator = new FloatAddMutator(new ConstantFloat(Prototype.angularAcceleration), 0);
         }
         
         public override void OnEquipped(EquipmentComponent component)

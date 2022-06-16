@@ -9,8 +9,7 @@ namespace DarkFrontier.Data.Values
     [Serializable, JsonObject(MemberSerialization.OptIn, IsReference = true)]
     public class ConstantValue<T> : IId, IValue<T>
     {
-        [field: SerializeReference]
-        [JsonProperty("id")]
+        [field: SerializeField] [JsonProperty("id")]
         public string Id { get; private set; } = Guid.NewGuid().ToString();
         
         public T Value { get; private init; }
@@ -22,5 +21,29 @@ namespace DarkFrontier.Data.Values
         public static implicit operator T(ConstantValue<T> constantValue) => constantValue.Value;
         
         public static implicit operator ConstantValue<T>(T value) => new(value);
+    }
+    
+    [Serializable]
+    public class ConstantInt : ConstantValue<int>
+    {
+        public ConstantInt()
+        {
+        }
+
+        public ConstantInt(int value) : base(value)
+        {
+        }
+    }
+    
+    [Serializable]
+    public class ConstantFloat : ConstantValue<float>
+    {
+        public ConstantFloat()
+        {
+        }
+
+        public ConstantFloat(float value) : base(value)
+        {
+        }
     }
 }

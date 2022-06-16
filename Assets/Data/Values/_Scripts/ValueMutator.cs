@@ -7,14 +7,12 @@ using UnityEngine;
 namespace DarkFrontier.Data.Values
 {
     [Serializable, JsonObject(MemberSerialization.OptIn, IsReference = true)]
-    public class ValueMutator<T> : IId
+    public class ValueMutator<T> : IMutator<T>
     {
-        [field: SerializeReference]
-        [JsonProperty("id")]
+        [field: SerializeField] [JsonProperty("id")]
         public string Id { get; private set; } = Guid.NewGuid().ToString();
         
-        [field: SerializeReference]
-        [JsonProperty("order")]
+        [field: SerializeField] [JsonProperty("order")]
         public int Order { get; private set; }
 
         public ValueMutator() => Singletons.Get<IdRegistry>().Register(this);

@@ -27,10 +27,10 @@ namespace DarkFrontier.Items.Equipment.Electronics.ShieldResists
         
         public ShieldAmplifierInstance(ShieldAmplifierPrototype prototype) : base(prototype)
         {
-            fieldMutator = new FloatAddMutator(new ConstantValue<float>(Prototype.amplification), 0);
-            explosiveMutator = new FloatAddMutator(new ConstantValue<float>(Prototype.amplification), 0);
-            particleMutator = new FloatAddMutator(new ConstantValue<float>(Prototype.amplification), 0);
-            kineticMutator = new FloatAddMutator(new ConstantValue<float>(Prototype.amplification), 0);
+            fieldMutator = new FloatAddMutator(new ConstantFloat(Prototype.amplification), 0);
+            explosiveMutator = new FloatAddMutator(new ConstantFloat(Prototype.amplification), 0);
+            particleMutator = new FloatAddMutator(new ConstantFloat(Prototype.amplification), 0);
+            kineticMutator = new FloatAddMutator(new ConstantFloat(Prototype.amplification), 0);
         }
         
         public override void OnEquipped(EquipmentComponent component)

@@ -18,7 +18,7 @@ namespace DarkFrontier.Items.Equipment.Capacitors
         
         public CapacitorInstance(CapacitorPrototype prototype) : base(prototype)
         {
-            mutator = new FloatAddMutator(new ConstantValue<float>(Prototype.capacitance), 0);
+            mutator = new FloatAddMutator(new ConstantFloat(Prototype.capacitance), 0);
         }
         
         public override void OnEquipped(EquipmentComponent component)

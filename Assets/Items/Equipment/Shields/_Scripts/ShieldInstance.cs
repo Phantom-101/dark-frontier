@@ -21,8 +21,8 @@ namespace DarkFrontier.Items.Equipment.Shields
         
         public ShieldInstance(ShieldPrototype prototype) : base(prototype)
         {
-            shieldingMutator = new FloatAddMutator(new ConstantValue<float>(Prototype.shielding), 0);
-            reinforcementMutator = new FloatAddMutator(new ConstantValue<float>(Prototype.reinforcement), 0);
+            shieldingMutator = new FloatAddMutator(new ConstantFloat(Prototype.shielding), 0);
+            reinforcementMutator = new FloatAddMutator(new ConstantFloat(Prototype.reinforcement), 0);
         }
         
         public override void OnEquipped(EquipmentComponent component)

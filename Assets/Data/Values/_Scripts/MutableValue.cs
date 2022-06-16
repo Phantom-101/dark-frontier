@@ -8,26 +8,25 @@ using UnityEngine;
 namespace DarkFrontier.Data.Values
 {
     [Serializable, JsonObject(MemberSerialization.OptIn, IsReference = true)]
-    public class MutableValue<T> : IId, IValue<T>
+    public class MutableValue<T> : IValue<T>
     {
-        [field: SerializeReference]
-        [JsonProperty("id")]
+        [field: SerializeField] [JsonProperty("id")]
         public string Id { get; private set; } = Guid.NewGuid().ToString();
         
-        [SerializeReference, JsonProperty("base-value")]
+        [SerializeField, JsonProperty("base-value")]
         public T baseValue;
         
         public T Value {
             get
             {
                 var ret = baseValue;
-                for(int i = 0, l = mutators.Count; i < l; i++) ret = mutators[i].Mutate(ret);
+                for(int i = 0, l = Mutators.Count; i < l; i++) ret = Mutators[i].Mutate(ret);
                 return ret;
             }
         }
         
-        [SerializeField, JsonProperty("mutators")]
-        protected List<ValueMutator<T>> mutators = new();
+        [JsonProperty("mutators")]
+        public List<IMutator<T>> Mutators { get; protected set; } = new();
 
         public MutableValue() => Singletons.Get<IdRegistry>().Register(this);
 
@@ -35,15 +34,39 @@ namespace DarkFrontier.Data.Values
 
         public void AddMutator(ValueMutator<T> mutator)
         {
-            int i = 0, l = mutators.Count;
-            while(i < l && mutators[i].Order <= mutator.Order) i++;
-            mutators.Insert(i, mutator);
+            int i = 0, l = Mutators.Count;
+            while(i < l && Mutators[i].Order <= mutator.Order) i++;
+            Mutators.Insert(i, mutator);
         }
 
-        public void RemoveMutator(ValueMutator<T> mutator) => mutators.Remove(mutator);
+        public void RemoveMutator(ValueMutator<T> mutator) => Mutators.Remove(mutator);
 
         public static implicit operator T(MutableValue<T> mutableValue) => mutableValue.Value;
         
         public static implicit operator MutableValue<T>(T value) => new(value);
+    }
+
+    [Serializable]
+    public class MutableInt : MutableValue<int>
+    {
+        public MutableInt()
+        {
+        }
+
+        public MutableInt(int baseValue) : base(baseValue)
+        {
+        }
+    }
+    
+    [Serializable]
+    public class MutableFloat : MutableValue<float>
+    {
+        public MutableFloat()
+        {
+        }
+
+        public MutableFloat(float baseValue) : base(baseValue)
+        {
+        }
     }
 }
