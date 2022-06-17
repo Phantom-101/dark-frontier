@@ -15,6 +15,6 @@ namespace DarkFrontier.Input
             set => _controlPath = value;
         }
 
-        public void Send(float value) => SendValueToControl(value);
+        public void Send(Vector2 value) => SendValueToControl(value);
     }
 }

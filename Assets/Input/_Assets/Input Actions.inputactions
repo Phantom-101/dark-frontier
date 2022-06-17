@@ -45,17 +45,6 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "5e17525e-cdcb-4c7d-be8c-629a8927b987",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Turn",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "cc4fc06b-30fc-4413-a9fe-4b40c9782283",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
@@ -79,7 +68,7 @@
                 {
                     "name": "up",
                     "id": "7e3a3e58-1608-4318-915e-beb4599a3ba9",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -90,7 +79,7 @@
                 {
                     "name": "down",
                     "id": "7695bca7-5137-407e-971b-fa0d8f2866f5",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -132,15 +121,37 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "08b943e9-971d-4573-b844-574aedd8fdb1",
-                    "path": "<Mouse>/scroll/y",
+                    "name": "Keys",
+                    "id": "775468c3-4f3c-4ec4-808c-1e9095be0acf",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "53f7b93f-d469-44ff-86d8-a79c1f639f88",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Roll",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "9ebb79db-cd22-422b-8e8a-2c1126fac321",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "Shoulders",

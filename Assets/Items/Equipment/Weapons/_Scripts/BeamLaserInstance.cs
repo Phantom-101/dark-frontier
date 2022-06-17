@@ -27,6 +27,11 @@ namespace DarkFrontier.Items.Equipment.Weapons.New
         [field: SerializeField] [JsonProperty("delay")]
         public float Delay { get; private set; }
 
+        private VisualElement _indicator = null!;
+        private VisualElement _center = null!;
+        private VisualElement _side = null!;
+        private VisualElement _bottom = null!;
+        
         private PlayerController _playerController = null!;
         
         public BeamLaserInstance()
@@ -96,14 +101,19 @@ namespace DarkFrontier.Items.Equipment.Weapons.New
 
         public override VisualElement CreateIndicator()
         {
-            var indicator = base.CreateIndicator();
-            indicator.Q("rect").RegisterCallback<ClickEvent>(OnClick);
-            return indicator;
+            _indicator = base.CreateIndicator();
+            _indicator.Q("rect").RegisterCallback<ClickEvent>(OnClick);
+            _center = _indicator.Q("center-fill");
+            _side = _indicator.Q("side-fill");
+            _bottom = _indicator.Q("bottom-fill");
+            return _indicator;
         }
 
         public override void UpdateIndicator(EquipmentComponent component)
         {
-            base.UpdateIndicator(component);
+            _center.style.height = new Length((1 - Delay / Prototype.interval) * 100, LengthUnit.Percent);
+            _side.style.height = new Length(Multiplier / Prototype.multiplier * 100, LengthUnit.Percent);
+            _bottom.style.width = new Length(Hp / Prototype.hp * 100, LengthUnit.Percent);
         }
 
         public override void ToSerialized()

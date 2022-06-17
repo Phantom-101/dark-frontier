@@ -6,6 +6,7 @@ using DarkFrontier.UI.Indicators.Equipment;
 using DarkFrontier.UI.Indicators.Interactions;
 using DarkFrontier.UI.Indicators.Modifiers;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace DarkFrontier.UI.States.InSpace
@@ -68,6 +69,16 @@ namespace DarkFrontier.UI.States.InSpace
             _speed.MarkDirtyRepaint();
             forward.Send(_acceleration.value > 0 ? _acceleration.value : 0);
             backward.Send(_acceleration.value > 0 ? 0 : -_acceleration.value);
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if(Mouse.current != null)
+            {
+                var pos = Mouse.current.position.ReadValue();
+                var mid = new Vector2(Display.main.renderingWidth, Display.main.renderingHeight) / 2;
+                var dist = (pos - mid).magnitude;
+                var clamped = Mathf.Clamp(dist - 100, 0, 500);
+                var norm = (pos - mid).normalized;
+                turn.Send(norm * clamped / 500);
+            }
             _equipment.Tick();
         }
     }
