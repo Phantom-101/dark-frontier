@@ -12,9 +12,16 @@ namespace DarkFrontier.Positioning.Navigation
         [field: SerializeReference, ReadOnly]
         public NavigationRegistry Registry { get; private set; } = null!;
 
+        public bool standalone;
+
+        private void Start()
+        {
+            if (standalone) Initialize(gameObject.scene);
+        }
+
         public void Initialize(Scene scene)
         {
-            Registry = ComponentUtils.AddOrGet<NavigationRegistry>(gameObject);
+            Registry = gameObject.AddOrGet<NavigationRegistry>();
             
             Registry.Colliders.Clear();
 
@@ -26,6 +33,11 @@ namespace DarkFrontier.Positioning.Navigation
                     Registry.Add(colliders[i]);
                 }
             }
+        }
+
+        private void Update()
+        {
+            if (standalone) Tick();
         }
 
         public void Tick()

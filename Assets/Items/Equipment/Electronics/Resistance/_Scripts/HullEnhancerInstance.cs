@@ -3,11 +3,11 @@ using DarkFrontier.Data.Values;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace DarkFrontier.Items.Equipment.Electronics.HullResists
+namespace DarkFrontier.Items.Equipment.Electronics.Resistance
 {
     public class AdaptivePlatingInstance : EquipmentInstance
     {
-        public new AdaptivePlatingPrototype Prototype => (AdaptivePlatingPrototype)base.Prototype;
+        public new HullEnhancerPrototype Prototype => (HullEnhancerPrototype)base.Prototype;
         
         [SerializeReference, JsonProperty("mutator-field")]
         public FloatAddMutator? fieldMutator;
@@ -25,7 +25,7 @@ namespace DarkFrontier.Items.Equipment.Electronics.HullResists
         {
         }
         
-        public AdaptivePlatingInstance(AdaptivePlatingPrototype prototype) : base(prototype)
+        public AdaptivePlatingInstance(HullEnhancerPrototype prototype) : base(prototype)
         {
             fieldMutator = new FloatAddMutator(new ConstantFloat(Prototype.adaptation), 0);
             explosiveMutator = new FloatAddMutator(new ConstantFloat(Prototype.adaptation), 0);

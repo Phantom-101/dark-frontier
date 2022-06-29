@@ -13,7 +13,7 @@ namespace DarkFrontier.Positioning.Navigation
         [ReadOnly]
         public List<Vector3> route = new();
 
-        public void Tick()
+        private void Update()
         {
             if(from != null && to != null)
             {

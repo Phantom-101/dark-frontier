@@ -42,9 +42,12 @@ namespace DarkFrontier.Game.Essentials
             Singletons.Bind(_sectorRegistry = new SectorRegistry());
             Singletons.Bind(_structureRegistry = new StructureRegistry());
             Singletons.Bind(_playerController = ComponentUtils.AddOrGet<PlayerController>());
-            Singletons.Bind(_cameraSpring = FindObjectOfType<CameraSpring>());
-            Singletons.Bind(_camera = _cameraSpring.camera = FindObjectOfType<UnityEngine.Camera>());
-            
+            if ((_cameraSpring = FindObjectOfType<CameraSpring>()) != null)
+            {
+                Singletons.Bind(_cameraSpring);
+                if (_camera = FindObjectOfType<UnityEngine.Camera>()) Singletons.Bind(_cameraSpring.camera = _camera);
+            }
+
             _gameSettings.Initialize();
             InitializeIdRegistry();
             InitializeSectors();

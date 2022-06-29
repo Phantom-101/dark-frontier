@@ -1,9 +1,9 @@
 ﻿using DarkFrontier.Items._Scripts;
 using UnityEngine;
 
-namespace DarkFrontier.Items.Equipment.Electronics.HullResists
+namespace DarkFrontier.Items.Equipment.Electronics.Resistance
 {
-    [CreateAssetMenu(menuName = "Items/Prototypes/Equipment/Electronics/Hull Resists/Adaptive Plating")]
+    [CreateAssetMenu(menuName = "Items/Prototypes/Equipment/Electronics/Resistance Boosters/Adaptive Plating")]
     public class AdaptivePlatingPrototype : EquipmentPrototype
     {
         public float adaptation;

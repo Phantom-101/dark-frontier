@@ -3,7 +3,7 @@ using DarkFrontier.Data.Values;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace DarkFrontier.Items.Equipment.Electronics.ShieldResists
+namespace DarkFrontier.Items.Equipment.Electronics.Resistance
 {
     public class ShieldAmplifierInstance : EquipmentInstance
     {
