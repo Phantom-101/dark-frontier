@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DarkFrontier.Items.Equipment.Electronics.Resistance
 {
-    public class AdaptivePlatingInstance : EquipmentInstance
+    public class HullEnhancerInstance : EquipmentInstance
     {
         public new HullEnhancerPrototype Prototype => (HullEnhancerPrototype)base.Prototype;
         
@@ -21,11 +21,11 @@ namespace DarkFrontier.Items.Equipment.Electronics.Resistance
         [SerializeReference, JsonProperty("mutator-kinetic")]
         public FloatAddMutator? kineticMutator;
         
-        public AdaptivePlatingInstance()
+        public HullEnhancerInstance()
         {
         }
         
-        public AdaptivePlatingInstance(HullEnhancerPrototype prototype) : base(prototype)
+        public HullEnhancerInstance(HullEnhancerPrototype prototype) : base(prototype)
         {
             fieldMutator = new FloatAddMutator(new ConstantFloat(Prototype.adaptation), 0);
             explosiveMutator = new FloatAddMutator(new ConstantFloat(Prototype.adaptation), 0);

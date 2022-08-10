@@ -4,7 +4,7 @@ using UnityEngine;
 namespace DarkFrontier.Items.Equipment.Electronics.Resistance
 {
     [CreateAssetMenu(menuName = "Items/Prototypes/Equipment/Electronics/Resistance Boosters/Shield Amplifier")]
-    public class ShieldAmplifierPrototype : EquipmentPrototype
+    public class ShieldSolidifierPrototype : EquipmentPrototype
     {
         public float amplification;
         

@@ -142,7 +142,7 @@ namespace DarkFrontier.Items.Structures
         public void Tick(float deltaTime)
         {
             if(Instance == null) return;
-            if((Instance.CurrentHp = Mathf.Clamp(Instance.CurrentHp, 0, Instance.MaxHp)) == 0)
+            if((Instance.CurrentHp = Mathf.Clamp(Instance.CurrentHp, 0, Instance.MaxHp.Value)) == 0)
             {
                 // TODO destroy structure
             }
@@ -164,24 +164,38 @@ namespace DarkFrontier.Items.Structures
             var curLinear = rigidbody.velocity;
             var targetLinear = transform.TransformVector(normLinear * Instance.LinearSpeed.Value);
             var offsetLinear = targetLinear - curLinear;
-            var deltaLinear = offsetLinear.normalized * Instance.LinearAcceleration.Value * deltaTime;
+            var deltaLinear = Instance.LinearAcceleration.Value * deltaTime * offsetLinear.normalized;
             rigidbody.AddForce(offsetLinear.sqrMagnitude < deltaLinear.sqrMagnitude ? offsetLinear : deltaLinear, ForceMode.VelocityChange);
 
             var normAngular = Instance.AngularTarget.sqrMagnitude > 1 ? Instance.AngularTarget.normalized : Instance.AngularTarget;
             var curAngular = rigidbody.angularVelocity;
             var targetAngular = transform.TransformDirection(normAngular * Instance.AngularSpeed.Value);
             var offsetAngular = targetAngular - curAngular;
-            var deltaAngular = offsetAngular.normalized * Instance.AngularAcceleration.Value * deltaTime;
+            var deltaAngular = Instance.AngularAcceleration.Value * deltaTime * offsetAngular.normalized;
             rigidbody.AddTorque(offsetAngular.sqrMagnitude < deltaAngular.sqrMagnitude ? offsetAngular : deltaAngular, ForceMode.VelocityChange);
         }
 
-        public void RecalculateMaxHp()
+        public void FittingChanged()
         {
             if(Instance == null) return;
-            Instance.MaxHp = 0;
-            for(int i = 0, l = Instance.Segments.Length; i < l; i++)
+            Instance.Rating = 0;
+            Instance.MaxHp.baseValue = 0;
+            for(int i = 0, li = Instance.Segments.Length; i < li; i++)
             {
-                Instance.MaxHp += Instance.Segments[i].Instance?.Prototype.poolHp ?? 0;
+                var segment = Instance.Segments[i].Instance;
+                if (segment != null)
+                {
+                    Instance.Rating += segment.Prototype.rating;
+                    Instance.MaxHp.baseValue += segment.Prototype.poolHp;
+                    for (int j = 0, lj = segment.Equipment.Length; j < lj; j++)
+                    {
+                        var equipment = segment.Equipment[j].Instance;
+                        if (equipment != null)
+                        {
+                            Instance.Rating += equipment.Prototype.rating;
+                        }
+                    }
+                }
             }
         }
 

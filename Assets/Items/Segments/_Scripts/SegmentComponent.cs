@@ -82,7 +82,7 @@ namespace DarkFrontier.Items.Segments
             Instance = instance;
             if(Structure != null)
             {
-                Structure.RecalculateMaxHp();
+                Structure.FittingChanged();
             }
             SelectorDirty = true;
             Register();

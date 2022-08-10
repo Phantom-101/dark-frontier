@@ -14,10 +14,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Build/Presets/Game Preset.unity
     guid: a79746f449aa6ae428cbc47ea799b1da
-  - enabled: 0
+  - enabled: 1
     path: Assets/Sandbox/SectorScenesTest/SectorScenesTest1.unity
     guid: e192adcc9e9f6d047b00700675bac577
-  - enabled: 0
+  - enabled: 1
     path: Assets/Sandbox/SectorScenesTest/SectorScenesTest2.unity
     guid: 036dc85dd66f7ce459ac7552d015720c
   - enabled: 1

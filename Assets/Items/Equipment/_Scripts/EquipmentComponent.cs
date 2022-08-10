@@ -77,6 +77,10 @@ namespace DarkFrontier.Items.Equipment
             Disable();
             Unregister();
             Instance = instance;
+            if(Structure != null)
+            {
+                Structure.FittingChanged();
+            }
             SelectorDirty = true;
             IndicatorDirty = true;
             Register();

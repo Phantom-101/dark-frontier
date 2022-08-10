@@ -29,8 +29,11 @@ namespace DarkFrontier.Items.Structures
         [field: SerializeField, ReadOnly] [JsonProperty("rotation")]
         public Vector3 Rotation { get; private set; }
 
+        [field: SerializeField, ReadOnly] [JsonProperty("rating")]
+        public int Rating { get; set; }
+
         [field: SerializeField, ReadOnly] [JsonProperty("pool-hp-max")]
-        public float MaxHp { get; set; }
+        public MutableFloat MaxHp { get; set; } = new(0);
 
         [field: SerializeField] [JsonProperty("pool-hp")]
         public float CurrentHp { get; set; }

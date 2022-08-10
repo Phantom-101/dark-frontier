@@ -4,10 +4,10 @@ using UnityEngine;
 namespace DarkFrontier.Items.Equipment.Electronics.Resistance
 {
     [CreateAssetMenu(menuName = "Items/Prototypes/Equipment/Electronics/Resistance Boosters/Adaptive Plating")]
-    public class AdaptivePlatingPrototype : EquipmentPrototype
+    public class HullEnhancerPrototype : EquipmentPrototype
     {
         public float adaptation;
         
-        public override ItemInstance NewInstance() => new AdaptivePlatingInstance(this);
+        public override ItemInstance NewInstance() => new HullEnhancerInstance(this);
     }
 }

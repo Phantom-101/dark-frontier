@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace DarkFrontier.Items.Equipment.Electronics.Resistance
 {
-    public class ShieldAmplifierInstance : EquipmentInstance
+    public class ShieldSolidifierInstance : EquipmentInstance
     {
-        public new ShieldAmplifierPrototype Prototype => (ShieldAmplifierPrototype)base.Prototype;
+        public new ShieldSolidifierPrototype Prototype => (ShieldSolidifierPrototype)base.Prototype;
         
         [SerializeReference, JsonProperty("mutator-field")]
         public FloatAddMutator? fieldMutator;
@@ -21,11 +21,11 @@ namespace DarkFrontier.Items.Equipment.Electronics.Resistance
         [SerializeReference, JsonProperty("mutator-kinetic")]
         public FloatAddMutator? kineticMutator;
         
-        public ShieldAmplifierInstance()
+        public ShieldSolidifierInstance()
         {
         }
         
-        public ShieldAmplifierInstance(ShieldAmplifierPrototype prototype) : base(prototype)
+        public ShieldSolidifierInstance(ShieldSolidifierPrototype prototype) : base(prototype)
         {
             fieldMutator = new FloatAddMutator(new ConstantFloat(Prototype.amplification), 0);
             explosiveMutator = new FloatAddMutator(new ConstantFloat(Prototype.amplification), 0);
