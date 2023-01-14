@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System.Collections.Generic;
 using DarkFrontier.Controllers.Intents;
 using DarkFrontier.Controllers.New;
 using DarkFrontier.Foundation.Services;
@@ -11,7 +12,7 @@ using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Equipment.Weapons.Lasers
 {
-    public class BeamLaserInstance : EquipmentInstance, IAttackIntent
+    public class BeamLaserInstance : EquipmentInstance, IAttackIntent, ILaserProviders
     {
         public new BeamLaserPrototype Prototype => (BeamLaserPrototype)base.Prototype;
 
@@ -19,7 +20,7 @@ namespace DarkFrontier.Items.Equipment.Weapons.Lasers
         public ISelectable? Target { get; private set; }
         
         [field: SerializeField] [JsonProperty("target-id")]
-        public string TargetId { get; private set; } = string.Empty;
+        public string? TargetId { get; private set; }
 
         [field: SerializeField] [JsonProperty("multiplier")]
         public float Multiplier { get; private set; } = 1;
@@ -27,6 +28,17 @@ namespace DarkFrontier.Items.Equipment.Weapons.Lasers
         [field: SerializeField] [JsonProperty("delay")]
         public float Delay { get; private set; }
 
+        public ILaserEndpointProvider Endpoint1Provider => new RelativeLaserEndpointProvider(_endpoint1, Vector3.zero);
+        
+        public ILaserEndpointProvider Endpoint2Provider => new RelativeLaserEndpointProvider(_endpoint2, Vector3.zero);
+        
+        public ILaserAlphaProvider AlphaProvider => new BeamLaserAlphaProvider(this);
+
+        public ILaserWidthProvider WidthProvider => new ConstLaserWidthProvider(this);
+
+        private Transform _endpoint1 = null!;
+        private Transform _endpoint2 = null!;
+        
         private VisualElement _indicator = null!;
         private VisualElement _center = null!;
         private VisualElement _side = null!;
@@ -60,25 +72,32 @@ namespace DarkFrontier.Items.Equipment.Weapons.Lasers
                 {
                     Delay = Prototype.interval;
                     var dmg = Prototype.damage * Multiplier;
+                    _endpoint1 = component.transform;
                     if(Target is StructureComponent structure)
                     {
-                        structure.TakeDamage(dmg);
+                        _endpoint2 = structure.transform;
+                        structure.TakeDamage(component.Structure, dmg);
                     }
                     else if(Target is SegmentComponent segment)
                     {
+                        _endpoint2 = segment.transform;
                         if(segment.Structure != null)
                         {
-                            segment.Structure.TakeDamage(dmg);
+                            segment.Structure.TakeDamage(component.Structure, dmg);
                         }
                     }
                     else if(Target is EquipmentComponent equipment)
                     {
+                        _endpoint2 = equipment.transform;
                         if(equipment.Structure != null)
                         {
-                            equipment.Structure.TakeDamage(dmg);
+                            equipment.Structure.TakeDamage(component.Structure, dmg);
                         }
                     }
                     Multiplier = Mathf.Clamp(Multiplier + Prototype.gain, 1, Prototype.multiplier);
+                    var obj = Object.Instantiate(Prototype.visuals);
+                    var visuals = obj.GetComponent<LaserVisuals>();
+                    visuals.UseProviders(this);
                 }
             }
         }
@@ -93,9 +112,9 @@ namespace DarkFrontier.Items.Equipment.Weapons.Lasers
         
         private void OnClick(ClickEvent evt)
         {
-            if(_playerController.Player != null && _playerController.Player.Instance?.Selected != null)
+            if(_playerController.Player != null && _playerController.Player.Adaptor!.selected != null)
             {
-                Attack(_playerController.Player.Instance.Selected);
+                Attack(_playerController.Player.Adaptor.selected);
             }
         }
 
@@ -116,16 +135,19 @@ namespace DarkFrontier.Items.Equipment.Weapons.Lasers
             _bottom.style.width = new Length(Hp / Prototype.hp * 100, LengthUnit.Percent);
         }
 
-        public override void ToSerialized()
+        public override void OnSerialize()
         {
-            base.ToSerialized();
-            TargetId = Target == null ? string.Empty : Target.Id;
+            base.OnSerialize();
+            TargetId = Target == null ? null : Target.Id;
         }
 
-        public override void FromSerialized()
+        public override void OnDeserialize()
         {
-            base.FromSerialized();
-            Target = string.IsNullOrEmpty(TargetId) ? Target : Singletons.Get<IdRegistry>().Get<ISelectable>(TargetId);
+            base.OnDeserialize();
+            if (TargetId != null)
+            {
+                Target = Singletons.Get<IdRegistry>().Get<ISelectable>(TargetId);
+            }
         }
     }
 }

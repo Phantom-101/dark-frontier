@@ -31,9 +31,9 @@ namespace DarkFrontier.Controllers.New
             if(Player == null || Player.Instance == null) return;
             
             var strafe = _inputActions.Gameplay.Strafe.ReadValue<Vector2>();
-            Player.Instance.LinearTarget = new Vector3(strafe.x, strafe.y, _inputActions.Gameplay.Accelerate.ReadValue<float>());
+            Player.Adaptor!.linearTarget = new Vector3(strafe.x, strafe.y, _inputActions.Gameplay.Accelerate.ReadValue<float>());
             var turn = _inputActions.Gameplay.Turn.ReadValue<Vector2>();
-            Player.Instance.AngularTarget = new Vector3(-turn.y, turn.x, _inputActions.Gameplay.Roll.ReadValue<float>());
+            Player.Adaptor.angularTarget = new Vector3(-turn.y, turn.x, _inputActions.Gameplay.Roll.ReadValue<float>());
         }
     }
 }

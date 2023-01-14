@@ -1,8 +1,6 @@
-﻿using DarkFrontier.Game.Essentials;
-
-namespace DarkFrontier.Data.Values
+﻿namespace DarkFrontier.Data.Values
 {
-    public interface IMutator<T> : IId
+    public interface IMutator<T>
     {
         int Order { get; }
 

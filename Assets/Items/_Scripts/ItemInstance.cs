@@ -3,29 +3,22 @@ using System;
 using DarkFrontier.Attributes;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Game.Essentials;
-using DarkFrontier.Items.Structures;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace DarkFrontier.Items._Scripts
 {
     [Serializable, JsonObject(MemberSerialization.OptIn, IsReference = true)]
-    public class ItemInstance : IInfo, IEquatable<ItemInstance>
+    public class ItemInstance : IEquatable<ItemInstance>
     {
         [field: SerializeReference, Expandable]
         public ItemPrototype Prototype { get; private set; } = null!;
         
         [field: SerializeReference] [JsonProperty("prototype-id")]
-        public string PrototypeId { get; private init; } = string.Empty;
-        
-        [field: SerializeReference] [JsonProperty("id")]
-        public string Id { get; protected set; } = Guid.NewGuid().ToString();
+        public string? PrototypeId { get; private set; }
         
         [field: SerializeReference] [JsonProperty("name")]
-        public string Name { get; protected set; } = string.Empty;
-        
-        [field: SerializeReference, TextArea] [JsonProperty("description")]
-        public string Description { get; protected set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         public ItemInstance()
         {
@@ -37,14 +30,19 @@ namespace DarkFrontier.Items._Scripts
             PrototypeId = Prototype.id;
         }
 
-        public virtual void ToSerialized()
+        public virtual void OnSerialize()
         {
+            PrototypeId = Prototype.id;
+            // TODO write to serialization writers
         }
-
-        public virtual void FromSerialized()
+        
+        public virtual void OnDeserialize()
         {
-            var prototype = Singletons.Get<IdRegistry>().Get<ItemPrototype>(PrototypeId);
-            Prototype = prototype == null ? Prototype : prototype;
+            if (PrototypeId != null)
+            {
+                var prototype = Singletons.Get<IdRegistry>().Get<ItemPrototype>(PrototypeId);
+                Prototype = prototype == null ? Prototype : prototype;
+            }
         }
 
         public bool Equals(ItemInstance? other)
@@ -63,7 +61,7 @@ namespace DarkFrontier.Items._Scripts
         public override int GetHashCode()
         {
             // ReSharper disable once NonReadonlyMemberInGetHashCode
-            return PrototypeId.GetHashCode();
+            return Prototype.id.GetHashCode();
         }
     }
 }

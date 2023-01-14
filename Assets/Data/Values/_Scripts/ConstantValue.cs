@@ -1,20 +1,14 @@
 ﻿using System;
-using DarkFrontier.Foundation.Services;
-using DarkFrontier.Game.Essentials;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace DarkFrontier.Data.Values
 {
     [Serializable, JsonObject(MemberSerialization.OptIn, IsReference = true)]
-    public class ConstantValue<T> : IId, IValue<T>
+    public class ConstantValue<T> : IValue<T>
     {
-        [field: SerializeField] [JsonProperty("id")]
-        public string Id { get; private set; } = Guid.NewGuid().ToString();
-        
         public T Value { get; private init; }
         
-        public ConstantValue() => Singletons.Get<IdRegistry>().Register(this);
+        public ConstantValue() {}
 
         public ConstantValue(T value) : this() => Value = value;
         

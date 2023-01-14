@@ -1,10 +1,14 @@
 ﻿#nullable enable
+using System.Collections.Generic;
 using DarkFrontier.Controllers.New;
+using DarkFrontier.Foundation.Extensions;
 using DarkFrontier.Foundation.Services;
 using DarkFrontier.Game.Essentials;
 using DarkFrontier.Items.Equipment;
 using DarkFrontier.Items.Segments;
 using DarkFrontier.Items.Structures.New;
+using DarkFrontier.Positioning.Sectors;
+using DarkFrontier.UI.Indicators.Interactions;
 using DarkFrontier.UI.Indicators.Selectors;
 using DarkFrontier.Utils;
 using Unity.Collections;
@@ -18,141 +22,122 @@ namespace DarkFrontier.Items.Structures
         [field: SerializeReference]
         public StructureInstance? Instance { get; private set; }
 
-        public string Id => Instance?.Id ?? string.Empty;
-        
-        [SerializeField, Attributes.ReadOnly]
-        private bool _initialized;
-        
-        [SerializeField, Attributes.ReadOnly]
-        private bool _registered;
-        
-        [SerializeField, Attributes.ReadOnly]
-        private bool _enabled;
-        
-        private IdRegistry _idRegistry = null!;
-        private StructureRegistry _structureRegistry = null!;
-        private DetectableRegistry _detectableRegistry = null!;
-        private PlayerController _playerController = null!;
+        public StructureAdaptor? Adaptor
+        {
+            get => _adaptor;
+            private set
+            {
+                _adaptor = value;
+                if (_adaptor != null)
+                {
+                    _adaptor.slot = this;
+                }
+            }
+        }
 
+        [SerializeReference]
+        private StructureAdaptor? _adaptor;
+
+        public string Id => Adaptor!.id;
+        
         [ReadOnly]
         public new Rigidbody rigidbody = null!;
         
         [ReadOnly]
         public new UnityEngine.Camera camera = null!;
+        
+        public SegmentComponent[] Segments { get; private set; } = null!;
+
+        public EquipmentComponent[] Equipment
+        {
+            get
+            {
+                var ret = new List<EquipmentComponent>();
+                for (int i = 0, l = Segments.Length; i < l; i++)
+                {
+                    ret.AddRange(Segments[i].Equipment);
+                }
+                return ret.ToArray();
+            }
+        }
+
+        private IdRegistry _idRegistry = null!;
+        private StructureRegistry _structureRegistry = null!;
+        private DetectableRegistry _detectableRegistry = null!;
+        private PlayerController _playerController = null!;
 
         public bool SelectorDirty => false;
-        
-        public void Initialize()
-        {
-            if(_initialized) return;
-            _idRegistry = Singletons.Get<IdRegistry>();
-            _structureRegistry = Singletons.Get<StructureRegistry>();
-            _detectableRegistry = Singletons.Get<DetectableRegistry>();
-            _playerController = Singletons.Get<PlayerController>();
-            rigidbody = gameObject.AddOrGet<Rigidbody>();
-            camera = Singletons.Get<UnityEngine.Camera>();
-            _initialized = true;
-        }
 
         public void Set(StructureInstance? instance)
         {
-            Disable();
-            Unregister();
+            _idRegistry = Singletons.Get<IdRegistry>();
+            _structureRegistry = Singletons.Get<StructureRegistry>();
+            _detectableRegistry = Singletons.Get<DetectableRegistry>();
+            
+            if (Instance != null)
+            {
+                transform.DestroyChildren();
+            
+                _idRegistry.Unregister(this);
+                _structureRegistry.Unregister(this);
+                _detectableRegistry.Unregister(this);
+
+                Adaptor = null;
+            }
+
             Instance = instance;
-            Register();
+            
+            if (Instance != null)
+            {
+                Adaptor = Instance.NewAdaptor();
+                
+                _idRegistry.Register(Id, this);
+                _structureRegistry.Register(this);
+                _detectableRegistry.Register(this);
+                
+                if(Instance.Prototype.prefab != null)
+                {
+                    Instantiate(Instance.Prototype.prefab, transform);
+                }
+                
+                Segments = GetComponentsInChildren<SegmentComponent>();
+                Adaptor.sector = GetComponentInParent<SectorComponent>();
+                Adaptor.controller = new Controller();
+                rigidbody = gameObject.AddOrGet<Rigidbody>();
+                camera = Singletons.Get<UnityEngine.Camera>();
+                _playerController = Singletons.Get<PlayerController>();
+                
+                for(int i = 0, li = Segments.Length; i < li; i++)
+                {
+                    Segments[i].Set(Instance.Segments.TryGet(Segments[i].Name, null));
+                }
+            }
         }
         
-        private void Register()
+        public void Set(StructureSerializable serializable)
         {
-            if(!_initialized || _registered || Instance == null) return;
-            _idRegistry.Register(this);
-            _registered = true;
-        }
-
-        private void Unregister()
-        {
-            if(!_initialized || !_registered || Instance == null) return;
-            _idRegistry.Unregister(this);
-            _registered = false;
-        }
-
-        public void Enable()
-        {
-            if(!_initialized || _enabled || Instance == null) return;
-            Instance.FromSerialized(this);
-            if(Instance.Prototype.prefab != null)
-            {
-                Instantiate(Instance.Prototype.prefab, transform);
-            }
-            Instance.FindSegments(gameObject);
-            for(int i = 0, li = Instance.Segments.Length; i < li; i++)
-            {
-                Instance.Segments[i].Initialize(this);
-                if(Instance.SegmentRecords.ContainsKey(Instance.Segments[i].Name))
-                {
-                    Instance.Segments[i].Set(Instance.SegmentRecords[Instance.Segments[i].Name]);
-                    Instance.Segments[i].Enable();
-                }
-            }
-            _structureRegistry.Register(this);
-            _detectableRegistry.Register(this);
-            _enabled = true;
-        }
-
-        private void Disable()
-        {
-            if(!_initialized || !_enabled || Instance == null) return;
-            transform.DestroyChildren();
-            Instance.ClearSegments();
-            _detectableRegistry.Unregister(this);
-            _structureRegistry.Unregister(this);
-            Instance.ToSerialized(this);
-            _enabled = false;
-        }
-        
-        public void Equip(string segment, SegmentInstance? instance)
-        {
-            if(!_initialized || !_enabled || Instance == null) return;
-            for(int i = 0, l = Instance.Segments.Length; i < l; i++)
-            {
-                var segmentComponent = Instance.Segments[i];
-                if(segmentComponent.Name == segment)
-                {
-                    segmentComponent.Equip(instance);
-                    segmentComponent.Enable();
-                    break;
-                }
-            }
-        }
-
-        public void Equip(string segment, string equipment, EquipmentInstance? instance)
-        {
-            if(!_initialized || !_enabled || Instance == null) return;
-            for(int i = 0, li = Instance.Segments.Length; i < li; i++)
-            {
-                var segmentComponent = Instance.Segments[i];
-                if(segmentComponent.Name == segment)
-                {
-                    segmentComponent.Equip(equipment, instance);
-                    break;
-                }
-            }
+            Set(serializable.instance);
+            
+            var t = transform;
+            t.localPosition = serializable.position;
+            t.localEulerAngles = serializable.rotation;
         }
 
         public void Tick(float deltaTime)
         {
             if(Instance == null) return;
+            
             if((Instance.CurrentHp = Mathf.Clamp(Instance.CurrentHp, 0, Instance.MaxHp.Value)) == 0)
             {
                 // TODO destroy structure
             }
-            for(int i = 0, l = Instance.Segments.Length; i < l; i++)
+            for(int i = 0, l = Segments.Length; i < l; i++)
             {
-                Instance.Segments[i].Tick(deltaTime);
+                Segments[i].Tick(deltaTime);
             }
             if(_playerController.Player != this)
             {
-                Instance.Controller.Tick(this);
+                Adaptor!.controller.Tick(this);
             }
         }
 
@@ -160,48 +145,34 @@ namespace DarkFrontier.Items.Structures
         {
             if(Instance == null) return;
 
-            var normLinear = Instance.LinearTarget.sqrMagnitude > 1 ? Instance.LinearTarget.normalized : Instance.LinearTarget;
-            var curLinear = rigidbody.velocity;
-            var targetLinear = transform.TransformVector(normLinear * Instance.LinearSpeed.Value);
-            var offsetLinear = targetLinear - curLinear;
+            var offsetLinear = transform.TransformVector(Adaptor!.linearTarget * Instance.LinearSpeed.Value) - rigidbody.velocity;
             var deltaLinear = Instance.LinearAcceleration.Value * deltaTime * offsetLinear.normalized;
             rigidbody.AddForce(offsetLinear.sqrMagnitude < deltaLinear.sqrMagnitude ? offsetLinear : deltaLinear, ForceMode.VelocityChange);
 
-            var normAngular = Instance.AngularTarget.sqrMagnitude > 1 ? Instance.AngularTarget.normalized : Instance.AngularTarget;
-            var curAngular = rigidbody.angularVelocity;
-            var targetAngular = transform.TransformDirection(normAngular * Instance.AngularSpeed.Value);
-            var offsetAngular = targetAngular - curAngular;
+            var offsetAngular = transform.TransformDirection(Adaptor.angularTarget * Instance.AngularSpeed.Value) - rigidbody.angularVelocity;
             var deltaAngular = Instance.AngularAcceleration.Value * deltaTime * offsetAngular.normalized;
             rigidbody.AddTorque(offsetAngular.sqrMagnitude < deltaAngular.sqrMagnitude ? offsetAngular : deltaAngular, ForceMode.VelocityChange);
         }
 
-        public void FittingChanged()
+        public void TakeDamage(StructureComponent? source, Damage damage)
         {
             if(Instance == null) return;
-            Instance.Rating = 0;
-            Instance.MaxHp.baseValue = 0;
-            for(int i = 0, li = Instance.Segments.Length; i < li; i++)
+            
+            var taken = TakeDamage(damage);
+            if (source == _playerController.Player)
             {
-                var segment = Instance.Segments[i].Instance;
-                if (segment != null)
-                {
-                    Instance.Rating += segment.Prototype.rating;
-                    Instance.MaxHp.baseValue += segment.Prototype.poolHp;
-                    for (int j = 0, lj = segment.Equipment.Length; j < lj; j++)
-                    {
-                        var equipment = segment.Equipment[j].Instance;
-                        if (equipment != null)
-                        {
-                            Instance.Rating += equipment.Prototype.rating;
-                        }
-                    }
-                }
+                Singletons.Get<InteractionList>().AddInteraction(new AttackInteraction(this, true, taken));
+            }
+            else if (this == _playerController.Player)
+            {
+                Singletons.Get<InteractionList>().AddInteraction(new AttackInteraction(source, false, taken));
             }
         }
-
-        public void TakeDamage(Damage damage)
+        
+        private float TakeDamage(Damage damage)
         {
-            if(Instance == null) return;
+            if(Instance == null) return 0;
+            
             var scaledTotal = damage.field / (1 + Instance.ShieldFieldResist.Value)
                               + damage.explosive / (1 + Instance.ShieldExplosiveResist.Value)
                               + damage.particle / (1 + Instance.ShieldParticleResist.Value)
@@ -209,18 +180,18 @@ namespace DarkFrontier.Items.Structures
             if(scaledTotal <= Instance.Shield)
             {
                 Instance.Shield -= scaledTotal;
+                return scaledTotal;
             }
-            else
-            {
-                var absorbed = Instance.Shield / scaledTotal;
-                Instance.Shield = 0;
-                var scaledRemainder = damage.field / (1 + Instance.HullFieldResist.Value)
-                                      + damage.explosive / (1 + Instance.HullExplosiveResist.Value)
-                                      + damage.particle / (1 + Instance.HullParticleResist.Value)
-                                      + damage.kinetic / (1 + Instance.HullKineticResist.Value);
-                scaledRemainder *= 1 - absorbed;
-                Instance.CurrentHp -= scaledRemainder;
-            }
+            var absorbed = Instance.Shield / scaledTotal;
+            var depleted = Instance.Shield;
+            Instance.Shield = 0;
+            var scaledRemainder = damage.field / (1 + Instance.HullFieldResist.Value)
+                                  + damage.explosive / (1 + Instance.HullExplosiveResist.Value)
+                                  + damage.particle / (1 + Instance.HullParticleResist.Value)
+                                  + damage.kinetic / (1 + Instance.HullKineticResist.Value);
+            scaledRemainder *= 1 - absorbed;
+            Instance.CurrentHp -= scaledRemainder;
+            return depleted + scaledRemainder;
         }
         
         public bool CanBeSelectedBy(StructureComponent other)

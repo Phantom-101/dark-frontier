@@ -23,7 +23,23 @@ namespace DarkFrontier.Items.Equipment
         [field: SerializeReference]
         public EquipmentInstance? Instance { get; private set; }
 
-        public string Id => Instance?.Id ?? string.Empty;
+        public EquipmentAdaptor? Adaptor
+        {
+            get => _adaptor;
+            private set
+            {
+                _adaptor = value;
+                if (_adaptor != null)
+                {
+                    _adaptor.slot = this;
+                }
+            }
+        }
+
+        [SerializeReference]
+        private EquipmentAdaptor? _adaptor;
+
+        public string Id => Adaptor!.id;
         
         [field: SerializeField]
         public string Name { get; private set; } = "";
@@ -34,15 +50,6 @@ namespace DarkFrontier.Items.Equipment
         [field: SerializeField]
         public EquipmentPrototype[] Compatible { get; private set; } = Array.Empty<EquipmentPrototype>();
 
-        [SerializeField, ReadOnly]
-        private bool _initialized;
-        
-        [SerializeField, ReadOnly]
-        private bool _registered;
-        
-        [SerializeField, ReadOnly]
-        private bool _enabled;
-        
         private IdRegistry _idRegistry = null!;
         private DetectableRegistry _detectableRegistry = null!;
         
@@ -52,73 +59,38 @@ namespace DarkFrontier.Items.Equipment
         public bool SelectorDirty { get; private set; }
         public bool IndicatorDirty { get; private set; }
 
-        public void Initialize(SegmentComponent component)
-        {
-            if(_initialized) return;
-            Segment = component;
-            _idRegistry = Singletons.Get<IdRegistry>();
-            _detectableRegistry = Singletons.Get<DetectableRegistry>();
-            camera = Singletons.Get<UnityEngine.Camera>();
-            _initialized = true;
-        }
-
-        public void Equip(EquipmentInstance? instance)
-        {
-            if(instance != null && Compatible.Length != 0 && !Compatible.Contains(instance.Prototype)) return;
-            instance?.OnUnequipped(this);
-            Set(instance);
-            Enable();
-            instance?.OnEquipped(this);
-        }
-        
         public void Set(EquipmentInstance? instance)
         {
-            if(instance != null && Compatible.Length != 0 && !Compatible.Contains(instance.Prototype)) return;
-            Disable();
-            Unregister();
+            _idRegistry = Singletons.Get<IdRegistry>();
+            _detectableRegistry = Singletons.Get<DetectableRegistry>();
+            
+            if (Instance != null)
+            {
+                transform.DestroyChildren();
+            
+                _idRegistry.Unregister(this);
+                _detectableRegistry.Unregister(this);
+
+                Adaptor = null;
+            }
+            
             Instance = instance;
-            if(Structure != null)
+            
+            if (Instance != null)
             {
-                Structure.FittingChanged();
+                Adaptor = Instance.NewAdaptor();
+                
+                _idRegistry.Register(Id, this);
+                _detectableRegistry.Register(this);
+                
+                if(Instance.Prototype.prefab != null)
+                {
+                    Instantiate(Instance.Prototype.prefab, transform);
+                }
+                
+                Segment = GetComponentInParent<SegmentComponent>();
+                camera = Singletons.Get<UnityEngine.Camera>();
             }
-            SelectorDirty = true;
-            IndicatorDirty = true;
-            Register();
-        }
-        
-        private void Register()
-        {
-            if(!_initialized || _registered || Instance == null) return;
-            _idRegistry.Register(this);
-            _registered = true;
-        }
-
-        private void Unregister()
-        {
-            if(!_initialized || !_registered || Instance == null) return;
-            _idRegistry.Unregister(this);
-            _registered = false;
-        }
-
-        public void Enable()
-        {
-            if(!_initialized || _enabled || Instance == null) return;
-            Instance.FromSerialized();
-            if(Instance.Prototype.prefab != null)
-            {
-                Instantiate(Instance.Prototype.prefab, transform);
-            }
-            _detectableRegistry.Register(this);
-            _enabled = true;
-        }
-
-        private void Disable()
-        {
-            if(!_initialized || !_enabled || Instance == null) return;
-            transform.DestroyChildren();
-            _detectableRegistry.Unregister(this);
-            Instance.ToSerialized();
-            _enabled = false;
         }
         
         public void Tick(float deltaTime)

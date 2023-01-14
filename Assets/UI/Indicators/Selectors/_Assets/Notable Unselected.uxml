@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="top-left" style="width: 200px; height: 50px; position: absolute; left: -200px; top: -50px; background-image: url(&apos;project://database/Assets/UI/Indicators/Selectors/_Assets/Notable%20Selector.png?fileID=2800000&amp;guid=2f32c030ed65c9742a6b81c3b3516c5f&amp;type=3#Notable Selector&apos;);" />
+    <ui:VisualElement name="bottom-right" style="width: 200px; height: 50px; position: absolute; background-image: url(&apos;project://database/Assets/UI/Indicators/Selectors/_Assets/Notable%20Selector.png?fileID=2800000&amp;guid=2f32c030ed65c9742a6b81c3b3516c5f&amp;type=3#Notable Selector&apos;); rotate: 180deg;" />
+</ui:UXML>

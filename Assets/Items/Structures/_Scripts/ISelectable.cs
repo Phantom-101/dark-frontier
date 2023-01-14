@@ -1,10 +1,11 @@
-﻿using DarkFrontier.Game.Essentials;
-using UnityEngine.UIElements;
+﻿using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Structures
 {
-    public interface ISelectable : IId
+    public interface ISelectable
     {
+        public string Id { get; }
+        
         bool SelectorDirty { get; }
         
         bool CanBeSelectedBy(StructureComponent other);

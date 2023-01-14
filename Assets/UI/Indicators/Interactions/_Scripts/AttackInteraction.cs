@@ -1,4 +1,5 @@
-﻿using DarkFrontier.Items.Structures;
+﻿#nullable enable
+using DarkFrontier.Items.Structures;
 using UnityEngine;
 
 namespace DarkFrontier.UI.Indicators.Interactions
@@ -7,7 +8,7 @@ namespace DarkFrontier.UI.Indicators.Interactions
     {
         public string Text { get; }
 
-        public AttackInteraction(StructureComponent other, bool attacking, float damage)
+        public AttackInteraction(StructureComponent? other, bool attacking, float damage)
         {
             Text = new RichTextBuilder()
                 .StartSize(20)
@@ -16,7 +17,7 @@ namespace DarkFrontier.UI.Indicators.Interactions
                 .EndColor()
                 .StartColor(Color.white)
                 .Text(attacking ? " to " : " from ")
-                .Text(other.Instance?.Name ?? "Unknown")
+                .Text(other == null ? "Unknown" : other.Instance?.Name ?? "Unknown")
                 .EndColor()
                 .EndSize()
                 .ToString();

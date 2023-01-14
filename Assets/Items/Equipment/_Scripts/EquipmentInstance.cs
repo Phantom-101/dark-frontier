@@ -1,5 +1,7 @@
 ﻿#nullable enable
 using System;
+using DarkFrontier.Controllers.New;
+using DarkFrontier.Foundation.Services;
 using DarkFrontier.Items._Scripts;
 using DarkFrontier.UI.Indicators.Modifiers;
 using Newtonsoft.Json;
@@ -8,6 +10,7 @@ using UnityEngine.UIElements;
 
 namespace DarkFrontier.Items.Equipment
 {
+    [Serializable]
     public class EquipmentInstance : ItemInstance, IEquatable<EquipmentInstance>
     {
         public new EquipmentPrototype Prototype => (EquipmentPrototype)base.Prototype;
@@ -28,11 +31,7 @@ namespace DarkFrontier.Items.Equipment
         {
         }
         
-        public virtual void Apply(EquipmentAuthoring authoring)
-        {
-            Id = authoring.id;
-            Name = authoring.name;
-        }
+        public EquipmentAdaptor NewAdaptor() => new();
         
         public virtual void OnEquipped(EquipmentComponent component)
         {
@@ -58,31 +57,38 @@ namespace DarkFrontier.Items.Equipment
 
         public virtual void UpdateSelector(EquipmentComponent component, bool selected)
         {
-            var position = component.camera.WorldToViewportPoint(component.transform.position);
-            if(position.z > 0)
+            if (component.Structure == Singletons.Get<PlayerController>().Player)
             {
-                _selector.style.visibility = Visibility.Visible;
-                _selector.style.left = new StyleLength(new Length(position.x * 100, LengthUnit.Percent));
-                _selector.style.top = new StyleLength(new Length(100 - position.y * 100, LengthUnit.Percent));
-                
-                if(selected)
-                {
-                    _selected.style.visibility = Visibility.Visible;
-                    _unselected.style.visibility = Visibility.Hidden;
-                    _unselected.pickingMode = PickingMode.Ignore;
-                    _durability.Value = Prototype.hp == 0 ? 0 : Mathf.Clamp01(Hp / Prototype.hp) / 4;
-                    _durability.MarkDirtyRepaint();
-                }
-                else
-                {
-                    _selected.style.visibility = Visibility.Hidden;
-                    _unselected.style.visibility = Visibility.Visible;
-                    _unselected.pickingMode = PickingMode.Position;
-                }
+                _selector.style.visibility = Visibility.Hidden;
             }
             else
             {
-                _selector.style.visibility = Visibility.Hidden;
+                var position = component.camera.WorldToViewportPoint(component.transform.position);
+                if (position.z > 0)
+                {
+                    _selector.style.visibility = Visibility.Visible;
+                    _selector.style.left = new StyleLength(new Length(position.x * 100, LengthUnit.Percent));
+                    _selector.style.top = new StyleLength(new Length(100 - position.y * 100, LengthUnit.Percent));
+
+                    if (selected)
+                    {
+                        _selected.style.visibility = Visibility.Visible;
+                        _unselected.style.visibility = Visibility.Hidden;
+                        _unselected.pickingMode = PickingMode.Ignore;
+                        _durability.Value = Prototype.hp == 0 ? 0 : Mathf.Clamp01(Hp / Prototype.hp) / 4;
+                        _durability.MarkDirtyRepaint();
+                    }
+                    else
+                    {
+                        _selected.style.visibility = Visibility.Hidden;
+                        _unselected.style.visibility = Visibility.Visible;
+                        _unselected.pickingMode = PickingMode.Position;
+                    }
+                }
+                else
+                {
+                    _selector.style.visibility = Visibility.Hidden;
+                }
             }
         }
         

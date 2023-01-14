@@ -1,6 +1,4 @@
 ﻿using System;
-using DarkFrontier.Foundation.Services;
-using DarkFrontier.Game.Essentials;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -15,7 +13,7 @@ namespace DarkFrontier.Data.Values
         [field: SerializeField] [JsonProperty("order")]
         public int Order { get; private set; }
 
-        public ValueMutator() => Singletons.Get<IdRegistry>().Register(this);
+        public ValueMutator() {}
         
         public ValueMutator(int order) : this() => Order = order;
 

@@ -6,11 +6,13 @@ namespace DarkFrontier.Controllers
 {
     public class PlayerFlag : MonoBehaviour
     {
-        public string id;
-
         public void Execute(IdRegistry registry, New.PlayerController controller)
         {
-            controller.Player = registry.Get<StructureComponent>(id);
+            var component = GetComponent<StructureComponent>();
+            if (component != null)
+            {
+                controller.Player = registry.Get<StructureComponent>(component.Id);
+            }
             Destroy(this);
         }
     }

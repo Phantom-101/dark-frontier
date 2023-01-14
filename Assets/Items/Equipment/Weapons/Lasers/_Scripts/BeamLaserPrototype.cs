@@ -11,6 +11,10 @@ namespace DarkFrontier.Items.Equipment.Weapons.Lasers
         public float multiplier;
         public float gain;
         public float interval;
+        public GameObject visuals;
+        public AnimationCurve alphaBase;
+        public AnimationCurve alphaMult;
+        public float width;
         
         public override ItemInstance NewInstance() => new BeamLaserInstance(this);
     }

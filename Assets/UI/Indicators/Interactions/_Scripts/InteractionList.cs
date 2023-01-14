@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DarkFrontier.Foundation.Services;
 using UnityEngine.UIElements;
 
 namespace DarkFrontier.UI.Indicators.Interactions
@@ -10,6 +11,7 @@ namespace DarkFrontier.UI.Indicators.Interactions
 
         public InteractionList()
         {
+            Singletons.Bind(this);
             for(int i = 0, l = _entries.Length; i < l; i++)
             {
                 Add(_entries[i] = new InteractionEntry());

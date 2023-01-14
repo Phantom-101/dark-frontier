@@ -17,7 +17,7 @@ namespace DarkFrontier.Items.Structures
         public GameObject? prefab;
         
         public GameObject? destructionFx;
-        
+
         public override ItemInstance NewInstance() => new StructureInstance(this);
     }
 }

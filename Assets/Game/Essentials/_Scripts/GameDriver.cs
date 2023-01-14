@@ -80,11 +80,6 @@ namespace DarkFrontier.Game.Essentials
 
         private static void InitializeStructures()
         {
-            var structures = FindObjectsOfType<StructureComponent>();
-            for(int i = 0, l = structures.Length; i < l; i++)
-            {
-                structures[i].Enable();
-            }
             var authorings = FindObjectsOfType<StructureAuthoring>();
             for(int i = 0, l = authorings.Length; i < l; i++)
             {
@@ -94,7 +89,7 @@ namespace DarkFrontier.Game.Essentials
 
         private void InitializePlayer()
         {
-            var playerFlag = GetComponent<PlayerFlag>();
+            var playerFlag = FindObjectOfType<PlayerFlag>();
             if(playerFlag != null)
             {
                 playerFlag.Execute(_idRegistry, _playerController);

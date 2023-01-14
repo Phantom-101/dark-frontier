@@ -76,14 +76,14 @@ namespace DarkFrontier.UI.Indicators.Selectors
 
         private void Update(ISelectable selectable)
         {
-            selectable.UpdateSelector(_playerController.Player != null && _playerController.Player.Instance?.Selected == selectable);
+            selectable.UpdateSelector(_playerController.Player != null && _playerController.Player.Adaptor!.selected == selectable);
         }
 
         private void OnClick(ClickEvent evt, ISelectable selectable)
         {
             if(_playerController.Player != null && _playerController.Player.Instance != null)
             {
-                _playerController.Player.Instance.Selected = selectable;
+                _playerController.Player.Adaptor!.selected = selectable;
             }
         }
     }

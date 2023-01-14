@@ -20,7 +20,10 @@ namespace DarkFrontier.Data.Values
             get
             {
                 var ret = baseValue;
-                for(int i = 0, l = Mutators.Count; i < l; i++) ret = Mutators[i].Mutate(ret);
+                for (int i = 0, l = Mutators.Count; i < l; i++)
+                {
+                    ret = Mutators[i].Mutate(ret);
+                }
                 return ret;
             }
         }
@@ -28,7 +31,7 @@ namespace DarkFrontier.Data.Values
         [JsonProperty("mutators")]
         public List<IMutator<T>> Mutators { get; protected set; } = new();
 
-        public MutableValue() => Singletons.Get<IdRegistry>().Register(this);
+        public MutableValue() {}
 
         public MutableValue(T baseValue) : this() => this.baseValue = baseValue;
 

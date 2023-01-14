@@ -61,7 +61,7 @@ namespace DarkFrontier.Positioning.Sectors
         private void Register()
         {
             if(!_initialized || _registered || Instance == null) return;
-            _idRegistry.Register(this);
+            _idRegistry.Register(Id, this);
             _registered = true;
         }
 
@@ -109,7 +109,7 @@ namespace DarkFrontier.Positioning.Sectors
         
         public bool CanBeSelectedBy(StructureComponent other)
         {
-            return other.Instance?.Sector != this;
+            return other.Adaptor!.sector != this;
         }
 
         public VisualElement CreateSelector()

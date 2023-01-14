@@ -13,7 +13,7 @@ namespace DarkFrontier.Items._Scripts
         {
             for(int i = 0, l = items.Length; i < l; i++)
             {
-                registry.Register(items[i]);
+                registry.Register(items[i].id, items[i]);
             }
             Destroy(this);
         }

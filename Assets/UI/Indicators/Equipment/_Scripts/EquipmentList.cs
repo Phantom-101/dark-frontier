@@ -22,7 +22,7 @@ namespace DarkFrontier.UI.Indicators.Equipment
         
         public void Tick()
         {
-            _components = _playerController.Player == null ? Array.Empty<EquipmentComponent>() : _playerController.Player.Instance?.Equipment ?? Array.Empty<EquipmentComponent>();
+            _components = _playerController.Player == null ? Array.Empty<EquipmentComponent>() : _playerController.Player.Equipment ?? Array.Empty<EquipmentComponent>();
             TrimIndicators();
             UpdateIndicators();
         }

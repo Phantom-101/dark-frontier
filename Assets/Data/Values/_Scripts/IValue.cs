@@ -1,8 +1,6 @@
-﻿using DarkFrontier.Game.Essentials;
-
-namespace DarkFrontier.Data.Values
+﻿namespace DarkFrontier.Data.Values
 {
-    public interface IValue<out T> : IId
+    public interface IValue<out T>
     {
         T Value { get; }
     }
