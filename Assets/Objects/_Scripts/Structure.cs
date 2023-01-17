@@ -1,23 +1,26 @@
 ﻿#nullable enable
 using System.Collections.Generic;
+using DarkFrontier.Objects.Components;
 
 namespace DarkFrontier.Objects
 {
-    public class Structure : DestructibleObject
+    public class Structure : SectorObject
     {
-        public List<StructureComponent> components = new();
+        public Detector detector = null!;
+        public List<StructurePart> parts = new();
+        public Selectable? selected;
 
-        public void Add(StructureComponent comp)
+        public void Add(StructurePart part)
         {
-            if (!components.Contains(comp))
+            if (!parts.Contains(part))
             {
-                components.Add(comp);
+                parts.Add(part);
             }
         }
 
-        public void Remove(StructureComponent comp)
+        public void Remove(StructurePart part)
         {
-            components.Remove(comp);
+            parts.Remove(part);
         }
     }
 }

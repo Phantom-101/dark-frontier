@@ -5,6 +5,22 @@ namespace DarkFrontier.Utils
 {
     public static class UIUtils
     {
+        public static void SetMargin(this IStyle style, float left, float right, float top, float bottom)
+        {
+            style.marginLeft = left;
+            style.marginRight = right;
+            style.marginTop = top;
+            style.marginBottom = bottom;
+        }
+        
+        public static void SetPadding(this IStyle style, float left, float right, float top, float bottom)
+        {
+            style.paddingLeft = left;
+            style.paddingRight = right;
+            style.paddingTop = top;
+            style.paddingBottom = bottom;
+        }
+        
         public static void AddTransition(this IStyle style, StylePropertyName name, TimeValue delay, TimeValue duration, EasingFunction easing)
         {
             if(style.transitionProperty.value == null)

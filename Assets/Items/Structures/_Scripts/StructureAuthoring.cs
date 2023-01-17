@@ -1,4 +1,5 @@
-﻿#nullable enable
+﻿/*
+#nullable enable
 using System;
 using DarkFrontier.Items.Equipment;
 using DarkFrontier.Items.Segments;
@@ -49,3 +50,4 @@ namespace DarkFrontier.Items.Structures
         }
     }
 }
+*/

@@ -80,11 +80,11 @@ namespace DarkFrontier.Game.Essentials
 
         private static void InitializeStructures()
         {
-            var authorings = FindObjectsOfType<StructureAuthoring>();
-            for(int i = 0, l = authorings.Length; i < l; i++)
-            {
-                authorings[i].Author();
-            }
+            //var authorings = FindObjectsOfType<StructureAuthoring>();
+            //for(int i = 0, l = authorings.Length; i < l; i++)
+            //{
+            //    authorings[i].Author();
+            //}
         }
 
         private void InitializePlayer()

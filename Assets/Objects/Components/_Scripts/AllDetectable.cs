@@ -1,10 +1,14 @@
-﻿namespace DarkFrontier.Objects.Components
+﻿using Framework.Variables;
+
+namespace DarkFrontier.Objects.Components
 {
     public class AllDetectable : Detectable
     {
+        public BoolReference ignoreSector = new();
+        
         public override bool CanAbsolutelyBeDetected(Detector detector)
         {
-            return true;
+            return ignoreSector.Value || detector.obj.Sector == obj.Sector;
         }
     }
 }

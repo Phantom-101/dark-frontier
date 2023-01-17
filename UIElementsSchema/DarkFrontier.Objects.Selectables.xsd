@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.Overlays" elementFormDefault="qualified" targetNamespace="DarkFrontier.Objects.Selectables" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
+  <xs:simpleType name="Selector_SpriteSizeEasing_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Ease" />
+      <xs:enumeration value="EaseIn" />
+      <xs:enumeration value="EaseOut" />
+      <xs:enumeration value="EaseInOut" />
+      <xs:enumeration value="Linear" />
+      <xs:enumeration value="EaseInSine" />
+      <xs:enumeration value="EaseOutSine" />
+      <xs:enumeration value="EaseInOutSine" />
+      <xs:enumeration value="EaseInCubic" />
+      <xs:enumeration value="EaseOutCubic" />
+      <xs:enumeration value="EaseInOutCubic" />
+      <xs:enumeration value="EaseInCirc" />
+      <xs:enumeration value="EaseOutCirc" />
+      <xs:enumeration value="EaseInOutCirc" />
+      <xs:enumeration value="EaseInElastic" />
+      <xs:enumeration value="EaseOutElastic" />
+      <xs:enumeration value="EaseInOutElastic" />
+      <xs:enumeration value="EaseInBack" />
+      <xs:enumeration value="EaseOutBack" />
+      <xs:enumeration value="EaseInOutBack" />
+      <xs:enumeration value="EaseInBounce" />
+      <xs:enumeration value="EaseOutBounce" />
+      <xs:enumeration value="EaseInOutBounce" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="SelectorType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="" name="UnselectedSpriteAddress" type="xs:string" use="optional" />
+        <xs:attribute default="" name="SelectedSpriteAddress" type="xs:string" use="optional" />
+        <xs:attribute default="100" name="UnselectedSpriteSize" type="xs:float" use="optional" />
+        <xs:attribute default="200" name="SelectedSpriteSize" type="xs:float" use="optional" />
+        <xs:attribute default="Ease" name="SpriteSizeEasing" xmlns:q1="DarkFrontier.Objects.Selectables" type="q1:Selector_SpriteSizeEasing_Type" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Selector" substitutionGroup="engine:VisualElement" xmlns:q2="DarkFrontier.Objects.Selectables" type="q2:SelectorType" />
+</xs:schema>

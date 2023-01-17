@@ -55,5 +55,25 @@ namespace DarkFrontier.Objects
         {
             components.Remove(comp);
         }
+
+        public override PersistentData Save(PersistentData? data = null)
+        {
+            data ??= new PersistentData();
+            base.Save(data);
+            foreach (var comp in components)
+            {
+                comp.Save(data);
+            }
+            return data;
+        }
+
+        public override void Load(PersistentData data)
+        {
+            base.Load(data);
+            foreach (var comp in components)
+            {
+                comp.Load(data);
+            }
+        }
     }
 }

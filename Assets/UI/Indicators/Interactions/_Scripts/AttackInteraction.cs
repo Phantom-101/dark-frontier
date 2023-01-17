@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using DarkFrontier.Items.Structures;
+using DarkFrontier.Utils;
 using UnityEngine;
 
 namespace DarkFrontier.UI.Indicators.Interactions

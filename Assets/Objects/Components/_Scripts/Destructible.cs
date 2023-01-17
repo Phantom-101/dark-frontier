@@ -1,6 +1,8 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
+using Framework.Persistence;
+using Framework.Variables;
 using UnityEngine;
 
 namespace DarkFrontier.Objects.Components
@@ -8,24 +10,24 @@ namespace DarkFrontier.Objects.Components
     public class Destructible : ObjectComponent
     {
         public float health;
-        public float maxHealth;
-        public List<HitBox> hitBoxes = new();
+        public FloatReference maxHealth = new();
+        public List<Hitbox> hitboxes = new();
 
-        public float HealthPercent => health / maxHealth;
+        public float HealthPercent => health / maxHealth.Value;
 
         public event EventHandler<float>? OnHealthChanged;
 
-        public void Add(HitBox hitBox)
+        public void Add(Hitbox hitbox)
         {
-            if (!hitBoxes.Contains(hitBox))
+            if (!hitboxes.Contains(hitbox))
             {
-                hitBoxes.Add(hitBox);
+                hitboxes.Add(hitbox);
             }
         }
 
-        public void Remove(HitBox hitBox)
+        public void Remove(Hitbox hitbox)
         {
-            hitBoxes.Remove(hitBox);
+            hitboxes.Remove(hitbox);
         }
 
         public virtual float ApplyDamage(float damage)
@@ -54,7 +56,21 @@ namespace DarkFrontier.Objects.Components
 
         protected void RaiseHealthChangedEvent(float delta)
         {
+            foreach (var hitbox in hitboxes)
+            {
+                hitbox.SetActive(health > 0);
+            }
             OnHealthChanged?.Invoke(this, delta);
+        }
+
+        public override void Save(PersistentData data)
+        {
+            data.Add("health", health);
+        }
+
+        public override void Load(PersistentData data)
+        {
+            health = data.Get<float>("health");
         }
     }
 }

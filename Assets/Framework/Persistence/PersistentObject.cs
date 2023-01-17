@@ -8,8 +8,16 @@ namespace Framework.Persistence
     public class PersistentObject : MonoBehaviour
     {
         public PersistentType type = null!;
-        public string id = Guid.NewGuid().ToString();
-        
+        public string id = string.Empty;
+
+        protected virtual void Awake()
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                id = Guid.NewGuid().ToString();
+            }
+        }
+
         public virtual PersistentData Save(PersistentData? data = null)
         {
             data ??= new PersistentData();
