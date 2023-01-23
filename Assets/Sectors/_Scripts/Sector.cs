@@ -27,7 +27,7 @@ namespace DarkFrontier.Sectors
         {
             data ??= new PersistentData();
             base.Save(data);
-            data.Add("objects", objects.FindAll(e => e.IsTopLevel()).ConvertAll(e => e.Save()));
+            data.Add("objects", objects.FindAll(e => e.transform.parent == transform).ConvertAll(e => e.Save()));
             return data;
         }
 

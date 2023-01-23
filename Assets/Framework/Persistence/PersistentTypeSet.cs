@@ -1,50 +1,30 @@
 #nullable enable
 using System.Collections.Generic;
-using Framework.Sets;
+using System.Linq;
+using Framework.Variables;
 using UnityEngine;
 
-namespace Framework.Persistence
-{
+namespace Framework.Persistence {
     [CreateAssetMenu(menuName = "Set/PersistentType", fileName = "NewPersistentTypeSet")]
-    public class PersistentTypeSet : ScriptableSet<PersistentType>
-    {
-        public PersistentType? Get(string id)
-        {
-            for (int i = 0, l = items.Count; i < l; i++)
-            {
-                if (items[i].id == id)
-                {
-                    return items[i];
-                }
-            }
-            return null;
+    public class PersistentTypeSet : ScriptableSet<PersistentType> {
+        public PersistentType? Get(string id) {
+            return value.FirstOrDefault(e => e.id == id);
         }
 
-        public PersistentObject? Load(PersistentData data, Transform? parent = null)
-        {
+        public PersistentObject? Load(PersistentData data, Transform? parent = null) {
             var type = Get(data.typeId);
-            if (type == null)
-            {
+            if (type == null) {
                 return null;
             }
+
             var ret = type.New(parent);
             ret.id = data.id;
             ret.Load(data);
             return ret;
         }
 
-        public List<PersistentObject> Load(List<PersistentData> data, Transform? parent = null)
-        {
-            List<PersistentObject> ret = new();
-            for (int i = 0, l = data.Count; i < l; i++)
-            {
-                var obj = Load(data[i], parent);
-                if (obj != null)
-                {
-                    ret.Add(obj);
-                }
-            }
-            return ret;
+        public IEnumerable<PersistentObject?> Load(IEnumerable<PersistentData> data, Transform? parent = null) {
+            return data.Select(e => Load(e, parent));
         }
     }
 }

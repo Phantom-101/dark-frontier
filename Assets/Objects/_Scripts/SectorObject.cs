@@ -4,19 +4,15 @@ using DarkFrontier.Objects.Components;
 using DarkFrontier.Sectors;
 using Framework.Persistence;
 
-namespace DarkFrontier.Objects
-{
-    public class SectorObject : PersistentObject
-    {
-        public Sector Sector
-        {
+namespace DarkFrontier.Objects {
+    public class SectorObject : PersistentObject {
+        public Sector Sector {
             get => _sector;
-            set
-            {
-                if (_sector == value)
-                {
+            set {
+                if (_sector == value) {
                     return;
                 }
+
                 _sector.Remove(this);
                 _sector = value;
                 _sector.Add(this);
@@ -27,51 +23,38 @@ namespace DarkFrontier.Objects
 
         public List<ObjectComponent> components = new();
 
-        protected virtual void OnEnable()
-        {
+        protected virtual void OnEnable() {
             _sector = GetComponentInParent<Sector>();
             _sector.Add(this);
         }
 
-        protected virtual void OnDisable()
-        {
+        protected virtual void OnDisable() {
             _sector.Remove(this);
         }
 
-        public virtual bool IsTopLevel()
-        {
-            return true;
-        }
-
-        public void Add(ObjectComponent comp)
-        {
-            if (!components.Contains(comp))
-            {
+        public void Add(ObjectComponent comp) {
+            if (!components.Contains(comp)) {
                 components.Add(comp);
             }
         }
 
-        public void Remove(ObjectComponent comp)
-        {
+        public void Remove(ObjectComponent comp) {
             components.Remove(comp);
         }
 
-        public override PersistentData Save(PersistentData? data = null)
-        {
+        public override PersistentData Save(PersistentData? data = null) {
             data ??= new PersistentData();
             base.Save(data);
-            foreach (var comp in components)
-            {
+            foreach (var comp in components) {
                 comp.Save(data);
             }
+
             return data;
         }
 
-        public override void Load(PersistentData data)
-        {
+        public override void Load(PersistentData data) {
             base.Load(data);
-            foreach (var comp in components)
-            {
+            foreach (var comp in components) {
                 comp.Load(data);
             }
         }

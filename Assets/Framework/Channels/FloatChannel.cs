@@ -1,9 +1,6 @@
 using UnityEngine;
 
-namespace Framework.Channels
-{
+namespace Framework.Channels {
     [CreateAssetMenu(menuName = "Channel/Float", fileName = "NewFloatChannel")]
-    public class FloatChannel : ScriptableChannel<float>
-    {
-    }
+    public class FloatChannel : ScriptableChannel<float> { }
 }

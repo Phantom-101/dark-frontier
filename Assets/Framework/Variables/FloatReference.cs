@@ -1,9 +1,6 @@
 using System;
 
-namespace Framework.Variables
-{
+namespace Framework.Variables {
     [Serializable]
-    public class FloatReference : ValueReference<float>
-    {
-    }
+    public class FloatReference : ValueReference<float> { }
 }

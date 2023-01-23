@@ -4,53 +4,41 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UIElements;
 
-namespace DarkFrontier.UI.Elements
-{
-    public class Selector : VisualElement
-    {
-        public new class UxmlFactory : UxmlFactory<Selector, UxmlTraits>
-        {
-        }
+namespace DarkFrontier.UI.Elements {
+    public class Selector : VisualElement {
+        public new class UxmlFactory : UxmlFactory<Selector, UxmlTraits> { }
 
-        public new class UxmlTraits : VisualElement.UxmlTraits
-        {
-            private readonly UxmlStringAttributeDescription _unselectedSpriteAddress = new()
-            {
-                name = "UnselectedSpriteAddress",
+        public new class UxmlTraits : VisualElement.UxmlTraits {
+            private readonly UxmlStringAttributeDescription _unselectedSpriteAddress = new() {
+                name = "unselected-sprite-address",
                 defaultValue = string.Empty
             };
 
-            private readonly UxmlStringAttributeDescription _selectedSpriteAddress = new()
-            {
-                name = "SelectedSpriteAddress",
+            private readonly UxmlStringAttributeDescription _selectedSpriteAddress = new() {
+                name = "selected-sprite-address",
                 defaultValue = string.Empty
             };
 
-            private readonly UxmlFloatAttributeDescription _unselectedSpriteSize = new()
-            {
-                name = "UnselectedSpriteSize",
+            private readonly UxmlFloatAttributeDescription _unselectedSpriteSize = new() {
+                name = "unselected-sprite-size",
                 defaultValue = 100
             };
 
-            private readonly UxmlFloatAttributeDescription _selectedSpriteSize = new()
-            {
-                name = "SelectedSpriteSize",
+            private readonly UxmlFloatAttributeDescription _selectedSpriteSize = new() {
+                name = "selected-sprite-size",
                 defaultValue = 200
             };
 
-            private readonly UxmlEnumAttributeDescription<EasingMode> _spriteSizeEasing = new()
-            {
-                name = "SpriteSizeEasing",
+            private readonly UxmlEnumAttributeDescription<EasingMode> _spriteSizeEasing = new() {
+                name = "sprite-size-easing",
                 defaultValue = EasingMode.Ease
             };
 
-            public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription
-            {
+            public override IEnumerable<UxmlChildElementDescription> uxmlChildElementsDescription {
                 get { yield break; }
             }
 
-            public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
-            {
+            public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc) {
                 base.Init(ve, bag, cc);
                 var ate = (Selector)ve;
 
@@ -62,105 +50,93 @@ namespace DarkFrontier.UI.Elements
             }
         }
 
-        public string UnselectedSpriteAddress
-        {
+        public string UnselectedSpriteAddress {
             get => _unselectedSpriteAddress;
-            set
-            {
-                if (_unselectedSpriteAddress == value)
-                {
+            set {
+                if (_unselectedSpriteAddress == value) {
                     return;
                 }
+
                 _unselectedSpriteAddress = value;
-                UnselectedSprite = string.IsNullOrEmpty(_unselectedSpriteAddress) ? null : Addressables.LoadAssetAsync<Sprite>(_unselectedSpriteAddress).WaitForCompletion();
+                UnselectedSprite = string.IsNullOrEmpty(_unselectedSpriteAddress)
+                    ? null
+                    : Addressables.LoadAssetAsync<Sprite>(_unselectedSpriteAddress).WaitForCompletion();
             }
         }
 
-        public string SelectedSpriteAddress
-        {
+        public string SelectedSpriteAddress {
             get => _selectedSpriteAddress;
-            set
-            {
-                if (_selectedSpriteAddress == value)
-                {
+            set {
+                if (_selectedSpriteAddress == value) {
                     return;
                 }
+
                 _selectedSpriteAddress = value;
-                SelectedSprite = string.IsNullOrEmpty(_selectedSpriteAddress) ? null : Addressables.LoadAssetAsync<Sprite>(_selectedSpriteAddress).WaitForCompletion();
+                SelectedSprite = string.IsNullOrEmpty(_selectedSpriteAddress)
+                    ? null
+                    : Addressables.LoadAssetAsync<Sprite>(_selectedSpriteAddress).WaitForCompletion();
             }
         }
-        
-        public Sprite UnselectedSprite
-        {
+
+        public Sprite UnselectedSprite {
             get => _unselectedSprite;
-            set
-            {
-                if (_unselectedSprite == value)
-                {
+            set {
+                if (_unselectedSprite == value) {
                     return;
                 }
+
                 _unselectedSprite = value;
                 UpdateSprite();
             }
         }
 
-        public Sprite SelectedSprite
-        {
+        public Sprite SelectedSprite {
             get => _selectedSprite;
-            set
-            {
-                if (_selectedSprite == value)
-                {
+            set {
+                if (_selectedSprite == value) {
                     return;
                 }
+
                 _selectedSprite = value;
                 UpdateSprite();
             }
         }
 
-        public float UnselectedSpriteSize
-        {
+        public float UnselectedSpriteSize {
             get => _unselectedSpriteSize;
-            set
-            {
+            set {
                 _unselectedSpriteSize = value;
                 UpdateSprite();
             }
         }
 
-        public float SelectedSpriteSize
-        {
+        public float SelectedSpriteSize {
             get => _selectedSpriteSize;
-            set
-            {
+            set {
                 _selectedSpriteSize = value;
                 UpdateSprite();
             }
         }
 
-        public EasingMode SpriteSizeEasing
-        {
+        public EasingMode SpriteSizeEasing {
             get => _spriteSizeEasing;
-            set
-            {
-                if (_spriteSizeEasing == value)
-                {
+            set {
+                if (_spriteSizeEasing == value) {
                     return;
                 }
+
                 _spriteSizeEasing = value;
                 UpdateTransitions();
             }
         }
 
-        public bool IsSelected
-        {
+        public bool IsSelected {
             get => _isSelected;
-            set
-            {
-                if (_isSelected == value)
-                {
+            set {
+                if (_isSelected == value) {
                     return;
                 }
+
                 _isSelected = value;
                 UpdateSprite();
             }
@@ -176,16 +152,14 @@ namespace DarkFrontier.UI.Elements
         private bool _isSelected;
         private readonly VisualElement _sprite;
 
-        public Selector()
-        {
+        public Selector() {
             style.position = Position.Absolute;
             style.width = 0;
             style.height = 0;
             style.alignItems = Align.Center;
             style.justifyContent = Justify.Center;
 
-            _sprite = new VisualElement
-            {
+            _sprite = new VisualElement {
                 name = "sprite",
                 style = {
                     position = Position.Absolute
@@ -194,8 +168,8 @@ namespace DarkFrontier.UI.Elements
             Add(_sprite);
         }
 
-        public Selector(Sprite unselectedSprite, Sprite selectedSprite, float unselectedSpriteSize, float selectedSpriteSize, EasingMode spriteSizeEasing) : this()
-        {
+        public Selector(Sprite unselectedSprite, Sprite selectedSprite, float unselectedSpriteSize,
+            float selectedSpriteSize, EasingMode spriteSizeEasing) : this() {
             _unselectedSprite = unselectedSprite;
             _selectedSprite = selectedSprite;
             _unselectedSpriteSize = unselectedSpriteSize;
@@ -204,25 +178,21 @@ namespace DarkFrontier.UI.Elements
             UpdateTransitions();
             UpdateSprite();
         }
-        
-        private void UpdateSprite()
-        {
-            if (_isSelected)
-            {
+
+        private void UpdateSprite() {
+            if (_isSelected) {
                 _sprite.style.backgroundImage = new StyleBackground(_selectedSprite);
                 _sprite.style.width = _selectedSpriteSize;
                 _sprite.style.height = _selectedSpriteSize;
             }
-            else
-            {
+            else {
                 _sprite.style.backgroundImage = new StyleBackground(_unselectedSprite);
                 _sprite.style.width = _unselectedSpriteSize;
                 _sprite.style.height = _unselectedSpriteSize;
             }
         }
-        
-        private void UpdateTransitions()
-        {
+
+        private void UpdateTransitions() {
             _sprite.style.AddTransition("width", 0, 0.5f, _spriteSizeEasing);
             _sprite.style.AddTransition("height", 0, 0.5f, _spriteSizeEasing);
         }

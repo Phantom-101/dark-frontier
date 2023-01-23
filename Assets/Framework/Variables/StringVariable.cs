@@ -1,9 +1,6 @@
 using UnityEngine;
 
-namespace Framework.Variables
-{
+namespace Framework.Variables {
     [CreateAssetMenu(menuName = "Variable/String", fileName = "NewString")]
-    public class StringVariable : ScriptableVariable<string>
-    {
-    }
+    public class StringVariable : ScriptableVariable<string> { }
 }

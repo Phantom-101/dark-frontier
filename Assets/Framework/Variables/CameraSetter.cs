@@ -1,8 +1,5 @@
 using UnityEngine;
 
-namespace Framework.Variables
-{
-    public class CameraSetter : VariableSetter<Camera>
-    {
-    }
+namespace Framework.Variables {
+    public class CameraSetter : VariableSetter<Camera> { }
 }

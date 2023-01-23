@@ -1,26 +1,21 @@
 #nullable enable
-using Framework.Variables;
 using UnityEditor;
 using UnityEngine;
 
-namespace GameFramework.Variables.Editor
-{
+namespace Framework.Variables.Editor {
     [CustomPropertyDrawer(typeof(ValueReference<>), true)]
-    public class ValueReferenceDrawer : PropertyDrawer
-    {
+    public class ValueReferenceDrawer : PropertyDrawer {
         private readonly string[] _popupOptions = { "Use Constant", "Use Variable" };
         private GUIStyle? _popupStyle;
-        
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            _popupStyle ??= new GUIStyle(GUI.skin.GetStyle("PaneOptions"))
-            {
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+            _popupStyle ??= new GUIStyle(GUI.skin.GetStyle("PaneOptions")) {
                 imagePosition = ImagePosition.ImageOnly
             };
 
             label = EditorGUI.BeginProperty(position, label, property);
             position = EditorGUI.PrefixLabel(position, label);
-            
+
             EditorGUI.BeginChangeCheck();
 
             var useConstantProperty = property.FindPropertyRelative("useConstant");
@@ -38,10 +33,10 @@ namespace GameFramework.Variables.Editor
             var result = EditorGUI.Popup(buttonRect, useConstantProperty.boolValue ? 0 : 1, _popupOptions, _popupStyle);
             useConstantProperty.boolValue = result == 0;
 
-            EditorGUI.PropertyField(position, useConstantProperty.boolValue ? constantProperty : variableProperty, GUIContent.none);
+            EditorGUI.PropertyField(position, useConstantProperty.boolValue ? constantProperty : variableProperty,
+                GUIContent.none);
 
-            if (EditorGUI.EndChangeCheck())
-            {
+            if (EditorGUI.EndChangeCheck()) {
                 property.serializedObject.ApplyModifiedProperties();
             }
 

@@ -1,9 +1,6 @@
 using System;
 
-namespace Framework.Variables
-{
+namespace Framework.Variables {
     [Serializable]
-    public class StringReference : ValueReference<string>
-    {
-    }
+    public class StringReference : ValueReference<string> { }
 }
